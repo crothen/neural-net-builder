@@ -404,24 +404,17 @@ export class NeuralNet {
 
         if (sourceNodes.length === 0 || targetNodes.length === 0) return;
 
-        const potential = sourceNodes.length * targetNodes.length;
-        const isSparse = potential > 2500;
+        // const potential = sourceNodes.length * targetNodes.length;
+        // const isSparse = potential > 2500;
 
         sourceNodes.forEach(src => {
             targetNodes.forEach((tgt) => {
-                let makeConnection = true;
-                if (isSparse) {
-                    makeConnection = Math.random() < 0.1;
-                }
-
-                if (makeConnection) {
-                    this.addConnection({
-                        id: `c-${src.id}-${tgt.id}`,
-                        sourceId: src.id,
-                        targetId: tgt.id,
-                        weight: Math.random() // Positive only
-                    });
-                }
+                this.addConnection({
+                    id: `c-${src.id}-${tgt.id}`,
+                    sourceId: src.id,
+                    targetId: tgt.id,
+                    weight: Math.random() // Positive only
+                });
             });
         });
     }
