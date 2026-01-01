@@ -154,7 +154,9 @@ export class NeuralNet {
 
         const needsTopologyRegen = topologyKeys.some(key => newConfig[key] !== undefined && newConfig[key] !== module[key]);
         const needsGeometryUpdate = geometryKeys.some(key => newConfig[key] !== undefined && newConfig[key] !== module[key]);
-        const needsRewiring = newConfig.isLocalized !== undefined || newConfig.localizationLeak !== undefined;
+        const needsRewiring = newConfig.isLocalized !== undefined
+            || newConfig.localizationLeak !== undefined
+            || newConfig.synapsesPerNode !== undefined;
 
         if (needsGeometryUpdate && !needsTopologyRegen) {
             // Non-destructive update of node positions (Scaling)
@@ -629,6 +631,16 @@ export class NeuralNet {
     ) {
         // Enforce replacement policy: Clear existing connections between these modules first
         this.disconnectModules(sourceId, targetId);
+
+        // Store configuration for future reference (UI Editing)
+        const configKey = `${sourceId}->${targetId}`;
+        this.moduleConnections.set(configKey, {
+            sourceId,
+            targetId,
+            coverage,
+            localizer,
+            sides: { src: srcSide, tgt: tgtSide }
+        });
 
         const getNodesForSide = (modId: string, side: ConnectionSide): Node[] => {
             const mod = this.modules.get(modId);

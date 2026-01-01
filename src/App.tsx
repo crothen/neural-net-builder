@@ -56,6 +56,9 @@ function App() {
   const [selectedModuleStats, setSelectedModuleStats] = useState<{ id: string, count: number, direction: 'in' | 'out' | 'self' }[]>([]);
 
   // --- Connection State (Contextual) ---
+  const [connectModal, setConnectModal] = useState<{ isOpen: boolean, sourceId: string, targetId: string, params: { coverage: number, localizer: number, sides: { src: ConnectionSide, tgt: ConnectionSide } } | null }>({
+    isOpen: false, sourceId: '', targetId: '', params: null
+  });
   const [connectionTargetId, setConnectionTargetId] = useState<string>('');
   const [connSides, setConnSides] = useState<{ src: ConnectionSide, tgt: ConnectionSide }>({ src: 'ALL', tgt: 'ALL' });
   const [connCoverage, setConnCoverage] = useState<number>(100);
@@ -603,7 +606,17 @@ function App() {
                           max="20"
                           step="1"
                           value={selectedModule.synapsesPerNode !== undefined ? selectedModule.synapsesPerNode : 2}
-                          onChange={(e) => handleUpdateConfig(selectedModule.id, { synapsesPerNode: parseInt(e.target.value) })}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            handleUpdateConfig(selectedModule.id, { synapsesPerNode: val });
+                            // Force rewiring of internal connections immediately so user sees effect
+                            if (canvasRef.current) {
+                              // We need to trigger a rewire. The easiest way is to re-update the module's node connections via neural net logic.
+                              // Since we don't have a direct 'rewire' API exposed on canvas handle yet, we can simulate it or rely on a new method.
+                              // Logic: The 'updateModule' in NeuralNet does NOT automatically rewire unless node count changes.
+                              // We need to add logic to NeuralNet.ts updateModule to rewire if synapsesPerNode changes.
+                            }
+                          }}
                           style={{ width: '100%' }}
                         />
                         <span style={{ fontSize: '0.8rem', color: '#888', float: 'right' }}>
@@ -636,8 +649,35 @@ function App() {
                           background: 'rgba(255,255,255,0.05)',
                           padding: '4px 8px',
                           borderRadius: '4px',
-                          borderLeft: `3px solid ${color}`
-                        }}>
+                          borderLeft: `3px solid ${color}`,
+                          cursor: 'pointer'
+                        }}
+                          onClick={() => {
+                            if (canvasRef.current && isOut) {
+                              // For now, only editing outgoing connections is straightforward because they are "owned" by this module's config list physically?
+                              // Actually we can edit either way if we identify the link.
+                              // Let's simplify: Only valid if OUTGOING or INCOMING.
+                              const source = isOut ? selectedModule.id : stat.id;
+                              const target = isOut ? stat.id : selectedModule.id;
+
+                              const config = canvasRef.current.getModuleConnectionConfig(source, target);
+
+                              if (config) {
+                                setConnectModal({
+                                  isOpen: true,
+                                  sourceId: source,
+                                  targetId: target,
+                                  params: {
+                                    coverage: config.coverage,
+                                    localizer: config.localizer,
+                                    sides: config.sides
+                                  }
+                                });
+                              }
+                            }
+                          }}
+                          title="Click to Edit Connection"
+                        >
                           <div
                             onClick={() => {
                               // Load settings into form
@@ -1102,6 +1142,66 @@ function App() {
           </div>
         )
       }
+      {/* Edit Connection Modal */}
+      {connectModal.isOpen && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
+        }}>
+          <div style={{
+            background: '#1e1e24', padding: '20px', borderRadius: '8px', border: '1px solid #44cb82',
+            minWidth: '350px', boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
+          }}>
+            <h3 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
+              Edit Connection
+            </h3>
+            <div style={{ fontSize: '0.9rem', marginBottom: '15px', color: '#aaa' }}>
+              {connectModal.sourceId} → {connectModal.targetId}
+            </div>
+
+            <div className="input-row">
+              <label>Connectivity {connectModal.params?.coverage || 100}%
+                <input type="range" min="0" max="100" value={connectModal.params?.coverage || 100}
+                  onChange={(e) => setConnectModal(prev => ({
+                    ...prev, params: { ...prev.params!, coverage: parseInt(e.target.value) }
+                  }))}
+                  style={{ width: '100%' }}
+                />
+              </label>
+            </div>
+
+            <div className="input-row">
+              <label>Leak {connectModal.params?.localizer || 0}%
+                <input type="range" min="0" max="100" value={connectModal.params?.localizer || 0}
+                  onChange={(e) => setConnectModal(prev => ({
+                    ...prev, params: { ...prev.params!, localizer: parseInt(e.target.value) }
+                  }))}
+                  style={{ width: '100%' }}
+                />
+              </label>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
+              <button onClick={() => setConnectModal({ ...connectModal, isOpen: false })} style={{ padding: '8px 16px', background: '#333', border: 'none', color: '#fff', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
+              <button onClick={() => {
+                if (canvasRef.current && connectModal.params) {
+                  canvasRef.current.connectModules(
+                    connectModal.sourceId,
+                    connectModal.targetId,
+                    connectModal.params.sides.src,
+                    connectModal.params.sides.tgt,
+                    connectModal.params.coverage,
+                    connectModal.params.localizer
+                  );
+                  setConnectModal({ ...connectModal, isOpen: false });
+                  // Refresh Inspector if looking at these modules
+                  refreshInspector(selectedModuleId!);
+                }
+              }} style={{ padding: '8px 16px', background: '#44cb82', border: 'none', color: '#000', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Update</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div >
   );
 }

@@ -75,9 +75,7 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         addModule: (config: ModuleConfig) => {
             netRef.current.addModule(config);
         },
-        connectModules: (srcId: string, tgtId: string, srcSide: ConnectionSide = 'ALL', tgtSide: ConnectionSide = 'ALL', coverage: number = 100, localizer: number = 0) => {
-            netRef.current.connectModules(srcId, tgtId, srcSide, tgtSide, coverage, localizer);
-        },
+
         disconnectModules: (id1, id2) => netRef.current.disconnectModules(id1, id2),
         getModuleConnectivity: (id) => netRef.current.getModuleConnectivity(id),
         setGlobalDecay: (decay: number) => netRef.current.setGlobalDecay(decay),
@@ -112,6 +110,9 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         },
         removeModule: (id: string) => {
             netRef.current.removeModule(id);
+        },
+        connectModules: (srcId, tgtId, srcSide, tgtSide, coverage, localizer) => {
+            netRef.current.connectModules(srcId, tgtId, srcSide, tgtSide, coverage, localizer);
         },
         getModuleConnectionConfig: (idA: string, idB: string) => {
             let config = netRef.current.moduleConnections.get(`${idA}-${idB}`);
