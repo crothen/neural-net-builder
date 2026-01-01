@@ -52,7 +52,7 @@ export class NeuralNet {
                     type: NodeType.HIDDEN,
                     x: centerX + r * Math.cos(theta),
                     y: centerY + r * Math.sin(theta),
-                    label: `${config.name || config.label}-${i}`,
+                    label: '',
                     activationType: config.activationType || 'SUSTAINED'
                 });
             }
@@ -103,7 +103,7 @@ export class NeuralNet {
                         type: nodeType,
                         x: colX,
                         y: startY + stepY * (i + 1),
-                        label: `${config.name || config.label}-${d}-${i}`,
+                        label: '',
                         activationType: config.activationType || 'PULSE'
                     });
                 }
