@@ -181,11 +181,28 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({
 
     const handleWheel = (e: React.WheelEvent) => {
         e.preventDefault();
+        const rect = canvasRef.current!.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+
         const scaleFactor = 1.1;
         const zoomIn = e.deltaY < 0;
         const factor = zoomIn ? scaleFactor : 1 / scaleFactor;
 
-        setTransform(prev => ({ ...prev, k: prev.k * factor }));
+        // Current world position under mouse
+        const wx = (mx - transform.x) / transform.k;
+        const wy = (my - transform.y) / transform.k;
+
+        // New scale
+        const newK = transform.k * factor;
+
+        // New translation to keep world point wx,wy at mouse position mx,my
+        // mx = newX + wx * newK  =>  newX = mx - wx * newK
+        setTransform({
+            x: mx - wx * newK,
+            y: my - wy * newK,
+            k: newK
+        });
     };
 
     const handleMouseDown = (e: React.MouseEvent) => {

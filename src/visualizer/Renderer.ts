@@ -77,8 +77,8 @@ export class Renderer {
                 this.ctx.shadowColor = 'yellow';
             } else {
                 // Dynamic styling based on Weight & Activity
-                let baseWidth = 0.5 + (weightAbs * 2.0); // Thicker connections = stronger weights
-                let baseAlpha = 0.1 + (weightAbs * 0.4); // More opaque = stronger weights
+                let baseWidth = 0.5 + (weightAbs * 1.5); // Thicker connections = stronger weights
+                let baseAlpha = 0.05 + (weightAbs * 0.15); // Much more transparent
 
                 if (intensity > 0.01) {
                     // Active Firing

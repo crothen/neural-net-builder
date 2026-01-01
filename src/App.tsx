@@ -509,6 +509,19 @@ function App() {
             >
               <span className="module-name">{m.name || m.label}</span>
               <span className="module-type">{m.type} • {m.nodeCount} Nodes</span>
+              <div style={{ display: 'flex', gap: '8px', marginTop: '4px', fontSize: '0.75rem', opacity: 0.8 }}>
+                {(() => {
+                  const stats = canvasRef.current?.getModuleConnectivity(m.id);
+                  const inCount = stats?.filter(s => s.direction === 'in').reduce((acc, s) => acc + s.count, 0) || 0;
+                  const outCount = stats?.filter(s => s.direction === 'out').reduce((acc, s) => acc + s.count, 0) || 0;
+                  return (
+                    <>
+                      <span style={{ color: '#00aaff' }}>In: {inCount}</span>
+                      <span style={{ color: '#00ffaa' }}>Out: {outCount}</span>
+                    </>
+                  );
+                })()}
+              </div>
               {m.depth && m.depth > 1 && <span className="module-type">Depth: {m.depth}</span>}
             </div>
           ))}

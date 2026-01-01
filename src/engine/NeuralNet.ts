@@ -60,8 +60,8 @@ export class NeuralNet {
             // Recurrent Internal Connections (Bidirectional)
             const nodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(config.id));
             nodes.forEach(source => {
-                // Connect to random peers (Two-Way)
-                for (let k = 0; k < 3; k++) {
+                // Connect to random peers (One-Way)
+                for (let k = 0; k < 1; k++) {
                     const target = nodes[Math.floor(Math.random() * nodes.length)];
 
                     // Forward
