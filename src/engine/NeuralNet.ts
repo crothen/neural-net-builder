@@ -196,12 +196,132 @@ export class NeuralNet {
         // Actually, step 1 deleted entries for removed nodes.
         // But existing nodes (other modules) might have connections FROM removed nodes.
         // We need to clean those lists.
+        // Re-build incoming map
         this.incoming.clear();
         this.connections.forEach(c => {
             const list = this.incoming.get(c.targetId);
             if (list) list.push(c);
             else this.incoming.set(c.targetId, [c]);
         });
+
+        // 4. Repair External Connectivity
+        // New nodes (if count increased) are currently orphaned.
+        // We need to ensure that if this module was connected to X, the NEW nodes also connect to X.
+
+        // Helper to check and add missing connections
+        const ensureConnection = (srcModId: string, tgtModId: string) => {
+            const srcMod = this.modules.get(srcModId);
+            const tgtMod = this.modules.get(tgtModId);
+            if (!srcMod || !tgtMod) return;
+
+            const srcNodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(srcModId + '-'));
+            const tgtNodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(tgtModId + '-'));
+
+            if (srcNodes.length === 0 || tgtNodes.length === 0) return;
+
+            // Build set of existing connections for O(1) lookup
+            const existing = new Set<string>();
+            this.connections.forEach(c => existing.add(c.id));
+
+            // Sparse Logic (match connectModules)
+            const potential = srcNodes.length * tgtNodes.length;
+            const isSparse = potential > 2500;
+
+            srcNodes.forEach(src => {
+                tgtNodes.forEach(tgt => {
+                    const connId = `c-${src.id}-${tgt.id}`;
+                    if (!existing.has(connId)) {
+                        let makeConnection = true;
+                        if (isSparse) makeConnection = Math.random() < 0.1;
+
+                        if (makeConnection) {
+                            this.addConnection({
+                                id: connId,
+                                sourceId: src.id,
+                                targetId: tgt.id,
+                                weight: Math.random() // Positive
+                            });
+                        }
+                    }
+                });
+            });
+        };
+
+        // Re-connect to previously identified neighbors
+        // optimization: we can assume neighbors based on surviving connections
+        // If we scaled DOWN, some neighbors might have lost ALL connections.
+        // So we really should have captured neighbors BEFORE the wipe.
+        // BUT, since we filtered connections in Step 3 based on 'srcExists && tgtExists',
+        // and 'addModule' re-uses IDs (0..N), the connections for 0..N are preserved.
+        // So we can still find the neighbors by looking at valid connections!
+
+        const neighborsOut = new Set<string>();
+        const neighborsIn = new Set<string>();
+
+        this.connections.forEach(c => {
+            // We need to resolve Module IDs from Node IDs
+            // Since we just rebuilt nodes, we can use the prefix check or look it up
+            // Simple prefix check is fast enough here or we trust the surviving connections
+            const srcNode = this.nodes.get(c.sourceId);
+            const tgtNode = this.nodes.get(c.targetId);
+            if (!srcNode || !tgtNode) return;
+
+            // Extract Module ID (everything before last hyphen is risky if we have dashes in name, 
+            // but here IDs are robust: "modID-index" or "modID-depth-index")
+            // actually our node IDs are "modID-..." 
+            // Let's rely on the module list to find owner.
+            // Optimize: Check if starts with THIS module ID
+
+            if (c.sourceId.startsWith(id + '-')) {
+                // Outgoing from THIS
+                // Find target module
+                // We can find target module by iterating modules (slow) or assumption.
+                // Better: iterate all modules for exact matches.
+                // For now, let's use the robust `getModuleConnectivity` logic's reverse:
+                // We can iterate ALL modules to find owners.
+                // Or simple heuristic:
+                // We just need to know which OTHER modules are touched.
+                // Let's look at the implementation of getModuleConnectivity again?
+                // No, let's just iterate all modules once to map Node->Module for the *relevant* connections.
+            }
+        });
+
+        // Actually, simpler approach:
+        // 1. Get all connections involving this module (preserved ones).
+        // 2. Identify the "Other" module ID.
+        // 3. Add to set.
+        // 4. Run ensureConnection.
+
+        this.connections.forEach(c => {
+            const isSource = c.sourceId.startsWith(id + '-');
+            const isTarget = c.targetId.startsWith(id + '-');
+
+            if (isSource && !isTarget) {
+                // Outgoing to someone. Who? 
+                // We don't know the module ID of target easily without lookup.
+                // let's try to extract it. 
+                // Heuristic: Module IDs are typically UUIDs or simple strings.
+                // Node ID: "MODULE_ID-..."
+                // We can check against key in this.modules
+                for (const [modId] of this.modules) {
+                    if (modId !== id && c.targetId.startsWith(modId + '-')) {
+                        neighborsOut.add(modId);
+                        break;
+                    }
+                }
+            } else if (isTarget && !isSource) {
+                // Incoming from someone
+                for (const [modId] of this.modules) {
+                    if (modId !== id && c.sourceId.startsWith(modId + '-')) {
+                        neighborsIn.add(modId);
+                        break;
+                    }
+                }
+            }
+        });
+
+        neighborsOut.forEach(tgt => ensureConnection(id, tgt));
+        neighborsIn.forEach(src => ensureConnection(src, id));
     }
 
     public moveModule(id: string, newX: number, newY: number) {
