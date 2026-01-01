@@ -66,30 +66,20 @@ export class NeuralNet {
                 this.nodeModuleMap.set(nodeId, config.id);
             }
 
-            // Recurrent Internal Connections (Bidirectional)
+            // Recurrent Internal Connections (Fully Connected)
             const nodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(config.id));
             nodes.forEach(source => {
-                // Connect to random peers (One-Way)
-                for (let k = 0; k < 1; k++) {
-                    let target = nodes[Math.floor(Math.random() * nodes.length)];
-                    // Prevent Self-Connections to avoid infinite feedback loops
-                    while (target.id === source.id && nodes.length > 1) {
-                        target = nodes[Math.floor(Math.random() * nodes.length)];
+                nodes.forEach(target => {
+                    if (source.id !== target.id) {
+                        this.addConnection({
+                            id: `c-${source.id}-${target.id}`,
+                            sourceId: source.id,
+                            targetId: target.id,
+                            weight: Math.random() // Positive only
+                        });
                     }
-
-                    // Forward
-                    // Forward only (One-way)
-                    this.addConnection({
-                        id: `c-${source.id}-${target.id}-${k}`,
-                        sourceId: source.id,
-                        targetId: target.id,
-                        weight: Math.random() // Positive only (0 to 1) for teal visuals
-                    });
-
-                    // REMOVED: Twoway/Reverse connection logic
-                }
+                });
             });
-
         } else {
             // LAYER / INPUT / OUTPUT: Vertical Columns
             const height = config.height || 600;
