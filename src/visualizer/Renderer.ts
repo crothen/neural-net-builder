@@ -23,7 +23,8 @@ export class Renderer {
         transform: { x: number, y: number, k: number },
         hoveredNodeId?: string,
         inspection?: { sourceId: string | null, targetId: string | null },
-        showHidden: boolean = true
+        showHidden: boolean = true,
+        highlightedNodeId?: string | null
     ) {
         const { x: tx, y: ty, k: zoom } = transform;
 
@@ -75,6 +76,38 @@ export class Renderer {
                 this.ctx.lineWidth = 4;
                 this.ctx.shadowBlur = 15;
                 this.ctx.shadowColor = 'yellow';
+            } else if (highlightedNodeId && (conn.sourceId === highlightedNodeId || conn.targetId === highlightedNodeId)) {
+                // Persistent Highlight (Middle Click) - Light Green
+                this.ctx.strokeStyle = '#00ff88';
+                this.ctx.lineWidth = 2.5;
+                this.ctx.globalAlpha = 0.8;
+                this.ctx.shadowBlur = 8;
+                this.ctx.shadowColor = '#00ff88';
+
+                // Draw Direction Arrow
+                const midX = (source.x + target.x) / 2;
+                const midY = (source.y + target.y) / 2;
+                const dx = target.x - source.x;
+                const dy = target.y - source.y;
+                const angle = Math.atan2(dy, dx);
+                const arrowSize = 8;
+
+                this.ctx.stroke(); // Draw line first
+
+                this.ctx.save();
+                this.ctx.translate(midX, midY);
+                this.ctx.rotate(angle);
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, 0);
+                this.ctx.lineTo(-arrowSize, -arrowSize / 2);
+                this.ctx.lineTo(-arrowSize, arrowSize / 2);
+                this.ctx.closePath();
+                this.ctx.fillStyle = '#00ff88';
+                this.ctx.fill();
+                this.ctx.restore();
+
+                // Restart path for consistency (though we just stroked)
+                this.ctx.beginPath();
             } else {
                 // Dynamic styling based on Weight & Activity
                 let baseWidth = 0.5 + (weightAbs * 1.5); // Thicker connections = stronger weights
@@ -99,10 +132,11 @@ export class Renderer {
             }
 
             this.ctx.stroke();
+            this.ctx.globalAlpha = 1.0; // Reset alpha for text if needed (though stroke() used line alpha)
             this.ctx.shadowBlur = 0; // Reset
 
-            // Draw Weight Text if inspected
-            if (isInspected) {
+            // Draw Weight Text if inspected OR Highlighted
+            if (isInspected || (highlightedNodeId && (conn.sourceId === highlightedNodeId || conn.targetId === highlightedNodeId))) {
                 const midX = (source.x + target.x) / 2;
                 const midY = (source.y + target.y) / 2;
 

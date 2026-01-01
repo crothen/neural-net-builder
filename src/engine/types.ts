@@ -21,6 +21,7 @@ export interface NodeConfig {
     refractoryPeriod?: number; // Cycles to wait after firing
     activationType?: ActivationType; // Configurable firing logic
     decay?: number;
+    inputFrequency?: number; // Frequency/Density for INPUT nodes
 }
 
 export interface ConnectionConfig {
@@ -72,10 +73,12 @@ export interface ModuleConfig {
     decay?: number;
     refractoryPeriod?: number;
     bias?: number;
+    inputFrequency?: number;
 
     // Localization
     isLocalized?: boolean;
     localizationLeak?: number; // 0-100 (Replaces 'localizer' for internal use basically)
+    synapsesPerNode?: number; // Internal connections per node (default 2)
 }
 
 export type ConnectionSide = 'ALL' | 'LEFT' | 'RIGHT';

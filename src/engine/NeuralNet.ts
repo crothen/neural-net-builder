@@ -113,7 +113,8 @@ export class NeuralNet {
                         // Pass missing parameters to Node
                         refractoryPeriod: config.refractoryPeriod,
                         threshold: config.threshold,
-                        bias: config.bias
+                        bias: config.bias,
+                        inputFrequency: config.inputFrequency
                     });
                     this.nodeModuleMap.set(nodeId, config.id);
                 }
@@ -449,10 +450,11 @@ export class NeuralNet {
         }
     }
 
-    public updateNode(nodeId: string, config: { label?: string, inputType?: 'PULSE' | 'SIN' | 'NOISE' }) {
+    public updateNode(nodeId: string, config: { label?: string, inputType?: 'PULSE' | 'SIN' | 'NOISE', inputFrequency?: number }) {
         const node = this.nodes.get(nodeId);
         if (node) {
             if (config.label !== undefined) node.label = config.label;
+            if (config.inputFrequency !== undefined) node.inputFrequency = config.inputFrequency;
             if (config.inputType !== undefined) {
                 node.inputType = config.inputType;
                 // If switching to manual Pulse, user controls it. 
@@ -485,7 +487,7 @@ export class NeuralNet {
 
         // 2. Create new connections
         const nodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(moduleId + '-'));
-        const connectionsPerNode = 2; // Fixed sparse connectivity
+        const connectionsPerNode = module.synapsesPerNode || 2; // Fixed sparse connectivity
 
         const isLocalized = module.isLocalized || false;
         const leak = module.localizationLeak || 0;
@@ -830,13 +832,26 @@ export class NeuralNet {
             if (node.type === NodeType.INPUT) {
                 switch (node.inputType) {
                     case 'SIN':
-                        // Sin Wave: 0.5Hz based on tickCount
-                        node.activation = (Math.sin(this.tickCount * 0.1) + 1) / 2;
+                        // Sin Wave: Base 0.1 factor * frequency
+                        // Base period approx 60 ticks. Freq 1 = 0.1 rad/tick.
+                        const sinFreq = (node.inputFrequency || 1.0) * 0.1;
+                        node.activation = (Math.sin(this.tickCount * sinFreq) + 1) / 2;
                         node.potential = node.activation;
                         break;
                     case 'NOISE':
-                        // Random noise
-                        node.activation = Math.random();
+                        // Random noise with Frequency (Sample and Hold)
+                        const freq = node.inputFrequency || 1.0;
+                        if (freq >= 1) {
+                            // Update every tick (or multiple times, but discrete is max 1)
+                            node.activation = Math.random();
+                        } else {
+                            // Sample and Hold
+                            const period = Math.round(1 / freq);
+                            if (this.tickCount % period === 0) {
+                                node.activation = Math.random();
+                            }
+                            // Else keep previous activation
+                        }
                         node.potential = node.activation;
                         break;
                     case 'PULSE':

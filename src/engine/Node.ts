@@ -22,6 +22,7 @@ export class Node {
     public activationTimer: number = 0;
     public activationType: 'SUSTAINED' | 'PULSE' = 'PULSE';
     public inputType: 'PULSE' | 'SIN' | 'NOISE' = 'PULSE';
+    public inputFrequency: number = 1.0;
 
     constructor(config: NodeConfig) {
         this.id = config.id;
@@ -32,6 +33,7 @@ export class Node {
         this.bias = config.bias || 0;
         this.threshold = config.threshold !== undefined ? config.threshold : 1.0;
         this.refractoryPeriod = config.refractoryPeriod !== undefined ? Number(config.refractoryPeriod) : 2;
+        this.inputFrequency = config.inputFrequency !== undefined ? config.inputFrequency : 1.0;
 
         // Sanitize activation type to ensure consistent behavior
         const typeInput = config.activationType ? String(config.activationType).toUpperCase() : 'PULSE';

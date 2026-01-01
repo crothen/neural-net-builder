@@ -55,9 +55,11 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
     const [draggingModuleId, setDraggingModuleId] = useState<string | null>(null);
 
     // Connection Inspector State
-    const [inspection, setInspection] = useState<{ sourceId: string | null, targetId: string | null }>({ sourceId: null, targetId: null });
-    const inspectionRef = useRef(inspection);
-    inspectionRef.current = inspection;
+    const [highlightedNodeId, setHighlightedNodeId] = useState<string | null>(null);
+    const highlightedNodeIdRef = useRef<string | null>(null);
+    highlightedNodeIdRef.current = highlightedNodeId;
+
+
 
     // Expose Save/Load
     const justLoadedRef = useRef(false);
@@ -189,8 +191,9 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
                 netRef.current,
                 transformRef.current,
                 hoveredNodeIdRef.current,
-                inspectionRef.current,
-                showHiddenRef.current
+                undefined, // inspection
+                showHiddenRef.current,
+                highlightedNodeIdRef.current
             );
             requestRef.current = requestAnimationFrame(animate);
         };
@@ -244,17 +247,16 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         if (e.button === 1) {
             e.preventDefault();
             if (hoveredNodeId) {
-                if (!inspection.sourceId) {
-                    setInspection({ sourceId: hoveredNodeId, targetId: null });
-                } else {
-                    if (inspection.sourceId === hoveredNodeId) {
-                        setInspection({ sourceId: null, targetId: null });
-                    } else {
-                        setInspection(prev => ({ ...prev, targetId: hoveredNodeId }));
-                    }
-                }
+                // New logic: Highlight all connections for this node
+                // We reuse 'inspection' state for this, but maybe we need a new state?
+                // The prompt says "highlight them in light green".
+                // And "hover over a connection => see value".
+                // I'll repurpose 'inspection' to be more flexible or add a 'highlightedNodeId' state.
+                // Actually, Renderer.draw accepts 'inspection'. I will add 'highlightedNodeId' to Renderer.draw.
+                // Let's create a state for it.
+                setHighlightedNodeId(prev => (prev === hoveredNodeId ? null : hoveredNodeId));
             } else {
-                setInspection({ sourceId: null, targetId: null });
+                setHighlightedNodeId(null);
             }
             return;
         }

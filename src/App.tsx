@@ -450,6 +450,30 @@ function App() {
                     </label>
                   </div>
                 )}
+                {(selectedModule.type === 'INPUT') && (
+                  <div className="input-row">
+                    <label>Frequency: {selectedModule.inputFrequency || 1.0} <Tooltip text="Sig/Tick (Noise) or Hz factor (Sin)" />
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="0.1"
+                        max="10.0"
+                        value={selectedModule.inputFrequency || 1.0}
+                        onChange={(e) => {
+                          const val = parseFloat(e.target.value);
+                          handleUpdateConfig(selectedModule.id, { inputFrequency: val });
+                          // Also update all nodes in module immediately
+                          const nodes = canvasRef.current?.getModuleNodes(selectedModule.id) || [];
+                          nodes.forEach(n => {
+                            if (canvasRef.current) canvasRef.current.updateNode(n.id, { inputFrequency: val } as any);
+                          });
+                        }}
+                        style={{ width: '60px', float: 'right' }}
+                      />
+                    </label>
+                  </div>
+                )}
+
                 {selectedModule.type !== 'INPUT' && (
                   <div className="input-row">
                     <label>Threshold: {selectedModule.threshold !== undefined ? selectedModule.threshold.toFixed(1) : '1.0'} <Tooltip text="Voltage required to fire (Lower = Sensitive)" />
@@ -571,6 +595,22 @@ function App() {
                         </label>
                       </div>
                     )}
+                    <div className="input-row">
+                      <label>Synapses/Node <Tooltip text="Internal connections per neuron" />
+                        <input
+                          type="range"
+                          min="0"
+                          max="20"
+                          step="1"
+                          value={selectedModule.synapsesPerNode !== undefined ? selectedModule.synapsesPerNode : 2}
+                          onChange={(e) => handleUpdateConfig(selectedModule.id, { synapsesPerNode: parseInt(e.target.value) })}
+                          style={{ width: '100%' }}
+                        />
+                        <span style={{ fontSize: '0.8rem', color: '#888', float: 'right' }}>
+                          {selectedModule.synapsesPerNode !== undefined ? selectedModule.synapsesPerNode : 2}
+                        </span>
+                      </label>
+                    </div>
                   </>
                 )}
               </InspectorSection>
@@ -769,10 +809,10 @@ function App() {
             </div>
           )}
         </div>
-      </aside>
+      </aside >
 
       {/* 2. MAIN CANVAS */}
-      <main className="canvas-wrapper">
+      < main className="canvas-wrapper" >
         <NeuralCanvas
           ref={canvasRef}
           speed={simulation.speed}
@@ -781,10 +821,10 @@ function App() {
           onModuleSelect={handleModuleSelect}
           onNodeContextMenu={handleNodeContextMenu}
         />
-      </main>
+      </main >
 
       {/* 3. BOTTOM PANEL */}
-      <section className="bottom-panel">
+      < section className="bottom-panel" >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
           <h2>Active Entities ({modules.length})</h2>
         </div>
@@ -815,12 +855,12 @@ function App() {
           ))}
           {modules.length === 0 && <div style={{ color: '#666', padding: '10px' }}>No modules created. Add one from the sidebar.</div>}
         </div>
-      </section>
+      </section >
 
       {/* 4. RIGHT SIDEBAR (Creation & Global) */}
-      <aside className="sidebar right-sidebar">
+      < aside className="sidebar right-sidebar" >
         {/* Creation */}
-        <div className="control-group">
+        < div className="control-group" >
           <h2>Create Module</h2>
           <div className="input-row">
             <select
@@ -839,18 +879,21 @@ function App() {
               <input type="number" placeholder="Nodes" value={newModule.nodes} onChange={e => setNewModule({ ...newModule, nodes: parseInt(e.target.value) })} style={{ width: '100%' }} />
             </label>
           </div>
-          {newModule.type === 'LAYER' && (
-            <div className="input-row">
-              <label>Depth <Tooltip text="Number of columns (Layers only)" />
-                <input type="number" placeholder="Depth" value={newModule.depth} onChange={e => setNewModule({ ...newModule, depth: parseInt(e.target.value) })} style={{ width: '100%' }} />
-              </label>
-            </div>
-          )}
+          {
+            newModule.type === 'LAYER' && (
+              <div className="input-row">
+                <label>Depth <Tooltip text="Number of columns (Layers only)" />
+                  <input type="number" placeholder="Depth" value={newModule.depth} onChange={e => setNewModule({ ...newModule, depth: parseInt(e.target.value) })} style={{ width: '100%' }} />
+                </label>
+              </div>
+            )
+          }
           <button className="primary" onClick={addModule}>+ Add</button>
-        </div>
+        </div >
 
         {/* Global Controls */}
-        <div className="control-group" style={{ marginTop: 'auto' }}>
+        < div className="control-group" style={{ marginTop: 'auto' }
+        }>
           <h2>Global</h2>
           <label>
             Speed: {simulation.speed}ms <Tooltip text="Ticks duration (ms)" />
@@ -919,143 +962,147 @@ function App() {
             <button style={{ background: '#333' }} onClick={() => fileInputRef.current?.click()}>Load</button>
             <input type="file" ref={fileInputRef} style={{ display: 'none' }} accept=".json" onChange={handleLoad} />
           </div>
-        </div>
-      </aside>
+        </div >
+      </aside >
 
       {/* MODAL OVERLAY */}
-      {isLabelEditorOpen && selectedModule && (
-        <div className="modal-overlay" onClick={() => setIsLabelEditorOpen(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <span className="modal-title">Edit Labels: {selectedModule.name}</span>
-              <button className="modal-close" onClick={() => setIsLabelEditorOpen(false)}>×</button>
-            </div>
-            <div className="modal-body">
-              {canvasRef.current && (
-                <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                  {canvasRef.current.getModuleNodes(selectedModule.id).map(node => (
-                    <div key={node.id} className="label-row" style={{ display: 'flex', gap: '10px', marginBottom: '5px' }}>
-                      <span>Node {node.id.split('-').pop()}</span>
-                      <input
-                        type="text"
-                        placeholder="Label..."
-                        value={node.label}
-                        onChange={(e) => handleNodeRename(node.id, e.target.value)}
-                        style={{ flex: 1, padding: '4px', background: '#222', border: '1px solid #444', color: '#fff' }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* NODE INSPECTOR MODAL */}
-      {isMenuOpen && menuNodeId && nodeConnections && (
-        <div className="modal-overlay" onClick={closeNodeMenu}>
-          <div
-            className="modal-content"
-            onClick={e => e.stopPropagation()}
-            style={{
-              // Center Position
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-
-              // Sizing
-              width: '500px',
-              maxWidth: '90vw',
-              height: '80vh',
-              maxHeight: '80vh',
-
-              display: 'flex',
-              flexDirection: 'column',
-              margin: 0
-            }}
-          >
-            <div className="modal-header">
-              <span className="modal-title" style={{ fontSize: '14px' }}>
-                Node: {menuNodeId} <br />
-                <span style={{ fontSize: '10px', color: '#aaa', fontWeight: 'normal' }}>
-                  In: {nodeConnections.incoming.length} | Out: {nodeConnections.outgoing.length}
-                </span>
-              </span>
-              <button className="modal-close" onClick={closeNodeMenu} style={{ width: '24px', height: '24px', lineHeight: '20px', padding: 0, textAlign: 'center' }}>×</button>
-            </div>
-
-            <div style={{ padding: '10px', background: '#222', borderBottom: '1px solid #444' }}>
-              <select
-                multiple
-                value={filterModuleIds}
-                onChange={(e) => {
-                  const selected = Array.from(e.target.selectedOptions, option => option.value);
-                  // Toggle behavior for 'ALL'
-                  if (selected.includes('ALL') && !filterModuleIds.includes('ALL')) {
-                    setFilterModuleIds(['ALL']);
-                  } else if (selected.includes('ALL') && selected.length > 1) {
-                    setFilterModuleIds(selected.filter(x => x !== 'ALL'));
-                  } else if (selected.length === 0) {
-                    setFilterModuleIds(['ALL']);
-                  } else {
-                    setFilterModuleIds(selected);
-                  }
-                }}
-                style={{ width: '100%', height: '80px', padding: '5px', background: '#111', border: '1px solid #333', color: '#fff' }}
-              >
-                <option value="ALL">All Modules</option>
-                {/* Extract Unique Modules from Connections */}
-                {Array.from(new Set([
-                  ...nodeConnections.incoming.map((c: any) => c.sourceId.split('-')[0] + '-' + c.sourceId.split('-')[1]),
-                  ...nodeConnections.outgoing.map((c: any) => c.targetId.split('-')[0] + '-' + c.targetId.split('-')[1])
-                ])).map((modId) => (
-                  <option key={modId} value={modId}>{modId}</option>
-                ))}
-              </select>
-
-              <div style={{ marginTop: '5px', display: 'flex', gap: '5px' }}>
-                <button
-                  style={{ flex: 1, fontSize: '10px', padding: '4px' }}
-                  onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                >
-                  Sort Wgt {sortOrder === 'asc' ? '▲' : '▼'}
-                </button>
+      {
+        isLabelEditorOpen && selectedModule && (
+          <div className="modal-overlay" onClick={() => setIsLabelEditorOpen(false)}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+              <div className="modal-header">
+                <span className="modal-title">Edit Labels: {selectedModule.name}</span>
+                <button className="modal-close" onClick={() => setIsLabelEditorOpen(false)}>×</button>
+              </div>
+              <div className="modal-body">
+                {canvasRef.current && (
+                  <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                    {canvasRef.current.getModuleNodes(selectedModule.id).map(node => (
+                      <div key={node.id} className="label-row" style={{ display: 'flex', gap: '10px', marginBottom: '5px' }}>
+                        <span>Node {node.id.split('-').pop()}</span>
+                        <input
+                          type="text"
+                          placeholder="Label..."
+                          value={node.label}
+                          onChange={(e) => handleNodeRename(node.id, e.target.value)}
+                          style={{ flex: 1, padding: '4px', background: '#222', border: '1px solid #444', color: '#fff' }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
+          </div>
+        )
+      }
 
-            <div className="modal-body" style={{ flex: 1, overflowY: 'auto', fontSize: '12px' }}>
-              <h4 style={{ margin: '5px 0', color: '#888' }}>Incoming ({nodeConnections.incoming.length})</h4>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                {nodeConnections.incoming
-                  .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.sourceId.startsWith(fid)))
-                  .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
-                  .map((c: any) => (
-                    <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
-                      <span>← {c.sourceId}</span>
-                      <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>{c.weight.toFixed(3)}</span>
-                    </li>
-                  ))}
-              </ul>
+      {/* NODE INSPECTOR MODAL */}
+      {
+        isMenuOpen && menuNodeId && nodeConnections && (
+          <div className="modal-overlay" onClick={closeNodeMenu}>
+            <div
+              className="modal-content"
+              onClick={e => e.stopPropagation()}
+              style={{
+                // Center Position
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
 
-              <h4 style={{ margin: '10px 0 5px', color: '#888' }}>Outgoing ({nodeConnections.outgoing.length})</h4>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                {nodeConnections.outgoing
-                  .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.targetId.startsWith(fid)))
-                  .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
-                  .map((c: any) => (
-                    <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
-                      <span>→ {c.targetId}</span>
-                      <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>{c.weight.toFixed(3)}</span>
-                    </li>
+                // Sizing
+                width: '500px',
+                maxWidth: '90vw',
+                height: '80vh',
+                maxHeight: '80vh',
+
+                display: 'flex',
+                flexDirection: 'column',
+                margin: 0
+              }}
+            >
+              <div className="modal-header">
+                <span className="modal-title" style={{ fontSize: '14px' }}>
+                  Node: {menuNodeId} <br />
+                  <span style={{ fontSize: '10px', color: '#aaa', fontWeight: 'normal' }}>
+                    In: {nodeConnections.incoming.length} | Out: {nodeConnections.outgoing.length}
+                  </span>
+                </span>
+                <button className="modal-close" onClick={closeNodeMenu} style={{ width: '24px', height: '24px', lineHeight: '20px', padding: 0, textAlign: 'center' }}>×</button>
+              </div>
+
+              <div style={{ padding: '10px', background: '#222', borderBottom: '1px solid #444' }}>
+                <select
+                  multiple
+                  value={filterModuleIds}
+                  onChange={(e) => {
+                    const selected = Array.from(e.target.selectedOptions, option => option.value);
+                    // Toggle behavior for 'ALL'
+                    if (selected.includes('ALL') && !filterModuleIds.includes('ALL')) {
+                      setFilterModuleIds(['ALL']);
+                    } else if (selected.includes('ALL') && selected.length > 1) {
+                      setFilterModuleIds(selected.filter(x => x !== 'ALL'));
+                    } else if (selected.length === 0) {
+                      setFilterModuleIds(['ALL']);
+                    } else {
+                      setFilterModuleIds(selected);
+                    }
+                  }}
+                  style={{ width: '100%', height: '80px', padding: '5px', background: '#111', border: '1px solid #333', color: '#fff' }}
+                >
+                  <option value="ALL">All Modules</option>
+                  {/* Extract Unique Modules from Connections */}
+                  {Array.from(new Set([
+                    ...nodeConnections.incoming.map((c: any) => c.sourceId.split('-')[0] + '-' + c.sourceId.split('-')[1]),
+                    ...nodeConnections.outgoing.map((c: any) => c.targetId.split('-')[0] + '-' + c.targetId.split('-')[1])
+                  ])).map((modId) => (
+                    <option key={modId} value={modId}>{modId}</option>
                   ))}
-              </ul>
+                </select>
+
+                <div style={{ marginTop: '5px', display: 'flex', gap: '5px' }}>
+                  <button
+                    style={{ flex: 1, fontSize: '10px', padding: '4px' }}
+                    onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  >
+                    Sort Wgt {sortOrder === 'asc' ? '▲' : '▼'}
+                  </button>
+                </div>
+              </div>
+
+              <div className="modal-body" style={{ flex: 1, overflowY: 'auto', fontSize: '12px' }}>
+                <h4 style={{ margin: '5px 0', color: '#888' }}>Incoming ({nodeConnections.incoming.length})</h4>
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                  {nodeConnections.incoming
+                    .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.sourceId.startsWith(fid)))
+                    .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
+                    .map((c: any) => (
+                      <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
+                        <span>← {c.sourceId}</span>
+                        <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>{c.weight.toFixed(3)}</span>
+                      </li>
+                    ))}
+                </ul>
+
+                <h4 style={{ margin: '10px 0 5px', color: '#888' }}>Outgoing ({nodeConnections.outgoing.length})</h4>
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                  {nodeConnections.outgoing
+                    .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.targetId.startsWith(fid)))
+                    .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
+                    .map((c: any) => (
+                      <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
+                        <span>→ {c.targetId}</span>
+                        <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>{c.weight.toFixed(3)}</span>
+                      </li>
+                    ))}
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 }
 
