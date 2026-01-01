@@ -20,6 +20,25 @@ html,
   overflow: hidden;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
 /* Main Grid Layout */
 .app-container {
   display: grid;
@@ -35,16 +54,90 @@ html,
 /* Sidebar (Common) */
 .sidebar {
   background: var(--bg-sidebar);
-  /* padding: 1.5rem; REMOVED padding from container to allow scroll-content to fill */
   display: flex;
   flex-direction: column;
-  /* gap: 1.5rem; REMOVED gap */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 50;
-  /* Higher Z-Index */
-  overflow: visible;
-  /* Allow tooltips to pop out */
+  overflow: hidden;
+  /* Contain scroll */
   position: relative;
+}
+
+.sidebar-header {
+  padding: 1.5rem 1rem 1rem 1rem;
+  flex-shrink: 0;
+  background: var(--bg-sidebar);
+  z-index: 52;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  /* Important for flex scrolling */
+  padding: 0 1rem 50px 1rem;
+  /* Extra bottom padding */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Inspector Sections */
+.inspector-section {
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  /* overflow: hidden; Removed to allow inner content to be seen if needed, though they don't pop out. 
+     The issue is likely flex-shrink. */
+  flex-shrink: 0;
+  /* Prevent section from crushing itself */
+}
+
+.section-header {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.section-header:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.section-header.open {
+  border-bottom-color: var(--glass-border);
+}
+
+.section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ccc;
+  text-transform: uppercase;
+}
+
+.section-body {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .scroll-content {

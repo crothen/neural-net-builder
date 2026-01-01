@@ -18,8 +18,10 @@ export class Node {
     public decay: number = 0.1; // How much potential decays per tick (0-1)
     public threshold: number = 1.0;
     public refractoryPeriod: number = 2; // Cycles to wait
-    private refractoryTimer: number = 0;
+    public refractoryTimer: number = 0;
+    public activationTimer: number = 0;
     public activationType: 'SUSTAINED' | 'PULSE' = 'PULSE';
+    public inputType: 'PULSE' | 'SIN' | 'NOISE' = 'PULSE';
 
     constructor(config: NodeConfig) {
         this.id = config.id;
@@ -29,13 +31,11 @@ export class Node {
         this.label = config.label || '';
         this.bias = config.bias || 0;
         this.threshold = config.threshold !== undefined ? config.threshold : 1.0;
-        this.refractoryPeriod = config.refractoryPeriod !== undefined ? config.refractoryPeriod : 2;
-        this.activationType = config.activationType || 'PULSE';
+        this.refractoryPeriod = config.refractoryPeriod !== undefined ? Number(config.refractoryPeriod) : 2;
 
-        // Default Brain nodes to SUSTAINED if not specified? 
-        // Better to be explicit in config, usually.
-        // But for backward compatibility logic inside the class:
-        this.activationType = config.activationType || 'PULSE';
+        // Sanitize activation type to ensure consistent behavior
+        const typeInput = config.activationType ? String(config.activationType).toUpperCase() : 'PULSE';
+        this.activationType = (typeInput === 'SUSTAINED') ? 'SUSTAINED' : 'PULSE';
 
         // FIX: If it is an OUTPUT or INTERPRETATION node, it should have NO memory.
         if (this.type === NodeType.OUTPUT || this.type === NodeType.INTERPRETATION) {
@@ -56,7 +56,11 @@ export class Node {
             this.refractoryTimer--;
             this.isFiring = false;
             this.activation = 0.0;
-            this.potential = 0; // Hard reset during absolute refractory
+            // Only hard reset potential for PULSE nodes. 
+            // SUSTAINED nodes keep their charge but are legally prevented from firing.
+            if (this.activationType === 'PULSE') {
+                this.potential = 0;
+            }
             return;
         }
 
@@ -67,19 +71,14 @@ export class Node {
             this.isFiring = true;
             this.activation = 1.0; // Spike!
 
-            // FIX: Only apply Refractory Period to PULSE nodes
-            if (this.activationType === 'PULSE') {
+            // Apply Refractory Period to BOTH types to allow rate-limiting
+            const jitter = Math.random() < 0.5 ? 0 : 1;
+            this.refractoryTimer = this.refractoryPeriod + jitter;
 
-                const jitter = Math.random() < 0.5 ? 0 : 1;
-                this.refractoryTimer = this.refractoryPeriod + jitter;
+            if (this.activationType === 'PULSE') {
                 this.potential -= this.threshold; // Soft Reset
-            } else {
-                // SUSTAINED MODE:
-                // Do NOT set the timer.
-                // Do NOT subtract threshold.
-                // Just let the high potential sit there.
-                // It will naturally decay in Step 4.
             }
+            // SUSTAINED: Potential is maintained, but output is silenced for (refractory) ticks.
 
         } else {
             this.isFiring = false;

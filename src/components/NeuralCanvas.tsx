@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } f
 import { NeuralNet } from '../engine/NeuralNet';
 import { Renderer } from '../visualizer/Renderer';
 import { NodeType } from '../engine/types';
-import type { ModuleConfig, ConnectionSide } from '../engine/types';
+import type { ModuleConfig, ConnectionSide, ModuleConnectionConfig } from '../engine/types';
 import type { Node as NeuralNode } from '../engine/Node';
 
 interface NeuralCanvasProps {
@@ -10,14 +10,14 @@ interface NeuralCanvasProps {
     paused: boolean;
     showHidden: boolean;
     onModuleSelect?: (moduleId: string | null) => void;
-    onNodeContextMenu?: (nodeId: string, x: number, y: number) => void;
+    onNodeContextMenu?: (nodeId: string) => void;
 }
 
 export interface NeuralCanvasHandle {
     save: () => any;
     load: (data: any) => void;
     addModule: (config: ModuleConfig) => void;
-    connectModules: (srcId: string, tgtId: string, srcSide?: ConnectionSide, tgtSide?: ConnectionSide) => void;
+    connectModules: (srcId: string, tgtId: string, srcSide?: ConnectionSide, tgtSide?: ConnectionSide, coverage?: number, localizer?: number) => void;
     disconnectModules: (id1: string, id2: string) => void;
     getModuleConnectivity: (id: string) => { id: string, count: number, direction: 'in' | 'out' | 'self' }[];
     setGlobalDecay: (decay: number) => void;
@@ -29,9 +29,17 @@ export interface NeuralCanvasHandle {
     getModuleNodes: (moduleId: string) => NeuralNode[];
     getNodeConnections: (nodeId: string) => { incoming: any[], outgoing: any[] };
     clear: () => void;
+    removeModule: (id: string) => void;
+    getModuleConnectionConfig: (idA: string, idB: string) => ModuleConnectionConfig | undefined;
+    step: (count: number) => void;
+    getTickCount: () => number;
+    resetState: () => void;
 }
 
-export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({ speed, paused, showHidden, onModuleSelect, onNodeContextMenu }, ref) => {
+export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
+    { speed, paused, showHidden, onModuleSelect, onNodeContextMenu },
+    ref
+) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const netRef = useRef<NeuralNet>(new NeuralNet());
     const rendererRef = useRef<Renderer | null>(null);
@@ -65,8 +73,8 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({
         addModule: (config: ModuleConfig) => {
             netRef.current.addModule(config);
         },
-        connectModules: (srcId: string, tgtId: string, srcSide: ConnectionSide = 'ALL', tgtSide: ConnectionSide = 'ALL') => {
-            netRef.current.connectModules(srcId, tgtId, srcSide, tgtSide);
+        connectModules: (srcId: string, tgtId: string, srcSide: ConnectionSide = 'ALL', tgtSide: ConnectionSide = 'ALL', coverage: number = 100, localizer: number = 0) => {
+            netRef.current.connectModules(srcId, tgtId, srcSide, tgtSide, coverage, localizer);
         },
         disconnectModules: (id1, id2) => netRef.current.disconnectModules(id1, id2),
         getModuleConnectivity: (id) => netRef.current.getModuleConnectivity(id),
@@ -97,6 +105,27 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({
             netRef.current.connections = [];
             netRef.current.modules.clear();
             netRef.current.incoming.clear();
+            netRef.current.moduleConnections.clear();
+            netRef.current.tickCount = 0;
+        },
+        removeModule: (id: string) => {
+            netRef.current.removeModule(id);
+        },
+        getModuleConnectionConfig: (idA: string, idB: string) => {
+            let config = netRef.current.moduleConnections.get(`${idA}-${idB}`);
+            if (!config) config = netRef.current.moduleConnections.get(`${idB}-${idA}`);
+            return config;
+        },
+        step: (count: number) => {
+            for (let i = 0; i < count; i++) {
+                netRef.current.step();
+            }
+        },
+        getTickCount: () => {
+            return netRef.current.tickCount;
+        },
+        resetState: () => {
+            netRef.current.resetState();
         }
     }));
 
@@ -342,7 +371,7 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({
     const handleContextMenu = (e: React.MouseEvent) => {
         if (hoveredNodeId && onNodeContextMenu) {
             e.preventDefault();
-            onNodeContextMenu(hoveredNodeId, e.clientX, e.clientY);
+            onNodeContextMenu(hoveredNodeId);
         }
     };
 

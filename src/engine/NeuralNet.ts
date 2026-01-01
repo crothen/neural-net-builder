@@ -1,12 +1,15 @@
 import { Node } from './Node';
 import { Connection } from './Connection';
-import type { NodeConfig, ConnectionConfig, ModuleConfig, ConnectionSide } from './types';
+import type { NodeConfig, ConnectionConfig, ModuleConfig, ConnectionSide, ModuleConnectionConfig } from './types';
 import { NodeType } from './types';
 
 export class NeuralNet {
     public nodes: Map<string, Node> = new Map();
     public connections: Connection[] = [];
     public modules: Map<string, ModuleConfig> = new Map();
+
+    // Config Storage for Links between Modules
+    public moduleConnections: Map<string, ModuleConnectionConfig> = new Map();
 
     // Cache for quick lookup of incoming connections per node
     public incoming: Map<string, Connection[]> = new Map();
@@ -41,6 +44,12 @@ export class NeuralNet {
         }
         this.modules.set(config.id, config);
 
+        // Inherit defaults if missing
+        if (config.type === 'BRAIN') {
+            if (config.isLocalized === undefined) config.isLocalized = false;
+            if (config.localizationLeak === undefined) config.localizationLeak = 0;
+        }
+
         // Generate Nodes based on Type
         if (config.type === 'BRAIN') {
             // BRAIN: Golden Spiral Distribution
@@ -61,33 +70,17 @@ export class NeuralNet {
                     y: centerY + r * Math.sin(theta),
                     label: '',
                     activationType: config.activationType || 'PULSE',
-                    decay: config.decay
+                    decay: config.decay,
+                    // Pass missing parameters to Node
+                    refractoryPeriod: config.refractoryPeriod,
+                    threshold: config.threshold,
+                    bias: config.bias
                 });
                 this.nodeModuleMap.set(nodeId, config.id);
             }
 
-            // Recurrent Internal Connections (Sparse: 2 peers per node)
-            const nodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(config.id));
-            const connectionsPerNode = 2; // Fixed sparse connectivity
-
-            nodes.forEach(source => {
-                for (let k = 0; k < connectionsPerNode; k++) {
-                    if (nodes.length <= 1) break;
-
-                    let target = nodes[Math.floor(Math.random() * nodes.length)];
-                    // Prevent Self-Connections
-                    while (target.id === source.id) {
-                        target = nodes[Math.floor(Math.random() * nodes.length)];
-                    }
-
-                    this.addConnection({
-                        id: `c-${source.id}-${target.id}-${k}`,
-                        sourceId: source.id,
-                        targetId: target.id,
-                        weight: Math.random() // Positive only
-                    });
-                }
-            });
+            // Recurrent Internal Connections
+            this.rewireInternalConnections(config.id);
         } else {
             // LAYER / INPUT / OUTPUT: Vertical Columns
             const height = config.height || 600;
@@ -116,7 +109,11 @@ export class NeuralNet {
                         y: startY + stepY * (i + 1),
                         label: '',
                         activationType: config.activationType || 'PULSE',
-                        decay: config.decay
+                        decay: config.decay,
+                        // Pass missing parameters to Node
+                        refractoryPeriod: config.refractoryPeriod,
+                        threshold: config.threshold,
+                        bias: config.bias
                     });
                     this.nodeModuleMap.set(nodeId, config.id);
                 }
@@ -150,8 +147,76 @@ export class NeuralNet {
         if (!module) return;
 
         // Check if we need to regenerate structure
-        const structuralKeys: (keyof ModuleConfig)[] = ['type', 'nodeCount', 'depth', 'radius', 'height', 'width'];
-        const needsRegeneration = structuralKeys.some(key => newConfig[key] !== undefined && newConfig[key] !== module[key]);
+        // Check if we need to regenerate structure
+        const topologyKeys: (keyof ModuleConfig)[] = ['type', 'nodeCount', 'depth'];
+        const geometryKeys: (keyof ModuleConfig)[] = ['radius', 'height', 'width'];
+
+        const needsTopologyRegen = topologyKeys.some(key => newConfig[key] !== undefined && newConfig[key] !== module[key]);
+        const needsGeometryUpdate = geometryKeys.some(key => newConfig[key] !== undefined && newConfig[key] !== module[key]);
+        const needsRewiring = newConfig.isLocalized !== undefined || newConfig.localizationLeak !== undefined;
+
+        if (needsGeometryUpdate && !needsTopologyRegen) {
+            // Non-destructive update of node positions (Scaling)
+            Object.assign(module, newConfig);
+
+            if (module.type === 'BRAIN') {
+                const centerX = module.x;
+                const centerY = module.y;
+                const radius = module.radius || 200;
+                const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+
+                // Re-calculate positions for existing nodes based on index
+                const nodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(id + '-'))
+                    .sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
+
+                nodes.forEach((node, i) => {
+                    const theta = i * goldenAngle;
+                    const r = radius * Math.sqrt((i + 1) / nodes.length); // Use current length as count
+                    node.x = centerX + r * Math.cos(theta);
+                    node.y = centerY + r * Math.sin(theta);
+                });
+            } else {
+                // LAYER / INPUT / OUTPUT
+                const nodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(id + '-'));
+                const height = module.height || 600;
+                const startY = module.y - (height / 2);
+                const stepY = height / (module.nodeCount + 1);
+
+                const depth = module.depth || 1;
+                const widthSpacing = module.width || 100;
+                const startX = module.x - ((depth - 1) * widthSpacing) / 2;
+
+                nodes.forEach(node => {
+                    // Extract Indices from ID: "modId-depth-index"
+                    // Brain nodes might have "modId-index", but we check type above.
+                    // Layer nodes: "modId-col-row"
+                    const parts = node.id.split('-');
+                    // parts[0] = modId. 
+                    // if parts.length == 3: modId, col, row.
+                    // if parts.length == 2: modId, row (Input/Output usually depth=1 but might be stored as simple index if I look at addModule logic?)
+                    // Let's re-verify addModule.
+                    // Input/output logic: "nodeId = `${config.id}-${d}-${i}`" (lines 97-101 in previous view)
+                    // So they are 0-indexed column.
+
+                    if (parts.length >= 3) {
+                        const col = parseInt(parts[parts.length - 2]);
+                        const row = parseInt(parts[parts.length - 1]);
+
+                        const colX = startX + (col * widthSpacing);
+                        node.x = colX;
+                        node.y = startY + stepY * (row + 1);
+                    }
+                });
+            }
+            // Should we rewire internal if geometry changes? 
+            // If localized, YES, because distances changed.
+            if (module.isLocalized) {
+                this.rewireInternalConnections(id);
+            }
+            return;
+        }
+
+        const needsRegeneration = needsTopologyRegen;
 
         // Always update the config object
         Object.assign(module, newConfig);
@@ -168,10 +233,10 @@ export class NeuralNet {
             relevantNodes.forEach(node => {
                 if (newConfig.threshold !== undefined) node.threshold = newConfig.threshold;
                 if (newConfig.decay !== undefined) node.decay = newConfig.decay;
-                if (newConfig.refractoryPeriod !== undefined) node.refractoryPeriod = newConfig.refractoryPeriod;
+                if (newConfig.refractoryPeriod !== undefined) node.refractoryPeriod = Number(newConfig.refractoryPeriod);
                 if (newConfig.activationType !== undefined) {
-                    // If we allow hot-swapping activation type without regen:
-                    node.activationType = newConfig.activationType;
+                    const typeInput = String(newConfig.activationType).toUpperCase();
+                    node.activationType = (typeInput === 'SUSTAINED') ? 'SUSTAINED' : 'PULSE';
                 }
             });
 
@@ -179,8 +244,10 @@ export class NeuralNet {
                 // Optimization: Remove activationType from structuralKeys if we handle it here?
                 // No, line 153 already has it. I should remove it from structuralKeys in the next step
                 // OR jus let it regen if I don't handle it here. 
-                // Actually, hot-swapping activationType is safe (just a flag change).
-                // So I SHOULD remove it from structuralKeys to prevent regen.
+            }
+
+            if (needsRewiring) {
+                this.rewireInternalConnections(id);
             }
             return;
         }
@@ -382,10 +449,148 @@ export class NeuralNet {
         }
     }
 
-    public updateNode(nodeId: string, config: { label?: string }) {
+    public updateNode(nodeId: string, config: { label?: string, inputType?: 'PULSE' | 'SIN' | 'NOISE' }) {
         const node = this.nodes.get(nodeId);
         if (node) {
             if (config.label !== undefined) node.label = config.label;
+            if (config.inputType !== undefined) {
+                node.inputType = config.inputType;
+                // If switching to manual Pulse, user controls it. 
+                // If switching to generators, they will take over in step().
+            }
+        }
+    }
+
+    private getBrainNodeAngle(node: Node, mod: ModuleConfig): number {
+        return Math.atan2(node.y - mod.y, node.x - mod.x);
+    }
+
+    private getAngleDist(a1: number, a2: number) {
+        let diff = Math.abs(a1 - a2);
+        if (diff > Math.PI) diff = (2 * Math.PI) - diff;
+        return diff;
+    }
+
+    public rewireInternalConnections(moduleId: string) {
+        const module = this.modules.get(moduleId);
+        if (!module) return;
+
+        // 1. Remove existing internal connections
+        this.connections = this.connections.filter(c => {
+            const srcMod = this.nodeModuleMap.get(c.sourceId);
+            const tgtMod = this.nodeModuleMap.get(c.targetId);
+            return !(srcMod === moduleId && tgtMod === moduleId);
+        });
+        this.rebuildIncomingMap(); // Quickest way to clean up maps
+
+        // 2. Create new connections
+        const nodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(moduleId + '-'));
+        const connectionsPerNode = 2; // Fixed sparse connectivity
+
+        const isLocalized = module.isLocalized || false;
+        const leak = module.localizationLeak || 0;
+
+        nodes.forEach(source => {
+            // 1. Prepare Candidates
+            let candidates = nodes.filter(n => n.id !== source.id);
+
+            // 2. Sort by Euclidean Distance if Localized
+            if (isLocalized && module.type === 'BRAIN') {
+                candidates.sort((a, b) => {
+                    const dA = (a.x - source.x) ** 2 + (a.y - source.y) ** 2;
+                    const dB = (b.x - source.x) ** 2 + (b.y - source.y) ** 2;
+                    return dA - dB;
+                });
+            } else {
+                // Shuffle for random distribution if not localized
+                candidates.sort(() => Math.random() - 0.5);
+            }
+
+            // 3. Select Targets
+            const count = Math.min(connectionsPerNode, candidates.length);
+            for (let k = 0; k < count; k++) {
+                let target: Node;
+
+                if (isLocalized && module.type === 'BRAIN') {
+                    // Logic: Leak check determines if we pick the 'Next Closest' or a 'Random' one
+                    // Leak 0: Always pick index 0 (closest).
+                    // Leak 100: Always pick random.
+                    const roll = Math.random() * 100;
+
+                    if (roll >= leak) {
+                        // Pick CLOSEST (Start of sorted array)
+                        // effective "shift" from the sorted list
+                        // However, we shouldn't shift if we loop K times. 
+                        // Actually, if we want "Next Closest", we should just iterate K times through the sorted list.
+                        // But wait! K=2. "Leak 0" should mean we connect to Neighbor #1 and Neighbor #2.
+                        // "Leak 100" means Random #1 and Random #2.
+                        // So if Roll >= Leak (Localized), we want candidates[k]? 
+                        // But if we mix behavior? e.g. Conn #1 is Localized, Conn #2 is Random.
+                        // Then we need to manage the pool.
+
+                        // Let's use `splice` to ensure uniqueness.
+                        // If Localized -> Pick index 0.
+                        target = candidates.splice(0, 1)[0];
+                    } else {
+                        // Pick RANDOM from remaining
+                        const idx = Math.floor(Math.random() * candidates.length);
+                        target = candidates.splice(idx, 1)[0];
+                    }
+                } else {
+                    // Random (list is already shuffled if not localized)
+                    // Just take next.
+                    target = candidates.splice(0, 1)[0];
+                }
+
+                if (target) {
+                    this.addConnection({
+                        id: `c-${source.id}-${target.id}-${k}`,
+                        sourceId: source.id,
+                        targetId: target.id,
+                        weight: Math.random() // Positive only
+                    });
+                }
+            }
+        });
+    }
+    public removeModule(moduleId: string) {
+        if (!this.modules.has(moduleId)) return;
+
+        // 1. Remove Nodes
+        const nodesToRemove: string[] = [];
+        this.nodes.forEach(n => {
+            if (n.id.startsWith(moduleId + '-')) nodesToRemove.push(n.id);
+        });
+
+        nodesToRemove.forEach(id => {
+            this.nodes.delete(id);
+            this.incoming.delete(id);
+            this.nodeModuleMap.delete(id);
+        });
+
+        // 2. Remove Connections
+        this.connections = this.connections.filter(c => {
+            const srcExists = this.nodes.has(c.sourceId);
+            const tgtExists = this.nodes.has(c.targetId);
+            return srcExists && tgtExists;
+        });
+
+        this.rebuildIncomingMap();
+
+        // 3. Remove Module Config
+        this.modules.delete(moduleId);
+
+        // 4. Remove Related Module Connection Configs
+        for (const key of this.moduleConnections.keys()) {
+            // key is "sourceId-targetId"
+            // We need to check if moduleId is either source or target
+            // But formatting is hyphenated, and IDs can contain hyphens.
+            // Wait, standard mod IDs are usually "brain-1", "layer-2".
+            // Safest check: parse the stored values?
+            const config = this.moduleConnections.get(key);
+            if (config && (config.sourceId === moduleId || config.targetId === moduleId)) {
+                this.moduleConnections.delete(key);
+            }
         }
     }
 
@@ -400,7 +605,29 @@ export class NeuralNet {
             });
     }
 
-    public connectModules(sourceId: string, targetId: string, srcSide: ConnectionSide = 'ALL', tgtSide: ConnectionSide = 'ALL') {
+    public tickCount: number = 0;
+
+    public resetState() {
+        this.nodes.forEach(n => {
+            n.potential = 0;
+            n.activation = 0;
+            n.refractoryTimer = 0;
+            n.activationTimer = 0;
+        });
+        this.tickCount = 0;
+    }
+
+    public connectModules(
+        sourceId: string,
+        targetId: string,
+        srcSide: ConnectionSide = 'ALL',
+        tgtSide: ConnectionSide = 'ALL',
+        coverage: number = 100,
+        localizer: number = 0
+    ) {
+        // Enforce replacement policy: Clear existing connections between these modules first
+        this.disconnectModules(sourceId, targetId);
+
         const getNodesForSide = (modId: string, side: ConnectionSide): Node[] => {
             const mod = this.modules.get(modId);
             if (!mod) return [];
@@ -426,21 +653,108 @@ export class NeuralNet {
 
         const sourceNodes = getNodesForSide(sourceId, srcSide);
         const targetNodes = getNodesForSide(targetId, tgtSide);
+        const targetMod = this.modules.get(targetId);
 
-        if (sourceNodes.length === 0 || targetNodes.length === 0) return;
+        if (sourceNodes.length === 0 || targetNodes.length === 0 || !targetMod) return;
 
-        // const potential = sourceNodes.length * targetNodes.length;
-        // const isSparse = potential > 2500;
+        // Validation for Coverage
+        const finalCoverage = Math.max(1, Math.min(100, coverage));
+        // Calculate attempts per source node
+        const connectionsPerSource = Math.max(1, Math.floor(targetNodes.length * (finalCoverage / 100)));
 
-        sourceNodes.forEach(src => {
-            targetNodes.forEach((tgt) => {
+        // Store Configuration for Future Inspection
+        const linkId = `${sourceId}-${targetId}`;
+        this.moduleConnections.set(linkId, {
+            sourceId,
+            targetId,
+            coverage: finalCoverage,
+            localizer: localizer,
+            sides: { src: srcSide, tgt: tgtSide }
+        });
+
+        // If using Localizer, enforce IS LOCALIZED on target brain
+        // Localizer is now treated as "Leak" (0 = Strict, 100 = Random)
+        // A value < 100 implies some localization structure.
+        if (targetMod.type === 'BRAIN' && localizer < 100) {
+            if (!targetMod.isLocalized) {
+                targetMod.isLocalized = true;
+                this.rewireInternalConnections(targetMod.id);
+            }
+        }
+
+        sourceNodes.forEach((src, srcIndex) => {
+            // Determine Candidate Pool for this Source Node
+            let candidates: Node[] = [...targetNodes];
+
+            // LOCALIZATION LOGIC (Only if Target is Brain and Localizer < 100)
+            let preferredCandidates: Node[] = [];
+            const useLocalization = targetMod.type === 'BRAIN' && localizer < 100;
+
+            if (useLocalization) {
+                // 1. Determine "Source Angle/Phase"
+                let srcAngle = 0;
+                const sourceMod = this.modules.get(sourceId);
+
+                if (sourceMod && sourceMod.type === 'BRAIN') {
+                    // Use physical angle
+                    srcAngle = Math.atan2(src.y - sourceMod.y, src.x - sourceMod.x);
+                } else {
+                    // Linear Mapping: Map index to -PI..PI
+                    const ratio = srcIndex / sourceNodes.length;
+                    srcAngle = -Math.PI + (ratio * 2 * Math.PI);
+                }
+
+                // 2. Define Wedge around this angle
+                const sectorSize = (2 * Math.PI) / (sourceNodes.length || 1);
+                const threshold = Math.max(sectorSize / 2, 0.2); // Ensure at least some width
+
+                preferredCandidates = targetNodes.filter(tgt => {
+                    const tgtAngle = this.getBrainNodeAngle(tgt, targetMod);
+                    return this.getAngleDist(srcAngle, tgtAngle) <= threshold;
+                });
+
+                // If preferred is empty (bad luck?), fall back to all
+                if (preferredCandidates.length === 0) preferredCandidates = [...targetNodes];
+            }
+
+            // Generate connections
+            const connectedTargets = new Set<string>();
+            let attempts = 0;
+            const maxAttempts = connectionsPerSource * 2; // Safety break
+
+            while (connectedTargets.size < connectionsPerSource && attempts < maxAttempts) {
+                attempts++;
+
+                let targetPool = candidates;
+
+                // Apply Localization Roll (Treat localizer as LEAK)
+                // If localizer is 10, there is a 10% chance to LEAK (use global), 90% chance to be LOCAL.
+                if (useLocalization) {
+                    const roll = Math.random() * 100;
+                    if (roll > localizer) {
+                        // Logic: Roll (0-100) > Leak (10) -> Success (use Local)
+                        targetPool = preferredCandidates;
+                    }
+                }
+
+                if (targetPool.length === 0) continue;
+
+
+                // Pick random target
+                const tgt = targetPool[Math.floor(Math.random() * targetPool.length)];
+
+                if (connectedTargets.has(tgt.id)) continue; // Already connected
+                if (tgt.id === src.id) continue; // No self loops here
+
+                // Add Connection
                 this.addConnection({
                     id: `c-${src.id}-${tgt.id}`,
                     sourceId: src.id,
                     targetId: tgt.id,
                     weight: Math.random() // Positive only
                 });
-            });
+                connectedTargets.add(tgt.id);
+            }
         });
     }
 
@@ -470,15 +784,21 @@ export class NeuralNet {
                 sourceId: c.sourceId,
                 targetId: c.targetId,
                 weight: c.weight
-            }))
+            })),
+            moduleConnections: Array.from(this.moduleConnections.entries())
         };
     }
 
-    public fromJSON(data: { modules?: ModuleConfig[], nodes: NodeConfig[], connections: ConnectionConfig[] }) {
+    public fromJSON(data: { modules?: ModuleConfig[], nodes: NodeConfig[], connections: ConnectionConfig[], moduleConnections?: [string, ModuleConnectionConfig][] }) {
         this.nodes.clear();
         this.connections = [];
         this.incoming.clear();
         this.modules.clear();
+        this.moduleConnections.clear();
+
+        if (data.moduleConnections) {
+            data.moduleConnections.forEach(([key, val]) => this.moduleConnections.set(key, val));
+        }
 
         if (data.modules) {
             data.modules.forEach(m => this.modules.set(m.id, m));
@@ -502,7 +822,32 @@ export class NeuralNet {
     }
 
     public step() {
+        this.tickCount++;
         const inputSums = new Map<string, number>();
+
+        // 1. Process INPUT Nodes based on InputType
+        this.nodes.forEach(node => {
+            if (node.type === NodeType.INPUT) {
+                switch (node.inputType) {
+                    case 'SIN':
+                        // Sin Wave: 0.5Hz based on tickCount
+                        node.activation = (Math.sin(this.tickCount * 0.1) + 1) / 2;
+                        node.potential = node.activation;
+                        break;
+                    case 'NOISE':
+                        // Random noise
+                        node.activation = Math.random();
+                        node.potential = node.activation;
+                        break;
+                    case 'PULSE':
+                    default:
+                        // Keep manual value, but maybe decay if needed (or not, if manual)
+                        // For now, do nothing, assume user sets it or it stays.
+                        break;
+                }
+                node.isFiring = node.activation > 0.5;
+            }
+        });
 
         this.nodes.forEach(node => {
             if (node.type === NodeType.INPUT) return;
@@ -669,34 +1014,33 @@ export class NeuralNet {
         });
     }
 
-    private rebuildIncomingMap() {
-        this.incoming.clear();
-        this.connections.forEach(c => {
-            if (!this.incoming.has(c.targetId)) {
-                this.incoming.set(c.targetId, []);
-            }
-            this.incoming.get(c.targetId)?.push(c);
-        });
-    }
+
 
     /**
      * Removes all connections between two modules.
      */
     public disconnectModules(modId1: string, modId2: string) {
+        // Find Connections between these two modules
         this.connections = this.connections.filter(c => {
-            const isSrc1 = this.nodeModuleMap.get(c.sourceId) === modId1;
-            const isTgt2 = this.nodeModuleMap.get(c.targetId) === modId2;
+            const srcMod = this.nodeModuleMap.get(c.sourceId);
+            const tgtMod = this.nodeModuleMap.get(c.targetId);
 
-            const isSrc2 = this.nodeModuleMap.get(c.sourceId) === modId2;
-            const isTgt1 = this.nodeModuleMap.get(c.targetId) === modId1;
+            // Check if connection is FROM 1 TO 2 or FROM 2 TO 1
+            const isMatch = (srcMod === modId1 && tgtMod === modId2) || (srcMod === modId2 && tgtMod === modId1);
 
-            // Remove if 1->2 OR 2->1 (Total disconnect? Or just directed?)
-            // User likely wants granular control. Let's strictly support directional or both.
-            // For now, let's just remove ALL links between them to be safe/simple "Delete Link" action.
-            return !((isSrc1 && isTgt2) || (isSrc2 && isTgt1));
+            // Keep if NOT a match (filter removes matches)
+            return !isMatch;
         });
 
-        // Rebuild lookup
+        // Rebuild incoming map
+        this.rebuildIncomingMap();
+
+        // Also remove Module Connection Config
+        this.moduleConnections.delete(`${modId1}-${modId2}`);
+        this.moduleConnections.delete(`${modId2}-${modId1}`);
+    }
+
+    private rebuildIncomingMap() {
         this.incoming.clear();
         this.connections.forEach(c => {
             const list = this.incoming.get(c.targetId);

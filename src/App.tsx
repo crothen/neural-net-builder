@@ -11,6 +11,22 @@ const Tooltip = ({ text }: { text: string }) => (
   </span>
 );
 
+// --- Components ---
+
+const InspectorSection = ({ title, children, defaultOpen = true }: { title: string, children: React.ReactNode, defaultOpen?: boolean }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  return (
+    <div className="inspector-section">
+      <div className={`section-header ${isOpen ? 'open' : ''}`} onClick={() => setIsOpen(!isOpen)}>
+        <span className="section-title">{title}</span>
+        <span style={{ fontSize: '0.8rem', color: '#888' }}>{isOpen ? '▼' : '▶'}</span>
+      </div>
+      {isOpen && <div className="section-body">{children}</div>}
+    </div>
+  );
+};
+
 function App() {
   const canvasRef = useRef<NeuralCanvasHandle>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -42,11 +58,13 @@ function App() {
   // --- Connection State (Contextual) ---
   const [connectionTargetId, setConnectionTargetId] = useState<string>('');
   const [connSides, setConnSides] = useState<{ src: ConnectionSide, tgt: ConnectionSide }>({ src: 'ALL', tgt: 'ALL' });
+  const [connCoverage, setConnCoverage] = useState<number>(100);
+  const [connLocalizer, setConnLocalizer] = useState<number>(0);
   const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(false);
 
   // --- Node Context Menu State ---
   const [menuNodeId, setMenuNodeId] = useState<string | null>(null);
-  const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
+  // const [menuPos, setMenuPos] = useState({ x: 0, y: 0 }); // No longer needed
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [nodeConnections, setNodeConnections] = useState<{ incoming: any[], outgoing: any[] } | null>(null);
   const [filterModuleIds, setFilterModuleIds] = useState<string[]>(['ALL']);
@@ -135,6 +153,8 @@ function App() {
   const handleModuleSelect = (id: string | null) => {
     setSelectedModuleId(id);
     setConnectionTargetId('');
+    setConnCoverage(100);
+    setConnLocalizer(0);
     refreshInspector(id);
   };
 
@@ -167,7 +187,7 @@ function App() {
 
   const handleConnect = () => {
     if (!canvasRef.current || !selectedModuleId || !connectionTargetId) return;
-    canvasRef.current.connectModules(selectedModuleId, connectionTargetId, connSides.src, connSides.tgt);
+    canvasRef.current.connectModules(selectedModuleId, connectionTargetId, connSides.src, connSides.tgt, connCoverage, connLocalizer);
     refreshInspector(selectedModuleId);
   };
 
@@ -198,11 +218,11 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
-  const handleNodeContextMenu = (nodeId: string, x: number, y: number) => {
+  const handleNodeContextMenu = (nodeId: string) => {
     if (canvasRef.current && canvasRef.current.getNodeConnections) {
       const conns = canvasRef.current.getNodeConnections(nodeId);
       setMenuNodeId(nodeId);
-      setMenuPos({ x, y });
+      // setMenuPos({ x, y });
       setNodeConnections(conns);
       setIsMenuOpen(true);
     }
@@ -249,7 +269,8 @@ function App() {
           canvasRef.current.addModule({
             id: 'brain-1', type: 'BRAIN', x: 600, y: 400, nodeCount: 200, depth: 1, label: 'Brain', name: 'Brain',
             activationType: 'SUSTAINED', threshold: 0.5, refractoryPeriod: 1, radius: 200, height: 0,
-            hebbianLearning: true, learningRate: 0.01
+            hebbianLearning: true, learningRate: 0.01,
+            isLocalized: true, localizationLeak: 20
           });
 
           canvasRef.current.addModule({
@@ -274,268 +295,480 @@ function App() {
     <div className="app-container">
       {/* 1. LEFT SIDEBAR (Inspector Only) */}
       <aside className="sidebar left-sidebar">
-        <h1>NEURAL ARCHITECT</h1>
+        <div className="sidebar-header">
+          <h1>NEURAL ARCHITECT</h1>
+        </div>
 
-        {/* Inspector Panel */}
-        {selectedModule ? (
-          <div className="control-group" style={{ border: '1px solid var(--accent-color)', background: 'rgba(0, 212, 255, 0.05)' }}>
-            <h2 style={{ color: 'var(--accent-color)', marginBottom: '0' }}>Inspector: {selectedModule.name}</h2>
-            <div style={{ fontSize: '0.75rem', color: '#666', marginBottom: '10px', fontFamily: 'monospace' }}>ID: {selectedModule.id}</div>
+        <div className="sidebar-content">
+          {/* Inspector Panel */}
+          {selectedModule ? (
+            <>
+              <div style={{ marginBottom: '10px', padding: '0 5px' }}>
+                <h2 style={{ color: 'var(--accent-color)', marginBottom: '0', fontSize: '1.1rem' }}>{selectedModule.name}</h2>
+                <div style={{ fontSize: '0.75rem', color: '#666', fontFamily: 'monospace' }}>ID: {selectedModule.id}</div>
+              </div>
 
-            <label>Name <Tooltip text="Module identifier" />
-              <input
-                type="text"
-                value={selectedModule.name || selectedModule.label || ''}
-                onChange={(e) => handleRename(selectedModule.id, e.target.value)}
-              />
-            </label>
+              {/* SECTION: GENERAL */}
+              <InspectorSection title="General">
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+                  <button
+                    onClick={() => {
+                      if (window.confirm(`Delete module "${selectedModule.name}"? This cannot be undone.`)) {
+                        if (canvasRef.current) {
+                          canvasRef.current.removeModule(selectedModule.id);
+                          refreshModules();
+                          setSelectedModuleId(null);
+                        }
+                      }
+                    }}
+                    style={{
+                      background: '#ff4444',
+                      color: 'white',
+                      border: 'none',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontSize: '0.8rem'
+                    }}
+                  >
+                    Delete Module
+                  </button>
+                </div>
 
-            <div className="input-row">
-              <label>Color <Tooltip text="Visual color tint" />
-                <input
-                  type="color"
-                  value={selectedModule.color || (selectedModule.type === 'INPUT' ? '#ff00ff' : selectedModule.type === 'OUTPUT' ? '#ffff00' : '#00ffff')}
-                  onChange={(e) => handleUpdateConfig(selectedModule.id, { color: e.target.value })}
-                  style={{ width: '100%', padding: '2px', height: '30px' }}
-                />
-              </label>
-            </div>
+                <label>Name <Tooltip text="Module identifier" />
+                  <input
+                    type="text"
+                    value={selectedModule.name || selectedModule.label || ''}
+                    onChange={(e) => handleRename(selectedModule.id, e.target.value)}
+                  />
+                </label>
 
-            <div className="input-row">
-              <label>Nodes <Tooltip text="Number of neurons" />
-                <input
-                  type="number"
-                  value={selectedModule.nodeCount}
-                  onChange={(e) => handleUpdateConfig(selectedModule.id, { nodeCount: parseInt(e.target.value) })}
-                />
-              </label>
-            </div>
-
-            <div className="input-row">
-              <label>Threshold: {selectedModule.threshold !== undefined ? selectedModule.threshold.toFixed(1) : '1.0'} <Tooltip text="Voltage required to fire (Lower = Sensitive)" />
-                <input
-                  type="range"
-                  min="0.1"
-                  max="5.0"
-                  step="0.1"
-                  value={selectedModule.threshold !== undefined ? selectedModule.threshold : 1.0}
-                  onChange={(e) => handleUpdateConfig(selectedModule.id, { threshold: parseFloat(e.target.value) })}
-                  style={{ width: '100%' }}
-                />
-              </label>
-            </div>
-
-            {selectedModule.type === 'BRAIN' && (
-              <>
-                <div className="toggle-container" style={{ marginTop: '10px' }}>
-                  <span className="toggle-label">Hebbian Learning <Tooltip text="Auto-adjust weights based on activity" /></span>
-                  <label className="switch">
+                <div className="input-row">
+                  <label>Color <Tooltip text="Visual color tint" />
                     <input
-                      type="checkbox"
-                      checked={!!selectedModule.hebbianLearning}
-                      onChange={(e) => handleUpdateConfig(selectedModule.id, { hebbianLearning: e.target.checked })}
+                      type="color"
+                      value={selectedModule.color || (selectedModule.type === 'INPUT' ? '#ff00ff' : selectedModule.type === 'OUTPUT' ? '#ffff00' : '#00ffff')}
+                      onChange={(e) => handleUpdateConfig(selectedModule.id, { color: e.target.value })}
+                      style={{ width: '100%', padding: '2px', height: '30px' }}
                     />
-                    <span className="slider"></span>
                   </label>
                 </div>
 
-                {(selectedModule.type === 'BRAIN' && selectedModule.hebbianLearning) && (
+                <div className="input-row">
+                  <label>Nodes <Tooltip text="Number of neurons" />
+                    <input
+                      type="number"
+                      value={selectedModule.nodeCount}
+                      onChange={(e) => handleUpdateConfig(selectedModule.id, { nodeCount: parseInt(e.target.value) })}
+                    />
+                  </label>
+                </div>
+
+                {selectedModule.type === 'LAYER' && (
+                  <div className="input-row">
+                    <label>Depth <Tooltip text="Number of columns (Layers only)" />
+                      <input
+                        type="number"
+                        value={selectedModule.depth || 1}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { depth: parseInt(e.target.value) })}
+                      />
+                    </label>
+                  </div>
+                )}
+
+                {/* SCALING CONTROLS */}
+                {selectedModule.type === 'BRAIN' && (
+                  <div className="input-row">
+                    <label>Size (Radius) <Tooltip text="Physical size of the brain on canvas" />
+                      <input
+                        type="range"
+                        min="50"
+                        max="500"
+                        step="10"
+                        value={selectedModule.radius || 200}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { radius: parseInt(e.target.value) })}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                )}
+                {(selectedModule.type === 'LAYER' || selectedModule.type === 'INPUT' || selectedModule.type === 'OUTPUT') && (
+                  <div className="input-row">
+                    <label>V-Spacing (Height) <Tooltip text="Vertical spread of nodes" />
+                      <input
+                        type="range"
+                        min="100"
+                        max="1000"
+                        step="10"
+                        value={selectedModule.height || 600}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { height: parseInt(e.target.value) })}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                )}
+                {selectedModule.type === 'LAYER' && (
+                  <div className="input-row">
+                    <label>H-Spacing (Width) <Tooltip text="Horizontal spread of columns" />
+                      <input
+                        type="range"
+                        min="20"
+                        max="300"
+                        step="10"
+                        value={selectedModule.width || 100}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { width: parseInt(e.target.value) })}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                )}
+
+              </InspectorSection>
+
+              {/* SECTION: PARAMETERS */}
+              <InspectorSection title="Parameters">
+                {selectedModule.type === 'INPUT' && (
+                  <div className="input-row">
+                    <label>Input Pattern <Tooltip text="Auto-generated signal pattern" />
+                      <select
+                        value={(canvasRef.current?.getModuleNodes(selectedModule.id) || [])[0]?.inputType || 'PULSE'}
+                        onChange={(e) => {
+                          // Update ALL nodes in this input module
+                          const newVal = e.target.value;
+                          const nodes = canvasRef.current?.getModuleNodes(selectedModule.id) || [];
+                          nodes.forEach(n => {
+                            if (canvasRef.current) canvasRef.current.updateNode(n.id, { inputType: newVal } as any);
+                          });
+                          refreshInspector(selectedModule.id);
+                        }}
+                        style={{ width: '100%' }}
+                      >
+                        <option value="PULSE">Pulse (Manual)</option>
+                        <option value="SIN">Sin Wave (0.5Hz)</option>
+                        <option value="NOISE">White Noise</option>
+                      </select>
+                    </label>
+                  </div>
+                )}
+                {selectedModule.type !== 'INPUT' && (
+                  <div className="input-row">
+                    <label>Threshold: {selectedModule.threshold !== undefined ? selectedModule.threshold.toFixed(1) : '1.0'} <Tooltip text="Voltage required to fire (Lower = Sensitive)" />
+                      <input
+                        type="range"
+                        min="0.1"
+                        max="5.0"
+                        step="0.1"
+                        value={selectedModule.threshold !== undefined ? selectedModule.threshold : 1.0}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { threshold: parseFloat(e.target.value) })}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                )}
+
+                {(selectedModule.type !== 'INPUT' && selectedModule.type !== 'OUTPUT') && (
+                  <div className="input-row">
+                    <label>Refractory (Ticks) <Tooltip text="Cycles to wait after firing before firing again" />
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={selectedModule.refractoryPeriod !== undefined ? selectedModule.refractoryPeriod : 2}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { refractoryPeriod: parseInt(e.target.value) })}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                )}
+
+                {selectedModule.type === 'BRAIN' && (
                   <>
-                    <div className="input-row">
-                      <label>Learning Rate <Tooltip text="Hebbian learning rate" />
+                    <div className="toggle-container" style={{ marginTop: '0' }}>
+                      <span className="toggle-label">Hebbian Learning <Tooltip text="Auto-adjust weights based on activity" /></span>
+                      <label className="switch">
                         <input
-                          type="number"
-                          step="0.001"
-                          min="0"
-                          max="1"
-                          value={selectedModule.learningRate || 0.01}
-                          onChange={(e) => handleUpdateConfig(selectedModule.id, { learningRate: parseFloat(e.target.value) })}
-                          style={{ width: '100%' }}
+                          type="checkbox"
+                          checked={!!selectedModule.hebbianLearning}
+                          onChange={(e) => handleUpdateConfig(selectedModule.id, { hebbianLearning: e.target.checked })}
                         />
+                        <span className="slider"></span>
                       </label>
                     </div>
-                    <div className="input-row">
-                      <label>Pruning Thresh <Tooltip text="Remove connections weaker than this (abs)" />
+
+                    {(selectedModule.type === 'BRAIN' && selectedModule.hebbianLearning) && (
+                      <div className="inspector-section" style={{ background: 'rgba(0,0,0,0.2)' }}>
+                        <div className="section-body" style={{ padding: '10px' }}>
+                          <div className="input-row">
+                            <label>Learning Rate <Tooltip text="Hebbian learning rate" />
+                              <input
+                                type="number"
+                                step="0.001"
+                                min="0"
+                                max="1"
+                                value={selectedModule.learningRate || 0.01}
+                                onChange={(e) => handleUpdateConfig(selectedModule.id, { learningRate: parseFloat(e.target.value) })}
+                                style={{ width: '100%' }}
+                              />
+                            </label>
+                          </div>
+                          <div className="input-row">
+                            <label>Pruning Thresh <Tooltip text="Remove connections weaker than this (abs)" />
+                              <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                max="1"
+                                value={selectedModule.pruningThreshold !== undefined ? selectedModule.pruningThreshold : 0.05}
+                                onChange={(e) => handleUpdateConfig(selectedModule.id, { pruningThreshold: parseFloat(e.target.value) })}
+                                style={{ width: '100%' }}
+                              />
+                            </label>
+                          </div>
+                          <div className="input-row">
+                            <label>Regrowth Rate <Tooltip text="New connections per tick (0.1 = 1 per 10 ticks)" />
+                              <input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                max="10"
+                                value={selectedModule.regrowthRate || 0}
+                                onChange={(e) => handleUpdateConfig(selectedModule.id, { regrowthRate: parseFloat(e.target.value) })}
+                                style={{ width: '100%' }}
+                              />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="toggle-container" style={{ marginTop: '15px' }}>
+                      <span className="toggle-label">Localized Structure <Tooltip text="Spatially optimize internal connections" /></span>
+                      <label className="switch">
                         <input
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          max="1"
-                          value={selectedModule.pruningThreshold !== undefined ? selectedModule.pruningThreshold : 0.05}
-                          onChange={(e) => handleUpdateConfig(selectedModule.id, { pruningThreshold: parseFloat(e.target.value) })}
-                          style={{ width: '100%' }}
+                          type="checkbox"
+                          checked={!!selectedModule.isLocalized}
+                          onChange={(e) => {
+                            if (window.confirm("Changing localization will rewire internal connections. Continue?")) {
+                              handleUpdateConfig(selectedModule.id, { isLocalized: e.target.checked });
+                            }
+                          }}
                         />
+                        <span className="slider"></span>
                       </label>
                     </div>
-                    <div className="input-row">
-                      <label>Regrowth Rate <Tooltip text="New connections per tick (0.1 = 1 per 10 ticks)" />
-                        <input
-                          type="number"
-                          step="0.1"
-                          min="0"
-                          max="10"
-                          value={selectedModule.regrowthRate || 0}
-                          onChange={(e) => handleUpdateConfig(selectedModule.id, { regrowthRate: parseFloat(e.target.value) })}
-                          style={{ width: '100%' }}
-                        />
-                      </label>
-                    </div>
+
+                    {selectedModule.isLocalized && (
+                      <div className="input-row">
+                        <label>Leak: {selectedModule.localizationLeak !== undefined ? selectedModule.localizationLeak : 0}% <Tooltip text="0% = Strict Neighbors, 100% = Random" />
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={selectedModule.localizationLeak !== undefined ? selectedModule.localizationLeak : 0}
+                            onChange={(e) => handleUpdateConfig(selectedModule.id, { localizationLeak: parseInt(e.target.value) })}
+                            style={{ width: '100%' }}
+                          />
+                        </label>
+                      </div>
+                    )}
                   </>
                 )}
-              </>
-            )}
+              </InspectorSection>
 
-            <div className="input-row">
-              <label>Refractory (Ticks) <Tooltip text="Cycles to wait after firing before firing again" />
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={selectedModule.refractoryPeriod !== undefined ? selectedModule.refractoryPeriod : 2}
-                  onChange={(e) => handleUpdateConfig(selectedModule.id, { refractoryPeriod: parseInt(e.target.value) })}
-                  style={{ width: '100%' }}
-                />
-              </label>
-            </div>
-            {selectedModule.type === 'LAYER' && (
-              <div className="input-row">
-                <label>Depth <Tooltip text="Number of columns (Layers only)" />
-                  <input
-                    type="number"
-                    value={selectedModule.depth || 1}
-                    onChange={(e) => handleUpdateConfig(selectedModule.id, { depth: parseInt(e.target.value) })}
-                  />
-                </label>
-              </div>
-            )}
+              {/* SECTION: CONNECTIONS */}
+              <InspectorSection title="Connections">
+                {selectedModuleStats.length === 0 ? (
+                  <div style={{ fontSize: '0.8rem', color: '#555', fontStyle: 'italic', textAlign: 'center', padding: '10px' }}>No active connections</div>
+                ) : (
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    {selectedModuleStats.map((stat, idx) => {
+                      const isOut = stat.direction === 'out';
+                      const isIn = stat.direction === 'in';
+                      const color = isOut ? '#00ffaa' : (isIn ? '#00aaff' : '#aaa');
+                      const icon = isOut ? '→' : (isIn ? '←' : '↻');
 
-            {/* Connection List */}
-            <div style={{ marginTop: '15px', borderTop: '1px solid #444', paddingTop: '10px' }}>
-              <h3 style={{ fontSize: '0.9rem', color: '#aaa', marginBottom: '8px' }}>Connections</h3>
-              {selectedModuleStats.length === 0 ? (
-                <div style={{ fontSize: '0.8rem', color: '#555', fontStyle: 'italic', textAlign: 'center', padding: '10px' }}>No active connections</div>
-              ) : (
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  {selectedModuleStats.map((stat, idx) => {
-                    const isOut = stat.direction === 'out';
-                    const isIn = stat.direction === 'in';
-                    const color = isOut ? '#00ffaa' : (isIn ? '#00aaff' : '#aaa');
-                    const icon = isOut ? '→' : (isIn ? '←' : '↻');
+                      return (
+                        <li key={idx} style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          fontSize: '0.8rem',
+                          background: 'rgba(255,255,255,0.05)',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          borderLeft: `3px solid ${color}`
+                        }}>
+                          <div
+                            onClick={() => {
+                              // Load settings into form
+                              if (canvasRef.current && canvasRef.current.getModuleConnectionConfig) {
+                                const config = canvasRef.current.getModuleConnectionConfig(selectedModule.id, stat.id);
+                                if (config) {
+                                  // If the saved config src/tgt matches our perspective
+                                  setConnectionTargetId(stat.id);
+                                  // Need to verify if 'stat.id' is source or target relative to 'selectedModule.id'
+                                  // Actually, 'Connect To' assumes Selected is Source. 
+                                  // But connection might be Incoming.
+                                  // If Incoming, we swap?
+                                  // The UI "Connect To" is strictly Outgoing creation.
+                                  // If we click an Incoming connection, can we edit it?
+                                  // Only if we treat 'selected' as target? 
+                                  // No, simpler: Just load the params.
+                                  setConnCoverage(config.coverage);
+                                  setConnLocalizer(config.localizer);
+                                  setConnSides(config.sides);
+                                }
+                              }
+                            }}
+                            style={{ display: 'flex', alignItems: 'center', gap: '6px', overflow: 'hidden', flex: 1, cursor: 'pointer' }}
+                            title="Click to edit connection settings"
+                          >
+                            <span style={{ color: color, fontWeight: 'bold' }}>{icon}</span>
+                            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>
+                              {modules.find(m => m.id === stat.id)?.name || stat.id}
+                            </span>
+                            <span style={{ color: '#666', fontSize: '0.7rem' }}>({stat.count} connections)</span>
+                          </div>
+                          <div
+                            role="button"
+                            onClick={() => {
+                              if (window.confirm("Disconnect these modules?")) {
+                                handleDisconnect(selectedModule.id, stat.id);
+                              }
+                            }}
+                            style={{
+                              width: '14px',
+                              height: '14px',
+                              minWidth: '14px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              marginLeft: '8px',
+                              background: 'rgba(255, 50, 50, 0.1)',
+                              border: '1px solid #500',
+                              borderRadius: '3px',
+                              color: '#f55',
+                              fontSize: '10px',
+                              lineHeight: '1',
+                              cursor: 'pointer',
+                              flexShrink: 0,
+                              userSelect: 'none'
+                            }}
+                            title="Disconnect"
+                          >
+                            ×
+                          </div>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
 
-                    return (
-                      <li key={idx} style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        fontSize: '0.8rem',
-                        background: 'rgba(255,255,255,0.05)',
-                        padding: '4px 8px', // Reduced padding
-                        borderRadius: '4px',
-                        borderLeft: `3px solid ${color}`
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflow: 'hidden', flex: 1 }}>
-                          <span style={{ color: color, fontWeight: 'bold' }}>{icon}</span>
-                          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }} title={modules.find(m => m.id === stat.id)?.name || stat.id}>
-                            {modules.find(m => m.id === stat.id)?.name || stat.id}
-                          </span>
-                          <span style={{ color: '#666', fontSize: '0.7rem' }}>({stat.count})</span>
-                        </div>
-                        <div
-                          role="button"
-                          onClick={() => handleDisconnect(selectedModule.id, stat.id)}
-                          style={{
-                            width: '14px',
-                            height: '14px',
-                            minWidth: '14px', // Force min width
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginLeft: '8px',
-                            background: 'rgba(255, 50, 50, 0.1)',
-                            border: '1px solid #500',
-                            borderRadius: '3px',
-                            color: '#f55',
-                            fontSize: '10px',
-                            lineHeight: '1',
-                            cursor: 'pointer',
-                            flexShrink: 0,
-                            userSelect: 'none'
-                          }}
-                          title="Disconnect"
-                        >
-                          ×
-                        </div>
-                      </li>
-                    )
-                  })}
-                </ul>
+                <div style={{ borderTop: '1px solid #444', paddingTop: '10px', marginTop: '10px' }}>
+                  <h3 style={{ margin: '0 0 5px 0', fontSize: '0.8rem', color: '#aaa' }}>Connect To</h3>
+                  <select
+                    value={connectionTargetId}
+                    onChange={e => {
+                      const val = e.target.value;
+                      setConnectionTargetId(val);
+                      const tgt = modules.find(m => m.id === val);
+                      if (tgt && tgt.type === 'BRAIN') {
+                        setConnCoverage(50);
+                        setConnLocalizer(0);
+                      } else {
+                        setConnCoverage(100);
+                        setConnLocalizer(0);
+                      }
+                    }}
+                    style={{ width: '100%', marginBottom: '8px' }}
+                  >
+                    <option value="">-- Select Target --</option>
+                    {otherModules.map(m => (
+                      <option key={m.id} value={m.id}>
+                        {m.name || m.label} ({m.type})
+                      </option>
+                    ))}
+                  </select>
+
+                  <div className="input-row" style={{ justifyContent: 'space-between' }}>
+                    <label style={{ width: '45%' }}>Src
+                      <select
+                        value={connSides.src}
+                        onChange={e => setConnSides({ ...connSides, src: e.target.value as any })}
+                        disabled={selectedModule.type !== 'LAYER'}
+                      >
+                        <option value="ALL">All</option>
+                        {selectedModule.type === 'LAYER' && <option value="LEFT">Left</option>}
+                        {selectedModule.type === 'LAYER' && <option value="RIGHT">Right</option>}
+                      </select>
+                    </label>
+                    <label style={{ width: '45%' }}>Tgt
+                      <select
+                        value={connSides.tgt}
+                        onChange={e => setConnSides({ ...connSides, tgt: e.target.value as any })}
+                        disabled={!targetModule || targetModule.type !== 'LAYER'}
+                      >
+                        <option value="ALL">All</option>
+                        {targetModule?.type === 'LAYER' && <option value="LEFT">Left</option>}
+                        {targetModule?.type === 'LAYER' && <option value="RIGHT">Right</option>}
+                      </select>
+                    </label>
+                  </div>
+
+                  <div className="input-row">
+                    <label>Coverage: {connCoverage}% <Tooltip text="Percentage of nodes to connect" />
+                      <input
+                        type="range"
+                        min="1"
+                        max="100"
+                        value={connCoverage}
+                        onChange={(e) => setConnCoverage(parseInt(e.target.value))}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+
+                  {targetModule && targetModule.type === 'BRAIN' && (
+                    <div className="input-row">
+                      <label>Leak: {connLocalizer}% <Tooltip text="Chance for connection to ignore localization (0 = Strict)" />
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={connLocalizer}
+                          onChange={(e) => setConnLocalizer(parseInt(e.target.value))}
+                          style={{ width: '100%' }}
+                        />
+                      </label>
+                    </div>
+                  )}
+
+                  <button
+                    className="primary"
+                    onClick={handleConnect}
+                    disabled={!connectionTargetId}
+                    style={{ marginTop: '10px', opacity: connectionTargetId ? 1 : 0.5 }}
+                  >
+                    Link
+                  </button>
+                </div>
+              </InspectorSection>
+
+              {/* Node Labels Button (Inputs/Outputs ONLY) */}
+              {(selectedModule.type === 'INPUT' || selectedModule.type === 'OUTPUT') && (
+                <div style={{ marginTop: '10px' }}>
+                  <button onClick={() => setIsLabelEditorOpen(true)} style={{ width: '100%', background: '#444' }}>Edit Node Labels</button>
+                </div>
               )}
-            </div>
-
-            {/* Node Labels Button (Inputs/Outputs ONLY) */}
-            {(selectedModule.type === 'INPUT' || selectedModule.type === 'OUTPUT') && (
-              <div style={{ marginTop: '10px' }}>
-                <button onClick={() => setIsLabelEditorOpen(true)} style={{ width: '100%', background: '#444' }}>Edit Node Labels</button>
+            </>
+          ) : (
+            <div className="control-group" style={{ opacity: 0.5, flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ textAlign: 'center', color: '#666' }}>
+                Select a module<br />to inspect
               </div>
-            )}
-
-            <div style={{ borderTop: '1px solid #444', paddingTop: '10px', marginTop: '10px' }}>
-              <h3 style={{ margin: '0 0 5px 0', fontSize: '0.8rem', color: '#aaa' }}>Connect To</h3>
-              <select
-                value={connectionTargetId}
-                onChange={e => setConnectionTargetId(e.target.value)}
-                style={{ width: '100%', marginBottom: '8px' }}
-              >
-                <option value="">-- Select Target --</option>
-                {otherModules.map(m => (
-                  <option key={m.id} value={m.id}>
-                    {m.name || m.label} ({m.type})
-                  </option>
-                ))}
-              </select>
-
-              <div className="input-row" style={{ justifyContent: 'space-between' }}>
-                <label style={{ width: '45%' }}>Src
-                  <select
-                    value={connSides.src}
-                    onChange={e => setConnSides({ ...connSides, src: e.target.value as any })}
-                    disabled={selectedModule.type !== 'LAYER'}
-                  >
-                    <option value="ALL">All</option>
-                    {selectedModule.type === 'LAYER' && <option value="LEFT">Left</option>}
-                    {selectedModule.type === 'LAYER' && <option value="RIGHT">Right</option>}
-                  </select>
-                </label>
-                <label style={{ width: '45%' }}>Tgt
-                  <select
-                    value={connSides.tgt}
-                    onChange={e => setConnSides({ ...connSides, tgt: e.target.value as any })}
-                    disabled={!targetModule || targetModule.type !== 'LAYER'}
-                  >
-                    <option value="ALL">All</option>
-                    {targetModule?.type === 'LAYER' && <option value="LEFT">Left</option>}
-                    {targetModule?.type === 'LAYER' && <option value="RIGHT">Right</option>}
-                  </select>
-                </label>
-              </div>
-
-              <button
-                className="primary"
-                onClick={handleConnect}
-                disabled={!connectionTargetId}
-                style={{ marginTop: '10px', opacity: connectionTargetId ? 1 : 0.5 }}
-              >
-                Link
-              </button>
             </div>
-          </div>
-        ) : (
-          <div className="control-group" style={{ opacity: 0.5, flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ textAlign: 'center', color: '#666' }}>
-              Select a module<br />to inspect
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </aside>
 
       {/* 2. MAIN CANVAS */}
@@ -640,17 +873,45 @@ function App() {
             </label>
           </div>
 
-          <div className="actions">
-            <button onClick={() => setSimulation({ ...simulation, paused: !simulation.paused })}>
+          <div className="actions" style={{ display: 'flex', gap: '5px' }}>
+            <button onClick={() => setSimulation({ ...simulation, paused: !simulation.paused })} style={{ flex: 2 }}>
               {simulation.paused ? '▶ Play' : '⏸ Pause'}
             </button>
+            <button onClick={() => {
+              setSimulation(prev => ({ ...prev, paused: true }));
+              canvasRef.current?.step(1);
+            }} style={{ flex: 1 }} title="Step Forward 1">
+              &gt;
+            </button>
+            <button onClick={() => {
+              setSimulation(prev => ({ ...prev, paused: true }));
+              canvasRef.current?.step(10);
+            }} style={{ flex: 1 }} title="Step Forward 10">
+              &gt;&gt;
+            </button>
           </div>
+          <div style={{ marginTop: '5px', textAlign: 'center', fontSize: '0.8rem', color: '#888' }}>
+            Steps: {canvasRef.current?.getTickCount ? canvasRef.current.getTickCount() : 0}
+          </div>
+
           <div style={{ marginTop: '10px' }}>
+            <button
+              onClick={() => {
+                if (window.confirm("Reset all Node potentials and activation states? Topology will be preserved.")) {
+                  canvasRef.current?.resetState();
+                }
+              }}
+              style={{ background: '#554', color: '#ffc', width: '100%' }}
+            >
+              Reset State
+            </button>
+          </div>
+          <div style={{ marginTop: '5px' }}>
             <button
               onClick={() => { if (window.confirm("Are you sure you want to DELETE everything? This cannot be undone.")) handleClear(); }}
               style={{ background: '#500', color: '#faa', width: '100%' }}
             >
-              Reset Net
+              Delete Net
             </button>
           </div>
           <div style={{ marginTop: '10px', display: 'flex', gap: '5px' }}>
@@ -698,12 +959,21 @@ function App() {
             className="modal-content"
             onClick={e => e.stopPropagation()}
             style={{
-              position: 'absolute',
-              left: `${Math.min(window.innerWidth - 420, Math.max(20, menuPos.x))}px`, // Bigger width
-              top: `${Math.min(window.innerHeight - 500, Math.max(20, menuPos.y))}px`,
-              width: '400px', // Bigger width
-              margin: 0,
-              transform: 'none'
+              // Center Position
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+
+              // Sizing
+              width: '500px',
+              maxWidth: '90vw',
+              height: '80vh',
+              maxHeight: '80vh',
+
+              display: 'flex',
+              flexDirection: 'column',
+              margin: 0
             }}
           >
             <div className="modal-header">
@@ -755,7 +1025,7 @@ function App() {
               </div>
             </div>
 
-            <div className="modal-body" style={{ maxHeight: '400px', overflowY: 'auto', fontSize: '12px' }}>
+            <div className="modal-body" style={{ flex: 1, overflowY: 'auto', fontSize: '12px' }}>
               <h4 style={{ margin: '5px 0', color: '#888' }}>Incoming ({nodeConnections.incoming.length})</h4>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 {nodeConnections.incoming

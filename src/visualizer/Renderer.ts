@@ -134,6 +134,29 @@ export class Renderer {
         // 3. Draw Nodes & Module Labels
         // Iterate by MODULE to access module-level properties (Color, Name)
         net.modules.forEach(module => {
+            // Visualize Localization Sectors (Brain Only)
+            if (module.type === 'BRAIN' && module.isLocalized) {
+                const radius = module.radius || 200;
+                const sectors = 8;
+
+                this.ctx.beginPath();
+                for (let i = 0; i < sectors; i++) {
+                    const angle = (i / sectors) * 2 * Math.PI;
+                    const x = module.x + Math.cos(angle) * (radius * 0.2); // Start slightly offset
+                    const y = module.y + Math.sin(angle) * (radius * 0.2);
+                    const endX = module.x + Math.cos(angle) * radius;
+                    const endY = module.y + Math.sin(angle) * radius;
+
+                    this.ctx.moveTo(x, y);
+                    this.ctx.lineTo(endX, endY);
+                }
+                this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; // Very subtle
+                this.ctx.lineWidth = 1;
+                this.ctx.setLineDash([5, 5]); // Dashed
+                this.ctx.stroke();
+                this.ctx.setLineDash([]); // Reset
+            }
+
             // Draw Module Label (Prominent)
             // Visibility Check: If hiding details, only show labels for INPUT/OUTPUT
             if (!showHidden && module.type !== 'INPUT' && module.type !== 'OUTPUT') {

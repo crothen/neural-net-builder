@@ -8,6 +8,7 @@ export const NodeType = {
 export type NodeType = typeof NodeType[keyof typeof NodeType];
 
 export type ActivationType = 'SUSTAINED' | 'PULSE'; // New firing modes
+export type InputType = 'PULSE' | 'SIN' | 'NOISE'; // New input generator modes
 
 export interface NodeConfig {
     id: string;
@@ -70,7 +71,23 @@ export interface ModuleConfig {
     threshold?: number;
     decay?: number;
     refractoryPeriod?: number;
+    bias?: number;
+
+    // Localization
+    isLocalized?: boolean;
+    localizationLeak?: number; // 0-100 (Replaces 'localizer' for internal use basically)
 }
 
 export type ConnectionSide = 'ALL' | 'LEFT' | 'RIGHT';
+
+export interface ModuleConnectionConfig {
+    sourceId: string;
+    targetId: string;
+    coverage: number;
+    localizer: number;
+    sides: {
+        src: ConnectionSide;
+        tgt: ConnectionSide;
+    };
+}
 
