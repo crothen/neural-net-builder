@@ -60,7 +60,8 @@ export class NeuralNet {
                     x: centerX + r * Math.cos(theta),
                     y: centerY + r * Math.sin(theta),
                     label: '',
-                    activationType: config.activationType || 'SUSTAINED'
+                    activationType: config.activationType || 'SUSTAINED',
+                    decay: config.decay
                 });
                 this.nodeModuleMap.set(nodeId, config.id);
             }
@@ -112,7 +113,8 @@ export class NeuralNet {
                         x: colX,
                         y: startY + stepY * (i + 1),
                         label: '',
-                        activationType: config.activationType || 'PULSE'
+                        activationType: config.activationType || 'PULSE',
+                        decay: config.decay
                     });
                     this.nodeModuleMap.set(nodeId, config.id);
                 }
@@ -671,14 +673,17 @@ export class NeuralNet {
     }
 
     public setGlobalDecay(decay: number) {
-        // Store for future nodes (we'll assume addNode uses this property, or we update widely)
-        // Ideally we add a property to NeuralNet, but inserting properties at top is hard with replace.
-        // We can just iterate existing nodes for now.
-        // To persist for FUTURE nodes, we really do need a property.
-        // I will hack it: I will add the property in a separate edit or assume I can find the top.
         this.nodes.forEach(n => {
-            // Apply to all non-input nodes (Brains, Layers, Output)
-            if (n.type !== NodeType.INPUT) {
+            // Apply global decay setting ONLY to Brain/Hidden nodes.
+            // Inputs are manual. 
+            // Outputs/Layers must remain at 1.0 (Instant) to avoid lag.
+
+            // Better check based on our Logic:
+            if (n.type === NodeType.OUTPUT || n.type === NodeType.INTERPRETATION) {
+                // FORCE these to stay at 1.0
+                n.decay = 1.0;
+            } else if (n.type !== NodeType.INPUT) {
+                // Only Brain nodes get the slider value
                 n.decay = decay;
             }
         });

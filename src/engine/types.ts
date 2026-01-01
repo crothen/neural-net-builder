@@ -19,6 +19,7 @@ export interface NodeConfig {
     threshold?: number; // Configurable firing threshold
     refractoryPeriod?: number; // Cycles to wait after firing
     activationType?: ActivationType; // Configurable firing logic
+    decay?: number;
 }
 
 export interface ConnectionConfig {

@@ -35,9 +35,14 @@ export class Node {
         // Default Brain nodes to SUSTAINED if not specified? 
         // Better to be explicit in config, usually.
         // But for backward compatibility logic inside the class:
-        if (!config.activationType && config.type === NodeType.HIDDEN) {
-            // We can default HIDDEN to SUSTAINED if we want, but user might mix types.
-            // Let's rely on the caller passing it. Default is PULSE.
+        this.activationType = config.activationType || 'PULSE';
+
+        // FIX: If it is an OUTPUT or INTERPRETATION node, it should have NO memory.
+        if (this.type === NodeType.OUTPUT || this.type === NodeType.INTERPRETATION) {
+            this.decay = 1.0; // Decay 100% every tick (Instant Reset)
+        } else {
+            // Brain nodes keep their memory
+            this.decay = config.decay || 0.1;
         }
     }
 
@@ -58,24 +63,22 @@ export class Node {
         // 1. Add inputs and bias
         this.potential += inputSum + this.bias;
 
-        // 2. Check for firing
         if (this.potential >= this.threshold) {
             this.isFiring = true;
             this.activation = 1.0; // Spike!
 
-            // Set Refractory Timer
-            this.refractoryTimer = this.refractoryPeriod;
-
-            // 3. Reset Strategy
+            // FIX: Only apply Refractory Period to PULSE nodes
             if (this.activationType === 'PULSE') {
-                // "Fire and Forget" / Standard Spiking
-                // Soft Reset: Subtract threshold. Allows high-input to fire multiple times if >> threshold
-                this.potential -= this.threshold;
+                this.refractoryTimer = this.refractoryPeriod;
+                this.potential -= this.threshold; // Soft Reset
             } else {
-                // 'SUSTAINED': Keep potential high.
-                // It will decay naturally below.
+                // SUSTAINED MODE:
+                // Do NOT set the timer.
                 // Do NOT subtract threshold.
+                // Just let the high potential sit there.
+                // It will naturally decay in Step 4.
             }
+
         } else {
             this.isFiring = false;
             this.activation = 0.0;
