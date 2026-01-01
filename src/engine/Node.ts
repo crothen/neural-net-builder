@@ -69,7 +69,9 @@ export class Node {
 
             // FIX: Only apply Refractory Period to PULSE nodes
             if (this.activationType === 'PULSE') {
-                this.refractoryTimer = this.refractoryPeriod;
+
+                const jitter = Math.random() < 0.5 ? 0 : 1;
+                this.refractoryTimer = this.refractoryPeriod + jitter;
                 this.potential -= this.threshold; // Soft Reset
             } else {
                 // SUSTAINED MODE:

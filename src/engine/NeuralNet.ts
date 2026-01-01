@@ -71,7 +71,11 @@ export class NeuralNet {
             nodes.forEach(source => {
                 // Connect to random peers (One-Way)
                 for (let k = 0; k < 1; k++) {
-                    const target = nodes[Math.floor(Math.random() * nodes.length)];
+                    let target = nodes[Math.floor(Math.random() * nodes.length)];
+                    // Prevent Self-Connections to avoid infinite feedback loops
+                    while (target.id === source.id && nodes.length > 1) {
+                        target = nodes[Math.floor(Math.random() * nodes.length)];
+                    }
 
                     // Forward
                     // Forward only (One-way)
