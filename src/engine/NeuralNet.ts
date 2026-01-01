@@ -627,6 +627,17 @@ export class NeuralNet {
         });
     }
 
+    public getNodeConnections(nodeId: string) {
+        // Retrieve all connections where this node is source or target
+        const incoming = this.incoming.get(nodeId) || [];
+        const outgoing = this.connections.filter(c => c.sourceId === nodeId);
+
+        return {
+            incoming,
+            outgoing
+        };
+    }
+
     /**
      * Returns a summary of connections for a specific module.
      * Used for the Inspector UI.

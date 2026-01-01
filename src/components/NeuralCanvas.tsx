@@ -10,6 +10,7 @@ interface NeuralCanvasProps {
     paused: boolean;
     showHidden: boolean;
     onModuleSelect?: (moduleId: string | null) => void;
+    onNodeContextMenu?: (nodeId: string, x: number, y: number) => void;
 }
 
 export interface NeuralCanvasHandle {
@@ -26,10 +27,11 @@ export interface NeuralCanvasHandle {
     updateNode: (nodeId: string, config: { label?: string }) => void;
     getModules: () => ModuleConfig[];
     getModuleNodes: (moduleId: string) => NeuralNode[];
+    getNodeConnections: (nodeId: string) => { incoming: any[], outgoing: any[] };
     clear: () => void;
 }
 
-export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({ speed, paused, showHidden, onModuleSelect }, ref) => {
+export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({ speed, paused, showHidden, onModuleSelect, onNodeContextMenu }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const netRef = useRef<NeuralNet>(new NeuralNet());
     const rendererRef = useRef<Renderer | null>(null);
@@ -86,6 +88,9 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({
         },
         getModuleNodes: (moduleId: string) => {
             return netRef.current.getModuleNodes(moduleId);
+        },
+        getNodeConnections: (nodeId: string) => {
+            return netRef.current.getNodeConnections(nodeId);
         },
         clear: () => {
             netRef.current.nodes.clear();
@@ -334,6 +339,13 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({
         }
     };
 
+    const handleContextMenu = (e: React.MouseEvent) => {
+        if (hoveredNodeId && onNodeContextMenu) {
+            e.preventDefault();
+            onNodeContextMenu(hoveredNodeId, e.clientX, e.clientY);
+        }
+    };
+
     return (
         <div style={{ width: '100%', height: '100%', background: '#000', overflow: 'hidden' }}>
             <canvas
@@ -346,6 +358,7 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({
                 onMouseLeave={handleMouseUp}
                 onClick={handleClick}
                 onDoubleClick={handleDoubleClick}
+                onContextMenu={handleContextMenu}
             />
         </div>
     );

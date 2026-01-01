@@ -36,13 +36,21 @@ function App() {
   const [modules, setModules] = useState<ModuleConfig[]>([]);
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
   // Separate state for nodes of selected module (for renaming)
-  const [selectedNodes, setSelectedNodes] = useState<NeuralNode[]>([]);
+  const [, setSelectedNodes] = useState<NeuralNode[]>([]);
   const [selectedModuleStats, setSelectedModuleStats] = useState<{ id: string, count: number, direction: 'in' | 'out' | 'self' }[]>([]);
 
   // --- Connection State (Contextual) ---
   const [connectionTargetId, setConnectionTargetId] = useState<string>('');
   const [connSides, setConnSides] = useState<{ src: ConnectionSide, tgt: ConnectionSide }>({ src: 'ALL', tgt: 'ALL' });
   const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(false);
+
+  // --- Node Context Menu State ---
+  const [menuNodeId, setMenuNodeId] = useState<string | null>(null);
+  const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [nodeConnections, setNodeConnections] = useState<{ incoming: any[], outgoing: any[] } | null>(null);
+  const [filterText, setFilterText] = useState('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // --- Helpers ---
   const refreshModules = () => {
@@ -188,6 +196,21 @@ function App() {
     a.download = 'neural-network-v2.json';
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleNodeContextMenu = (nodeId: string, x: number, y: number) => {
+    if (canvasRef.current && canvasRef.current.getNodeConnections) {
+      const conns = canvasRef.current.getNodeConnections(nodeId);
+      setMenuNodeId(nodeId);
+      setMenuPos({ x, y });
+      setNodeConnections(conns);
+      setIsMenuOpen(true);
+    }
+  };
+
+  const closeNodeMenu = () => {
+    setIsMenuOpen(false);
+    setMenuNodeId(null);
   };
 
   const handleLoad = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -495,6 +518,7 @@ function App() {
           paused={simulation.paused}
           showHidden={simulation.showHidden}
           onModuleSelect={handleModuleSelect}
+          onNodeContextMenu={handleNodeContextMenu}
         />
       </main>
 
@@ -615,23 +639,94 @@ function App() {
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <span className="modal-title">Edit Labels: {selectedModule.name}</span>
-              <button className="close-button" onClick={() => setIsLabelEditorOpen(false)}>×</button>
+              <button className="modal-close" onClick={() => setIsLabelEditorOpen(false)}>×</button>
             </div>
-            <div className="node-list-container">
-              {selectedNodes.map((n, i) => (
-                <div key={n.id} className="node-editor-row">
-                  <span className="node-index">{i}</span>
-                  <input
-                    value={n.label === n.id ? '' : n.label}
-                    placeholder="(Default)"
-                    onChange={(e) => handleNodeRename(n.id, e.target.value)}
-                    style={{ flex: 1, padding: '5px', background: '#333', border: '1px solid #555', color: '#fff' }}
-                  />
+            <div className="modal-body">
+              {canvasRef.current && (
+                <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                  {canvasRef.current.getModuleNodes(selectedModule.id).map(node => (
+                    <div key={node.id} className="label-row" style={{ display: 'flex', gap: '10px', marginBottom: '5px' }}>
+                      <span>Node {node.id.split('-').pop()}</span>
+                      <input
+                        type="text"
+                        placeholder="Label..."
+                        value={node.label}
+                        onChange={(e) => handleNodeRename(node.id, e.target.value)}
+                        style={{ flex: 1, padding: '4px', background: '#222', border: '1px solid #444', color: '#fff' }}
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-            <div style={{ marginTop: '15px', textAlign: 'right' }}>
-              <button className="primary" onClick={() => setIsLabelEditorOpen(false)}>Done</button>
+          </div>
+        </div>
+      )}
+
+      {/* NODE INSPECTOR MODAL */}
+      {isMenuOpen && menuNodeId && nodeConnections && (
+        <div className="modal-overlay" onClick={closeNodeMenu}>
+          <div
+            className="modal-content"
+            onClick={e => e.stopPropagation()}
+            style={{
+              position: 'absolute',
+              left: `${Math.min(window.innerWidth - 320, Math.max(20, menuPos.x))}px`,
+              top: `${Math.min(window.innerHeight - 400, Math.max(20, menuPos.y))}px`,
+              width: '300px',
+              margin: 0,
+              transform: 'none'
+            }}
+          >
+            <div className="modal-header">
+              <span className="modal-title">Node: {menuNodeId}</span>
+              <button className="modal-close" onClick={closeNodeMenu}>×</button>
+            </div>
+
+            <div style={{ padding: '10px', background: '#222', borderBottom: '1px solid #444' }}>
+              <input
+                type="text"
+                placeholder="Filter ID..."
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                style={{ width: '100%', padding: '5px', background: '#111', border: '1px solid #333', color: '#fff' }}
+              />
+              <div style={{ marginTop: '5px', display: 'flex', gap: '5px' }}>
+                <button
+                  style={{ flex: 1, fontSize: '10px', padding: '4px' }}
+                  onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                >
+                  Sort Wgt {sortOrder === 'asc' ? '▲' : '▼'}
+                </button>
+              </div>
+            </div>
+
+            <div className="modal-body" style={{ maxHeight: '300px', overflowY: 'auto', fontSize: '12px' }}>
+              <h4 style={{ margin: '5px 0', color: '#888' }}>Incoming ({nodeConnections.incoming.length})</h4>
+              <ul style={{ listStyle: 'none', padding: 0 }}>
+                {nodeConnections.incoming
+                  .filter((c: any) => c.sourceId.includes(filterText))
+                  .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
+                  .map((c: any) => (
+                    <li key={c.id} style={{ padding: '2px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
+                      <span>← {c.sourceId}</span>
+                      <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>{c.weight.toFixed(3)}</span>
+                    </li>
+                  ))}
+              </ul>
+
+              <h4 style={{ margin: '10px 0 5px', color: '#888' }}>Outgoing ({nodeConnections.outgoing.length})</h4>
+              <ul style={{ listStyle: 'none', padding: 0 }}>
+                {nodeConnections.outgoing
+                  .filter((c: any) => filterText ? c.targetId.includes(filterText) : true)
+                  .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
+                  .map((c: any) => (
+                    <li key={c.id} style={{ padding: '2px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
+                      <span>→ {c.targetId}</span>
+                      <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>{c.weight.toFixed(3)}</span>
+                    </li>
+                  ))}
+              </ul>
             </div>
           </div>
         </div>
