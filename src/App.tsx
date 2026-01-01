@@ -397,10 +397,9 @@ function App() {
                             border: '1px solid #500', // Subtle border
                             borderRadius: '3px',
                             cursor: 'pointer',
-                            fontSize: '12px', // Smaller font
-                            lineHeight: '1',
-                            width: '18px', // Smaller width
-                            height: '18px', // Smaller height
+                            width: '16px', // Smaller width
+                            height: '16px', // Smaller height
+                            fontSize: '10px', // Smaller font
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
