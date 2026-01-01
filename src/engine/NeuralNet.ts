@@ -224,24 +224,20 @@ export class NeuralNet {
             this.connections.forEach(c => existing.add(c.id));
 
             // Sparse Logic (match connectModules)
-            const potential = srcNodes.length * tgtNodes.length;
-            const isSparse = potential > 2500;
+            // Removed Sparse Logic to ensure "all nodes" are included as requested
+            // const potential = srcNodes.length * tgtNodes.length;
+            // const isSparse = potential > 2500;
 
             srcNodes.forEach(src => {
                 tgtNodes.forEach(tgt => {
                     const connId = `c-${src.id}-${tgt.id}`;
                     if (!existing.has(connId)) {
-                        let makeConnection = true;
-                        if (isSparse) makeConnection = Math.random() < 0.1;
-
-                        if (makeConnection) {
-                            this.addConnection({
-                                id: connId,
-                                sourceId: src.id,
-                                targetId: tgt.id,
-                                weight: Math.random() // Positive
-                            });
-                        }
+                        this.addConnection({
+                            id: connId,
+                            sourceId: src.id,
+                            targetId: tgt.id,
+                            weight: Math.random() // Positive
+                        });
                     }
                 });
             });
