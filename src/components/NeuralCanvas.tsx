@@ -1,0 +1,335 @@
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import { NeuralNet } from '../engine/NeuralNet';
+import { Renderer } from '../visualizer/Renderer';
+import { NodeType } from '../engine/types';
+import type { ModuleConfig, ConnectionSide } from '../engine/types';
+import type { Node as NeuralNode } from '../engine/Node';
+
+interface NeuralCanvasProps {
+    speed: number;
+    paused: boolean;
+    showHidden: boolean;
+    onModuleSelect?: (moduleId: string | null) => void;
+}
+
+export interface NeuralCanvasHandle {
+    save: () => any;
+    load: (data: any) => void;
+    addModule: (config: ModuleConfig) => void;
+    connectModules: (srcId: string, tgtId: string, srcSide?: ConnectionSide, tgtSide?: ConnectionSide) => void;
+    disconnectModules: (id1: string, id2: string) => void;
+    getModuleConnectivity: (id: string) => { id: string, count: number, direction: 'in' | 'out' | 'self' }[];
+    setGlobalDecay: (decay: number) => void;
+    moveModule: (id: string, x: number, y: number) => void;
+    updateModule: (id: string, config: Partial<ModuleConfig>) => void;
+    renameModule: (id: string, name: string) => void;
+    updateNode: (nodeId: string, config: { label?: string }) => void;
+    getModules: () => ModuleConfig[];
+    getModuleNodes: (moduleId: string) => NeuralNode[];
+    clear: () => void;
+}
+
+export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>(({ speed, paused, showHidden, onModuleSelect }, ref) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const netRef = useRef<NeuralNet>(new NeuralNet());
+    const rendererRef = useRef<Renderer | null>(null);
+    const requestRef = useRef<number | null>(null);
+
+    // Interaction State
+    const [transform, setTransform] = useState({ x: 0, y: 0, k: 1 });
+    const [isDragging, setIsDragging] = useState(false);
+    const dragStartRef = useRef<{ x: number, y: number } | null>(null);
+    const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>(undefined);
+
+    // Module Move State
+    const [draggingModuleId, setDraggingModuleId] = useState<string | null>(null);
+
+    // Connection Inspector State
+    const [inspection, setInspection] = useState<{ sourceId: string | null, targetId: string | null }>({ sourceId: null, targetId: null });
+    const inspectionRef = useRef(inspection);
+    inspectionRef.current = inspection;
+
+    // Expose Save/Load
+    const justLoadedRef = useRef(false);
+
+    useImperativeHandle(ref, () => ({
+        save: () => {
+            return netRef.current.toJSON();
+        },
+        load: (data: any) => {
+            netRef.current.fromJSON(data);
+            justLoadedRef.current = true;
+        },
+        addModule: (config: ModuleConfig) => {
+            netRef.current.addModule(config);
+        },
+        connectModules: (srcId: string, tgtId: string, srcSide: ConnectionSide = 'ALL', tgtSide: ConnectionSide = 'ALL') => {
+            netRef.current.connectModules(srcId, tgtId, srcSide, tgtSide);
+        },
+        disconnectModules: (id1, id2) => netRef.current.disconnectModules(id1, id2),
+        getModuleConnectivity: (id) => netRef.current.getModuleConnectivity(id),
+        setGlobalDecay: (decay: number) => netRef.current.setGlobalDecay(decay),
+        moveModule: (id: string, x: number, y: number) => {
+            netRef.current.moveModule(id, x, y);
+        },
+        updateModule: (id: string, config: Partial<ModuleConfig>) => {
+            netRef.current.updateModule(id, config);
+        },
+        renameModule: (id: string, name: string) => {
+            netRef.current.renameModule(id, name);
+        },
+        updateNode: (nodeId: string, config: { label?: string }) => {
+            netRef.current.updateNode(nodeId, config);
+        },
+        getModules: () => {
+            return Array.from(netRef.current.modules.values());
+        },
+        getModuleNodes: (moduleId: string) => {
+            return netRef.current.getModuleNodes(moduleId);
+        },
+        clear: () => {
+            netRef.current.nodes.clear();
+            netRef.current.connections = [];
+            netRef.current.modules.clear();
+            netRef.current.incoming.clear();
+        }
+    }));
+
+    // Initialize Network (Generation Logic Removed)
+    useEffect(() => { }, []);
+
+    // Animation & Rendering Loop
+    const hoveredNodeIdRef = useRef<string | undefined>(undefined);
+    hoveredNodeIdRef.current = hoveredNodeId;
+
+    const transformRef = useRef(transform);
+    transformRef.current = transform;
+
+    const showHiddenRef = useRef(showHidden);
+    showHiddenRef.current = showHidden;
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const handleResize = () => {
+            if (!canvas.parentElement) return;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+
+            // Adjust renderer size
+            if (rendererRef.current) {
+                rendererRef.current.resize(rect.width, rect.height);
+            }
+
+            // Reset context scale
+            const ctx = canvas.getContext('2d');
+            if (ctx) ctx.scale(dpr, dpr);
+        };
+
+        const resizeObserver = new ResizeObserver(() => handleResize());
+        if (canvas.parentElement) {
+            resizeObserver.observe(canvas.parentElement);
+        }
+
+        // Initial setup
+        handleResize();
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        rendererRef.current = new Renderer(ctx, canvas.width, canvas.height); // Size updated in resize
+
+        let lastTime = 0;
+        const animate = (time: number) => {
+            const dt = time - lastTime;
+
+            if (!paused && dt > speed) {
+                netRef.current.step();
+                lastTime = time;
+            }
+
+            rendererRef.current?.draw(
+                netRef.current,
+                transformRef.current,
+                hoveredNodeIdRef.current,
+                inspectionRef.current,
+                showHiddenRef.current
+            );
+            requestRef.current = requestAnimationFrame(animate);
+        };
+
+        requestRef.current = requestAnimationFrame(animate);
+
+        return () => {
+            if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
+            resizeObserver.disconnect();
+        };
+    }, [speed, paused]);
+
+    // --- Interaction Handlers ---
+
+    const getPointerPos = (e: React.MouseEvent) => {
+        const rect = canvasRef.current!.getBoundingClientRect();
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        };
+    };
+
+    const handleWheel = (e: React.WheelEvent) => {
+        e.preventDefault();
+        const scaleFactor = 1.1;
+        const zoomIn = e.deltaY < 0;
+        const factor = zoomIn ? scaleFactor : 1 / scaleFactor;
+
+        setTransform(prev => ({ ...prev, k: prev.k * factor }));
+    };
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        // Middle Click Handling (Button 1)
+        if (e.button === 1) {
+            e.preventDefault();
+            if (hoveredNodeId) {
+                if (!inspection.sourceId) {
+                    setInspection({ sourceId: hoveredNodeId, targetId: null });
+                } else {
+                    if (inspection.sourceId === hoveredNodeId) {
+                        setInspection({ sourceId: null, targetId: null });
+                    } else {
+                        setInspection(prev => ({ ...prev, targetId: hoveredNodeId }));
+                    }
+                }
+            } else {
+                setInspection({ sourceId: null, targetId: null });
+            }
+            return;
+        }
+
+        const pos = getPointerPos(e);
+
+        // Left Click -> Check for Module Drag
+        if (hoveredNodeId) {
+            const modules = Array.from(netRef.current.modules.values());
+            let foundModId: string | null = null;
+
+            // Simple prefix check
+            for (const mod of modules) {
+                if (hoveredNodeId.startsWith(mod.id + '-')) {
+                    foundModId = mod.id;
+                    break;
+                }
+            }
+
+            if (foundModId) {
+                const mod = netRef.current.modules.get(foundModId);
+                if (mod) {
+                    setDraggingModuleId(foundModId);
+                    // Store offset from module center
+                    const wx = (pos.x - transform.x) / transform.k;
+                    const wy = (pos.y - transform.y) / transform.k;
+
+                    dragStartRef.current = { x: wx - mod.x, y: wy - mod.y };
+
+                    // SELECTION REMOVED FROM SINGLE CLICK (Drag only)
+                    return;
+                }
+            }
+        }
+
+        // Background Drag
+        setIsDragging(true);
+        dragStartRef.current = { x: pos.x - transform.x, y: pos.y - transform.y };
+
+        // Background Click -> Deselect REMOVED by user request
+        // if (!hoveredNodeId && onModuleSelect) onModuleSelect(null);
+    };
+
+    const handleDoubleClick = () => {
+        // Check selection on double click
+        if (hoveredNodeId) {
+            const modules = Array.from(netRef.current.modules.values());
+            let foundModId: string | null = null;
+            for (const mod of modules) {
+                if (hoveredNodeId.startsWith(mod.id + '-')) {
+                    foundModId = mod.id;
+                    break;
+                }
+            }
+            if (foundModId && onModuleSelect) {
+                onModuleSelect(foundModId);
+            }
+        }
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        const pos = getPointerPos(e);
+
+        if (draggingModuleId && dragStartRef.current) {
+            const wx = (pos.x - transform.x) / transform.k;
+            const wy = (pos.y - transform.y) / transform.k;
+
+            const newX = wx - dragStartRef.current.x;
+            const newY = wy - dragStartRef.current.y;
+
+            netRef.current.moveModule(draggingModuleId, newX, newY);
+            return;
+        }
+
+        if (isDragging && dragStartRef.current) {
+            setTransform({
+                ...transform,
+                x: pos.x - dragStartRef.current.x,
+                y: pos.y - dragStartRef.current.y
+            });
+        }
+
+        // Hover
+        const lx = (pos.x - transform.x) / transform.k;
+        const ly = (pos.y - transform.y) / transform.k;
+
+        let foundNode = undefined;
+        for (const node of netRef.current.nodes.values()) {
+            const dx = lx - node.x;
+            const dy = ly - node.y;
+            if (dx * dx + dy * dy < 400) {
+                foundNode = node.id;
+                break;
+            }
+        }
+        setHoveredNodeId(foundNode);
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+        setDraggingModuleId(null);
+        dragStartRef.current = null;
+    };
+
+    const handleClick = () => {
+        if (hoveredNodeId && !draggingModuleId) {
+            const node = netRef.current.nodes.get(hoveredNodeId);
+            if (node && node.type === NodeType.INPUT) {
+                node.setInput(1.0);
+            }
+        }
+    };
+
+    return (
+        <div style={{ width: '100%', height: '100%', background: '#000', overflow: 'hidden' }}>
+            <canvas
+                ref={canvasRef}
+                style={{ width: '100%', height: '100%', touchAction: 'none' }}
+                onWheel={handleWheel}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onClick={handleClick}
+                onDoubleClick={handleDoubleClick}
+            />
+        </div>
+    );
+});
