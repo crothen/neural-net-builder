@@ -1,73 +1,83 @@
-# React + TypeScript + Vite
+# Neural Network Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://crothen.github.io/neural-net-builder/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Currently, two official plugins are available:
+A modular, interactive neural network visualization tool built with **React**, **TypeScript**, and **Vite**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This application allows you to design, simulate, and inspect neural networks in real-time. You can create various types of modules (Brains, Layers, Inputs, Outputs), connect them, and watch the signals propagate through the network using a dynamic Leaky Integrate-and-Fire model.
 
-## React Compiler
+**[🚀 Try the Live Demo Here](https://crothen.github.io/neural-net-builder/)**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+*   **Modular Architecture**: Build your network using distinctive modules:
+    *   **🧠 Brain**: A circular, biologically-inspired cluster of neurons with internal recurrent connections.
+    *   **Input**: A controllable signal source (Pulse, Sine Wave, Noise).
+    *   **Layer**: A structured vertical layer of neurons (like in Deep Learning).
+    *   **Output**: Visualizes the final signal strength.
+*   **Interactive Canvas**:
+    *   **Drag & Drop**: Move modules freely around the infinite canvas.
+    *   **Zoom & Pan**: Mouse-centered zooming and panning for navigating large networks.
+    *   **Real-time Connections**: Visual feedback for signal propagation. Teal lines indicate excitatory connections; red lines (if any) indicate inhibitory ones.
+*   **Deep Inspection**:
+    *   Click any module to see internal stats like node count, connectivity (In/Out), and potential decay.
+    *   **Inspector Panel**: Manage connections, adjust weights, and disconnect modules with precision.
+*   **Simulation Physics**:
+    *   Uses a `Leaky Integrate-and-Fire` model for realistic neuron spiking behavior.
+    *   Supports **Hebbian Learning** (optional) for dynamic weight adjustment based on activity.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠️ How to Use
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1.  **Add Modules**: Use the **Right Sidebar** to drag and drop new modules onto the canvas.
+    *   Start with an **Input** module to generate signals.
+    *   Add a **Brain** or **Layer** to process them.
+    *   Add an **Output** to see the result.
+2.  **Connect Modules**:
+    *   Select a module (Left Click).
+    *   In the **Left Sidebar (Inspector)**, use the "Connect To" dropdown to link it to another module.
+3.  **Simulate**:
+    *   Use the **Play/Pause** controls at the top left.
+    *   Adjust the **Simulation Speed** slider to slow down or speed up time.
+4.  **Zoom & Pan**:
+    *   Use the **Scroll Wheel** to zoom in/out (zooms to cursor).
+    *   **Click & Drag** on the background to pan the view.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 💻 Running Locally
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+To run this project on your local machine:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/crothen/neural-net-builder.git
+    cd neural-net-builder
+    ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    # or
+    npm ci
+    ```
+
+3.  **Start the development server**:
+    ```bash
+    npm run dev
+    ```
+
+4.  **Build for production**:
+    ```bash
+    npm run build
+    ```
+
+## 🏗️ Tech Stack
+
+*   **Frontend**: React 18, TypeScript
+*   **Build Tool**: Vite
+*   **Visualization**: HTML5 Canvas API (Custom Renderer)
+*   **Deployment**: GitHub Pages (Automated via GitHub Actions)
+
+---
+*Created by [crothen](https://github.com/crothen)*
