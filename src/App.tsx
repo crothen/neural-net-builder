@@ -49,7 +49,7 @@ function App() {
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [nodeConnections, setNodeConnections] = useState<{ incoming: any[], outgoing: any[] } | null>(null);
-  const [filterText, setFilterText] = useState('');
+  const [filterModuleId, setFilterModuleId] = useState('ALL');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // --- Helpers ---
@@ -671,26 +671,39 @@ function App() {
             onClick={e => e.stopPropagation()}
             style={{
               position: 'absolute',
-              left: `${Math.min(window.innerWidth - 320, Math.max(20, menuPos.x))}px`,
-              top: `${Math.min(window.innerHeight - 400, Math.max(20, menuPos.y))}px`,
-              width: '300px',
+              left: `${Math.min(window.innerWidth - 420, Math.max(20, menuPos.x))}px`, // Bigger width
+              top: `${Math.min(window.innerHeight - 500, Math.max(20, menuPos.y))}px`,
+              width: '400px', // Bigger width
               margin: 0,
               transform: 'none'
             }}
           >
             <div className="modal-header">
-              <span className="modal-title">Node: {menuNodeId}</span>
+              <span className="modal-title" style={{ fontSize: '14px' }}>
+                Node: {menuNodeId} <br />
+                <span style={{ fontSize: '10px', color: '#aaa', fontWeight: 'normal' }}>
+                  In: {nodeConnections.incoming.length} | Out: {nodeConnections.outgoing.length}
+                </span>
+              </span>
               <button className="modal-close" onClick={closeNodeMenu}>×</button>
             </div>
 
             <div style={{ padding: '10px', background: '#222', borderBottom: '1px solid #444' }}>
-              <input
-                type="text"
-                placeholder="Filter ID..."
-                value={filterText}
-                onChange={(e) => setFilterText(e.target.value)}
+              <select
+                value={filterModuleId}
+                onChange={(e) => setFilterModuleId(e.target.value)}
                 style={{ width: '100%', padding: '5px', background: '#111', border: '1px solid #333', color: '#fff' }}
-              />
+              >
+                <option value="ALL">All Modules</option>
+                {/* Extract Unique Modules from Connections */}
+                {Array.from(new Set([
+                  ...nodeConnections.incoming.map((c: any) => c.sourceId.split('-')[0] + '-' + c.sourceId.split('-')[1]),
+                  ...nodeConnections.outgoing.map((c: any) => c.targetId.split('-')[0] + '-' + c.targetId.split('-')[1])
+                ])).map((modId) => (
+                  <option key={modId} value={modId}>{modId}</option>
+                ))}
+              </select>
+
               <div style={{ marginTop: '5px', display: 'flex', gap: '5px' }}>
                 <button
                   style={{ flex: 1, fontSize: '10px', padding: '4px' }}
@@ -701,14 +714,14 @@ function App() {
               </div>
             </div>
 
-            <div className="modal-body" style={{ maxHeight: '300px', overflowY: 'auto', fontSize: '12px' }}>
+            <div className="modal-body" style={{ maxHeight: '400px', overflowY: 'auto', fontSize: '12px' }}>
               <h4 style={{ margin: '5px 0', color: '#888' }}>Incoming ({nodeConnections.incoming.length})</h4>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 {nodeConnections.incoming
-                  .filter((c: any) => c.sourceId.includes(filterText))
+                  .filter((c: any) => filterModuleId === 'ALL' || c.sourceId.startsWith(filterModuleId))
                   .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
                   .map((c: any) => (
-                    <li key={c.id} style={{ padding: '2px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
+                    <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
                       <span>← {c.sourceId}</span>
                       <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>{c.weight.toFixed(3)}</span>
                     </li>
@@ -718,10 +731,10 @@ function App() {
               <h4 style={{ margin: '10px 0 5px', color: '#888' }}>Outgoing ({nodeConnections.outgoing.length})</h4>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 {nodeConnections.outgoing
-                  .filter((c: any) => filterText ? c.targetId.includes(filterText) : true)
+                  .filter((c: any) => filterModuleId === 'ALL' || c.targetId.startsWith(filterModuleId))
                   .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
                   .map((c: any) => (
-                    <li key={c.id} style={{ padding: '2px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
+                    <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
                       <span>→ {c.targetId}</span>
                       <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>{c.weight.toFixed(3)}</span>
                     </li>
