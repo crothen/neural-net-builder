@@ -150,7 +150,7 @@ export class NeuralNet {
         if (!module) return;
 
         // Check if we need to regenerate structure
-        const structuralKeys: (keyof ModuleConfig)[] = ['type', 'nodeCount', 'depth', 'radius', 'height', 'width', 'activationType'];
+        const structuralKeys: (keyof ModuleConfig)[] = ['type', 'nodeCount', 'depth', 'radius', 'height', 'width'];
         const needsRegeneration = structuralKeys.some(key => newConfig[key] !== undefined && newConfig[key] !== module[key]);
 
         // Always update the config object
@@ -163,13 +163,24 @@ export class NeuralNet {
                 this.renameModule(id, newConfig.name);
             }
 
-            // Update threshold efficiently without regeneration
-            if (newConfig.threshold !== undefined) {
-                for (const node of this.nodes.values()) {
-                    if (node.id.startsWith(id + '-')) {
-                        node.threshold = newConfig.threshold;
-                    }
+            // Update params efficiently without regeneration
+            const relevantNodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(id + '-'));
+            relevantNodes.forEach(node => {
+                if (newConfig.threshold !== undefined) node.threshold = newConfig.threshold;
+                if (newConfig.decay !== undefined) node.decay = newConfig.decay;
+                if (newConfig.refractoryPeriod !== undefined) node.refractoryPeriod = newConfig.refractoryPeriod;
+                if (newConfig.activationType !== undefined) {
+                    // If we allow hot-swapping activation type without regen:
+                    node.activationType = newConfig.activationType;
                 }
+            });
+
+            if (newConfig.activationType !== undefined) {
+                // Optimization: Remove activationType from structuralKeys if we handle it here?
+                // No, line 153 already has it. I should remove it from structuralKeys in the next step
+                // OR jus let it regen if I don't handle it here. 
+                // Actually, hot-swapping activationType is safe (just a flag change).
+                // So I SHOULD remove it from structuralKeys to prevent regen.
             }
             return;
         }
