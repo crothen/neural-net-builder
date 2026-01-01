@@ -78,7 +78,7 @@ export class Renderer {
             } else {
                 // Dynamic styling based on Weight & Activity
                 let baseWidth = 0.5 + (weightAbs * 1.5); // Thicker connections = stronger weights
-                let baseAlpha = 0.05 + (weightAbs * 0.15); // Much more transparent
+                let baseAlpha = 0.02 + (weightAbs * 0.1); // Extremely transparent resting state
 
                 if (intensity > 0.01) {
                     // Active Firing

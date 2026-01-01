@@ -388,28 +388,31 @@ function App() {
                           </span>
                           <span style={{ color: '#666', fontSize: '0.7rem' }}>({stat.count})</span>
                         </div>
-                        <button
+                        <div
+                          role="button"
                           onClick={() => handleDisconnect(selectedModule.id, stat.id)}
                           style={{
-                            padding: '0',
-                            background: 'transparent',
-                            color: '#f55',
-                            border: '1px solid #500', // Subtle border
-                            borderRadius: '3px',
-                            cursor: 'pointer',
-                            width: '16px', // Smaller width
-                            height: '16px', // Smaller height
-                            fontSize: '10px', // Smaller font
+                            width: '14px',
+                            height: '14px',
+                            minWidth: '14px', // Force min width
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            marginLeft: '8px', // Space from text
-                            flexShrink: 0
+                            marginLeft: '8px',
+                            background: 'rgba(255, 50, 50, 0.1)',
+                            border: '1px solid #500',
+                            borderRadius: '3px',
+                            color: '#f55',
+                            fontSize: '10px',
+                            lineHeight: '1',
+                            cursor: 'pointer',
+                            flexShrink: 0,
+                            userSelect: 'none'
                           }}
                           title="Disconnect"
                         >
                           ×
-                        </button>
+                        </div>
                       </li>
                     )
                   })}
