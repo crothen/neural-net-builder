@@ -473,6 +473,16 @@ export class NeuralNet {
             ...n,
             label: n.label // Ensure label is passed if not in spread
         }));
+
+        // Rebuild Node->Module Map
+        this.nodeModuleMap.clear();
+        this.modules.forEach(mod => {
+            // Re-identify nodes for this module
+            // This relies on ID prefixes matching
+            const nodes = this.getModuleNodes(mod.id);
+            nodes.forEach(n => this.nodeModuleMap.set(n.id, mod.id));
+        });
+
         data.connections.forEach(c => this.addConnection(c));
     }
 
@@ -531,13 +541,9 @@ export class NeuralNet {
                     entry.conns.forEach(item => {
                         const normalizedSignal = item.rawSignal * normFactor;
                         sum += normalizedSignal;
-                        // Determine visual strength. 
-                        // If we normalize heavily (e.g. /100), the signal is tiny.
-                        // But physically it's correct. 
-                        // Visualizer: maybe multiply by a constant visual boost? 
-                        // If we show raw signal, it looks "red" (intense).
-                        // Let's show normalized.
-                        item.conn.signalStrength = Math.abs(normalizedSignal);
+                        // Visualizer: Use raw signal so activity is visible, 
+                        // even though physics uses normalized input.
+                        item.conn.signalStrength = Math.abs(item.rawSignal);
                     });
                 }
             });
