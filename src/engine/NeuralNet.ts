@@ -10,6 +10,8 @@ export class NeuralNet {
 
     // Cache for quick lookup of incoming connections per node
     public incoming: Map<string, Connection[]> = new Map();
+    // Cache for Node ID -> Module ID lookup
+    public nodeModuleMap: Map<string, string> = new Map();
 
     constructor() { }
 
@@ -33,6 +35,10 @@ export class NeuralNet {
     }
 
     public addModule(config: ModuleConfig) {
+        if (config.type === 'BRAIN' && config.hebbianLearning === undefined) {
+            config.hebbianLearning = true;
+            config.learningRate = 0.01;
+        }
         this.modules.set(config.id, config);
 
         // Generate Nodes based on Type
@@ -47,14 +53,16 @@ export class NeuralNet {
                 const theta = i * goldenAngle;
                 const r = radius * Math.sqrt((i + 1) / config.nodeCount);
 
+                const nodeId = `${config.id}-${i}`;
                 this.addNode({
-                    id: `${config.id}-${i}`,
+                    id: nodeId,
                     type: NodeType.HIDDEN,
                     x: centerX + r * Math.cos(theta),
                     y: centerY + r * Math.sin(theta),
                     label: '',
                     activationType: config.activationType || 'SUSTAINED'
                 });
+                this.nodeModuleMap.set(nodeId, config.id);
             }
 
             // Recurrent Internal Connections (Bidirectional)
@@ -106,6 +114,7 @@ export class NeuralNet {
                         label: '',
                         activationType: config.activationType || 'PULSE'
                     });
+                    this.nodeModuleMap.set(nodeId, config.id);
                 }
 
                 if (d > 0) {
@@ -176,6 +185,7 @@ export class NeuralNet {
         idsToRemove.forEach(nodeId => {
             this.nodes.delete(nodeId);
             this.incoming.delete(nodeId);
+            this.nodeModuleMap.delete(nodeId);
         });
 
         // 2. Re-run addModule logic (generation)
@@ -475,12 +485,60 @@ export class NeuralNet {
             let sum = 0;
             const incomingConns = this.incoming.get(node.id) || [];
 
+            // Normalization Logic: Group connections by source Brain module
+            const brainInputs = new Map<string, { conns: { conn: Connection, rawSignal: number }[] }>();
+
             incomingConns.forEach(conn => {
                 const sourceNode = this.nodes.get(conn.sourceId);
                 if (sourceNode) {
-                    const signal = sourceNode.activation * conn.weight;
-                    sum += signal;
-                    conn.signalStrength = Math.abs(signal);
+                    const rawSignal = sourceNode.activation * conn.weight;
+
+                    const sourceModId = this.nodeModuleMap.get(sourceNode.id);
+                    const targetModId = this.nodeModuleMap.get(node.id);
+
+                    let isExternalBrain = false;
+                    if (sourceModId && sourceModId !== targetModId) {
+                        const sourceMod = this.modules.get(sourceModId);
+                        if (sourceMod && sourceMod.type === 'BRAIN') {
+                            isExternalBrain = true;
+                        }
+                    }
+
+                    if (isExternalBrain && sourceModId) {
+                        let entry = brainInputs.get(sourceModId);
+                        if (!entry) {
+                            entry = { conns: [] };
+                            brainInputs.set(sourceModId, entry);
+                        }
+                        entry.conns.push({ conn, rawSignal });
+                    } else {
+                        // Standard processing
+                        sum += rawSignal;
+                        conn.signalStrength = Math.abs(rawSignal);
+                    }
+                }
+            });
+
+            // Process Normalized Inputs
+            brainInputs.forEach((entry) => {
+                const count = entry.conns.length;
+                if (count > 0) {
+                    // Normalization Factor: 1.0 / Total Connections from this brain
+                    // This ensures the total possible input from the brain is effectively "averaged"
+                    // preventing saturation from 100+ connections.
+                    const normFactor = 1.0 / count;
+
+                    entry.conns.forEach(item => {
+                        const normalizedSignal = item.rawSignal * normFactor;
+                        sum += normalizedSignal;
+                        // Determine visual strength. 
+                        // If we normalize heavily (e.g. /100), the signal is tiny.
+                        // But physically it's correct. 
+                        // Visualizer: maybe multiply by a constant visual boost? 
+                        // If we show raw signal, it looks "red" (intense).
+                        // Let's show normalized.
+                        item.conn.signalStrength = Math.abs(normalizedSignal);
+                    });
                 }
             });
 

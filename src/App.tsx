@@ -225,7 +225,8 @@ function App() {
 
           canvasRef.current.addModule({
             id: 'brain-1', type: 'BRAIN', x: 600, y: 400, nodeCount: 200, depth: 1, label: 'Brain', name: 'Brain',
-            activationType: 'SUSTAINED', threshold: 0.5, refractoryPeriod: 1, radius: 200, height: 0
+            activationType: 'SUSTAINED', threshold: 0.5, refractoryPeriod: 1, radius: 200, height: 0,
+            hebbianLearning: true, learningRate: 0.01
           });
 
           canvasRef.current.addModule({
