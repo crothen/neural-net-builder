@@ -58,6 +58,8 @@ export interface ModuleConfig {
     // Hebbian Learning
     hebbianLearning?: boolean;
     learningRate?: number;
+    pruningThreshold?: number; // Remove weak connections below this
+    regrowthRate?: number; // New connections per tick
 
     radius?: number; // for Brain
     width?: number; // for Layer width (visual spacing between columns)

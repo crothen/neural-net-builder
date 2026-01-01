@@ -339,20 +339,48 @@ function App() {
                   </label>
                 </div>
 
-                {selectedModule.hebbianLearning && (
-                  <div className="input-row" style={{ marginTop: '8px' }}>
-                    <label>Learning Rate ({selectedModule.learningRate || 0.01}) <Tooltip text="Speed of weight adaptation" />
-                      <input
-                        type="range"
-                        min="0.001"
-                        max="0.1"
-                        step="0.001"
-                        value={selectedModule.learningRate || 0.01}
-                        onChange={(e) => handleUpdateConfig(selectedModule.id, { learningRate: parseFloat(e.target.value) })}
-                        style={{ width: '100%' }}
-                      />
-                    </label>
-                  </div>
+                {(selectedModule.type === 'BRAIN' && selectedModule.hebbianLearning) && (
+                  <>
+                    <div className="input-row">
+                      <label>Learning Rate <Tooltip text="Hebbian learning rate" />
+                        <input
+                          type="number"
+                          step="0.001"
+                          min="0"
+                          max="1"
+                          value={selectedModule.learningRate || 0.01}
+                          onChange={(e) => handleUpdateConfig(selectedModule.id, { learningRate: parseFloat(e.target.value) })}
+                          style={{ width: '100%' }}
+                        />
+                      </label>
+                    </div>
+                    <div className="input-row">
+                      <label>Pruning Thresh <Tooltip text="Remove connections weaker than this (abs)" />
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          max="1"
+                          value={selectedModule.pruningThreshold !== undefined ? selectedModule.pruningThreshold : 0.05}
+                          onChange={(e) => handleUpdateConfig(selectedModule.id, { pruningThreshold: parseFloat(e.target.value) })}
+                          style={{ width: '100%' }}
+                        />
+                      </label>
+                    </div>
+                    <div className="input-row">
+                      <label>Regrowth Rate <Tooltip text="New connections per tick (0.1 = 1 per 10 ticks)" />
+                        <input
+                          type="number"
+                          step="0.1"
+                          min="0"
+                          max="10"
+                          value={selectedModule.regrowthRate || 0}
+                          onChange={(e) => handleUpdateConfig(selectedModule.id, { regrowthRate: parseFloat(e.target.value) })}
+                          style={{ width: '100%' }}
+                        />
+                      </label>
+                    </div>
+                  </>
                 )}
               </>
             )}

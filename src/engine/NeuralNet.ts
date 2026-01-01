@@ -66,19 +66,27 @@ export class NeuralNet {
                 this.nodeModuleMap.set(nodeId, config.id);
             }
 
-            // Recurrent Internal Connections (Fully Connected)
+            // Recurrent Internal Connections (Sparse: 2 peers per node)
             const nodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(config.id));
+            const connectionsPerNode = 2; // Fixed sparse connectivity
+
             nodes.forEach(source => {
-                nodes.forEach(target => {
-                    if (source.id !== target.id) {
-                        this.addConnection({
-                            id: `c-${source.id}-${target.id}`,
-                            sourceId: source.id,
-                            targetId: target.id,
-                            weight: Math.random() // Positive only
-                        });
+                for (let k = 0; k < connectionsPerNode; k++) {
+                    if (nodes.length <= 1) break;
+
+                    let target = nodes[Math.floor(Math.random() * nodes.length)];
+                    // Prevent Self-Connections
+                    while (target.id === source.id) {
+                        target = nodes[Math.floor(Math.random() * nodes.length)];
                     }
-                });
+
+                    this.addConnection({
+                        id: `c-${source.id}-${target.id}-${k}`,
+                        sourceId: source.id,
+                        targetId: target.id,
+                        weight: Math.random() // Positive only
+                    });
+                }
             });
         } else {
             // LAYER / INPUT / OUTPUT: Vertical Columns
@@ -568,26 +576,95 @@ export class NeuralNet {
                     c.sourceId.startsWith(moduleId) && c.targetId.startsWith(moduleId)
                 );
 
+                const pruningThreshold = module.pruningThreshold !== undefined ? module.pruningThreshold : 0.05;
+                const connsToRemove: Set<string> = new Set();
+
                 internalConns.forEach(conn => {
                     const src = this.nodes.get(conn.sourceId);
                     const tgt = this.nodes.get(conn.targetId);
 
-                    if (src && tgt && src.isFiring) {
-                        // Hebbian Rule: "Cells that fire together, wire together"
-                        if (tgt.isFiring) {
-                            conn.weight += rate; // Strengthen
-                        } else {
-                            // Anti-Hebbian / LTD (Long Term Depression)
-                            // If source fires but target doesn't, the connection weakens
-                            conn.weight -= rate;
-                        }
+                    if (src && tgt) {
+                        // Hebbian Update: W_new = W_old + rate * (Activation_src * Activation_tgt)
+                        // Standard Hebbian: "Cells that fire together, wire together"
+                        // Only increase if both are active?
+                        // Or standard delta rule?
+                        // Simple Hebbian: product of activations.
+                        const delta = src.activation * tgt.activation * rate;
 
-                        // Clamp Weights to [-1, 1]
-                        if (conn.weight > 1) conn.weight = 1;
-                        if (conn.weight < -1) conn.weight = -1;
+                        // Anti-Hebbian / Decay?
+                        // If we only increase, weights explode.
+                        // We need a decay factor or normalization.
+                        // Let's modify: If source fires and target DOES NOT, weaken connection? (LTP/LTD)
+                        // Simplified 3-factor rule often used:
+                        // delta = rate * (post * (pre - pre_avg)) or similar.
+
+                        // For visual simplicity:
+                        // Increase if co-active.
+                        // Decay naturally? No, weights are static unless changed.
+                        // Let's implement a "Forget" factor if src fires but tgt doesn't.
+                        // delta = rate * src * tgt  MINUS  decay_rate * src * (1-tgt)?
+                        // Let's stick to the User Request: "Hebbian Learning". usually implies positive reinforcement.
+                        // But without normalization, it explodes.
+                        // Let's add a small decay to the weight itself if it's high?
+                        // Or just clamp it.
+                        // For now, implementing the pure Hebbian term requested previously.
+
+                        conn.weight += delta;
+
+                        // Limit Max Weight
+                        if (conn.weight > 2.0) conn.weight = 2.0;
+
+                        // PRUNING
+                        if (Math.abs(conn.weight) < pruningThreshold) {
+                            connsToRemove.add(conn.id);
+                        }
                     }
                 });
+
+                // Apply Pruning
+                if (connsToRemove.size > 0) {
+                    this.connections = this.connections.filter(c => !connsToRemove.has(c.id));
+                    // Full Rebuild of incoming map is safest/easiest given current architecture
+                    this.rebuildIncomingMap();
+                }
+
+                // REGROWTH
+                const regrowthRate = module.regrowthRate || 0; // Connections per tick
+                if (regrowthRate > 0) {
+                    const count = Math.floor(regrowthRate);
+                    const chance = regrowthRate - count;
+                    let toAdd = count;
+                    if (Math.random() < chance) toAdd++;
+
+                    const moduleNodes = this.getModuleNodes(moduleId);
+                    if (moduleNodes.length > 1) {
+                        for (let i = 0; i < toAdd; i++) {
+                            const src = moduleNodes[Math.floor(Math.random() * moduleNodes.length)];
+                            let tgt = moduleNodes[Math.floor(Math.random() * moduleNodes.length)];
+                            while (tgt.id === src.id) {
+                                tgt = moduleNodes[Math.floor(Math.random() * moduleNodes.length)];
+                            }
+
+                            this.addConnection({
+                                id: `c-${src.id}-${tgt.id}-${Date.now()}-${Math.random()}`,
+                                sourceId: src.id,
+                                targetId: tgt.id,
+                                weight: 0.1 // Weak initial weight
+                            });
+                        }
+                    }
+                }
             }
+        });
+    }
+
+    private rebuildIncomingMap() {
+        this.incoming.clear();
+        this.connections.forEach(c => {
+            if (!this.incoming.has(c.targetId)) {
+                this.incoming.set(c.targetId, []);
+            }
+            this.incoming.get(c.targetId)?.push(c);
         });
     }
 
@@ -596,11 +673,11 @@ export class NeuralNet {
      */
     public disconnectModules(modId1: string, modId2: string) {
         this.connections = this.connections.filter(c => {
-            const isSrc1 = this.nodes.get(c.sourceId)?.id.startsWith(modId1 + '-');
-            const isTgt2 = this.nodes.get(c.targetId)?.id.startsWith(modId2 + '-');
+            const isSrc1 = this.nodeModuleMap.get(c.sourceId) === modId1;
+            const isTgt2 = this.nodeModuleMap.get(c.targetId) === modId2;
 
-            const isSrc2 = this.nodes.get(c.sourceId)?.id.startsWith(modId2 + '-');
-            const isTgt1 = this.nodes.get(c.targetId)?.id.startsWith(modId1 + '-');
+            const isSrc2 = this.nodeModuleMap.get(c.sourceId) === modId2;
+            const isTgt1 = this.nodeModuleMap.get(c.targetId) === modId1;
 
             // Remove if 1->2 OR 2->1 (Total disconnect? Or just directed?)
             // User likely wants granular control. Let's strictly support directional or both.
