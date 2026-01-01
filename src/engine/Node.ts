@@ -91,10 +91,11 @@ export class Node {
         // Clamp to 0 to prevent negative buildup
         if (this.potential < 0) this.potential = 0;
 
-        // FIX: Clamp Sustained nodes to Threshold to prevent runaway potential (e.g. 9.0)
-        // If firing, they are effectively "saturated" at 1.0 (or threshold).
-        if (this.activationType === 'SUSTAINED' && this.potential > this.threshold) {
-            this.potential = this.threshold;
+        // FIX: Clamp Sustained nodes to a reasonable Max (e.g. 4.0) 
+        // instead of the threshold (1.0). This allows "strong" memory 
+        // that takes time to decay, without going to infinity.
+        if (this.activationType === 'SUSTAINED' && this.potential > 4.0) {
+            this.potential = 4.0;
         }
     }
 
