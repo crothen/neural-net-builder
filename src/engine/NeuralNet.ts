@@ -60,7 +60,7 @@ export class NeuralNet {
                     x: centerX + r * Math.cos(theta),
                     y: centerY + r * Math.sin(theta),
                     label: '',
-                    activationType: config.activationType || 'SUSTAINED',
+                    activationType: config.activationType || 'PULSE',
                     decay: config.decay
                 });
                 this.nodeModuleMap.set(nodeId, config.id);
