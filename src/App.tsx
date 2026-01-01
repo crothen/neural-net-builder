@@ -49,7 +49,7 @@ function App() {
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [nodeConnections, setNodeConnections] = useState<{ incoming: any[], outgoing: any[] } | null>(null);
-  const [filterModuleId, setFilterModuleId] = useState('ALL');
+  const [filterModuleIds, setFilterModuleIds] = useState<string[]>(['ALL']);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // --- Helpers ---
@@ -685,14 +685,27 @@ function App() {
                   In: {nodeConnections.incoming.length} | Out: {nodeConnections.outgoing.length}
                 </span>
               </span>
-              <button className="modal-close" onClick={closeNodeMenu}>×</button>
+              <button className="modal-close" onClick={closeNodeMenu} style={{ width: '24px', height: '24px', lineHeight: '20px', padding: 0, textAlign: 'center' }}>×</button>
             </div>
 
             <div style={{ padding: '10px', background: '#222', borderBottom: '1px solid #444' }}>
               <select
-                value={filterModuleId}
-                onChange={(e) => setFilterModuleId(e.target.value)}
-                style={{ width: '100%', padding: '5px', background: '#111', border: '1px solid #333', color: '#fff' }}
+                multiple
+                value={filterModuleIds}
+                onChange={(e) => {
+                  const selected = Array.from(e.target.selectedOptions, option => option.value);
+                  // Toggle behavior for 'ALL'
+                  if (selected.includes('ALL') && !filterModuleIds.includes('ALL')) {
+                    setFilterModuleIds(['ALL']);
+                  } else if (selected.includes('ALL') && selected.length > 1) {
+                    setFilterModuleIds(selected.filter(x => x !== 'ALL'));
+                  } else if (selected.length === 0) {
+                    setFilterModuleIds(['ALL']);
+                  } else {
+                    setFilterModuleIds(selected);
+                  }
+                }}
+                style={{ width: '100%', height: '80px', padding: '5px', background: '#111', border: '1px solid #333', color: '#fff' }}
               >
                 <option value="ALL">All Modules</option>
                 {/* Extract Unique Modules from Connections */}
@@ -718,7 +731,7 @@ function App() {
               <h4 style={{ margin: '5px 0', color: '#888' }}>Incoming ({nodeConnections.incoming.length})</h4>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 {nodeConnections.incoming
-                  .filter((c: any) => filterModuleId === 'ALL' || c.sourceId.startsWith(filterModuleId))
+                  .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.sourceId.startsWith(fid)))
                   .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
                   .map((c: any) => (
                     <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
@@ -731,7 +744,7 @@ function App() {
               <h4 style={{ margin: '10px 0 5px', color: '#888' }}>Outgoing ({nodeConnections.outgoing.length})</h4>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 {nodeConnections.outgoing
-                  .filter((c: any) => filterModuleId === 'ALL' || c.targetId.startsWith(filterModuleId))
+                  .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.targetId.startsWith(fid)))
                   .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
                   .map((c: any) => (
                     <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
