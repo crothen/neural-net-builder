@@ -377,13 +377,13 @@ function App() {
                         alignItems: 'center',
                         fontSize: '0.8rem',
                         background: 'rgba(255,255,255,0.05)',
-                        padding: '6px 8px',
+                        padding: '4px 8px', // Reduced padding
                         borderRadius: '4px',
                         borderLeft: `3px solid ${color}`
                       }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflow: 'hidden' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflow: 'hidden', flex: 1 }}>
                           <span style={{ color: color, fontWeight: 'bold' }}>{icon}</span>
-                          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '140px' }}>
+                          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }} title={modules.find(m => m.id === stat.id)?.name || stat.id}>
                             {modules.find(m => m.id === stat.id)?.name || stat.id}
                           </span>
                           <span style={{ color: '#666', fontSize: '0.7rem' }}>({stat.count})</span>
@@ -391,19 +391,21 @@ function App() {
                         <button
                           onClick={() => handleDisconnect(selectedModule.id, stat.id)}
                           style={{
-                            padding: '2px 6px',
+                            padding: '0',
                             background: 'transparent',
                             color: '#f55',
-                            border: '1px solid #500',
+                            border: '1px solid #500', // Subtle border
                             borderRadius: '3px',
                             cursor: 'pointer',
-                            fontSize: '1rem',
-                            lineHeight: '0.8',
-                            width: '24px',
-                            height: '24px',
+                            fontSize: '12px', // Smaller font
+                            lineHeight: '1',
+                            width: '18px', // Smaller width
+                            height: '18px', // Smaller height
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+                            marginLeft: '8px', // Space from text
+                            flexShrink: 0
                           }}
                           title="Disconnect"
                         >

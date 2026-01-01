@@ -65,22 +65,15 @@ export class NeuralNet {
                     const target = nodes[Math.floor(Math.random() * nodes.length)];
 
                     // Forward
+                    // Forward only (One-way)
                     this.addConnection({
                         id: `c-${source.id}-${target.id}-${k}`,
                         sourceId: source.id,
                         targetId: target.id,
-                        weight: Math.random() * 2 - 1
+                        weight: Math.random() // Positive only (0 to 1) for teal visuals
                     });
 
-                    // Reverse (Two-Way connection as requested)
-                    if (source.id !== target.id) {
-                        this.addConnection({
-                            id: `c-${target.id}-${source.id}-${k}-rev`,
-                            sourceId: target.id,
-                            targetId: source.id,
-                            weight: Math.random() * 2 - 1
-                        });
-                    }
+                    // REMOVED: Twoway/Reverse connection logic
                 }
             });
 
@@ -125,7 +118,7 @@ export class NeuralNet {
                                 id: `c-${srcId}-${tgtId}`,
                                 sourceId: srcId,
                                 targetId: tgtId,
-                                weight: Math.random() * 2 - 1
+                                weight: Math.random() // Positive only
                             });
                         }
                     }
@@ -310,7 +303,7 @@ export class NeuralNet {
                         id: `c-${src.id}-${tgt.id}`,
                         sourceId: src.id,
                         targetId: tgt.id,
-                        weight: Math.random() * 2 - 1
+                        weight: Math.random() // Positive only
                     });
                 }
             });
@@ -462,27 +455,41 @@ export class NeuralNet {
     public getModuleConnectivity(moduleId: string) {
         const stats = new Map<string, { id: string, count: number, direction: 'in' | 'out' | 'self' }>();
 
+        // Create a lookup for module ID by node ID
+        const nodeToModuleId = new Map<string, string>();
+
+        this.modules.forEach(mod => {
+            const nodes = this.getModuleNodes(mod.id);
+            nodes.forEach(n => nodeToModuleId.set(n.id, mod.id));
+        });
+
         this.connections.forEach(c => {
-            const srcNode = this.nodes.get(c.sourceId);
-            const tgtNode = this.nodes.get(c.targetId);
-            if (!srcNode || !tgtNode) return;
+            const srcModId = nodeToModuleId.get(c.sourceId);
+            const tgtModId = nodeToModuleId.get(c.targetId);
 
-            // Extract module IDs (everything before the last hyphen)
-            const srcMod = srcNode.id.substring(0, srcNode.id.lastIndexOf('-'));
-            const tgtMod = tgtNode.id.substring(0, tgtNode.id.lastIndexOf('-'));
+            if (!srcModId || !tgtModId) return;
 
-            if (srcMod === moduleId) {
-                // Outgoing to tgtMod
-                const key = `out-${tgtMod}`;
-                if (!stats.has(key)) stats.set(key, { id: tgtMod, count: 0, direction: srcMod === tgtMod ? 'self' : 'out' });
+            // CASE 1: Outgoing from selected module
+            if (srcModId === moduleId) {
+                const key = `out-${tgtModId}`;
+                // If source==target, it's internal/self.
+                const dir = srcModId === tgtModId ? 'self' : 'out';
+
+                if (!stats.has(key)) {
+                    stats.set(key, { id: tgtModId, count: 0, direction: dir });
+                }
                 stats.get(key)!.count++;
             }
 
-            if (tgtMod === moduleId && srcMod !== moduleId) {
-                // Incoming from srcMod (exclude self-loops here as they are caught above with specific key/direction logic if desired, 
-                // but 'self' usually implies internal. Let's just track 'in' from others.
-                const key = `in-${srcMod}`;
-                if (!stats.has(key)) stats.set(key, { id: srcMod, count: 0, direction: 'in' });
+            // CASE 2: Incoming to selected module (from OTHERS)
+            // We generally separate "Internal" (Self) from "In".
+            // If srcMod == tgtMod == moduleId, we already caught it above as 'self'.
+            // So here we only care if tgtMod == moduleId && srcMod != moduleId.
+            if (tgtModId === moduleId && srcModId !== moduleId) {
+                const key = `in-${srcModId}`;
+                if (!stats.has(key)) {
+                    stats.set(key, { id: srcModId, count: 0, direction: 'in' });
+                }
                 stats.get(key)!.count++;
             }
         });
