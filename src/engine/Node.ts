@@ -88,8 +88,14 @@ export class Node {
         // Apply decay to the remaining potential
         this.potential *= (1 - this.decay);
 
-        // Clamp to 0 to prevent negative buildup (unless we want inhibitory behavior later)
+        // Clamp to 0 to prevent negative buildup
         if (this.potential < 0) this.potential = 0;
+
+        // FIX: Clamp Sustained nodes to Threshold to prevent runaway potential (e.g. 9.0)
+        // If firing, they are effectively "saturated" at 1.0 (or threshold).
+        if (this.activationType === 'SUSTAINED' && this.potential > this.threshold) {
+            this.potential = this.threshold;
+        }
     }
 
     /**
