@@ -219,6 +219,33 @@ export class Renderer {
                 this.ctx.fillText(module.name || 'DATA', module.x, module.y);
             }
 
+            // --- CUSTOM VISUALIZATION FOR COLLAPSED CONCEPT (TRIANGLE) ---
+            if (module.type === 'CONCEPT' && module.collapsed) {
+                const r = 30;
+                this.ctx.beginPath();
+                // Triangle pointing right (or determines based on connections?) - Just generic triangle for now
+                // Pointing Right: (x+r, y), (x-r, y-r), (x-r, y+r)
+                this.ctx.moveTo(module.x + r, module.y);
+                this.ctx.lineTo(module.x - r, module.y - r);
+                this.ctx.lineTo(module.x - r, module.y + r);
+                this.ctx.closePath();
+
+                this.ctx.fillStyle = '#444';
+                this.ctx.fill();
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = '#aaa';
+                this.ctx.stroke();
+
+                // Icon / Label
+                this.ctx.fillStyle = '#fff';
+                this.ctx.font = '12px "Inter", sans-serif';
+                this.ctx.textAlign = 'center';
+                this.ctx.textBaseline = 'middle';
+                // Clip name if too long
+                const displayName = module.name || 'Concept';
+                this.ctx.fillText(displayName.substring(0, 8), module.x - 5, module.y);
+            }
+
             // Draw Module Label (Prominent)
             // Visibility Check: If hiding details, only show labels for INPUT/OUTPUT
             if (module.type === 'TRAINING_DATA' || (!showHidden && module.type !== 'INPUT' && module.type !== 'OUTPUT')) {
@@ -267,6 +294,9 @@ export class Renderer {
             }
 
             nodes.forEach(node => {
+                // Skip if collapsed concept (drawn as triangle)
+                if (module.type === 'CONCEPT' && module.collapsed) return;
+
                 // Visibility Check
                 if (!showHidden) {
                     if (node.type === NodeType.HIDDEN || node.type === NodeType.INTERPRETATION) {

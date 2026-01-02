@@ -87,10 +87,14 @@ export interface ModuleConfig {
     // Concept Data
     concepts?: { id: string; label: string }[];
     conceptColumn?: string;
+    collapsed?: boolean; // If true, rendering is simplified (e.g. triangle)
 
     // Training Data
     trainingData?: any[]; // The raw CSV rows
     trainingConfig?: {
+        targetBrainId?: string; // Linked Brain
+        targetOutputId?: string; // Linked Learned Output
+        trainingIterations?: number; // Steps per concept
         idColumn: string;
         wordColumn: string;
         // Map ModuleID -> CSV Column Name

@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import json
-import time
-import threading
 from .model import NeuralNet
 from .engine import Engine
 
@@ -10,49 +8,75 @@ class NeuralGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Neural Net Runtime Control")
-        self.root.geometry("400x350")
+        self.root.geometry("900x600")
 
         self.net = NeuralNet()
         self.engine = Engine(self.net)
         
         self.is_running = False
-        self.sim_speed_ms = 50  # Delay between ticks
-        self.tick_batch_size = 1 # Steps per GUI update
+        self.io_widgets = {} # node_id -> widget
 
-        self._init_ui()
+        self._setup_layout()
         self._update_stats()
 
-    def _init_ui(self):
-        # File Controls
-        frame_file = tk.LabelFrame(self.root, text="File Operations", padx=5, pady=5)
-        frame_file.pack(fill="x", padx=10, pady=5)
+    def _setup_layout(self):
+        # Main Split: Left (Controls) vs Right (Visuals)
+        self.paned = tk.PanedWindow(self.root, orient="horizontal")
+        self.paned.pack(fill="both", expand=True)
 
-        tk.Button(frame_file, text="Load JSON", command=self.load_net).pack(side="left", padx=5)
-        tk.Button(frame_file, text="Save JSON", command=self.save_net).pack(side="left", padx=5)
-        tk.Button(frame_file, text="Reset State", command=self.reset_state).pack(side="left", padx=5)
+        # LEFT: Controls
+        self.frame_controls = tk.Frame(self.paned, width=300, padx=10, pady=10)
+        self.paned.add(self.frame_controls)
+        
+        # RIGHT: I/O Visualization with Scrollbar
+        self.frame_viz_container = tk.Frame(self.paned, bg="#222", width=500)
+        self.paned.add(self.frame_viz_container)
+
+        self.canvas_viz = tk.Canvas(self.frame_viz_container, bg="#222")
+        self.scrollbar = tk.Scrollbar(self.frame_viz_container, orient="vertical", command=self.canvas_viz.yview)
+        self.frame_io = tk.Frame(self.canvas_viz, bg="#222")
+
+        self.frame_io.bind(
+            "<Configure>",
+            lambda e: self.canvas_viz.configure(scrollregion=self.canvas_viz.bbox("all"))
+        )
+
+        self.canvas_viz.create_window((0, 0), window=self.frame_io, anchor="nw")
+        self.canvas_viz.configure(yscrollcommand=self.scrollbar.set)
+
+        self.canvas_viz.pack(side="left", fill="both", expand=True)
+        self.scrollbar.pack(side="right", fill="y")
+
+        self._init_controls()
+
+    def _init_controls(self):
+        # File Operations
+        frame_file = tk.LabelFrame(self.frame_controls, text="File Operations", padx=5, pady=5)
+        frame_file.pack(fill="x", pady=5)
+        tk.Button(frame_file, text="Load JSON", command=self.load_net).pack(fill="x", pady=2)
+        tk.Button(frame_file, text="Save JSON", command=self.save_net).pack(fill="x", pady=2)
+        tk.Button(frame_file, text="Reset State", command=self.reset_state).pack(fill="x", pady=2)
 
         # Simulation Controls
-        frame_sim = tk.LabelFrame(self.root, text="Simulation", padx=5, pady=5)
-        frame_sim.pack(fill="x", padx=10, pady=5)
+        frame_sim = tk.LabelFrame(self.frame_controls, text="Simulation", padx=5, pady=5)
+        frame_sim.pack(fill="x", pady=5)
 
-        self.btn_play = tk.Button(frame_sim, text="▶ Play", command=self.toggle_play, bg="#ddffdd", width=10)
-        self.btn_play.pack(side="left", padx=5)
+        self.btn_play = tk.Button(frame_sim, text="▶ Play", command=self.toggle_play, bg="#ddffdd")
+        self.btn_play.pack(fill="x", pady=2)
         
-        tk.Button(frame_sim, text="Step >", command=self.step_once).pack(side="left", padx=5)
-        tk.Button(frame_sim, text="Step 10 >>", command=lambda: self.step_many(10)).pack(side="left", padx=5)
+        tk.Button(frame_sim, text="Step >", command=self.step_once).pack(fill="x", pady=2)
+        tk.Button(frame_sim, text="Step 10 >>", command=lambda: self.step_many(10)).pack(fill="x", pady=2)
 
         # Settings
-        frame_settings = tk.LabelFrame(self.root, text="Settings", padx=5, pady=5)
-        frame_settings.pack(fill="x", padx=10, pady=5)
-
-        tk.Label(frame_settings, text="Speed (ms delay):").pack(side="left")
+        frame_settings = tk.LabelFrame(self.frame_controls, text="Speed (ms delay)", padx=5, pady=5)
+        frame_settings.pack(fill="x", pady=5)
         self.scale_speed = tk.Scale(frame_settings, from_=0, to=500, orient="horizontal")
         self.scale_speed.set(50)
-        self.scale_speed.pack(side="left", fill="x", expand=True, padx=5)
+        self.scale_speed.pack(fill="x")
 
         # Stats
-        frame_stats = tk.LabelFrame(self.root, text="Statistics", padx=5, pady=5)
-        frame_stats.pack(fill="both", expand=True, padx=10, pady=5)
+        frame_stats = tk.LabelFrame(self.frame_controls, text="Statistics", padx=5, pady=5)
+        frame_stats.pack(fill="both", expand=True, pady=5)
 
         self.lbl_ticks = tk.Label(frame_stats, text="Ticks: 0", font=("Arial", 12, "bold"))
         self.lbl_ticks.pack(anchor="w")
@@ -63,8 +87,8 @@ class NeuralGUI:
         self.lbl_modules = tk.Label(frame_stats, text="Modules: 0")
         self.lbl_modules.pack(anchor="w")
         
-        self.lbl_status = tk.Label(frame_stats, text="Status: Idle", fg="gray")
-        self.lbl_status.pack(anchor="w", pady=5)
+        self.lbl_status = tk.Label(frame_stats, text="Status: Idle", fg="gray", wraplength=280)
+        self.lbl_status.pack(anchor="w", pady=5, side="bottom")
 
     def load_net(self):
         filepath = filedialog.askopenfilename(filetypes=[("JSON Files", "*.json")])
@@ -75,9 +99,9 @@ class NeuralGUI:
                 data = json.load(f)
             self.net.from_json(data)
             self.engine = Engine(self.net) # Re-bind engine
+            self._rebuild_io_viz()
             self._update_stats()
             self.lbl_status.config(text=f"Loaded: {filepath.split('/')[-1]}", fg="green")
-            print(f"Loaded network from {filepath}")
         except Exception as e:
             messagebox.showerror("Load Error", str(e))
 
@@ -90,7 +114,6 @@ class NeuralGUI:
             with open(filepath, 'w') as f:
                 json.dump(data, f, indent=2)
             self.lbl_status.config(text=f"Saved: {filepath.split('/')[-1]}", fg="blue")
-            print(f"Saved network to {filepath}")
         except Exception as e:
             messagebox.showerror("Save Error", str(e))
 
@@ -116,16 +139,9 @@ class NeuralGUI:
         if not self.is_running: return
         
         delay = self.scale_speed.get()
-        
-        # If speed is 0, we try to run as fast as possible (batch steps)
-        # Otherwise respect delay
-        
-        steps = 1
-        if delay == 0:
-             steps = 10 # Batch for speed
+        steps = 10 if delay == 0 else 1
         
         self.step_many(steps)
-        
         if self.is_running:
             self.root.after(max(1, delay), self._run_loop)
 
@@ -138,10 +154,111 @@ class NeuralGUI:
             self.engine.step()
         self._update_stats()
 
+    # --- I/O Visualization ---
+
+    def _rebuild_io_viz(self):
+        # Clear existing
+        for widget in self.frame_io.winfo_children():
+            widget.destroy()
+        
+        self.io_widgets = {}
+
+        # Identify I/O Modules
+        io_modules = [m for m in self.net.modules.values() if m.type in ('INPUT', 'OUTPUT', 'LEARNED_OUTPUT', 'CONCEPT')]
+        
+        # Sort by type then name
+        io_modules.sort(key=lambda m: (m.type, m.name or m.id))
+
+        if not io_modules:
+            tk.Label(self.frame_io, text="No Input/Output Modules found.", bg="#222", fg="#888").pack(pady=20)
+            return
+
+        for mod in io_modules:
+            # Module Frame
+            frame_mod = tk.LabelFrame(self.frame_io, text=f"{mod.name} ({mod.type})", bg="#333", fg="#ddd", padx=5, pady=5)
+            frame_mod.pack(fill="x", padx=10, pady=5)
+            
+            # Nodes Container (Flow Layout using Grid)
+            frame_nodes = tk.Frame(frame_mod, bg="#333")
+            frame_nodes.pack(fill="both", expand=True)
+
+            # Find Nodes
+            mod_nodes = [n for n in self.net.nodes.values() if self.net.nodeModuleMap.get(n.id) == mod.id]
+            # Try to sort numerically if IDs end in digits
+            try:
+                mod_nodes.sort(key=lambda n: int(n.id.split('-')[-1]))
+            except:
+                mod_nodes.sort(key=lambda n: n.id)
+
+            if not mod_nodes:
+                tk.Label(frame_nodes, text="(No Nodes)", bg="#333", fg="#555").pack()
+                continue
+                
+            cols = 8 # Grid columns
+            for i, node in enumerate(mod_nodes):
+                row = i // cols
+                col = i % cols
+                
+                if mod.type == 'INPUT' or mod.type == 'CONCEPT':
+                    # Clickable Button
+                    # Logic: Click fires the node
+                    btn = tk.Button(frame_nodes, text="O", width=2, height=1, 
+                                    bg="#444", fg="#fff", borderwidth=1,
+                                    command=lambda n=node: self.trigger_input(n))
+                    btn.grid(row=row, column=col, padx=2, pady=2)
+                    self.io_widgets[node.id] = (btn, 'input')
+                    
+                    # Tooltip (simple bind)
+                    # btn.bind("<Enter>", lambda e, txt=node.label: self.lbl_status.config(text=f"Hover: {txt}"))
+                else:
+                    # Output Indicator
+                    lbl = tk.Label(frame_nodes, text="", width=4, height=2, 
+                                   bg="#000", relief="sunken", borderwidth=1)
+                    lbl.grid(row=row, column=col, padx=2, pady=2)
+                    self.io_widgets[node.id] = (lbl, 'output')
+                    
+                    # Label? logic is cramped. Just showing lights.
+
+    def trigger_input(self, node):
+        node.activation = 1.0
+        node.potential = 1.0
+        node.isFiring = True
+        self._update_visuals() # Immediate feedback
+
     def _update_stats(self):
         self.lbl_ticks.config(text=f"Ticks: {self.net.tickCount}")
         self.lbl_nodes.config(text=f"Nodes: {len(self.net.nodes)}")
         self.lbl_modules.config(text=f"Modules: {len(self.net.modules)}")
+        self._update_visuals()
+
+    def _update_visuals(self):
+        for node_id, (widget, w_type) in self.io_widgets.items():
+            if node_id not in self.net.nodes: continue
+            node = self.net.nodes[node_id]
+            
+            # Brightness based on activation
+            # 0.0 -> Black/Gray (#222/444)
+            # 1.0 -> Bright Green/Red
+            
+            if w_type == 'output':
+                # Green scale
+                val = int(min(node.activation, 1.0) * 255)
+                # Ensure visible minimum if firing
+                if node.isFiring: val = max(val, 100)
+                
+                # Hex Color: #00GG00
+                color = f"#00{val:02x}00"
+                if val < 20: color = "#111" # dim
+                
+                widget.configure(bg=color)
+                
+            elif w_type == 'input':
+                # Red/Yellow scale
+                # If user clicked, it's 1.0
+                if node.activation > 0.5:
+                    widget.configure(bg="#ff5555", text="X")
+                else:
+                    widget.configure(bg="#444", text="O")
 
 if __name__ == "__main__":
     root = tk.Tk()

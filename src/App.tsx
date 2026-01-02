@@ -112,6 +112,10 @@ function App() {
     }
   };
 
+  const [conceptListModal, setConceptListModal] = useState<{ isOpen: boolean, moduleId: string, title: string, concepts: { id: string, label: string }[] }>({
+    isOpen: false, moduleId: '', title: '', concepts: []
+  });
+
   const refreshInspector = (modId: string | null) => {
     if (!canvasRef.current || !modId) {
       setSelectedNodes([]);
@@ -965,211 +969,245 @@ function App() {
                 </InspectorSection>
               )}
 
-              {/* SECTION: CONNECTIONS */}
-              <InspectorSection title="Connections">
-                {selectedModuleStats.length === 0 ? (
-                  <div style={{ fontSize: '0.8rem', color: '#555', fontStyle: 'italic', textAlign: 'center', padding: '10px' }}>No active connections</div>
-                ) : (
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    {selectedModuleStats.map((stat, idx) => {
-                      const isOut = stat.direction === 'out';
-                      const isIn = stat.direction === 'in';
-                      const color = isOut ? '#00ffaa' : (isIn ? '#00aaff' : '#aaa');
-                      const icon = isOut ? '→' : (isIn ? '←' : '↻');
+              {/* --- CONCEPT INSPECTOR --- */}
+              {selectedModule.type === 'CONCEPT' && (
+                <InspectorSection title="Concept Settings">
+                  <div className="toggle-container" style={{ marginTop: '0' }}>
+                    <span className="toggle-label">Show as Triangle (Collapsed) <Tooltip text="Hide individual nodes on canvas" /></span>
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={!!selectedModule.collapsed}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { collapsed: e.target.checked })}
+                      />
+                      <span className="slider"></span>
+                    </label>
+                  </div>
 
-                      return (
-                        <li key={idx} style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          fontSize: '0.8rem',
-                          background: 'rgba(255,255,255,0.05)',
-                          padding: '4px 8px',
-                          borderRadius: '4px',
-                          borderLeft: `3px solid ${color}`,
-                          cursor: 'pointer'
-                        }}
-                          onClick={() => {
-                            if (canvasRef.current && isOut) {
-                              // For now, only editing outgoing connections is straightforward because they are "owned" by this module's config list physically?
-                              // Actually we can edit either way if we identify the link.
-                              // Let's simplify: Only valid if OUTGOING or INCOMING.
-                              const source = isOut ? selectedModule.id : stat.id;
-                              const target = isOut ? stat.id : selectedModule.id;
+                  <div style={{ marginTop: '10px' }}>
+                    <label>Concept Count: {selectedModule.concepts?.length || 0}</label>
+                    <button
+                      style={{ marginTop: '5px', width: '100%', background: '#444' }}
+                      onClick={() => setConceptListModal({
+                        isOpen: true,
+                        moduleId: selectedModule.id,
+                        title: selectedModule.name || 'Concept List',
+                        concepts: selectedModule.concepts || []
+                      })}
+                    >
+                      View Word List
+                    </button>
+                  </div>
+                </InspectorSection>
+              )}
 
-                              const config = canvasRef.current.getModuleConnectionConfig(source, target);
+              {/* SECTION: CONNECTIONS (Hidden for TRAINING_DATA & CONCEPT) */}
+              {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT' && (
+                <InspectorSection title="Connections">
+                  {selectedModuleStats.length === 0 ? (
+                    <div style={{ fontSize: '0.8rem', color: '#555', fontStyle: 'italic', textAlign: 'center', padding: '10px' }}>No active connections</div>
+                  ) : (
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      {selectedModuleStats.map((stat, idx) => {
+                        const isOut = stat.direction === 'out';
+                        const isIn = stat.direction === 'in';
+                        const color = isOut ? '#00ffaa' : (isIn ? '#00aaff' : '#aaa');
+                        const icon = isOut ? '→' : (isIn ? '←' : '↻');
 
-                              if (config) {
-                                setConnectModal({
-                                  isOpen: true,
-                                  sourceId: source,
-                                  targetId: target,
-                                  params: {
-                                    coverage: config.coverage,
-                                    localizer: config.localizer,
-                                    sides: config.sides
-                                  }
-                                });
-                              }
-                            }
+                        return (
+                          <li key={idx} style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            fontSize: '0.8rem',
+                            background: 'rgba(255,255,255,0.05)',
+                            padding: '4px 8px',
+                            borderRadius: '4px',
+                            borderLeft: `3px solid ${color}`,
+                            cursor: 'pointer'
                           }}
-                          title="Click to Edit Connection"
-                        >
-                          <div
                             onClick={() => {
-                              // Load settings into form
-                              if (canvasRef.current && canvasRef.current.getModuleConnectionConfig) {
-                                const config = canvasRef.current.getModuleConnectionConfig(selectedModule.id, stat.id);
+                              if (canvasRef.current && isOut) {
+                                // For now, only editing outgoing connections is straightforward because they are "owned" by this module's config list physically?
+                                // Actually we can edit either way if we identify the link.
+                                // Let's simplify: Only valid if OUTGOING or INCOMING.
+                                const source = isOut ? selectedModule.id : stat.id;
+                                const target = isOut ? stat.id : selectedModule.id;
+
+                                const config = canvasRef.current.getModuleConnectionConfig(source, target);
+
                                 if (config) {
-                                  // If the saved config src/tgt matches our perspective
-                                  setConnectionTargetId(stat.id);
-                                  // Need to verify if 'stat.id' is source or target relative to 'selectedModule.id'
-                                  // Actually, 'Connect To' assumes Selected is Source. 
-                                  // But connection might be Incoming.
-                                  // If Incoming, we swap?
-                                  // The UI "Connect To" is strictly Outgoing creation.
-                                  // If we click an Incoming connection, can we edit it?
-                                  // Only if we treat 'selected' as target? 
-                                  // No, simpler: Just load the params.
-                                  setConnCoverage(config.coverage);
-                                  setConnLocalizer(config.localizer);
-                                  setConnSides(config.sides);
+                                  setConnectModal({
+                                    isOpen: true,
+                                    sourceId: source,
+                                    targetId: target,
+                                    params: {
+                                      coverage: config.coverage,
+                                      localizer: config.localizer,
+                                      sides: config.sides
+                                    }
+                                  });
                                 }
                               }
                             }}
-                            style={{ display: 'flex', alignItems: 'center', gap: '6px', overflow: 'hidden', flex: 1, cursor: 'pointer' }}
-                            title="Click to edit connection settings"
+                            title="Click to Edit Connection"
                           >
-                            <span style={{ color: color, fontWeight: 'bold' }}>{icon}</span>
-                            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>
-                              {modules.find(m => m.id === stat.id)?.name || stat.id}
-                            </span>
-                            <span style={{ color: '#666', fontSize: '0.7rem' }}>({stat.count} connections)</span>
-                          </div>
-                          <div
-                            role="button"
-                            onClick={() => {
-                              if (window.confirm("Disconnect these modules?")) {
-                                handleDisconnect(selectedModule.id, stat.id);
-                              }
-                            }}
-                            style={{
-                              width: '14px',
-                              height: '14px',
-                              minWidth: '14px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              marginLeft: '8px',
-                              background: 'rgba(255, 50, 50, 0.1)',
-                              border: '1px solid #500',
-                              borderRadius: '3px',
-                              color: '#f55',
-                              fontSize: '10px',
-                              lineHeight: '1',
-                              cursor: 'pointer',
-                              flexShrink: 0,
-                              userSelect: 'none'
-                            }}
-                            title="Disconnect"
-                          >
-                            ×
-                          </div>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                )}
+                            <div
+                              onClick={() => {
+                                // Load settings into form
+                                if (canvasRef.current && canvasRef.current.getModuleConnectionConfig) {
+                                  const config = canvasRef.current.getModuleConnectionConfig(selectedModule.id, stat.id);
+                                  if (config) {
+                                    // If the saved config src/tgt matches our perspective
+                                    setConnectionTargetId(stat.id);
+                                    // Need to verify if 'stat.id' is source or target relative to 'selectedModule.id'
+                                    // Actually, 'Connect To' assumes Selected is Source. 
+                                    // But connection might be Incoming.
+                                    // If Incoming, we swap?
+                                    // The UI "Connect To" is strictly Outgoing creation.
+                                    // If we click an Incoming connection, can we edit it?
+                                    // Only if we treat 'selected' as target? 
+                                    // No, simpler: Just load the params.
+                                    setConnCoverage(config.coverage);
+                                    setConnLocalizer(config.localizer);
+                                    setConnSides(config.sides);
+                                  }
+                                }
+                              }}
+                              style={{ display: 'flex', alignItems: 'center', gap: '6px', overflow: 'hidden', flex: 1, cursor: 'pointer' }}
+                              title="Click to edit connection settings"
+                            >
+                              <span style={{ color: color, fontWeight: 'bold' }}>{icon}</span>
+                              <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>
+                                {modules.find(m => m.id === stat.id)?.name || stat.id}
+                              </span>
+                              <span style={{ color: '#666', fontSize: '0.7rem' }}>({stat.count} connections)</span>
+                            </div>
+                            <div
+                              role="button"
+                              onClick={() => {
+                                if (window.confirm("Disconnect these modules?")) {
+                                  handleDisconnect(selectedModule.id, stat.id);
+                                }
+                              }}
+                              style={{
+                                width: '14px',
+                                height: '14px',
+                                minWidth: '14px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginLeft: '8px',
+                                background: 'rgba(255, 50, 50, 0.1)',
+                                border: '1px solid #500',
+                                borderRadius: '3px',
+                                color: '#f55',
+                                fontSize: '10px',
+                                lineHeight: '1',
+                                cursor: 'pointer',
+                                flexShrink: 0,
+                                userSelect: 'none'
+                              }}
+                              title="Disconnect"
+                            >
+                              ×
+                            </div>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  )}
 
-                <div style={{ borderTop: '1px solid #444', paddingTop: '10px', marginTop: '10px' }}>
-                  <h3 style={{ margin: '0 0 5px 0', fontSize: '0.8rem', color: '#aaa' }}>Connect To</h3>
-                  <select
-                    value={connectionTargetId}
-                    onChange={e => {
-                      const val = e.target.value;
-                      setConnectionTargetId(val);
-                      const tgt = modules.find(m => m.id === val);
-                      if (tgt && tgt.type === 'BRAIN') {
-                        setConnCoverage(50);
-                        setConnLocalizer(0);
-                      } else {
-                        setConnCoverage(100);
-                        setConnLocalizer(0);
-                      }
-                    }}
-                    style={{ width: '100%', marginBottom: '8px' }}
-                  >
-                    <option value="">-- Select Target --</option>
-                    {otherModules.map(m => (
-                      <option key={m.id} value={m.id}>
-                        {m.name || m.label} ({m.type})
-                      </option>
-                    ))}
-                  </select>
+                  <div style={{ borderTop: '1px solid #444', paddingTop: '10px', marginTop: '10px' }}>
+                    <h3 style={{ margin: '0 0 5px 0', fontSize: '0.8rem', color: '#aaa' }}>Connect To</h3>
+                    <select
+                      value={connectionTargetId}
+                      onChange={e => {
+                        const val = e.target.value;
+                        setConnectionTargetId(val);
+                        const tgt = modules.find(m => m.id === val);
+                        if (tgt && tgt.type === 'BRAIN') {
+                          setConnCoverage(50);
+                          setConnLocalizer(0);
+                        } else {
+                          setConnCoverage(100);
+                          setConnLocalizer(0);
+                        }
+                      }}
+                      style={{ width: '100%', marginBottom: '8px' }}
+                    >
+                      <option value="">-- Select Target --</option>
+                      {otherModules.map(m => (
+                        <option key={m.id} value={m.id}>
+                          {m.name || m.label} ({m.type})
+                        </option>
+                      ))}
+                    </select>
 
-                  <div className="input-row" style={{ justifyContent: 'space-between' }}>
-                    <label style={{ width: '45%' }}>Src
-                      <select
-                        value={connSides.src}
-                        onChange={e => setConnSides({ ...connSides, src: e.target.value as any })}
-                        disabled={selectedModule.type !== 'LAYER'}
-                      >
-                        <option value="ALL">All</option>
-                        {selectedModule.type === 'LAYER' && <option value="LEFT">Left</option>}
-                        {selectedModule.type === 'LAYER' && <option value="RIGHT">Right</option>}
-                      </select>
-                    </label>
-                    <label style={{ width: '45%' }}>Tgt
-                      <select
-                        value={connSides.tgt}
-                        onChange={e => setConnSides({ ...connSides, tgt: e.target.value as any })}
-                        disabled={!targetModule || targetModule.type !== 'LAYER'}
-                      >
-                        <option value="ALL">All</option>
-                        {targetModule?.type === 'LAYER' && <option value="LEFT">Left</option>}
-                        {targetModule?.type === 'LAYER' && <option value="RIGHT">Right</option>}
-                      </select>
-                    </label>
-                  </div>
+                    <div className="input-row" style={{ justifyContent: 'space-between' }}>
+                      <label style={{ width: '45%' }}>Src
+                        <select
+                          value={connSides.src}
+                          onChange={e => setConnSides({ ...connSides, src: e.target.value as any })}
+                          disabled={selectedModule.type !== 'LAYER'}
+                        >
+                          <option value="ALL">All</option>
+                          {selectedModule.type === 'LAYER' && <option value="LEFT">Left</option>}
+                          {selectedModule.type === 'LAYER' && <option value="RIGHT">Right</option>}
+                        </select>
+                      </label>
+                      <label style={{ width: '45%' }}>Tgt
+                        <select
+                          value={connSides.tgt}
+                          onChange={e => setConnSides({ ...connSides, tgt: e.target.value as any })}
+                          disabled={!targetModule || targetModule.type !== 'LAYER'}
+                        >
+                          <option value="ALL">All</option>
+                          {targetModule?.type === 'LAYER' && <option value="LEFT">Left</option>}
+                          {targetModule?.type === 'LAYER' && <option value="RIGHT">Right</option>}
+                        </select>
+                      </label>
+                    </div>
 
-                  <div className="input-row">
-                    <label>Coverage: {connCoverage}% <Tooltip text="Percentage of nodes to connect" />
-                      <input
-                        type="range"
-                        min="1"
-                        max="100"
-                        value={connCoverage}
-                        onChange={(e) => setConnCoverage(parseInt(e.target.value))}
-                        style={{ width: '100%' }}
-                      />
-                    </label>
-                  </div>
-
-                  {targetModule && targetModule.type === 'BRAIN' && (
                     <div className="input-row">
-                      <label>Leak: {connLocalizer}% <Tooltip text="Chance for connection to ignore localization (0 = Strict)" />
+                      <label>Coverage: {connCoverage}% <Tooltip text="Percentage of nodes to connect" />
                         <input
                           type="range"
-                          min="0"
+                          min="1"
                           max="100"
-                          value={connLocalizer}
-                          onChange={(e) => setConnLocalizer(parseInt(e.target.value))}
+                          value={connCoverage}
+                          onChange={(e) => setConnCoverage(parseInt(e.target.value))}
                           style={{ width: '100%' }}
                         />
                       </label>
                     </div>
-                  )}
 
-                  <button
-                    className="primary"
-                    onClick={handleConnect}
-                    disabled={!connectionTargetId}
-                    style={{ marginTop: '10px', opacity: connectionTargetId ? 1 : 0.5 }}
-                  >
-                    Link
-                  </button>
-                </div>
-              </InspectorSection>
+                    {targetModule && targetModule.type === 'BRAIN' && (
+                      <div className="input-row">
+                        <label>Leak: {connLocalizer}% <Tooltip text="Chance for connection to ignore localization (0 = Strict)" />
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={connLocalizer}
+                            onChange={(e) => setConnLocalizer(parseInt(e.target.value))}
+                            style={{ width: '100%' }}
+                          />
+                        </label>
+                      </div>
+                    )}
+
+                    <button
+                      className="primary"
+                      onClick={handleConnect}
+                      disabled={!connectionTargetId}
+                      style={{ marginTop: '10px', opacity: connectionTargetId ? 1 : 0.5 }}
+                    >
+                      Link
+                    </button>
+                  </div>
+                </InspectorSection>
+              )}
 
               {/* Node Labels Button (Inputs/Outputs ONLY) */}
               {(selectedModule.type === 'INPUT' || selectedModule.type === 'OUTPUT') && (
@@ -1198,6 +1236,56 @@ function App() {
           onModuleSelect={handleModuleSelect}
           onNodeContextMenu={handleNodeContextMenu}
         />
+
+        {/* Global HUD / Overlay Controls */}
+        <div className="hud-overlay">
+          <div className="actions" style={{ display: 'flex', gap: '5px' }}>
+            <button onClick={() => setSimulation({ ...simulation, paused: !simulation.paused })} style={{ flex: 2 }}>
+              {simulation.paused ? '▶ Play' : '⏸ Pause'}
+            </button>
+            <button onClick={() => {
+              setSimulation(prev => ({ ...prev, paused: true }));
+              canvasRef.current?.step(1);
+            }} style={{ flex: 1 }} title="Step Forward 1">
+              &gt;
+            </button>
+            <button onClick={() => {
+              setSimulation(prev => ({ ...prev, paused: true }));
+              canvasRef.current?.step(10);
+            }} style={{ flex: 1 }} title="Step Forward 10">
+              &gt;&gt;
+            </button>
+          </div>
+          <div style={{ marginTop: '5px', textAlign: 'center', fontSize: '0.8rem', color: '#888' }}>
+            Steps: {canvasRef.current?.getTickCount ? canvasRef.current.getTickCount() : 0}
+          </div>
+
+          <div style={{ marginTop: '10px' }}>
+            <button
+              onClick={() => {
+                if (window.confirm("Reset all Node potentials and activation states? Topology will be preserved.")) {
+                  canvasRef.current?.resetState();
+                }
+              }}
+              style={{ background: '#554', color: '#ffc', width: '100%' }}
+            >
+              Reset State
+            </button>
+          </div>
+          <div style={{ marginTop: '5px' }}>
+            <button
+              onClick={() => { if (window.confirm("Are you sure you want to DELETE everything? This cannot be undone.")) handleClear(); }}
+              style={{ background: '#500', color: '#faa', width: '100%' }}
+            >
+              Delete Net
+            </button>
+          </div>
+          <div style={{ marginTop: '10px', display: 'flex', gap: '5px' }}>
+            <button style={{ background: '#333' }} onClick={handleSave}>Save</button>
+            <button style={{ background: '#333' }} onClick={() => fileInputRef.current?.click()}>Load</button>
+            <input type="file" ref={fileInputRef} style={{ display: 'none' }} accept=".json" onChange={handleLoad} />
+          </div>
+        </div >
       </main >
 
       {/* 3. BOTTOM PANEL */}
@@ -1478,60 +1566,66 @@ function App() {
               <input
                 type="checkbox"
                 checked={!simulation.showHidden}
-                onChange={() => setSimulation({ ...simulation, showHidden: !simulation.showHidden })}
+                onChange={(e) => setSimulation({ ...simulation, showHidden: !e.target.checked })}
               />
               <span className="slider"></span>
             </label>
           </div>
+        </div>
 
-          <div className="actions" style={{ display: 'flex', gap: '5px' }}>
-            <button onClick={() => setSimulation({ ...simulation, paused: !simulation.paused })} style={{ flex: 2 }}>
-              {simulation.paused ? '▶ Play' : '⏸ Pause'}
-            </button>
-            <button onClick={() => {
-              setSimulation(prev => ({ ...prev, paused: true }));
-              canvasRef.current?.step(1);
-            }} style={{ flex: 1 }} title="Step Forward 1">
-              &gt;
-            </button>
-            <button onClick={() => {
-              setSimulation(prev => ({ ...prev, paused: true }));
-              canvasRef.current?.step(10);
-            }} style={{ flex: 1 }} title="Step Forward 10">
-              &gt;&gt;
-            </button>
-          </div>
-          <div style={{ marginTop: '5px', textAlign: 'center', fontSize: '0.8rem', color: '#888' }}>
-            Steps: {canvasRef.current?.getTickCount ? canvasRef.current.getTickCount() : 0}
-          </div>
+        <div className="control-group" style={{ marginTop: '10px' }}>
+          <h2>Mass Import</h2>
+          <label className="button-upload" style={{
+            cursor: 'pointer', background: '#333', padding: '8px',
+            borderRadius: '4px', textAlign: 'center', width: '100%', display: 'block'
+          }}>
+            Import Concept CSVs
+            <input
+              type="file"
+              multiple
+              accept=".csv,.txt"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  Array.from(e.target.files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                      if (ev.target?.result) {
+                        const text = ev.target.result as string;
+                        const lines = text.split('\n').filter(l => l.trim().length > 0);
+                        const name = file.name.replace(/\.[^/.]+$/, "");
+                        if (canvasRef.current && lines.length > 0) {
+                          const id = `concept-${Date.now()}-${index}`;
+                          const concepts = lines.map(line => {
+                            const parts = line.split(',');
+                            if (parts.length < 2) return null;
+                            return { id: parts[0].trim(), label: parts[1].trim() };
+                          }).filter(c => c !== null) as { id: string; label: string }[];
 
-          <div style={{ marginTop: '10px' }}>
-            <button
-              onClick={() => {
-                if (window.confirm("Reset all Node potentials and activation states? Topology will be preserved.")) {
-                  canvasRef.current?.resetState();
+                          canvasRef.current.addModule({
+                            id,
+                            type: 'CONCEPT',
+                            x: 200 + (index * 50),
+                            y: 200 + (index * 50),
+                            nodeCount: 0,
+                            label: name,
+                            name: name,
+                            conceptColumn: name,
+                            concepts,
+                            collapsed: true
+                          });
+                        }
+                      }
+                    };
+                    reader.readAsText(file);
+                  });
+                  setTimeout(() => refreshModules(), 500);
                 }
               }}
-              style={{ background: '#554', color: '#ffc', width: '100%' }}
-            >
-              Reset State
-            </button>
-          </div>
-          <div style={{ marginTop: '5px' }}>
-            <button
-              onClick={() => { if (window.confirm("Are you sure you want to DELETE everything? This cannot be undone.")) handleClear(); }}
-              style={{ background: '#500', color: '#faa', width: '100%' }}
-            >
-              Delete Net
-            </button>
-          </div>
-          <div style={{ marginTop: '10px', display: 'flex', gap: '5px' }}>
-            <button style={{ background: '#333' }} onClick={handleSave}>Save</button>
-            <button style={{ background: '#333' }} onClick={() => fileInputRef.current?.click()}>Load</button>
-            <input type="file" ref={fileInputRef} style={{ display: 'none' }} accept=".json" onChange={handleLoad} />
-          </div>
-        </div >
-      </aside >
+            />
+          </label>
+        </div>
+      </aside>
 
       {/* MODAL OVERLAY */}
       {
@@ -1732,6 +1826,31 @@ function App() {
           </div>
         )
       }
+
+      {/* CONCEPT LIST MODAL */}
+      {
+        conceptListModal.isOpen && (
+          <div className="modal-overlay" onClick={() => setConceptListModal({ ...conceptListModal, isOpen: false })}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+              <div className="modal-header">
+                <span className="modal-title">{conceptListModal.title}</span>
+                <button className="close-button" onClick={() => setConceptListModal({ ...conceptListModal, isOpen: false })}>×</button>
+              </div>
+              <div className="node-list-container">
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                  {conceptListModal.concepts.map((c, i) => (
+                    <li key={i} style={{ borderBottom: '1px solid #333', padding: '4px', display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#888', fontFamily: 'monospace' }}>{c.id}</span>
+                      <span>{c.label}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        )
+      }
+
     </div >
   );
 }
