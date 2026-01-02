@@ -1,0 +1,97 @@
+{
+    "modules": [
+        {
+            "id": "concept-1",
+            "type": "CONCEPT",
+            "x": 100,
+            "y": 400,
+            "nodeCount": 2,
+            "label": "Colors",
+            "activationType": "PULSE"
+        },
+        {
+            "id": "brain-1",
+            "type": "BRAIN",
+            "x": 400,
+            "y": 400,
+            "nodeCount": 1,
+            "label": "Brain",
+            "activationType": "SUSTAINED",
+            "threshold": 0.5,
+            "decay": 0.1
+        },
+        {
+            "id": "training-1",
+            "type": "TRAINING_DATA",
+            "x": 0,
+            "y": 0,
+            "label": "Training Data",
+            "nodeCount": 0,
+            "trainingData": [
+                {
+                    "id": "1",
+                    "color": "1"
+                },
+                {
+                    "id": "2",
+                    "color": "2"
+                }
+            ],
+            "trainingConfig": {
+                "conceptMappings": {
+                    "concept-1": {
+                        "column": "color",
+                        "delimiter": ";"
+                    }
+                }
+            }
+        }
+    ],
+    "nodes": [
+        {
+            "id": "concept-1-1",
+            "type": "CONCEPT",
+            "x": 100,
+            "y": 400,
+            "label": "Red",
+            "activationType": "PULSE",
+            "threshold": 0.5,
+            "decay": 0.1
+        },
+        {
+            "id": "concept-1-2",
+            "type": "CONCEPT",
+            "x": 100,
+            "y": 450,
+            "label": "Blue",
+            "activationType": "PULSE",
+            "threshold": 0.5,
+            "decay": 0.1
+        },
+        {
+            "id": "brain-1-n0",
+            "type": "HIDDEN",
+            "x": 400,
+            "y": 400,
+            "label": "Brain 0",
+            "activationType": "SUSTAINED",
+            "threshold": 0.5,
+            "decay": 0.1
+        }
+    ],
+    "connections": [
+        {
+            "id": "c1",
+            "sourceId": "concept-1-1",
+            "targetId": "brain-1-n0",
+            "weight": 1.0
+        },
+        {
+            "id": "c2",
+            "sourceId": "concept-1-2",
+            "targetId": "brain-1-n0",
+            "weight": 1.0
+        }
+    ],
+    "moduleConnections": []
+}

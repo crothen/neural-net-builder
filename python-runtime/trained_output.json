@@ -1,0 +1,175 @@
+{
+  "modules": [
+    {
+      "id": "concept-1",
+      "type": "CONCEPT",
+      "x": 100,
+      "y": 400,
+      "nodeCount": 2,
+      "label": "Colors",
+      "name": null,
+      "depth": 1,
+      "color": null,
+      "radius": null,
+      "height": null,
+      "width": null,
+      "activationType": "PULSE",
+      "threshold": null,
+      "refractoryPeriod": null,
+      "hebbianLearning": null,
+      "learningRate": null,
+      "pruningThreshold": null,
+      "regrowthRate": null,
+      "isLocalized": null,
+      "localizationLeak": null,
+      "synapsesPerNode": null,
+      "concepts": null,
+      "trainingData": null,
+      "trainingConfig": null
+    },
+    {
+      "id": "brain-1",
+      "type": "BRAIN",
+      "x": 400,
+      "y": 400,
+      "nodeCount": 1,
+      "label": "Brain",
+      "name": null,
+      "depth": 1,
+      "color": null,
+      "radius": null,
+      "height": null,
+      "width": null,
+      "activationType": "SUSTAINED",
+      "threshold": 0.5,
+      "refractoryPeriod": null,
+      "hebbianLearning": null,
+      "learningRate": null,
+      "pruningThreshold": null,
+      "regrowthRate": null,
+      "isLocalized": null,
+      "localizationLeak": null,
+      "synapsesPerNode": null,
+      "concepts": null,
+      "trainingData": null,
+      "trainingConfig": null
+    },
+    {
+      "id": "training-1",
+      "type": "TRAINING_DATA",
+      "x": 0,
+      "y": 0,
+      "nodeCount": 0,
+      "label": "Training Data",
+      "name": null,
+      "depth": 1,
+      "color": null,
+      "radius": null,
+      "height": null,
+      "width": null,
+      "activationType": null,
+      "threshold": null,
+      "refractoryPeriod": null,
+      "hebbianLearning": null,
+      "learningRate": null,
+      "pruningThreshold": null,
+      "regrowthRate": null,
+      "isLocalized": null,
+      "localizationLeak": null,
+      "synapsesPerNode": null,
+      "concepts": null,
+      "trainingData": [
+        {
+          "id": "1",
+          "color": "1"
+        },
+        {
+          "id": "2",
+          "color": "2"
+        }
+      ],
+      "trainingConfig": {
+        "conceptMappings": {
+          "concept-1": {
+            "column": "color",
+            "delimiter": ";"
+          }
+        }
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "concept-1-1",
+      "type": "CONCEPT",
+      "x": 100,
+      "y": 400,
+      "label": "Red",
+      "activationType": "PULSE",
+      "potential": 0.0,
+      "activation": 0.0,
+      "isFiring": false,
+      "refractoryTimer": 0,
+      "bias": 0.0,
+      "decay": 0.1,
+      "threshold": 0.5,
+      "refractoryPeriod": 0,
+      "inputType": "PULSE",
+      "inputFrequency": 1.0
+    },
+    {
+      "id": "concept-1-2",
+      "type": "CONCEPT",
+      "x": 100,
+      "y": 450,
+      "label": "Blue",
+      "activationType": "PULSE",
+      "potential": 0.0,
+      "activation": 0.0,
+      "isFiring": false,
+      "refractoryTimer": 0,
+      "bias": 0.0,
+      "decay": 0.1,
+      "threshold": 0.5,
+      "refractoryPeriod": 0,
+      "inputType": "PULSE",
+      "inputFrequency": 1.0
+    },
+    {
+      "id": "brain-1-n0",
+      "type": "HIDDEN",
+      "x": 400,
+      "y": 400,
+      "label": "Brain 0",
+      "activationType": "SUSTAINED",
+      "potential": 0.0,
+      "activation": 0.0,
+      "isFiring": false,
+      "refractoryTimer": 0,
+      "bias": 0.0,
+      "decay": 0.1,
+      "threshold": 0.5,
+      "refractoryPeriod": 0,
+      "inputType": "PULSE",
+      "inputFrequency": 1.0
+    }
+  ],
+  "connections": [
+    {
+      "id": "c1",
+      "sourceId": "concept-1-1",
+      "targetId": "brain-1-n0",
+      "weight": 1.0,
+      "signalStrength": 0.0
+    },
+    {
+      "id": "c2",
+      "sourceId": "concept-1-2",
+      "targetId": "brain-1-n0",
+      "weight": 1.0,
+      "signalStrength": 0.0
+    }
+  ],
+  "moduleConnections": [],
+  "tickCount": 20
+}

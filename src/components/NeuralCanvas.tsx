@@ -301,7 +301,7 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
             const wy = (pos.y - transform.y) / transform.k;
 
             for (const mod of netRef.current.modules.values()) {
-                if (mod.type === 'LEARNED_OUTPUT' || (mod.nodeCount === 0 && mod.type === 'CONCEPT')) {
+                if (mod.type === 'LEARNED_OUTPUT' || mod.type === 'TRAINING_DATA' || (mod.nodeCount === 0 && mod.type === 'CONCEPT')) {
                     // It's a box
                     const w = mod.width || 100; // Default width
                     const h = mod.height || 600; // Default height

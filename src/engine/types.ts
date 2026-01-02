@@ -65,6 +65,7 @@ export interface ModuleConfig {
     learningRate?: number;
     pruningThreshold?: number; // Remove weak connections below this
     regrowthRate?: number; // New connections per tick
+    leak?: number; // For Brain modules (general signal leak/decay modifier)
 
     radius?: number; // for Brain
     width?: number; // for Layer width (visual spacing between columns)

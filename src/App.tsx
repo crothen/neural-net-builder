@@ -6,7 +6,7 @@ import type { Node as NeuralNode } from './engine/Node';
 import './App.css';
 
 const Tooltip = ({ text }: { text: string }) => (
-  <span className="tooltip-container">?
+  <span className="tooltip-container" style={{ marginLeft: '6px', cursor: 'help' }}>?
     <span className="tooltip-text">{text}</span>
   </span>
 );
@@ -127,22 +127,6 @@ function App() {
   };
 
   // --- Handlers ---
-
-  const handleTypeChange = (type: ModuleType) => {
-    let count = 10;
-    let depth = 1;
-
-    switch (type) {
-      case 'BRAIN': count = 100; break;
-      case 'LAYER': count = 10; depth = 5; break;
-      case 'INPUT': count = 10; break;
-      case 'OUTPUT': count = 10; break;
-      case 'CONCEPT': count = 0; break; // Dynamic
-      case 'LEARNED_OUTPUT': count = 0; break; // Starts empty
-      case 'TRAINING_DATA': count = 0; break; // No nodes
-    }
-    setNewModule(prev => ({ ...prev, type, nodes: count, depth }));
-  };
 
   const handleSpeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSimulation({ ...simulation, speed: parseInt(e.target.value) });
@@ -330,7 +314,7 @@ function App() {
           canvasRef.current.addModule({
             id: 'brain-1', type: 'BRAIN', x: 600, y: 400, nodeCount: 200, depth: 1, label: 'Brain', name: 'Brain',
             activationType: 'SUSTAINED', threshold: 0.5, refractoryPeriod: 1, radius: 200, height: 0,
-            hebbianLearning: true, learningRate: 0.01,
+            hebbianLearning: true, learningRate: 0.01, regrowthRate: 0.1,
             isLocalized: true, localizationLeak: 20
           });
 
@@ -415,15 +399,17 @@ function App() {
                   </label>
                 </div>
 
-                <div className="input-row">
-                  <label>Nodes <Tooltip text="Number of neurons" />
-                    <input
-                      type="number"
-                      value={selectedModule.nodeCount}
-                      onChange={(e) => handleUpdateConfig(selectedModule.id, { nodeCount: parseInt(e.target.value) })}
-                    />
-                  </label>
-                </div>
+                {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT' && (
+                  <div className="input-row">
+                    <label>Nodes <Tooltip text="Number of neurons" />
+                      <input
+                        type="number"
+                        value={selectedModule.nodeCount}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { nodeCount: parseInt(e.target.value) })}
+                      />
+                    </label>
+                  </div>
+                )}
 
                 {selectedModule.type === 'LAYER' && (
                   <div className="input-row">
@@ -535,7 +521,7 @@ function App() {
                   </div>
                 )}
 
-                {selectedModule.type !== 'INPUT' && (
+                {selectedModule.type !== 'INPUT' && selectedModule.type !== 'TRAINING_DATA' && (
                   <div className="input-row">
                     <label>Threshold: {selectedModule.threshold !== undefined ? selectedModule.threshold.toFixed(1) : '1.0'} <Tooltip text="Voltage required to fire (Lower = Sensitive)" />
                       <input
@@ -551,15 +537,33 @@ function App() {
                   </div>
                 )}
 
-                {(selectedModule.type !== 'INPUT' && selectedModule.type !== 'OUTPUT') && (
+                {/* REFRACTORY */}
+                {selectedModule.type !== 'TRAINING_DATA' && (
                   <div className="input-row">
-                    <label>Refractory (Ticks) <Tooltip text="Cycles to wait after firing before firing again" />
+                    <label>Refractory: {selectedModule.refractoryPeriod || 0}ms <Tooltip text="Cooldown after firing" />
                       <input
                         type="number"
                         min="0"
                         max="100"
                         value={selectedModule.refractoryPeriod !== undefined ? selectedModule.refractoryPeriod : 2}
                         onChange={(e) => handleUpdateConfig(selectedModule.id, { refractoryPeriod: parseInt(e.target.value) })}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                )}
+
+                {/* LEAK (BRAIN ONLY) */}
+                {selectedModule.type === 'BRAIN' && (
+                  <div className="input-row">
+                    <label>Leak Rate: {selectedModule.leak || 0} <Tooltip text="Signal loss per tick" />
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="1"
+                        value={selectedModule.leak || 0}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { leak: parseFloat(e.target.value) })}
                         style={{ width: '100%' }}
                       />
                     </label>
@@ -792,50 +796,91 @@ function App() {
                         </div>
 
                         <div style={{ marginTop: '10px', borderTop: '1px solid #444', paddingTop: '5px' }}>
-                          <strong>Concept Mappings</strong>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <strong>Concept Mappings</strong>
+                            </div>
+                            <button
+                              className="secondary"
+                              style={{ padding: '4px', fontSize: '11px', width: '100%', marginBottom: '5px' }}
+                              onClick={() => {
+                                // AUTO-MAP Logic
+                                if (!selectedModule.trainingData || !selectedModule.trainingData.length) return;
+                                const headers = Object.keys(selectedModule.trainingData[0]);
+                                const newMappings = { ...selectedModule.trainingConfig!.conceptMappings };
+
+                                modules.forEach(m => {
+                                  if (m.type === 'CONCEPT') {
+                                    // Try to find a header that matches the module name (case-insensitive)
+                                    const match = headers.find(h => h.toLowerCase() === (m.name || m.label || '').toLowerCase());
+                                    if (match) {
+                                      newMappings[m.id] = {
+                                        column: match,
+                                        delimiter: newMappings[m.id]?.delimiter || ';'
+                                      };
+                                    }
+                                  }
+                                });
+
+                                handleUpdateConfig(selectedModule.id, {
+                                  trainingConfig: {
+                                    ...selectedModule.trainingConfig!,
+                                    conceptMappings: newMappings
+                                  }
+                                });
+                              }}
+                            >
+                              Auto-Map
+                            </button>
+                          </div>
+
                           <div style={{ fontSize: '0.8rem', color: '#888', marginBottom: '5px' }}>
                             Map CSV columns to connected Concept modules.
                           </div>
                           {/** iterate over connected modules that are CONCEPT type **/}
                           {modules.filter(m => m.type === 'CONCEPT').map(conceptMod => {
-                            // Hacky check: is there a visual connection to this module?
-                            // In reality, we should check the connection list.
-                            // For now, let's just list ALL concept modules to make it easy to map.
-                            // Or better: Filter to only modules that are connected?
-                            // Let's just list all for simplicity of UI first.
                             return (
-                              <div key={conceptMod.id} style={{ marginBottom: '5px', padding: '5px', background: '#222', borderRadius: '4px' }}>
-                                <div style={{ marginBottom: '2px', fontWeight: 'bold' }}>{conceptMod.name || conceptMod.label}</div>
-                                <div style={{ display: 'flex', gap: '5px' }}>
-                                  <select
-                                    value={selectedModule.trainingConfig!.conceptMappings[conceptMod.id]?.column || ''}
-                                    onChange={(e) => {
-                                      const newMappings = { ...selectedModule.trainingConfig!.conceptMappings };
-                                      if (e.target.value === '') {
-                                        delete newMappings[conceptMod.id];
-                                      } else {
-                                        newMappings[conceptMod.id] = {
-                                          column: e.target.value,
-                                          delimiter: newMappings[conceptMod.id]?.delimiter || ';'
-                                        };
+                              <div key={conceptMod.id} style={{
+                                marginBottom: '2px', padding: '4px', background: '#222', borderRadius: '4px',
+                                display: 'flex', alignItems: 'center', gap: '5px'
+                              }}>
+                                <div style={{ fontWeight: 'bold', fontSize: '11px', flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {conceptMod.name || conceptMod.label}
+                                </div>
+
+                                {/* Column Selector */}
+                                <select
+                                  value={selectedModule.trainingConfig!.conceptMappings[conceptMod.id]?.column || ''}
+                                  onChange={(e) => {
+                                    const newMappings = { ...selectedModule.trainingConfig!.conceptMappings };
+                                    if (e.target.value === '') {
+                                      delete newMappings[conceptMod.id];
+                                    } else {
+                                      newMappings[conceptMod.id] = {
+                                        column: e.target.value,
+                                        delimiter: newMappings[conceptMod.id]?.delimiter || ';'
+                                      };
+                                    }
+                                    handleUpdateConfig(selectedModule.id, {
+                                      trainingConfig: {
+                                        ...selectedModule.trainingConfig!,
+                                        conceptMappings: newMappings
                                       }
-                                      handleUpdateConfig(selectedModule.id, {
-                                        trainingConfig: {
-                                          ...selectedModule.trainingConfig!,
-                                          conceptMappings: newMappings
-                                        }
-                                      });
-                                    }}
-                                    style={{ flex: 2, fontSize: '10px' }}
-                                  >
-                                    <option value="">(None)</option>
-                                    {Object.keys(selectedModule.trainingData![0]).map(k => (
-                                      <option key={k} value={k}>{k}</option>
-                                    ))}
-                                  </select>
+                                    });
+                                  }}
+                                  style={{ flex: 1.5, fontSize: '10px', width: 0 }} // width 0 allows flex shrink
+                                >
+                                  <option value="">(None)</option>
+                                  {Object.keys(selectedModule.trainingData![0]).map(k => (
+                                    <option key={k} value={k}>{k}</option>
+                                  ))}
+                                </select>
+
+                                {/* Delimiter */}
+                                <div style={{ position: 'relative', width: '30px' }}>
                                   <input
                                     type="text"
-                                    placeholder="Split (;)"
+                                    placeholder=";"
                                     value={selectedModule.trainingConfig!.conceptMappings[conceptMod.id]?.delimiter || ';'}
                                     onChange={(e) => {
                                       const mapping = selectedModule.trainingConfig!.conceptMappings[conceptMod.id];
@@ -850,11 +895,17 @@ function App() {
                                         });
                                       }
                                     }}
-                                    style={{ flex: 1, fontSize: '10px', textAlign: 'center' }}
+                                    style={{
+                                      width: '100%',
+                                      textAlign: 'center',
+                                      padding: '2px',
+                                      fontSize: '10px'
+                                    }}
+                                    title="Delimiter"
                                   />
                                 </div>
                               </div>
-                            );
+                            )
                           })}
                         </div>
                       </>
@@ -1145,7 +1196,10 @@ function App() {
               onClick={() => handleModuleSelect(m.id)}
             >
               <span className="module-name">{m.name || m.label}</span>
-              <span className="module-type">{m.type} • {m.nodeCount} Nodes</span>
+              <span className="module-type">
+                {m.type}
+                {(m.type !== 'TRAINING_DATA' && m.type !== 'CONCEPT' && m.type !== 'LEARNED_OUTPUT') && ` • ${m.nodeCount} Nodes`}
+              </span>
               <div style={{ display: 'flex', gap: '8px', marginTop: '4px', fontSize: '0.75rem', opacity: 0.8 }}>
                 {(() => {
                   const stats = canvasRef.current?.getModuleConnectivity(m.id);
@@ -1170,22 +1224,66 @@ function App() {
       < aside className="sidebar right-sidebar" >
         {/* Creation */}
         < div className="control-group" >
-          <h2>Create Module</h2>
-
+          {/* MODULE TYPE DROPDOWN */}
           <div className="input-row">
-            <label>Type <Tooltip text="Module Function" />
+            <label>Type
               <select
                 value={newModule.type}
-                onChange={e => handleTypeChange(e.target.value as ModuleType)}
+                onChange={(e) => {
+                  const type = e.target.value as ModuleType;
+                  const defaults: any = { type };
+
+                  // Reset Defaults based on Type
+                  if (type === 'BRAIN') {
+                    defaults.nodes = 100;
+                    defaults.width = undefined; // Radius used
+                    defaults.height = undefined;
+                    defaults.name = "New Brain";
+                    defaults.regrowthRate = 0.1;
+                  } else if (type === 'LAYER') {
+                    defaults.nodes = 50;
+                    defaults.width = 100;
+                    defaults.height = 600;
+                    defaults.depth = 1;
+                    defaults.name = "New Layer";
+                  } else if (type === 'INPUT') {
+                    defaults.nodes = 10;
+                    defaults.width = 50;
+                    defaults.height = 300;
+                    defaults.name = "Input";
+                  } else if (type === 'OUTPUT') {
+                    defaults.nodes = 5;
+                    defaults.width = 50;
+                    defaults.height = 300;
+                    defaults.name = "Output";
+                  } else if (type === 'CONCEPT') {
+                    defaults.nodes = 0; // Auto-calculated
+                    defaults.width = 100; // Visual width
+                    defaults.height = undefined;
+                    defaults.name = "Concept List";
+                  } else if (type === 'LEARNED_OUTPUT') {
+                    defaults.nodes = 0;
+                    defaults.width = 200; // Small square
+                    defaults.height = 200;
+                    defaults.name = "Learned Output";
+                  } else if (type === 'TRAINING_DATA') {
+                    defaults.nodes = 0;
+                    defaults.width = undefined; // Hexagon
+                    defaults.height = undefined;
+                    defaults.name = "Training";
+                  }
+
+                  setNewModule(prev => ({ ...prev, ...defaults }));
+                }}
                 style={{ width: '100%' }}
               >
-                <option value="BRAIN">Brain (Recurrent)</option>
-                <option value="LAYER">Layer (Feedfwd)</option>
-                <option value="INPUT">Input Layer</option>
-                <option value="OUTPUT">Output Layer</option>
+                <option value="BRAIN">Brain (Self-Organizing)</option>
+                <option value="LAYER">Layer (Feed-Forward)</option>
+                <option value="INPUT">Input (Sensor)</option>
+                <option value="OUTPUT">Output (Actuator)</option>
                 <option value="CONCEPT">Concept Input (CSV)</option>
-                <option value="LEARNED_OUTPUT">Learned Output</option>
-                <option value="TRAINING_DATA">Training Data</option>
+                <option value="LEARNED_OUTPUT">Learned Output (Dynamic)</option>
+                <option value="TRAINING_DATA">Training Data (Ground Truth)</option>
               </select>
             </label>
           </div>
@@ -1321,7 +1419,7 @@ function App() {
           }
 
           {
-            newModule.type !== 'LEARNED_OUTPUT' && newModule.type !== 'CONCEPT' && (
+            newModule.type !== 'LEARNED_OUTPUT' && newModule.type !== 'CONCEPT' && newModule.type !== 'TRAINING_DATA' && (
               <div className="input-row">
                 <label>Nodes <Tooltip text="Number of neurons in this module" />
                   <input type="number" placeholder="Nodes" value={newModule.nodes} onChange={e => setNewModule({ ...newModule, nodes: parseInt(e.target.value) })} style={{ width: '100%' }} />

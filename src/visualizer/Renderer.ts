@@ -221,7 +221,7 @@ export class Renderer {
 
             // Draw Module Label (Prominent)
             // Visibility Check: If hiding details, only show labels for INPUT/OUTPUT
-            if (!showHidden && module.type !== 'INPUT' && module.type !== 'OUTPUT') {
+            if (module.type === 'TRAINING_DATA' || (!showHidden && module.type !== 'INPUT' && module.type !== 'OUTPUT')) {
                 // Skip drawing label
             } else {
                 // Use custom color if present, else faint Cyan
@@ -247,8 +247,8 @@ export class Renderer {
 
             // Special Case: Empty Learned Output
             if (module.type === 'LEARNED_OUTPUT' && nodes.length === 0) {
-                const w = module.width || 100;
-                const h = module.height || 600;
+                const w = module.width || 200;
+                const h = module.height || 200;
                 const x = module.x - w / 2;
                 const y = module.y - h / 2;
 
