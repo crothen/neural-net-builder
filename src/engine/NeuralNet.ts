@@ -1,10 +1,11 @@
-import { Node } from './Node';
+import { BaseNode } from './nodes/BaseNode';
+import { NodeFactory } from './NodeFactory';
 import { Connection } from './Connection';
 import type { NodeConfig, ConnectionConfig, ModuleConfig, ConnectionSide, ModuleConnectionConfig } from './types';
 import { NodeType } from './types';
 
 export class NeuralNet {
-    public nodes: Map<string, Node> = new Map();
+    public nodes: Map<string, BaseNode> = new Map();
     public connections: Connection[] = [];
     public modules: Map<string, ModuleConfig> = new Map();
 
@@ -19,7 +20,7 @@ export class NeuralNet {
     constructor() { }
 
     public addNode(config: NodeConfig) {
-        const node = new Node(config);
+        const node = NodeFactory.create(config);
         this.nodes.set(node.id, node);
         this.incoming.set(node.id, []);
     }
@@ -291,7 +292,8 @@ export class NeuralNet {
         const needsGeometryUpdate = geometryKeys.some(key => newConfig[key] !== undefined && newConfig[key] !== module[key]);
         const needsRewiring = newConfig.isLocalized !== undefined
             || newConfig.localizationLeak !== undefined
-            || newConfig.synapsesPerNode !== undefined;
+            || newConfig.synapsesPerNode !== undefined
+            || newConfig.initialWeightModifier !== undefined;
 
         if (needsGeometryUpdate && !needsTopologyRegen) {
             // Non-destructive update of node positions (Scaling)
@@ -374,6 +376,26 @@ export class NeuralNet {
                 if (newConfig.refractoryPeriod !== undefined) node.refractoryPeriod = Number(newConfig.refractoryPeriod);
                 if (newConfig.fatigue !== undefined) node.fatigue = newConfig.fatigue;
                 if (newConfig.recovery !== undefined) node.recovery = newConfig.recovery;
+                if (newConfig.initialWeightModifier !== undefined) {
+                    // Update internal initial weight modifier on module config
+                    // Wait, this is stored on modules map, not nodes. 
+                    // Passed config `newConfig` is merged later in `Object.assign(module, newConfig)` 
+                    // but we do that AFTER this block if `!needsRegeneration`.
+                    // We need to ensure module config is updated if we are skipping regen.
+                    // But wait, line 361 `Object.assign` is AFTER this block?
+                    // NO, line 361 is inside the `else` block or after?
+                    // Let's check view_file.
+                    // Ah, `Object.assign(module, newConfig)` is at line 361, which is OUTSIDE the `if (!needsRegeneration)` block?
+                    // No, line 282: updateModule starts.
+                    // Line 361 `Object.assign` is executed regardless?
+                    // Wait, lines 297-356 handle geometry update and RETURN.
+                    // Then line 361 executes.
+                    // Then line 364: `if (!needsRegeneration)`.
+                    // So `module` IS ALREADY updated with `newConfig` by line 364.
+                    // So if `needsRewiring` is true, we just call `rewireInternalConnections(id)`.
+                    // We don't need to do anything special here for `initialWeightModifier`.
+                    // It will be picked up by `rewireInternalConnections` from `this.modules.get(moduleId)`.
+                }
                 if (newConfig.activationType !== undefined) {
                     const typeInput = String(newConfig.activationType).toUpperCase();
                     node.activationType = (typeInput === 'SUSTAINED') ? 'SUSTAINED' : 'PULSE';
@@ -609,7 +631,7 @@ export class NeuralNet {
         }
     }
 
-    private getBrainNodeAngle(node: Node, mod: ModuleConfig): number {
+    private getBrainNodeAngle(node: BaseNode, mod: ModuleConfig): number {
         return Math.atan2(node.y - mod.y, node.x - mod.x);
     }
 
@@ -617,6 +639,19 @@ export class NeuralNet {
         let diff = Math.abs(a1 - a2);
         if (diff > Math.PI) diff = (2 * Math.PI) - diff;
         return diff;
+    }
+
+    private normalizeWeights(node: BaseNode, targetSum: number) {
+        const incoming = this.incoming.get(node.id);
+        if (!incoming || incoming.length === 0) return;
+
+        let currentSum = 0;
+        incoming.forEach(c => currentSum += c.weight);
+
+        if (currentSum > targetSum) {
+            const factor = targetSum / currentSum;
+            incoming.forEach(c => c.weight *= factor);
+        }
     }
 
     public rewireInternalConnections(moduleId: string) {
@@ -637,6 +672,7 @@ export class NeuralNet {
 
         const isLocalized = module.isLocalized || false;
         const leak = module.localizationLeak || 0;
+        const targetPercentage = module.initialWeightModifier ?? 0.2; // Default 20% consensus
 
         nodes.forEach(source => {
             // 1. Prepare Candidates
@@ -657,45 +693,66 @@ export class NeuralNet {
             // 3. Select Targets
             const count = Math.min(connectionsPerNode, candidates.length);
             for (let k = 0; k < count; k++) {
-                let target: Node;
+                let target: BaseNode;
 
                 if (isLocalized && module.type === 'BRAIN') {
-                    // Logic: Leak check determines if we pick the 'Next Closest' or a 'Random' one
-                    // Leak 0: Always pick index 0 (closest).
-                    // Leak 100: Always pick random.
+                    // Localization with Leak Logic
                     const roll = Math.random() * 100;
-
                     if (roll >= leak) {
-                        // Pick CLOSEST (Start of sorted array)
-                        // effective "shift" from the sorted list
-                        // However, we shouldn't shift if we loop K times. 
-                        // Actually, if we want "Next Closest", we should just iterate K times through the sorted list.
-                        // But wait! K=2. "Leak 0" should mean we connect to Neighbor #1 and Neighbor #2.
-                        // "Leak 100" means Random #1 and Random #2.
-                        // So if Roll >= Leak (Localized), we want candidates[k]? 
-                        // But if we mix behavior? e.g. Conn #1 is Localized, Conn #2 is Random.
-                        // Then we need to manage the pool.
-
-                        // Let's use `splice` to ensure uniqueness.
-                        // If Localized -> Pick index 0.
+                        // Pick CLOSEST
                         target = candidates.splice(0, 1)[0];
                     } else {
-                        // Pick RANDOM from remaining
+                        // Pick RANDOM
                         const idx = Math.floor(Math.random() * candidates.length);
                         target = candidates.splice(idx, 1)[0];
                     }
                 } else {
-                    // Random (list is already shuffled if not localized)
-                    // Just take next.
+                    // Random
                     target = candidates.splice(0, 1)[0];
                 }
 
                 if (target) {
+                    // Calculate Weight based on User Formula
+                    // We need to know 'target's total incoming connections' to set the weight ON THE CONNECTION TO TARGET?
+                    // Wait. The formula `getInitialWeight(totalIncoming)` is for the *Target Node*.
+                    // "We want the node to fire if ~20% of inputs are active." -> The Target Node.
+                    // So we must check how many connections `target` WILL have.
+                    // IMPORTANT: We are iterating `nodes` as SOURCES.
+                    // But the weight logic depends on the TARGET's situation.
+
+                    // Current Incoming (External)
+                    const currentIncoming = this.incoming.get(target.id)?.length || 0;
+
+                    // Future Incoming (Internal)
+                    // We assume every node gets exactly `connectionsPerNode` internal connections?
+                    // In a directed graph, "synapsesPerNode" on the MODULE usually means "Outgoing per node" or "Incoming per node"?
+                    // Read line 650: `connectionsPerNode = module.synapsesPerNode || 2`.
+                    // And the loop iterates `nodes.forEach(source ...)`. 
+                    // Then creates `count` connections FROM source TO targets.
+                    // So `synapsesPerNode` is OUTGOING connections per node.
+
+                    // IF connections are random/localized, the INCOMING count varies!
+                    // We cannot know the exact final incoming count for `target` easily inside this loop (it's probabilistic).
+                    // However, if the graph is uniform-ish, Avg Incoming ~= Avg Outgoing = `synapsesPerNode`.
+                    // Let's use `connectionsPerNode` as the estimate for internal incoming.
+
+                    const estimatedTotalInputs = currentIncoming + connectionsPerNode;
+
+                    // Precision Note: This is an estimate. 
+                    // If we wanted exactness, we'd need two passes: 1. Decide connections, 2. assign weights.
+                    // But for "Initial Weights", an estimate is standard.
+
+                    let idealWeight = 1.0 / (Math.max(1, estimatedTotalInputs) * targetPercentage);
+                    idealWeight = Math.min(idealWeight, 0.5); // Clamp max
+
+                    // Apply randomness (0.0 to Ideal)
+                    const finalWeight = Math.random() * idealWeight;
+
                     this.addConnection({
                         id: `c-${source.id}-${target.id}-${k}`,
                         sourceId: source.id,
                         targetId: target.id,
-                        weight: Math.random() // Positive only
+                        weight: finalWeight
                     });
                 }
             }
@@ -742,7 +799,7 @@ export class NeuralNet {
         }
     }
 
-    public getModuleNodes(moduleId: string): Node[] {
+    public getModuleNodes(moduleId: string): BaseNode[] {
         // Filter nodes that belong to this module (prefix check)
         // Optimization: Could store this in module config, but filter is fine for UI
         return Array.from(this.nodes.values())
@@ -760,7 +817,6 @@ export class NeuralNet {
             n.potential = 0;
             n.activation = 0;
             n.refractoryTimer = 0;
-            n.activationTimer = 0;
         });
         this.tickCount = 0;
     }
@@ -786,7 +842,7 @@ export class NeuralNet {
             sides: { src: srcSide, tgt: tgtSide }
         });
 
-        const getNodesForSide = (modId: string, side: ConnectionSide): Node[] => {
+        const getNodesForSide = (modId: string, side: ConnectionSide): BaseNode[] => {
             const mod = this.modules.get(modId);
             if (!mod) return [];
 
@@ -847,10 +903,10 @@ export class NeuralNet {
 
         sourceNodes.forEach((src, srcIndex) => {
             // Determine Candidate Pool for this Source Node
-            let candidates: Node[] = [...targetNodes];
+            let candidates: BaseNode[] = [...targetNodes];
 
             // LOCALIZATION LOGIC (Only if Target is Brain and Localizer < 100)
-            let preferredCandidates: Node[] = [];
+            let preferredCandidates: BaseNode[] = [];
             const useLocalization = targetMod.type === 'BRAIN' && localizer < 100;
 
             if (useLocalization) {
@@ -1149,6 +1205,22 @@ export class NeuralNet {
             }
         });
 
+        // Synaptic Scaling (Homeostasis)
+        // Check per module config, default to 100 if undefined
+        this.modules.forEach(module => {
+            if (module.type === 'BRAIN' && module.sustainability && module.sustainability.synapticScaling) {
+                const period = module.sustainability.scalingPeriod || 100;
+                if (this.tickCount % period === 0) {
+                    // Apply to all nodes in this module
+                    const moduleNodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(module.id));
+                    moduleNodes.forEach(node => {
+                        this.normalizeWeights(node, module.sustainability!.targetSum);
+                    });
+                }
+            }
+        });
+
+
         // 3. Hebbian Learning (Phase 12)
         this.modules.forEach(module => {
             if (module.type === 'BRAIN' && module.hebbianLearning) {
@@ -1174,30 +1246,25 @@ export class NeuralNet {
                         // Only increase if both are active?
                         // Or standard delta rule?
                         // Simple Hebbian: product of activations.
-                        const delta = src.activation * tgt.activation * rate;
+                        // Subtractive Normalization
+                        // "Grow based on correlation, but shrink everyone to pay for it."
+                        // This maintains a fixed "weight budget" per node (Conservation of Synaptic weight).
 
-                        // Anti-Hebbian / Decay?
-                        // If we only increase, weights explode.
-                        // We need a decay factor or normalization.
-                        // Let's modify: If source fires and target DOES NOT, weaken connection? (LTP/LTD)
-                        // Simplified 3-factor rule often used:
-                        // delta = rate * (post * (pre - pre_avg)) or similar.
+                        // 1. Calculate Boost
+                        const boost = rate * src.activation * tgt.activation;
+                        conn.weight += boost;
 
-                        // For visual simplicity:
-                        // Increase if co-active.
-                        // Decay naturally? No, weights are static unless changed.
-                        // Let's implement a "Forget" factor if src fires but tgt doesn't.
-                        // delta = rate * src * tgt  MINUS  decay_rate * src * (1-tgt)?
-                        // Let's stick to the User Request: "Hebbian Learning". usually implies positive reinforcement.
-                        // But without normalization, it explodes.
-                        // Let's add a small decay to the weight itself if it's high?
-                        // Or just clamp it.
-                        // For now, implementing the pure Hebbian term requested previously.
-
-                        conn.weight += delta;
-
-                        // Limit Max Weight
-                        if (conn.weight > 1.0) conn.weight = 1.0;
+                        // 2. The Tax: Pay for it immediately
+                        // Subtract the boost proportionally from EVERY incoming connection
+                        const incomingToTgt = this.incoming.get(tgt.id) || [];
+                        if (incomingToTgt.length > 0) {
+                            const tax = boost / incomingToTgt.length;
+                            incomingToTgt.forEach(c => {
+                                c.weight -= tax;
+                                // Clamp at 0
+                                if (c.weight < 0) c.weight = 0;
+                            });
+                        }
 
                         // PRUNING
                         if (Math.abs(conn.weight) < pruningThreshold) {
@@ -1287,7 +1354,7 @@ export class NeuralNet {
      * Used for the Inspector UI.
      */
     public getModuleConnectivity(moduleId: string) {
-        const stats = new Map<string, { id: string, count: number, direction: 'in' | 'out' | 'self' }>();
+        const stats = new Map<string, { id: string, count: number, totalWeight: number, direction: 'in' | 'out' | 'self' }>();
 
         // Create a lookup for module ID by node ID
         const nodeToModuleId = new Map<string, string>();
@@ -1310,9 +1377,11 @@ export class NeuralNet {
                 const dir = srcModId === tgtModId ? 'self' : 'out';
 
                 if (!stats.has(key)) {
-                    stats.set(key, { id: tgtModId, count: 0, direction: dir });
+                    stats.set(key, { id: tgtModId, count: 0, totalWeight: 0, direction: dir });
                 }
-                stats.get(key)!.count++;
+                const entry = stats.get(key)!;
+                entry.count++;
+                entry.totalWeight += Math.abs(c.weight); // Use absolute weight for magnitude? Or raw? User asked for "values". Usually weight.
             }
 
             // CASE 2: Incoming to selected module (from OTHERS)
@@ -1322,9 +1391,11 @@ export class NeuralNet {
             if (tgtModId === moduleId && srcModId !== moduleId) {
                 const key = `in-${srcModId}`;
                 if (!stats.has(key)) {
-                    stats.set(key, { id: srcModId, count: 0, direction: 'in' });
+                    stats.set(key, { id: srcModId, count: 0, totalWeight: 0, direction: 'in' });
                 }
-                stats.get(key)!.count++;
+                const entry = stats.get(key)!;
+                entry.count++;
+                entry.totalWeight += Math.abs(c.weight);
             }
         });
 

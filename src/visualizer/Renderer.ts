@@ -404,26 +404,41 @@ export class Renderer {
                 // Should not show!
             } else if (node) {
                 // Draw tooltip near node
+                const labelText = node.label || node.id;
+
                 let status = '';
                 if (node.isFiring) status = ' (FIRED!)';
+                const statsText = `Potential: ${node.potential.toFixed(3)}${status}`;
 
-                const text = `${node.label || node.id} | Pot: ${node.potential.toFixed(2)}${status}`;
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-                // Draw rect above node
+                this.ctx.font = '12px Courier New';
+                const labelMetrics = this.ctx.measureText(labelText);
+                const statsMetrics = this.ctx.measureText(statsText);
+
+                const padding = 8;
+                const lineHeight = 16;
+                const width = Math.max(labelMetrics.width, statsMetrics.width) + (padding * 2);
+                const height = (lineHeight * 2) + (padding * 2);
+
                 const tx = node.x + 15;
-                const ty = node.y - 30;
+                const ty = node.y - height;
 
-                // Adjust width for text
-                const width = 160 + (node.isFiring ? 40 : 0);
-
-                this.ctx.fillRect(tx, ty, width, 30);
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+                this.ctx.fillRect(tx, ty, width, height);
                 this.ctx.strokeStyle = '#fff';
-                this.ctx.strokeRect(tx, ty, width, 30);
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeRect(tx, ty, width, height);
 
                 this.ctx.fillStyle = '#fff';
-                this.ctx.font = '12px Courier New';
                 this.ctx.textAlign = 'left';
-                this.ctx.fillText(text, tx + 10, ty + 20);
+                this.ctx.textBaseline = 'top';
+
+                // Draw Label Title (Bold-ish color or just white)
+                this.ctx.fillStyle = '#44cb82'; // Greenish title
+                this.ctx.fillText(labelText, tx + padding, ty + padding);
+
+                // Draw Stats
+                this.ctx.fillStyle = '#fff';
+                this.ctx.fillText(statsText, tx + padding, ty + padding + lineHeight);
             }
         }
     }

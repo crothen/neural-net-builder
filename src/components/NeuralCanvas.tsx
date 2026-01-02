@@ -3,7 +3,7 @@ import { NeuralNet } from '../engine/NeuralNet';
 import { Renderer } from '../visualizer/Renderer';
 import { NodeType } from '../engine/types';
 import type { ModuleConfig, ConnectionSide, ModuleConnectionConfig } from '../engine/types';
-import type { Node as NeuralNode } from '../engine/Node';
+import { BaseNode as NeuralNode } from '../engine/nodes/BaseNode';
 
 interface NeuralCanvasProps {
     speed: number;
@@ -16,6 +16,7 @@ interface NeuralCanvasProps {
 export interface NeuralCanvasHandle {
     save: () => any;
     load: (data: any) => void;
+    loadData: (data: any) => void;
     addModule: (config: ModuleConfig) => void;
     connectModules: (srcId: string, tgtId: string, srcSide?: ConnectionSide, tgtSide?: ConnectionSide, coverage?: number, localizer?: number) => void;
     disconnectModules: (id1: string, id2: string) => void;
@@ -71,6 +72,12 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         },
         load: (data: any) => {
             netRef.current.fromJSON(data);
+            justLoadedRef.current = true;
+        },
+        loadData: (data: any) => {
+            netRef.current.fromJSON(data);
+            // We don't necessarily set justLoadedRef here if we want simulation to start immediately or behave differently
+            // But for initial load, it's fine.
             justLoadedRef.current = true;
         },
         addModule: (config: ModuleConfig) => {

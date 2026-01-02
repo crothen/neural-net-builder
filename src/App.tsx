@@ -1,15 +1,68 @@
-import { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import { NeuralCanvas } from './components/NeuralCanvas';
 import type { NeuralCanvasHandle } from './components/NeuralCanvas';
 import type { ModuleConfig, ConnectionSide, ModuleType } from './engine/types';
-import type { Node as NeuralNode } from './engine/Node';
+import type { BaseNode as NeuralNode } from './engine/nodes/BaseNode';
 import './App.css';
+import tooltipConfig from './config/tooltips.json';
+// Import initial network directly (Vite/Bundler will handle JSON)
+import initialNetwork from './initial-setup/initial-network.json';
 
-const Tooltip = ({ text }: { text: string }) => (
-  <span className="tooltip-container" style={{ marginLeft: '6px', cursor: 'help' }}>?
-    <span className="tooltip-text">{text}</span>
-  </span>
-);
+const Tooltip = ({ text }: { text: string }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const triggerRef = useRef<HTMLSpanElement>(null);
+
+  // Check if 'text' is a key in our config, otherwise use it raw
+  const content = (tooltipConfig as any)[text] || text;
+
+  const handleMouseEnter = () => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setPosition({
+        x: rect.right + 10, // Offset to the right
+        y: rect.top // Align top
+      });
+      setIsVisible(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsVisible(false);
+  };
+
+  return (
+    <>
+      <span
+        ref={triggerRef}
+        className="tooltip-container"
+        style={{ marginLeft: '6px', cursor: 'help' }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        ?
+      </span>
+      {isVisible && ReactDOM.createPortal(
+        <div
+          className="tooltip-text"
+          style={{
+            top: position.y,
+            left: position.x,
+            // Styling overrides for Portal
+            position: 'fixed',
+            visibility: 'visible',
+            opacity: 1,
+            pointerEvents: 'none'
+          }}
+        >
+          {content}
+        </div>,
+        document.body
+      )}
+    </>
+  );
+};
 
 // --- Components ---
 
@@ -26,6 +79,36 @@ const InspectorSection = ({ title, children, defaultOpen = true }: { title: stri
     </div>
   );
 };
+
+const MemoizedFilterSelect = React.memo(({ filterModuleIds, onChange, connections }: { filterModuleIds: string[], onChange: (selected: string[]) => void, connections: { incoming: any[], outgoing: any[] } }) => {
+  return (
+    <select
+      multiple
+      value={filterModuleIds}
+      onChange={(e) => {
+        const selected = Array.from(e.target.selectedOptions, option => option.value);
+        onChange(selected);
+      }}
+      style={{ width: '100%', height: '80px', padding: '5px', background: '#111', border: '1px solid #333', color: '#fff' }}
+    >
+      <option value="ALL">All Modules</option>
+      {Array.from(new Set([
+        ...connections.incoming.map((c: any) => c.sourceId.split('-')[0] + (c.sourceId.split('-').length > 2 ? '-' + c.sourceId.split('-')[1] : '')),
+        ...connections.outgoing.map((c: any) => c.targetId.split('-')[0] + (c.targetId.split('-').length > 2 ? '-' + c.targetId.split('-')[1] : ''))
+      ])).filter(id => !id.match(/^\d+$/)).map((modId) => (
+        <option key={modId} value={modId}>{modId}</option>
+      ))}
+    </select>
+  );
+}, (prev, next) => {
+  // Custom comparison to really avoid re-renders if IDs are same
+  // But standard shallow compare of props works if 'filterModuleIds' array ref is stable (it is state)
+  // And 'connections' is stable (state set on open).
+  // AND 'onChange' is stable (useCallback).
+  return prev.filterModuleIds === next.filterModuleIds &&
+    prev.connections === next.connections &&
+    prev.onChange === next.onChange;
+});
 
 function App() {
   const canvasRef = useRef<NeuralCanvasHandle>(null);
@@ -85,7 +168,7 @@ function App() {
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
   // Separate state for nodes of selected module (for renaming)
   const [, setSelectedNodes] = useState<NeuralNode[]>([]);
-  const [selectedModuleStats, setSelectedModuleStats] = useState<{ id: string, count: number, direction: 'in' | 'out' | 'self' }[]>([]);
+  const [selectedModuleStats, setSelectedModuleStats] = useState<{ id: string, count: number, totalWeight?: number, direction: 'in' | 'out' | 'self' }[]>([]);
 
   // --- Connection State (Contextual) ---
   const [connectModal, setConnectModal] = useState<{ isOpen: boolean, sourceId: string, targetId: string, params: { coverage: number, localizer: number, sides: { src: ConnectionSide, tgt: ConnectionSide } } | null }>({
@@ -97,7 +180,22 @@ function App() {
   const [connLocalizer, setConnLocalizer] = useState<number>(0);
   const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(false);
 
-  // --- Node Context Menu State ---
+  // --- Initial Load ---
+  useEffect(() => {
+    // Small timeout to ensure Canvas is ready/mounted
+    const timer = setTimeout(() => {
+      if (canvasRef.current) {
+        console.log("Loading Initial Network...", initialNetwork);
+        // Cast to any to bypass strict JSON type checks vs internal Types
+        canvasRef.current.loadData(initialNetwork as any);
+        // FORCE REFRESH of React State to match Engine State
+        refreshModules();
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const [menuNodeId, setMenuNodeId] = useState<string | null>(null);
   // const [menuPos, setMenuPos] = useState({ x: 0, y: 0 }); // No longer needed
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -105,7 +203,19 @@ function App() {
   const [filterModuleIds, setFilterModuleIds] = useState<string[]>(['ALL']);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  // --- Helpers ---
+  // Force update for live values in modal
+  const [, setForceUpdate] = useState(0);
+  useEffect(() => {
+    let interval: any;
+    if (isMenuOpen) {
+      interval = setInterval(() => {
+        setForceUpdate(prev => prev + 1);
+      }, 200); // reduced to 5 FPS to improve UI responsiveness (filtering)
+    }
+    return () => clearInterval(interval);
+  }, [isMenuOpen]);
+
+
   const refreshModules = () => {
     if (canvasRef.current) {
       setModules(canvasRef.current.getModules());
@@ -131,6 +241,19 @@ function App() {
   };
 
   // --- Handlers ---
+
+  const handleFilterChange = useCallback((selected: string[]) => {
+    // Toggle logic
+    if (selected.includes('ALL') && !filterModuleIds.includes('ALL')) {
+      setFilterModuleIds(['ALL']);
+    } else if (selected.includes('ALL') && selected.length > 1) {
+      setFilterModuleIds(selected.filter(x => x !== 'ALL'));
+    } else if (selected.length === 0) {
+      setFilterModuleIds(['ALL']);
+    } else {
+      setFilterModuleIds(selected);
+    }
+  }, [filterModuleIds]);
 
   const handleSpeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSimulation({ ...simulation, speed: parseInt(e.target.value) });
@@ -388,7 +511,7 @@ function App() {
                 </div>
 
                 <label>
-                  <div>Name <Tooltip text="Module identifier" /></div>
+                  <div>Name <Tooltip text="moduleName" /></div>
                   <input
                     type="text"
                     value={selectedModule.name || selectedModule.label || ''}
@@ -398,7 +521,7 @@ function App() {
 
                 <div className="input-row">
                   <label>
-                    <div>Color <Tooltip text="Visual color tint" /></div>
+                    <div>Color <Tooltip text="moduleColor" /></div>
                     {/* Uncontrolled input with key to reset on module change.
                             onChange updates Canvas directly (fast).
                             onBlur syncs React state (slow).
@@ -426,7 +549,7 @@ function App() {
                 {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT' && (
                   <div className="input-row">
                     <label>
-                      <div>Nodes <Tooltip text="Number of neurons" /></div>
+                      <div>Nodes <Tooltip text="nodeCount" /></div>
                       <input
                         type="number"
                         value={selectedModule.nodeCount}
@@ -439,7 +562,7 @@ function App() {
                 {selectedModule.type === 'LAYER' && (
                   <div className="input-row">
                     <label>
-                      <div>Depth <Tooltip text="Number of columns (Layers only)" /></div>
+                      <div>Depth <Tooltip text="layerDepth" /></div>
                       <input
                         type="number"
                         value={selectedModule.depth || 1}
@@ -453,7 +576,7 @@ function App() {
                   <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #333' }}>
                     {/* Concept Toggle */}
                     <div className="toggle-container" style={{ marginBottom: '10px' }}>
-                      <span className="toggle-label">Show as Triangle <Tooltip text="Collapsed visualization" /></span>
+                      <span className="toggle-label">Show as Triangle <Tooltip text="conceptToggle" /></span>
                       <label className="switch">
                         <input
                           type="checkbox"
@@ -484,7 +607,7 @@ function App() {
                 {selectedModule.type === 'BRAIN' && (
                   <div className="input-row">
                     <label>
-                      <div>Size (Radius) <Tooltip text="Physical size of the brain on canvas" /></div>
+                      <div>Size (Radius) <Tooltip text="brainRadius" /></div>
                       <input
                         type="range"
                         min="50"
@@ -500,7 +623,7 @@ function App() {
                 {(selectedModule.type === 'LAYER' || selectedModule.type === 'INPUT' || selectedModule.type === 'OUTPUT') && (
                   <div className="input-row">
                     <label>
-                      <div>V-Spacing (Height) <Tooltip text="Vertical spread of nodes" /></div>
+                      <div>V-Spacing (Height) <Tooltip text="vSpacing" /></div>
                       <input
                         type="range"
                         min="100"
@@ -516,7 +639,7 @@ function App() {
                 {selectedModule.type === 'LAYER' && (
                   <div className="input-row">
                     <label>
-                      <div>H-Spacing (Width) <Tooltip text="Horizontal spread of columns" /></div>
+                      <div>H-Spacing (Width) <Tooltip text="hSpacing" /></div>
                       <input
                         type="range"
                         min="20"
@@ -537,7 +660,7 @@ function App() {
                 {selectedModule.type === 'INPUT' && (
                   <div className="input-row">
                     <label>
-                      <div>Input Pattern <Tooltip text="Auto-generated signal pattern" /></div>
+                      <div>Input Pattern <Tooltip text="inputPattern" /></div>
                       <select
                         value={(canvasRef.current?.getModuleNodes(selectedModule.id) || [])[0]?.inputType || 'PULSE'}
                         onChange={(e) => {
@@ -561,7 +684,7 @@ function App() {
                 {(selectedModule.type === 'INPUT') && (
                   <div className="input-row">
                     <label>
-                      <div>Frequency: {selectedModule.inputFrequency || 1.0} <Tooltip text="Sig/Tick (Noise) or Hz factor (Sin)" /></div>
+                      <div>Frequency: {selectedModule.inputFrequency || 1.0} <Tooltip text="inputFrequency" /></div>
                       <input
                         type="number"
                         step="0.1"
@@ -586,7 +709,7 @@ function App() {
                 {(selectedModule.type === 'BRAIN' || selectedModule.type === 'SUSTAINED_OUTPUT') && (
                   <div className="input-row">
                     <label>
-                      <div>Firing-Threshold: {selectedModule.threshold !== undefined ? selectedModule.threshold.toFixed(1) : '1.0'} <Tooltip text="Voltage required to fire (Lower = Sensitive)" /></div>
+                      <div>Firing-Threshold: {selectedModule.threshold !== undefined ? selectedModule.threshold.toFixed(1) : '1.0'} <Tooltip text="firingThreshold" /></div>
                       <input
                         type="number"
                         min="0.1"
@@ -603,7 +726,7 @@ function App() {
                 {selectedModule.type === 'SUSTAINED_OUTPUT' && (
                   <div className="input-row">
                     <label>
-                      <div>Input Gain: {selectedModule.gain || 3.0} <Tooltip text="Multiplier for incoming connection weights" /></div>
+                      <div>Input Gain: {selectedModule.gain || 3.0} <Tooltip text="inputGain" /></div>
                       <input
                         type="number"
                         min="0.1"
@@ -621,7 +744,7 @@ function App() {
                 {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'OUTPUT' && selectedModule.type !== 'SUSTAINED_OUTPUT' && (
                   <div className="input-row">
                     <label>
-                      <div>Refractory: {selectedModule.refractoryPeriod || 0}ms <Tooltip text="Cooldown after firing" /></div>
+                      <div>Refractory: {selectedModule.refractoryPeriod || 0}ms <Tooltip text="refractoryPeriod" /></div>
                       <input
                         type="number"
                         min="0"
@@ -638,7 +761,7 @@ function App() {
                 {selectedModule.type === 'BRAIN' && (
                   <div className="input-row">
                     <label>
-                      <div>Leak Rate: {selectedModule.leak || 0} <Tooltip text="Signal loss per tick" /></div>
+                      <div>Leak Rate: {selectedModule.leak || 0} <Tooltip text="leakRate" /></div>
                       <input
                         type="number"
                         step="0.01"
@@ -651,26 +774,11 @@ function App() {
                     </label>
                   </div>
                 )}
+
                 {(selectedModule.type === 'BRAIN' || selectedModule.type === 'SUSTAINED_OUTPUT') && (
                   <div className="input-row">
                     <label>
-                      <div>Decay Factor: {selectedModule.decay !== undefined ? selectedModule.decay : '0.9'} <Tooltip text="Multiplier per Tick (0.9 = retain 90%)" /></div>
-                      <input
-                        type="number"
-                        step="0.01"
-                        min="0.0"
-                        max="1.0"
-                        value={selectedModule.decay !== undefined ? selectedModule.decay : 0.9}
-                        onChange={(e) => handleUpdateConfig(selectedModule.id, { decay: parseFloat(e.target.value) })}
-                        style={{ width: '100%' }}
-                      />
-                    </label>
-                  </div>
-                )}
-                {(selectedModule.type === 'BRAIN' || selectedModule.type === 'SUSTAINED_OUTPUT') && (
-                  <div className="input-row">
-                    <label>
-                      <div>Max Potential: {selectedModule.maxPotential !== undefined ? selectedModule.maxPotential : '3.0'} <Tooltip text="Firing ceiling (Prevents infinite charge)" /></div>
+                      <div>Max Potential: {selectedModule.maxPotential !== undefined ? selectedModule.maxPotential : '3.0'} <Tooltip text="maxPotential" /></div>
                       <input
                         type="number"
                         step="0.1"
@@ -684,43 +792,12 @@ function App() {
                   </div>
                 )}
 
-                {selectedModule.type === 'BRAIN' && (
-                  <>
-                    <div className="input-row">
-                      <label>
-                        <div>Fatigue Jump: {selectedModule.fatigue || 0} <Tooltip text="Threshold jump after firing" /></div>
-                        <input
-                          type="number"
-                          step="0.1"
-                          min="0.0"
-                          max="5.0"
-                          value={selectedModule.fatigue !== undefined ? selectedModule.fatigue : 0}
-                          onChange={(e) => handleUpdateConfig(selectedModule.id, { fatigue: parseFloat(e.target.value) })}
-                          style={{ width: '100%' }}
-                        />
-                      </label>
-                    </div>
-                    <div className="input-row">
-                      <label>
-                        <div>Recovery Rate: {selectedModule.recovery || 0} <Tooltip text="Threshold recovery per tick" /></div>
-                        <input
-                          type="number"
-                          step="0.001"
-                          min="0.0"
-                          max="0.5"
-                          value={selectedModule.recovery !== undefined ? selectedModule.recovery : 0}
-                          onChange={(e) => handleUpdateConfig(selectedModule.id, { recovery: parseFloat(e.target.value) })}
-                          style={{ width: '100%' }}
-                        />
-                      </label>
-                    </div>
-                  </>
-                )}
+
 
                 {selectedModule.type === 'BRAIN' && (
                   <>
                     <div className="toggle-container" style={{ marginTop: '0' }}>
-                      <span className="toggle-label">Hebbian Learning <Tooltip text="Auto-adjust weights based on activity" /></span>
+                      <span className="toggle-label">Hebbian Learning <Tooltip text="hebbianToggle" /></span>
                       <label className="switch">
                         <input
                           type="checkbox"
@@ -736,7 +813,7 @@ function App() {
                         <div className="section-body" style={{ padding: '10px' }}>
                           <div className="input-row">
                             <label>
-                              <div>Learning Rate <Tooltip text="Hebbian learning rate" /></div>
+                              <div>Learning Rate <Tooltip text="learningRate" /></div>
                               <input
                                 type="number"
                                 step="0.001"
@@ -750,7 +827,7 @@ function App() {
                           </div>
                           <div className="input-row">
                             <label>
-                              <div>Pruning Thresh <Tooltip text="Remove connections weaker than this (abs)" /></div>
+                              <div>Pruning Thresh <Tooltip text="pruningThresh" /></div>
                               <input
                                 type="number"
                                 step="0.01"
@@ -764,7 +841,7 @@ function App() {
                           </div>
                           <div className="input-row">
                             <label>
-                              <div>Regrowth Rate <Tooltip text="New connections per tick (0.1 = 1 per 10 ticks)" /></div>
+                              <div>Regrowth Rate <Tooltip text="regrowthRate" /></div>
                               <input
                                 type="number"
                                 step="0.1"
@@ -779,6 +856,175 @@ function App() {
                         </div>
                       </div>
                     )}
+
+                    <InspectorSection title="Sustainability (Homeostasis)">
+                      <div style={{ padding: '10px' }}>
+                        <div style={{ fontSize: '11px', color: '#888', marginBottom: '8px' }}>
+                          Manage energy, fatigue, and stability.
+                        </div>
+
+                        {/* Decay */}
+                        <div className="input-row">
+                          <label>
+                            <div>Decay Factor <Tooltip text="Multiplier per Tick (0.9 = retain 90%)" /></div>
+                            <input
+                              type="number"
+                              step="0.01"
+                              min="0.0"
+                              max="1.0"
+                              value={selectedModule.decay !== undefined ? selectedModule.decay : 0.9}
+                              onChange={(e) => handleUpdateConfig(selectedModule.id, { decay: parseFloat(e.target.value) })}
+                              style={{ width: '100%' }}
+                            />
+                          </label>
+                        </div>
+
+                        {/* Fatigue / Recovery */}
+                        <div className="input-row">
+                          <label>
+                            <div>Fatigue Cost <Tooltip text="Threshold increase after firing" /></div>
+                            <input
+                              type="number"
+                              step="0.1"
+                              min="0"
+                              max="5.0"
+                              value={selectedModule.fatigue !== undefined ? selectedModule.fatigue : 0}
+                              onChange={(e) => handleUpdateConfig(selectedModule.id, { fatigue: parseFloat(e.target.value) })}
+                              style={{ width: '100%' }}
+                            />
+                          </label>
+                        </div>
+                        <div className="input-row">
+                          <label>
+                            <div>Recovery Rate <Tooltip text="Threshold recovery per tick" /></div>
+                            <input
+                              type="number"
+                              step="0.001"
+                              min="0.0"
+                              max="0.5"
+                              value={selectedModule.recovery !== undefined ? selectedModule.recovery : 0}
+                              onChange={(e) => handleUpdateConfig(selectedModule.id, { recovery: parseFloat(e.target.value) })}
+                              style={{ width: '100%' }}
+                            />
+                          </label>
+                        </div>
+
+                        {/* Target Activity (Initial Weight Mod) */}
+                        <div className="input-row">
+                          <label>
+                            <div>Target Activity: {selectedModule.initialWeightModifier !== undefined ? selectedModule.initialWeightModifier : 0.2} <Tooltip text="initialWeightModifier" /></div>
+                            <input
+                              type="number"
+                              step="0.05"
+                              min="0.05"
+                              max="1.0"
+                              value={selectedModule.initialWeightModifier !== undefined ? selectedModule.initialWeightModifier : 0.2}
+                              onChange={(e) => handleUpdateConfig(selectedModule.id, { initialWeightModifier: parseFloat(e.target.value) })}
+                              style={{ width: '100%' }}
+                            />
+                          </label>
+                        </div>
+
+                        <div style={{ borderTop: '1px solid #444', margin: '8px 0' }}></div>
+
+                        {/* Synaptic Scaling */}
+                        <div className="toggle-container" style={{ marginTop: '5px' }}>
+                          <span className="toggle-label">Synaptic Scaling <Tooltip text="Normalize incoming weights (Epilepsy Fix)" /></span>
+                          <label className="switch">
+                            <input
+                              type="checkbox"
+                              checked={!!selectedModule.sustainability?.synapticScaling}
+                              onChange={(e) => handleUpdateConfig(selectedModule.id, {
+                                sustainability: {
+                                  synapticScaling: e.target.checked,
+                                  targetSum: selectedModule.sustainability?.targetSum ?? 3.0,
+                                  adaptiveThreshold: selectedModule.sustainability?.adaptiveThreshold ?? false,
+                                  targetRate: selectedModule.sustainability?.targetRate ?? 0.05,
+                                  adaptationSpeed: selectedModule.sustainability?.adaptationSpeed ?? 0.001
+                                }
+                              })}
+                            />
+                            <span className="slider"></span>
+                          </label>
+                        </div>
+                        {selectedModule.sustainability?.synapticScaling && (
+                          <div className="input-row">
+                            <label>Target Sum (Budget)
+                              <input
+                                type="number"
+                                step="0.1"
+                                value={selectedModule.sustainability?.targetSum ?? 3.0}
+                                onChange={(e) => handleUpdateConfig(selectedModule.id, {
+                                  sustainability: {
+                                    ...selectedModule.sustainability!,
+                                    targetSum: parseFloat(e.target.value)
+                                  }
+                                })}
+                                style={{ width: '100%' }}
+                              />
+                            </label>
+                          </div>
+                        )}
+
+                        {/* Adaptive Thresholds */}
+                        <div className="toggle-container" style={{ marginTop: '5px' }}>
+                          <span className="toggle-label">Adaptive Threshold <Tooltip text="Dynamic thresholding (Coma Fix)" /></span>
+                          <label className="switch">
+                            <input
+                              type="checkbox"
+                              checked={!!selectedModule.sustainability?.adaptiveThreshold}
+                              onChange={(e) => handleUpdateConfig(selectedModule.id, {
+                                sustainability: {
+                                  synapticScaling: selectedModule.sustainability?.synapticScaling ?? false,
+                                  targetSum: selectedModule.sustainability?.targetSum ?? 3.0,
+                                  adaptiveThreshold: e.target.checked,
+                                  targetRate: selectedModule.sustainability?.targetRate ?? 0.05,
+                                  adaptationSpeed: selectedModule.sustainability?.adaptationSpeed ?? 0.001
+                                }
+                              })}
+                            />
+                            <span className="slider"></span>
+                          </label>
+                        </div>
+
+                        {selectedModule.sustainability?.adaptiveThreshold && (
+                          <>
+                            <div className="input-row">
+                              <label>Target Rate (fires/tick)
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  value={selectedModule.sustainability?.targetRate ?? 0.05}
+                                  onChange={(e) => handleUpdateConfig(selectedModule.id, {
+                                    sustainability: {
+                                      ...selectedModule.sustainability!,
+                                      targetRate: parseFloat(e.target.value)
+                                    }
+                                  })}
+                                  style={{ width: '100%' }}
+                                />
+                              </label>
+                            </div>
+                            <div className="input-row">
+                              <label>Adaptation Speed
+                                <input
+                                  type="number"
+                                  step="0.001"
+                                  value={selectedModule.sustainability?.adaptationSpeed ?? 0.001}
+                                  onChange={(e) => handleUpdateConfig(selectedModule.id, {
+                                    sustainability: {
+                                      ...selectedModule.sustainability!,
+                                      adaptationSpeed: parseFloat(e.target.value)
+                                    }
+                                  })}
+                                  style={{ width: '100%' }}
+                                />
+                              </label>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </InspectorSection>
 
                     <div className="toggle-container" style={{ marginTop: '15px' }}>
                       <span className="toggle-label">Localized Structure <Tooltip text="Spatially optimize internal connections" /></span>
@@ -807,7 +1053,7 @@ function App() {
                         <label>
                           <div>Leak: {selectedModule.localizationLeak !== undefined ? selectedModule.localizationLeak : 0}% <Tooltip text="0% = Strict Neighbors, 100% = Random" /></div>
                           <input
-                            type="range"
+                            type="number"
                             min="0"
                             max="100"
                             value={selectedModule.localizationLeak !== undefined ? selectedModule.localizationLeak : 0}
@@ -821,9 +1067,9 @@ function App() {
                       <label>
                         <div>Synapses/Node <Tooltip text="Internal connections per neuron" /></div>
                         <input
-                          type="range"
+                          type="number"
                           min="0"
-                          max="20"
+                          max="100"
                           step="1"
                           value={selectedModule.synapsesPerNode !== undefined ? selectedModule.synapsesPerNode : 2}
                           onChange={(e) => {
@@ -832,8 +1078,7 @@ function App() {
                           }}
                           style={{ width: '100%' }}
                         />
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#888' }}>
-                          <span>Current: {selectedModule.synapsesPerNode !== undefined ? selectedModule.synapsesPerNode : 2}</span>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', fontSize: '0.8rem', color: '#888' }}>
                           <span>Suggested: {Math.round(Math.sqrt(selectedModule.nodeCount) * 1.5)}</span>
                         </div>
                       </label>
@@ -1099,6 +1344,26 @@ function App() {
               {/* SECTION: CONNECTIONS (Hidden for TRAINING_DATA & CONCEPT) */}
               {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT' && (
                 <InspectorSection title="Connections">
+                  {/* Connection Totals Summary */}
+                  {selectedModuleStats.length > 0 && (
+                    <div style={{
+                      fontSize: '0.8rem',
+                      display: 'flex',
+                      justifyContent: 'space-around',
+                      marginBottom: '8px',
+                      background: 'rgba(0,0,0,0.2)',
+                      padding: '4px',
+                      borderRadius: '4px'
+                    }}>
+                      <div style={{ color: '#00aaff' }}>
+                        In: {selectedModuleStats.filter(s => s.direction === 'in').reduce((acc, s) => acc + (s.totalWeight || 0), 0).toFixed(1)}
+                      </div>
+                      <div style={{ color: '#00ffaa' }}>
+                        Out: {selectedModuleStats.filter(s => s.direction === 'out').reduce((acc, s) => acc + (s.totalWeight || 0), 0).toFixed(1)}
+                      </div>
+                    </div>
+                  )}
+
                   {selectedModuleStats.length === 0 ? (
                     <div style={{ fontSize: '0.8rem', color: '#555', fontStyle: 'italic', textAlign: 'center', padding: '10px' }}>No active connections</div>
                   ) : (
@@ -1176,7 +1441,9 @@ function App() {
                               <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>
                                 {modules.find(m => m.id === stat.id)?.name || stat.id}
                               </span>
-                              <span style={{ color: '#666', fontSize: '0.7rem' }}>({stat.count} connections)</span>
+                              <span style={{ color: '#666', fontSize: '0.7rem' }}>
+                                ({stat.count} x, Σ {stat.totalWeight?.toFixed(1)})
+                              </span>
                             </div>
                             <div
                               role="button"
@@ -1821,47 +2088,27 @@ function App() {
 
                 display: 'flex',
                 flexDirection: 'column',
-                margin: 0
+                margin: 0,
+                borderRadius: '0px', // Removed round border
+                padding: '20px', // Added padding
+                background: '#1e1e24',
+                border: '1px solid #444',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
               }}
             >
               <div className="modal-header">
                 <span className="modal-title" style={{ fontSize: '14px' }}>
-                  Node: {menuNodeId} <br />
-                  <span style={{ fontSize: '10px', color: '#aaa', fontWeight: 'normal' }}>
-                    In: {nodeConnections.incoming.length} | Out: {nodeConnections.outgoing.length}
-                  </span>
+                  Node: {menuNodeId}
                 </span>
                 <button className="modal-close" onClick={closeNodeMenu} style={{ width: '24px', height: '24px', lineHeight: '20px', padding: 0, textAlign: 'center' }}>×</button>
               </div>
 
               <div style={{ padding: '10px', background: '#222', borderBottom: '1px solid #444' }}>
-                <select
-                  multiple
-                  value={filterModuleIds}
-                  onChange={(e) => {
-                    const selected = Array.from(e.target.selectedOptions, option => option.value);
-                    // Toggle behavior for 'ALL'
-                    if (selected.includes('ALL') && !filterModuleIds.includes('ALL')) {
-                      setFilterModuleIds(['ALL']);
-                    } else if (selected.includes('ALL') && selected.length > 1) {
-                      setFilterModuleIds(selected.filter(x => x !== 'ALL'));
-                    } else if (selected.length === 0) {
-                      setFilterModuleIds(['ALL']);
-                    } else {
-                      setFilterModuleIds(selected);
-                    }
-                  }}
-                  style={{ width: '100%', height: '80px', padding: '5px', background: '#111', border: '1px solid #333', color: '#fff' }}
-                >
-                  <option value="ALL">All Modules</option>
-                  {/* Extract Unique Modules from Connections */}
-                  {Array.from(new Set([
-                    ...nodeConnections.incoming.map((c: any) => c.sourceId.split('-')[0] + '-' + c.sourceId.split('-')[1]),
-                    ...nodeConnections.outgoing.map((c: any) => c.targetId.split('-')[0] + '-' + c.targetId.split('-')[1])
-                  ])).map((modId) => (
-                    <option key={modId} value={modId}>{modId}</option>
-                  ))}
-                </select>
+                <MemoizedFilterSelect
+                  filterModuleIds={filterModuleIds}
+                  connections={nodeConnections}
+                  onChange={handleFilterChange}
+                />
 
                 <div style={{ marginTop: '5px', display: 'flex', gap: '5px' }}>
                   <button
@@ -1874,31 +2121,57 @@ function App() {
               </div>
 
               <div className="modal-body" style={{ flex: 1, overflowY: 'auto', fontSize: '12px' }}>
-                <h4 style={{ margin: '5px 0', color: '#888' }}>Incoming ({nodeConnections.incoming.length})</h4>
-                <ul style={{ listStyle: 'none', padding: 0 }}>
-                  {nodeConnections.incoming
-                    .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.sourceId.startsWith(fid)))
-                    .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
-                    .map((c: any) => (
-                      <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
-                        <span>← {c.sourceId}</span>
-                        <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>{c.weight.toFixed(3)}</span>
-                      </li>
-                    ))}
-                </ul>
+                {(() => {
+                  const filteredIncoming = nodeConnections.incoming
+                    .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.sourceId.startsWith(fid)));
+                  const incomingSum = filteredIncoming.reduce((acc: number, c: any) => acc + c.weight, 0);
 
-                <h4 style={{ margin: '10px 0 5px', color: '#888' }}>Outgoing ({nodeConnections.outgoing.length})</h4>
-                <ul style={{ listStyle: 'none', padding: 0 }}>
-                  {nodeConnections.outgoing
-                    .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.targetId.startsWith(fid)))
-                    .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
-                    .map((c: any) => (
-                      <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
-                        <span>→ {c.targetId}</span>
-                        <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>{c.weight.toFixed(3)}</span>
-                      </li>
-                    ))}
-                </ul>
+                  return (
+                    <>
+                      <h4 style={{ margin: '5px 0', color: '#888' }}>
+                        Incoming ({filteredIncoming.length}) <span style={{ float: 'right' }}>Σ {incomingSum.toFixed(2)}</span>
+                      </h4>
+                      <ul style={{ listStyle: 'none', padding: 0 }}>
+                        {filteredIncoming
+                          .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
+                          .map((c: any) => (
+                            <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span>← {c.sourceId}</span>
+                              <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>
+                                W: {c.weight.toFixed(3)}
+                              </span>
+                            </li>
+                          ))}
+                      </ul>
+                    </>
+                  );
+                })()}
+
+                {(() => {
+                  const filteredOutgoing = nodeConnections.outgoing
+                    .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.targetId.startsWith(fid)));
+                  const outgoingSum = filteredOutgoing.reduce((acc: number, c: any) => acc + c.weight, 0);
+
+                  return (
+                    <>
+                      <h4 style={{ margin: '10px 0 5px', color: '#888' }}>
+                        Outgoing ({filteredOutgoing.length}) <span style={{ float: 'right' }}>Σ {outgoingSum.toFixed(2)}</span>
+                      </h4>
+                      <ul style={{ listStyle: 'none', padding: 0 }}>
+                        {filteredOutgoing
+                          .sort((a: any, b: any) => sortOrder === 'asc' ? a.weight - b.weight : b.weight - a.weight)
+                          .map((c: any) => (
+                            <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span>→ {c.targetId}</span>
+                              <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>
+                                W: {c.weight.toFixed(3)}
+                              </span>
+                            </li>
+                          ))}
+                      </ul>
+                    </>
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -1994,5 +2267,7 @@ function App() {
     </div >
   );
 }
+
+
 
 export default App;

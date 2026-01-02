@@ -28,6 +28,24 @@ export interface NodeConfig {
     inputType?: InputType;
     fatigue?: number; // Threshold jump after firing
     recovery?: number; // Threshold recovery per tick
+
+    // Sustainability
+    sustainability?: {
+        synapticScaling: boolean;
+        targetSum: number;
+        adaptiveThreshold: boolean;
+        targetRate: number;
+        adaptationSpeed: number;
+    };
+}
+
+export interface SustainabilityConfig {
+    synapticScaling: boolean;
+    targetSum: number;
+    adaptiveThreshold: boolean;
+    targetRate: number;
+    adaptationSpeed: number;
+    scalingPeriod?: number;
 }
 
 export interface ConnectionConfig {
@@ -86,11 +104,15 @@ export interface ModuleConfig {
     fatigue?: number; // Threshold jump
     recovery?: number; // Threshold recovery
 
+    // Sustainability
+    sustainability?: SustainabilityConfig;
+
 
     // Localization
     isLocalized?: boolean;
     localizationLeak?: number; // 0-100 (Replaces 'localizer' for internal use basically)
     synapsesPerNode?: number; // Internal connections per node (default 2)
+    initialWeightModifier?: number; // Scaler for random weight initialization (default 0.2)
 
     // Concept Data
     concepts?: { id: string; label: string }[];

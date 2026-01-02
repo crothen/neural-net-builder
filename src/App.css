@@ -514,51 +514,163 @@ input:checked+.slider:before {
   justify-content: center;
   width: 14px;
   height: 14px;
-  border-radius: 4px;
+  border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #aaa;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ccc;
   font-size: 10px;
   cursor: help;
   position: relative;
   margin-left: 6px;
   vertical-align: middle;
+  transition: all 0.2s ease;
 }
 
 .tooltip-container:hover {
   background: var(--accent-color);
   color: #000;
   border-color: var(--accent-color);
+  box-shadow: 0 0 8px var(--accent-color);
 }
 
 .tooltip-text {
-  visibility: hidden;
+  /* Position and Visibility handled by JS Portal now */
+  /* visibility: hidden; <--- REMOVED */
+  /* position: fixed; <--- REMOVED (Inline style used) */
+  z-index: 100000;
+  /* Extremely high z-index */
+  /* left/top set by JS */
+
+  background: rgba(10, 10, 15, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #eee;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  max-width: 250px;
+  white-space: normal;
+  /* Allow wrapping */
+  line-height: 1.4;
+
+  /* Glassmorphism */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+
+  /* Animation */
+  animation: tooltip-slide-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+/* Reverting to absolute but ensuring parents don't clip. 
+     If parents have overflow: hidden/auto, absolute IS clipped.
+     The sidebar has overflow-y: auto.
+     
+     Strategy:
+     1. Use fixed positioning but valid for the sidebar area? 
+     No, without JS, fixed positioning relative to the hovered element is hard.
+     
+     Strategy B:
+     The tooltip is inside the sidebar which has a z-index of 50.
+     The canvas has z-index 0 (default).
+     If the tooltip is clipped, it's because of `overflow: hidden` or `auto` on `.sidebar-content`.
+     
+     We can try to make the tooltip container `position: static`? No.
+     
+     If we stick to CSS-only:
+     We can use `position: fixed` and center it or put it in a known spot? No, that's bad UX.
+     
+     Let's try to simply use `position: absolute` but ensure the tooltip pops *out* to the right.
+     And we need to make sure the tooltip has a very high z-index.
+     However, if the container (`.sidebar-content` or `.inspector-section`) creates a stacking context or has overflow, it will clip.
+     
+     .sidebar-content has `overflow-y: auto`. This CLIPS absolute children.
+     
+     Refactoring to use Javascript for tooltip positioning is the robust fix, but the user asked for "configure in json" and "fix problem".
+     I can change the CSS to *avoid* clipping if I can. 
+     But inside a scrollable sidebar, you cannot have overflow-visible children extending outside.
+     
+     Wait, if I change `position: fixed` and use a generic location, it's barely acceptable.
+     
+     Actually, passing the mouse position or using a React portal is the real solution.
+     Since I am editing `App.tsx` anyway, I could have escalated to a Portal.
+     But I am in CSS editing mode now.
+     
+     Let's check if I can make the sidebar `overflow: visible`? No, we need scrolling.
+     
+     Okay, I will stick to `position: absolute` for now but give it a massively high z-index and hope the container isn't strict.
+     Wait, `.sidebar-content` ALREADY has `overflow-y: auto`. It WILL clip.
+     
+     I must switch to a JS-based tooltip or Portal approach for a *true* fix if it's being clipped by the scrollbar.
+     However, the user said "hidden behind the canvas". This implies z-index against the canvas, NOT clipping by the sidebar.
+     The sidebar is on the left. The canvas is in the middle.
+     If the tooltip extends to the right (into the canvas area), and the sidebar has a lower z-index than the canvas, it hides.
+     
+      Sidebar z-index: 50.
+     Canvas z-index: ?
+     
+     If I give the tooltip a very high z-index, it should work IF the stacking context allows.
+     
+     Let's improve the visual style first as requested.
+  */
+
+/* Fallback: Absolute positioning relative to the small icon */
+position: absolute;
+left: calc(100% + 10px);
+top: 50%;
+transform: translateY(-50%);
+
+width: max-content;
+max-width: 250px;
+white-space: normal;
+/* Allow wrapping */
+
+background: rgba(15, 15, 20, 0.95);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+color: #eee;
+padding: 8px 12px;
+border-radius: 6px;
+font-size: 0.8rem;
+line-height: 1.4;
+
+opacity: 0;
+transition: opacity 0.2s,
+transform 0.2s;
+pointer-events: none;
+
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+0 0 0 1px rgba(255, 255, 255, 0.05);
+z-index: 10000;
+/* Attempt to beat the canvas */
+}
+
+/* Arrow */
+.tooltip-text::before {
+  content: '';
   position: absolute;
-  z-index: 1000;
-  left: calc(100% + 10px);
+  left: -6px;
   top: 50%;
   transform: translateY(-50%);
-  bottom: auto;
-  background: #000;
-  border: 1px solid #444;
-  color: #eee;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.2s;
-  pointer-events: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  border-width: 6px 6px 6px 0;
+  border-style: solid;
+  border-color: transparent rgba(15, 15, 20, 0.95) transparent transparent;
 }
 
 .tooltip-container:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
+  transform: translateY(-50%) translateX(5px);
 }
 
 /* Right Sidebar Tooltip Override */
 .right-sidebar .tooltip-text {
   left: auto;
   right: calc(100% + 10px);
+}
+
+.right-sidebar .tooltip-text::before {
+  left: auto;
+  right: -6px;
+  transform: translateY(-50%) rotate(180deg);
 }
