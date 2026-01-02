@@ -219,6 +219,34 @@ export class Renderer {
                 this.ctx.fillText(module.name || 'DATA', module.x, module.y);
             }
 
+            // --- CUSTOM VISUALIZATION FOR CHECKER (PENTAGON) ---
+            if (module.type === 'CHECKER') {
+                const r = 40; // Size
+                const sides = 5;
+                this.ctx.beginPath();
+                for (let i = 0; i < sides; i++) {
+                    // Rotate -Math.PI/2 to point upwards
+                    const angle = (Math.PI * 2 * i / sides) - (Math.PI / 2);
+                    const x = module.x + r * Math.cos(angle);
+                    const y = module.y + r * Math.sin(angle);
+                    if (i === 0) this.ctx.moveTo(x, y);
+                    else this.ctx.lineTo(x, y);
+                }
+                this.ctx.closePath();
+                this.ctx.fillStyle = '#00ffff'; // Cyan for Checker
+                this.ctx.fill();
+                this.ctx.strokeStyle = '#fff';
+                this.ctx.lineWidth = 2;
+                this.ctx.stroke();
+
+                // Icon/Text
+                this.ctx.fillStyle = '#000'; // Black text on Cyan
+                this.ctx.font = 'bold 12px Arial';
+                this.ctx.textAlign = 'center';
+                this.ctx.textBaseline = 'middle';
+                this.ctx.fillText('CHECK', module.x, module.y);
+            }
+
             // --- CUSTOM VISUALIZATION FOR COLLAPSED CONCEPT (TRIANGLE) ---
             if (module.type === 'CONCEPT' && module.collapsed) {
                 const r = 15; // Smaller

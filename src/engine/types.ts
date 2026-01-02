@@ -68,7 +68,7 @@ export interface NodeState {
     inRefractory: boolean; // Visual feedback?
 }
 
-export type ModuleType = 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT' | 'SUSTAINED_OUTPUT' | 'CONCEPT' | 'LEARNED_OUTPUT' | 'TRAINING_DATA';
+export type ModuleType = 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT' | 'SUSTAINED_OUTPUT' | 'CONCEPT' | 'LEARNED_OUTPUT' | 'TRAINING_DATA' | 'CHECKER';
 
 export interface ModuleConfig {
     id: string;
@@ -145,5 +145,18 @@ export interface ModuleConnectionConfig {
         src: ConnectionSide;
         tgt: ConnectionSide;
     };
+}
+
+export type TrainingPhase = 'IDLE' | 'IMPRINTING' | 'ASSOCIATION';
+
+export interface TrainingProtocolConfig {
+    iterations: number;
+    runsPerConcept: number;
+    ticksPerSample: number;
+    settleTime: number;
+    labelMappings?: Record<string, { moduleId: string, nodeIndex: number }>;
+    // Implemented properties for dynamic population
+    targetBrainId?: string;
+    targetOutputId?: string;
 }
 

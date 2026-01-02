@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { NeuralCanvas } from './components/NeuralCanvas';
 import type { NeuralCanvasHandle } from './components/NeuralCanvas';
+import { CheckerModal } from './components/CheckerModal'; // Import Component
 import type { ModuleConfig, ConnectionSide, ModuleType } from './engine/types';
 import type { BaseNode as NeuralNode } from './engine/nodes/BaseNode';
 import './App.css';
@@ -201,6 +202,38 @@ function App() {
   const [connCoverage, setConnCoverage] = useState<number>(100);
   const [connLocalizer, setConnLocalizer] = useState<number>(0);
   const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(false);
+  // Training UI State
+  const [trainingUIConfig, setTrainingUIConfig] = useState<any>({
+    iterations: 1000,
+    runsPerConcept: 5,
+    ticksPerSample: 20,
+    settleTime: 10,
+    labelMappings: {},
+    targetBrainId: undefined, // Dynamic
+    targetOutputId: undefined // Dynamic
+  });
+
+  // Checker / Verification UI State
+  const [isCheckerOpen, setIsCheckerOpen] = useState(false);
+  const [checkerModuleId, setCheckerModuleId] = useState<string | null>(null);
+  const [trainingStatus, setTrainingStatus] = useState<{ phase: string, sampleIndex: number, epoch: number }>({ phase: 'IDLE', sampleIndex: 0, epoch: 0 });
+
+  // Status Polling for Training
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (canvasRef.current && canvasRef.current.getTrainingState) {
+        const state = canvasRef.current.getTrainingState();
+        // Only update if changed to avoid re-renders?
+        setTrainingStatus(prev => {
+          if (prev.phase !== state.phase || prev.sampleIndex !== state.sampleIndex) {
+            return state;
+          }
+          return prev;
+        });
+      }
+    }, 500); // Poll every 500ms
+    return () => clearInterval(interval);
+  }, []);
 
   // --- Initial Load ---
   useEffect(() => {
@@ -1323,6 +1356,70 @@ function App() {
                         </div>
                       </>
                     )}
+                    {/* NEW: Training Protocol UI */}
+                    <div style={{ marginTop: '10px', padding: '10px', background: '#222', borderRadius: '4px' }}>
+                      <h4 style={{ margin: '0 0 10px 0', fontSize: '0.9rem', borderBottom: '1px solid #444' }}>Protocol Config</h4>
+
+                      <div className="input-row">
+                        <label>Iterations (Total)
+                          <input type="number" value={trainingUIConfig.iterations} onChange={e => setTrainingUIConfig({ ...trainingUIConfig, iterations: parseInt(e.target.value) })} style={{ width: '100%' }} />
+                        </label>
+                      </div>
+                      <div className="input-row">
+                        <label>Runs / Concept
+                          <input type="number" value={trainingUIConfig.runsPerConcept} onChange={e => setTrainingUIConfig({ ...trainingUIConfig, runsPerConcept: parseInt(e.target.value) })} style={{ width: '100%' }} />
+                        </label>
+                      </div>
+                      <div className="input-row">
+                        <label>Ticks / Sample
+                          <input type="number" value={trainingUIConfig.ticksPerSample} onChange={e => setTrainingUIConfig({ ...trainingUIConfig, ticksPerSample: parseInt(e.target.value) })} style={{ width: '100%' }} />
+                        </label>
+                      </div>
+                      <div className="input-row">
+                        <label>Settle Time
+                          <input type="number" value={trainingUIConfig.settleTime} onChange={e => setTrainingUIConfig({ ...trainingUIConfig, settleTime: parseInt(e.target.value) })} style={{ width: '100%' }} />
+                        </label>
+                      </div>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '10px' }}>
+                        <div style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '5px' }}>
+                          Status: <span style={{ color: trainingStatus.phase === 'IDLE' ? '#888' : '#0f0' }}>{trainingStatus.phase}</span>
+                          {trainingStatus.phase !== 'IDLE' && ` (Sample: ${trainingStatus.sampleIndex})`}
+                        </div>
+
+                        <button
+                          onClick={() => {
+                            if (canvasRef.current && selectedModule.trainingData) {
+                              canvasRef.current.setTrainingConfig(trainingUIConfig);
+                              // Pass Training Data Rows to Start
+                              canvasRef.current.startTrainingPhase('IMPRINTING');
+                            }
+                          }}
+                          className="primary"
+                          style={{ background: '#00aeff' }}
+                        >
+                          Start Phase 1: Imprinting
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (canvasRef.current && selectedModule.trainingData) {
+                              canvasRef.current.setTrainingConfig(trainingUIConfig);
+                              canvasRef.current.startTrainingPhase('ASSOCIATION');
+                            }
+                          }}
+                          className="primary"
+                          style={{ background: '#ff00ae' }}
+                        >
+                          Start Phase 2: Association
+                        </button>
+                        <button
+                          onClick={() => canvasRef.current && canvasRef.current.stopTraining()}
+                          style={{ background: '#555' }}
+                        >
+                          Stop Training
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -1361,7 +1458,29 @@ function App() {
                 </InspectorSection>
               )}
 
-
+              {/* CHECKER Module Inspector */}
+              {selectedModule.type === 'CHECKER' && (
+                <InspectorSection title="Verification">
+                  <div style={{ marginTop: '10px' }}>
+                    <div style={{ fontSize: '0.9rem', color: '#ccc', marginBottom: '10px' }}>
+                      Verification Tool
+                    </div>
+                    <p style={{ fontSize: '0.8rem', color: '#888' }}>
+                      Use this module to verify learned associations between Concepts and Learned Subjects.
+                    </p>
+                    <button
+                      className="primary"
+                      style={{ width: '100%', background: '#00ffff', color: '#000', fontWeight: 'bold' }}
+                      onClick={() => {
+                        setCheckerModuleId(selectedModule.id);
+                        setIsCheckerOpen(true);
+                      }}
+                    >
+                      Open Verification Matrix
+                    </button>
+                  </div>
+                </InspectorSection>
+              )}
 
               {/* SECTION: CONNECTIONS (Hidden for TRAINING_DATA & CONCEPT) */}
               {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT' && (
@@ -2285,6 +2404,15 @@ function App() {
           </div>
         )
       }
+
+      {/* CHECKER MODAL */}
+      <CheckerModal
+        isOpen={isCheckerOpen}
+        onClose={() => setIsCheckerOpen(false)}
+        checkerModuleId={checkerModuleId}
+        modules={modules}
+        canvasRef={canvasRef}
+      />
 
     </div >
   );

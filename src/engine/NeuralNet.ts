@@ -1,7 +1,7 @@
 import { BaseNode } from './nodes/BaseNode';
 import { NodeFactory } from './NodeFactory';
 import { Connection } from './Connection';
-import type { NodeConfig, ConnectionConfig, ModuleConfig, ConnectionSide, ModuleConnectionConfig } from './types';
+import type { NodeConfig, ConnectionConfig, ModuleConfig, ConnectionSide, ModuleConnectionConfig, TrainingPhase, TrainingProtocolConfig } from './types';
 import { NodeType } from './types';
 
 export class NeuralNet {
@@ -911,11 +911,376 @@ export class NeuralNet {
 
     public resetState() {
         this.nodes.forEach(n => {
-            n.potential = 0;
             n.activation = 0;
+            n.potential = 0;
             n.refractoryTimer = 0;
         });
         this.tickCount = 0;
+    }
+
+    // Training State
+    public trainingPhase: TrainingPhase = 'IDLE';
+    public trainingConfig: TrainingProtocolConfig = {
+        iterations: 50,
+        runsPerConcept: 5,
+        ticksPerSample: 500,
+        settleTime: 100
+    };
+    private trainingQueue: any[] = [];
+    private trainingStepIndex: number = 0;
+    private trainingTick: number = 0;
+    private currentTrainingSample: any = null;
+
+    public get currentSampleIndex(): number { return this.trainingStepIndex; }
+
+    public setTrainingConfig(config: Partial<TrainingProtocolConfig>) {
+        this.trainingConfig = { ...this.trainingConfig, ...config };
+    }
+
+    public startTrainingPhase(phase: TrainingPhase, data: any[]) {
+        this.trainingPhase = phase;
+        this.trainingQueue = this.buildTrainingQueue(data);
+        this.trainingStepIndex = 0;
+        this.trainingTick = 0;
+        console.log(`[Training] Started Phase: ${phase} with ${this.trainingQueue.length} samples.`);
+    }
+
+    public stopTraining() {
+        this.trainingPhase = 'IDLE';
+        this.currentTrainingSample = null;
+    }
+
+    private buildTrainingQueue(data: any[]): any[] {
+        // Flatten data based on runsPerConcept
+        // Data should have { inputs: Map<moduleId, vector>, label: string }
+        // For now, assume 'data' is already pre-processed input vectors?
+        // Or data is the Raw Rows? Let's assume Raw Rows for now.
+        const queue: any[] = [];
+        // Helper to shuffle
+        const shuffle = (array: any[]) => array.sort(() => Math.random() - 0.5);
+
+        // We probably want to shuffle the concepts, then repeat?
+        // Or repeat then shuffle? "Randomized list of all training samples"
+        // Let's create the full deck then shuffle it.
+        for (let i = 0; i < this.trainingConfig.iterations; i++) {
+            // For each iteration (epochish), we want to show every concept 'runsPerConcept' times?
+            // Or 'iterations' IS the total loops?
+            // Plan says: "Training Iterations: How many times the full dataset is shown"
+            // "Runs Per Concept: How many times a single specific input is repeated in one batch"
+            // Wait, if Runs Per Concept is 5, do we show Apple 5 times in a row? Or just 5 Apples in the deck?
+            // "Create a randomized list... repeated by Runs Per Concept" usually means 5 Apples distributed randomly.
+
+            // Let's produce ONE 'epoch' of cards
+            const deck: any[] = [];
+            data.forEach(row => {
+                for (let r = 0; r < this.trainingConfig.runsPerConcept; r++) {
+                    deck.push(row);
+                }
+            });
+            shuffle(deck);
+            queue.push(...deck);
+        }
+        return queue;
+    }
+
+    public forceNodePotential(nodeId: string, value: number) {
+        const node = this.nodes.get(nodeId);
+        if (node) {
+            node.potential = value; // Force potential
+            if (value >= (node.threshold || 1.0)) {
+                // We don't necessarily force 'isFiring' here,
+                // the main loop check (potential >= threshold) handles firing logic.
+                // But if we set it AFTER the check, it might not fire until next tick.
+                // Setting potential high is usually enough for next tick.
+                // If we want INSTANT fire, we might need to set isFiring=true but that skips refractory logic.
+                // Safest is to set Potential high and let the loop handle firing.
+            }
+        }
+    }
+
+    // Called inside update()
+    private updateTraining() {
+        if (this.trainingPhase === 'IDLE') return;
+
+        // 1. Check if we need to load next sample
+        if (this.trainingTick >= this.trainingConfig.ticksPerSample || this.trainingStepIndex === 0 && this.trainingTick === 0 && !this.currentTrainingSample) {
+            if (this.trainingStepIndex >= this.trainingQueue.length) {
+                console.log(`[Training] Phase ${this.trainingPhase} Complete.`);
+                this.stopTraining();
+                return;
+            }
+
+            // Load Next
+            this.currentTrainingSample = this.trainingQueue[this.trainingStepIndex];
+            this.trainingStepIndex++;
+            this.trainingTick = 0;
+
+            // 0. Training Steps
+            this.updateTraining();
+
+            // 1. Update Potentials
+            this.nodes.forEach(n => {
+                n.potential = 0;
+                n.isFiring = false;
+                n.refractoryTimer = 0;
+                // Don't reset weights!
+            });
+
+            // Apply Inputs (This needs to persist for TicksPerSample? Or Pulse once?)
+            // "Set Inputs: Apply the pattern to Input Nodes."
+            // Usually constant current or high frequency pulsing.
+            // We need to know WHICH modules to stimulate.
+            // This logic needs to hook into the 'TrainingModule' logic which parses the CSV row.
+            // For now, we'll assume we have a helper to 'ApplyRowToInputs'.
+            this.applyTrainingInput(this.currentTrainingSample);
+        }
+
+        // 2. Training Logic per Tick
+        this.trainingTick++;
+
+        // Keep inputs active? (If they are manual inputs, setting them once might be enough if they don't decay instantly?)
+        // Input nodes usually decay. So we might need to "Force Input" every tick or use "Sustained" input nodes.
+        // Or re-apply pulse.
+        // Let's re-apply inputs every tick for stability?
+        // Or assume the input helper sets a property that lasts.
+        this.applyTrainingInput(this.currentTrainingSample); // Re-apply to sustain inputs
+
+        // 3. Phase 2: Teacher Forcing
+        if (this.trainingPhase === 'ASSOCIATION') {
+            if (this.trainingTick > this.trainingConfig.settleTime) {
+                // FORCE OUTPUT
+                const label = this.currentTrainingSample?.Word; // Assume 'Word' is the key
+                if (label) {
+                    let mapping = this.trainingConfig.labelMappings ? this.trainingConfig.labelMappings[label] : undefined;
+
+                    // DYNAMIC POPULATION: If mapping missing, try to find Linked Output and Create Node
+                    if (!mapping && this.trainingConfig.targetOutputId) {
+                        const outModId = this.trainingConfig.targetOutputId;
+                        // Check if node exists for this label?
+                        // We need to know the index.
+                        const outModNodes = this.getModuleNodes(outModId);
+                        // Find by label? BaseNode has 'label'.
+                        let targetNode = outModNodes.find(n => n.label === label);
+
+                        if (!targetNode) {
+                            // Create New Node
+                            const newIndex = outModNodes.length;
+                            const newNodeId = `${outModId}-${newIndex}`;
+                            const config = this.modules.get(outModId);
+                            if (config) {
+                                // Calculate position
+                                const nodesPerRow = 5; // Grid layout?
+                                const row = Math.floor(newIndex / nodesPerRow);
+                                const col = newIndex % nodesPerRow;
+
+                                // Default Output Vertical Column Layout?
+                                // If it is LEARNED_OUTPUT, maybe we do grid or spiral?
+                                // Let's simplify: Vertical stack appending.
+                                const height = config.height || 600;
+                                const startY = config.y - (height / 2);
+                                const stepY = 40; // Fixed spacing
+
+                                this.addNode({
+                                    id: newNodeId,
+                                    type: NodeType.LEARNED,
+                                    x: config.x,
+                                    y: startY + (newIndex * stepY), // Append to bottom
+                                    label: label,
+                                    activationType: 'SUSTAINED', // Learned Outputs usually sustained?
+                                    decay: 0.1,
+                                    refractoryPeriod: 0
+                                });
+                                this.nodeModuleMap.set(newNodeId, outModId);
+
+                                // Update Mapping in Config
+                                if (!this.trainingConfig.labelMappings) this.trainingConfig.labelMappings = {};
+                                this.trainingConfig.labelMappings[label] = { moduleId: outModId, nodeIndex: newIndex };
+                                mapping = this.trainingConfig.labelMappings[label];
+
+                                // Auto-connect from Brain? 
+                                // Ideally, all Brain nodes project to ALL Output nodes.
+                                // We need to ensure connectivity.
+                                if (this.trainingConfig.targetBrainId) {
+                                    this.connectModules(this.trainingConfig.targetBrainId, outModId, 'ALL', 'ALL', 100, 0);
+                                    // This might double-connect existing nodes? connectModules usually allows duplicates or checks?
+                                    // Our connectModules is naive, it might add duplicate connections.
+                                    // Ideally we only connect the NEW node.
+                                    // Let's implement specific connection for this new node.
+                                    const brainNodes = this.getModuleNodes(this.trainingConfig.targetBrainId);
+                                    brainNodes.forEach(src => {
+                                        this.addConnection({
+                                            id: `c-${src.id}-${newNodeId}-${Date.now()}`,
+                                            sourceId: src.id,
+                                            targetId: newNodeId,
+                                            weight: (Math.random() - 0.5) * 0.4
+                                        });
+                                    });
+                                }
+                            }
+                        } else {
+                            // Update mapping if it was missing but node existed
+                            // (Shouldn't happen if config is sync, but safety)
+                            const idx = parseInt(targetNode.id.split('-').pop() || '0');
+                            if (!this.trainingConfig.labelMappings) this.trainingConfig.labelMappings = {};
+                            this.trainingConfig.labelMappings[label] = { moduleId: outModId, nodeIndex: idx };
+                            mapping = this.trainingConfig.labelMappings[label];
+                        }
+                    }
+
+                    if (mapping) {
+                        const targetNodeId = `${mapping.moduleId}-${mapping.nodeIndex}`;
+                        this.forceNodePotential(targetNodeId, 2.0); // Super-threshold
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Sensitivity Analysis: "Reverse Check"
+     * Calculates the impact of each Concept Node on a specific Subject Node.
+     * Score = Sum(Weight_Concept->Brain * Weight_Brain->Subject)
+     */
+    public analyzeSubject(subjectNodeId: string): { conceptId: string, label: string, score: number }[] {
+        const subjectNode = this.nodes.get(subjectNodeId);
+        if (!subjectNode) return [];
+
+        const incomingToSubject = this.incoming.get(subjectNodeId) || [];
+        const scores = new Map<string, number>();
+
+        // 1. Iterate all Brain nodes connected to Subject
+        incomingToSubject.forEach(connBrainToSub => {
+            const brainNodeId = connBrainToSub.sourceId;
+            const weightBrainToSub = connBrainToSub.weight;
+
+            // 2. Iterate all Concept nodes connected to Brain node
+            const incomingToBrain = this.incoming.get(brainNodeId) || [];
+            incomingToBrain.forEach(connConceptToBrain => {
+                const conceptNodeId = connConceptToBrain.sourceId;
+                const conceptNode = this.nodes.get(conceptNodeId);
+
+                if (conceptNode && conceptNode.type === NodeType.CONCEPT) {
+                    const weightConceptToBrain = connConceptToBrain.weight;
+
+                    // 3. Calculate Path Score
+                    // Using absolute weight? Or signed?
+                    // Usually signed matters (Excitation vs Inhibition).
+                    // But we want "Strongest Association". 
+                    // Let's use Signed Score. Positive = Strong Association.
+                    const pathScore = weightConceptToBrain * weightBrainToSub;
+
+                    const current = scores.get(conceptNodeId) || 0;
+                    scores.set(conceptNodeId, current + pathScore);
+                }
+            });
+        });
+
+        // 4. Format and Sort
+        return Array.from(scores.entries()).map(([id, score]) => {
+            const node = this.nodes.get(id);
+            return {
+                conceptId: id,
+                label: node?.label || id,
+                score: score
+            };
+        }).sort((a, b) => b.score - a.score);
+    }
+
+    /**
+     * Run Inference (Forward Check)
+     * Forces specific Concept nodes to fire and runs simulation for N ticks.
+     */
+    public runInference(activeConceptNodeIds: string[], ticks: number = 20) {
+        // Reset state first? Or keep context? 
+        // Helper to verify. Let's just force inputs.
+
+        // 1. Reset Activations (Optional, maybe user wants clean slate)
+        this.resetState();
+
+        // 2. Queue inputs
+        // We'll use a temporary "manual override" map or just force per tick?
+        // Let's run the loop synchronously here for 'ticks' count.
+        for (let i = 0; i < ticks; i++) {
+            this.tickCount++;
+
+            // Force Concepts
+            activeConceptNodeIds.forEach(id => {
+                const n = this.nodes.get(id);
+                if (n) {
+                    n.potential = 2.0;
+                    n.isFiring = true;
+                    n.activation = 1.0;
+                }
+            });
+
+            // Run Update Logic (Step)
+            // But 'update' calls 'updateTraining'. We might want to skip training logic?
+            // If trainingPhase is IDLE, updateTraining returns.
+            // We assume Verification is done when IDLE.
+
+            // We need to call step() logic specifically without incrementing global tick count?
+            // Or just call update()?
+            // If we call update(), visualizer might get out of sync if we do it in a burst.
+            // But for "Calculate Result", instantaneous is fine.
+
+            // We need to duplicate 'step' logic OR use 'step' and allow side effects.
+            // Let's call the internal logic of step.
+            // Copied logic from step() for safety since we can't easily extract it without refactor.
+            // actually, refactoring step() to public step() and calling it is better.
+            // But we renamed step() to update().
+            // Let's just call update().
+            this.update();
+        }
+
+        // Return top active outputs?
+        const outputs = Array.from(this.nodes.values())
+            .filter(n => n.type === NodeType.OUTPUT || n.type === NodeType.LEARNED)
+            .map(n => ({ id: n.id, label: n.label, activation: n.activation }))
+            .sort((a, b) => b.activation - a.activation);
+
+        return outputs;
+    }
+
+    private applyTrainingInput(row: any) {
+        if (!row) return;
+        // Logic to parse row keys (Color, Shape...) and fire corresponding input modules
+        // This relies on the 'conceptMappings' in the Training Module Config.
+        // We'll search for the Training Module to get the config?
+        // Faster: Store mappings in TrainingProtocolConfig or dedicated cache.
+        // Use 'neuralNet.modules' to find modules with 'trainingConfig'.
+
+        // This part is tricky without direct access to the CSV parsing mapping logic. 
+        // We need to know: Column "Color" -> Module "55-color-input".
+        // And Value "1;5" -> Fire Nodes 1 and 5.
+
+        // Let's iterate modules to find mappings.
+        this.modules.forEach(mod => {
+            if (mod.type === 'TRAINING_DATA' && mod.trainingConfig) {
+                const mappings = mod.trainingConfig.conceptMappings;
+                Object.keys(mappings).forEach(modId => {
+                    const map = mappings[modId];
+                    const colName = map.column;
+                    const val = row[colName]; // "1;5"
+                    if (val) {
+                        const indices = val.toString().split(map.delimiter).map((s: string) => parseInt(s.trim()));
+                        indices.forEach((idx: number) => {
+                            if (!isNaN(idx)) {
+                                // Input Nodes are usually 1-indexed in CSV? Or 0? 
+                                // Our Concept files have ID starting at 1.
+                                // Our Nodes are 0-indexed (modId-0).
+                                // Let's assume indices need -1 offset if data is 1-based.
+                                // DATA: ID 1 = Node 0.
+                                const nodeId = `${modId}-${idx - 1}`; // Assuming 1-based IDs in CSV
+                                const node = this.nodes.get(nodeId);
+                                if (node) {
+                                    node.potential = 2.0; // Force Fire Input
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     public connectModules(
@@ -1178,7 +1543,8 @@ export class NeuralNet {
         }
     }
 
-    public step() {
+    public update() {
+        this.updateTraining();
         this.tickCount++;
         const inputSums = new Map<string, number>();
 
@@ -1365,7 +1731,13 @@ export class NeuralNet {
         });
 
 
-        // 3. Hebbian Learning (Phase 12)
+        // 3. Hebbian Learning
+        // Phase-Gating logic
+        const isImprinting = this.trainingPhase === 'IMPRINTING';
+        const isAssociation = this.trainingPhase === 'ASSOCIATION';
+        // If IDLE, we might default to one or the other, or User Config. 
+        // For now, let's assume if IDLE, use default module settings (usually enabled for Brain-Brain).
+
         this.modules.forEach(module => {
             if (module.type === 'BRAIN' && module.hebbianLearning) {
                 const rate = module.learningRate || 0.01;
@@ -1373,14 +1745,41 @@ export class NeuralNet {
 
                 // Optimization: Filter global connections for internal ones
                 // Note: In a high-performance scenario, we would cache this list.
-                const internalConns = this.connections.filter(c =>
-                    c.sourceId.startsWith(moduleId) && c.targetId.startsWith(moduleId)
-                );
+                // Modified: Now we verify phase compatibility.
+
+                // PHASE 1 (Imprinting): Plasticity for Internal (Brain-Brain) ONLY.
+                // PHASE 2 (Association): Plasticity for Outbound (Brain-Output) ONLY/Primary.
+                // IDLE: Default behavior (Internal only usually).
+
+                const relevantConns = this.connections.filter(c => {
+                    const isInternal = c.sourceId.startsWith(moduleId) && c.targetId.startsWith(moduleId);
+                    const isOutboundToOutput = c.sourceId.startsWith(moduleId) && (
+                        this.nodes.get(c.targetId)?.type === 'OUTPUT' ||
+                        this.nodes.get(c.targetId)?.activationType === 'SUSTAINED'
+                    );
+
+                    if (isImprinting) {
+                        return isInternal; // Only internal learns
+                    } else if (isAssociation) {
+                        // Association: We want to learn the MAP to the Output.
+                        // Should internal learning stop? "Freezing" implies yes.
+                        return isOutboundToOutput;
+                    } else {
+                        // IDLE (Standard Running)
+                        // Default Hebbian usually implies Internal clustering.
+                        // Maybe Outbound too if we want online learning?
+                        // For now, keep original behavior: Internal Only (assumed) or All?
+                        // Original code filter:
+                        // const internalConns = this.connections.filter(c => c.sourceId.startsWith(moduleId) && c.targetId.startsWith(moduleId));
+                        // So original was Internal Only.
+                        return isInternal;
+                    }
+                });
 
                 const pruningThreshold = module.pruningThreshold !== undefined ? module.pruningThreshold : 0.05;
                 const connsToRemove: Set<string> = new Set();
 
-                internalConns.forEach(conn => {
+                relevantConns.forEach(conn => {
                     const src = this.nodes.get(conn.sourceId);
                     const tgt = this.nodes.get(conn.targetId);
 
@@ -1420,35 +1819,44 @@ export class NeuralNet {
                         }
 
                         // 2. Check Target Sum (Capacity)
-                        const targetSum = module.sustainability?.targetSum || 3.0; // Default to 3
-                        const incomingToTgt = this.incoming.get(tgt.id) || [];
+                        // Note: For Association (Brain->Output), the Output Node is the Target.
+                        // It might NOT be part of this 'module'. 
+                        // If Tgt is Outside, we rely on Tgt's own regulation? 
+                        // Or simplistic unbounded growth for Output?
+                        // User Request: "Brain-to-Output Connections: ENABLED (High Learning Rate)."
+                        // It implies standard Hebbian.
+                        // But Subtractive Norm usually applies to the receiving dendritic tree.
+                        // If Target is OutputNode, it enters here.
 
-                        // RESTRICTION: Only consider INTERNAL connections for the budget
-                        const internalIncoming = incomingToTgt.filter(c => c.sourceId.startsWith(moduleId));
+                        // IF Phase is Association, we might skip Normalization for Outputs 
+                        // OR we enforce it on the Output Node's incoming?
+                        // Let's keep it simple: Apply normalization if Configured.
+                        // If Target is SUSTAINED OUTPUT, does it have 'sustainability'?
+                        // Probably not. So skip norm for cross-module connections if not configured.
 
-                        let currentTotal = 0;
-                        internalIncoming.forEach(c => currentTotal += Math.abs(c.weight));
+                        const targetModule = this.modules.get(tgt.id.split('-')[0]); // Hacky ID parse?
+                        // Or just check if Tgt is in THIS module (Internal).
+                        const isInternal = tgt.id.startsWith(moduleId);
 
-                        // 3. Conditional Tax: Only tax if we are exceeding the budget
-                        if (currentTotal > targetSum) {
-                            // "Rich get richer, but everyone pays the tax to stay under the ceiling."
-                            // We distribute the 'boost' cost (or the excess) across everyone.
-                            // To stabilize AT targetSum, strictly speaking we should remove 'excess'.
-                            // But simply removing 'boost' (the recent addition) is the "Subtractive Normalization" philosophy
-                            // which stabilizes the sum at the point where it becomes active (approx targetSum).
+                        if (isInternal && module.sustainability) {
+                            const targetSum = module.sustainability.targetSum || 3.0;
+                            const incomingToTgt = this.incoming.get(tgt.id) || [];
+                            // RESTRICTION: Only consider INTERNAL connections for the budget
+                            const internalIncoming = incomingToTgt.filter(c => c.sourceId.startsWith(moduleId));
 
-                            if (internalIncoming.length > 0) {
-                                const tax = boost / internalIncoming.length;
+                            let currentTotal = 0;
+                            internalIncoming.forEach(c => currentTotal += Math.abs(c.weight));
 
-                                internalIncoming.forEach(c => {
-                                    c.weight -= tax;
-                                    // Allow negative (Inhibitory) weights - No Clamp
-
-                                    // CHECK PRUNING
-                                    if (Math.abs(c.weight) < pruningThreshold) {
-                                        connsToRemove.add(c.id);
-                                    }
-                                });
+                            if (currentTotal > targetSum) {
+                                if (internalIncoming.length > 0) {
+                                    const tax = boost / internalIncoming.length;
+                                    internalIncoming.forEach(c => {
+                                        c.weight -= tax;
+                                        if (Math.abs(c.weight) < pruningThreshold) {
+                                            connsToRemove.add(c.id);
+                                        }
+                                    });
+                                }
                             }
                         }
 
