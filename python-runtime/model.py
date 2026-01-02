@@ -167,6 +167,11 @@ class NeuralNet:
             valid_keys = Node.__annotations__.keys()
             filtered = {k: v for k, v in n_data.items() if k in valid_keys}
             node = Node(**filtered)
+            
+            # CRITICAL FIX: Enforce IO behavior to match TypeScript
+            if node.type in ('OUTPUT', 'INTERPRETATION'):
+                node.decay = 1.0
+                
             self.nodes[node.id] = node
 
         # Rebuild Node->Module Map

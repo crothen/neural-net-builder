@@ -221,13 +221,11 @@ export class Renderer {
 
             // --- CUSTOM VISUALIZATION FOR COLLAPSED CONCEPT (TRIANGLE) ---
             if (module.type === 'CONCEPT' && module.collapsed) {
-                const r = 30;
+                const r = 15; // Smaller
                 this.ctx.beginPath();
-                // Triangle pointing right (or determines based on connections?) - Just generic triangle for now
-                // Pointing Right: (x+r, y), (x-r, y-r), (x-r, y+r)
-                this.ctx.moveTo(module.x + r, module.y);
-                this.ctx.lineTo(module.x - r, module.y - r);
-                this.ctx.lineTo(module.x - r, module.y + r);
+                this.ctx.moveTo(module.x, module.y - r); // Top
+                this.ctx.lineTo(module.x - r, module.y + r * 0.8); // Bot Left
+                this.ctx.lineTo(module.x + r, module.y + r * 0.8); // Bot Right
                 this.ctx.closePath();
 
                 this.ctx.fillStyle = '#444';
@@ -236,14 +234,7 @@ export class Renderer {
                 this.ctx.strokeStyle = '#aaa';
                 this.ctx.stroke();
 
-                // Icon / Label
-                this.ctx.fillStyle = '#fff';
-                this.ctx.font = '12px "Inter", sans-serif';
-                this.ctx.textAlign = 'center';
-                this.ctx.textBaseline = 'middle';
-                // Clip name if too long
-                const displayName = module.name || 'Concept';
-                this.ctx.fillText(displayName.substring(0, 8), module.x - 5, module.y);
+                // No text inside triangle as requested
             }
 
             // Draw Module Label (Prominent)
@@ -263,7 +254,9 @@ export class Renderer {
                 // For Brain, radius. For Layers, height/2.
                 const labelY = module.type === 'BRAIN'
                     ? module.y - (module.radius || 200) - 15
-                    : module.y - (module.height || 600) / 2 - 15;
+                    : module.type === 'CONCEPT' && module.collapsed
+                        ? module.y - 25 // Just above the triangle (r=15)
+                        : module.y - (module.height || 600) / 2 - 15;
 
                 // Use name if available, else label
                 this.ctx.fillText(module.name || module.label!, module.x, labelY);

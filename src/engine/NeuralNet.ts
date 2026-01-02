@@ -24,6 +24,16 @@ export class NeuralNet {
         this.incoming.set(node.id, []);
     }
 
+    private rebuildIncomingMap() {
+        this.incoming.clear();
+        this.nodes.forEach(n => this.incoming.set(n.id, []));
+        this.connections.forEach(conn => {
+            const list = this.incoming.get(conn.targetId);
+            if (list) list.push(conn);
+            else this.incoming.set(conn.targetId, [conn]);
+        });
+    }
+
     public addConnection(config: ConnectionConfig) {
         const conn = new Connection(config);
         this.connections.push(conn);
@@ -35,6 +45,35 @@ export class NeuralNet {
         } else {
             this.incoming.set(conn.targetId, [conn]);
         }
+
+        // USER RULE: If target is Sustained Output, normalize weights immediately
+        this.normalizeSustainedWeights(conn.targetId);
+    }
+
+    /**
+     * Checks if the node belongs to a SUSTAINED_OUTPUT module.
+     * If so, sets all incoming weights to (MaxPotential / ConnectionCount).
+     */
+    public normalizeSustainedWeights(nodeId: string) {
+        const moduleId = this.nodeModuleMap.get(nodeId);
+        if (!moduleId) return;
+
+        const module = this.modules.get(moduleId);
+        if (!module || module.type !== 'SUSTAINED_OUTPUT') return;
+
+        const node = this.nodes.get(nodeId);
+        if (!node) return;
+
+        const incoming = this.incoming.get(nodeId) || [];
+        if (incoming.length === 0) return;
+
+        const gain = module.gain !== undefined ? module.gain : 3.0; // Default gain 3.0
+        const newWeight = gain / incoming.length;
+
+        // Update all incoming weights
+        incoming.forEach(conn => {
+            conn.weight = newWeight;
+        });
     }
 
     public addModule(config: ModuleConfig) {
@@ -74,22 +113,23 @@ export class NeuralNet {
                     // Pass missing parameters to Node
                     refractoryPeriod: config.refractoryPeriod,
                     threshold: config.threshold,
-                    bias: config.bias
+                    bias: config.bias,
+                    maxPotential: config.maxPotential
                 });
                 this.nodeModuleMap.set(nodeId, config.id);
             }
 
             // Recurrent Internal Connections
             this.rewireInternalConnections(config.id);
-            // Recurrent Internal Connections
-            this.rewireInternalConnections(config.id);
         } else if (config.type === 'CONCEPT') {
             // CONCEPT: Nodes defined by ID/Label list
             const concepts = config.concepts || [];
             // Default layout: Vertical column
-            const height = config.height || (concepts.length * 60); // Dynamic height
+            // Default layout: Vertical column
+            const height = config.height || (concepts.length * 40); // Increased spacing for readability
             const startY = config.y - (height / 2);
-            const stepY = concepts.length > 0 ? height / concepts.length : 60;
+            // Smaller minimum step
+            const stepY = concepts.length > 0 ? height / concepts.length : 40;
 
             concepts.forEach((concept, i) => {
                 const nodeId = `${config.id}-${concept.id}`; // Use concept ID if unique, or index? 
@@ -105,7 +145,8 @@ export class NeuralNet {
                     decay: config.decay || 0.1,
                     refractoryPeriod: config.refractoryPeriod,
                     threshold: config.threshold,
-                    bias: config.bias
+                    bias: config.bias,
+                    maxPotential: config.maxPotential
                 });
                 this.nodeModuleMap.set(nodeId, config.id);
             });
@@ -124,8 +165,14 @@ export class NeuralNet {
             const startX = config.x - ((depth - 1) * widthSpacing) / 2;
 
             let nodeType: NodeType = NodeType.HIDDEN;
+            let activationType = config.activationType || 'PULSE';
+
             if (config.type === 'INPUT') nodeType = NodeType.INPUT;
             if (config.type === 'OUTPUT') nodeType = NodeType.OUTPUT;
+            if (config.type === 'SUSTAINED_OUTPUT') {
+                nodeType = NodeType.OUTPUT;
+                activationType = 'SUSTAINED'; // Enforce sustained
+            }
             if (config.type === 'LAYER') nodeType = NodeType.INTERPRETATION;
 
             for (let d = 0; d < depth; d++) {
@@ -139,13 +186,14 @@ export class NeuralNet {
                         x: colX,
                         y: startY + stepY * (i + 1),
                         label: '',
-                        activationType: config.activationType || 'PULSE',
+                        activationType: activationType,
                         decay: config.decay,
                         // Pass missing parameters to Node
                         refractoryPeriod: config.refractoryPeriod,
                         threshold: config.threshold,
                         bias: config.bias,
-                        inputFrequency: config.inputFrequency
+                        inputFrequency: config.inputFrequency,
+                        maxPotential: config.maxPotential
                     });
                     this.nodeModuleMap.set(nodeId, config.id);
                 }
@@ -160,7 +208,7 @@ export class NeuralNet {
                                 id: `c-${srcId}-${tgtId}`,
                                 sourceId: srcId,
                                 targetId: tgtId,
-                                weight: Math.random() // Positive only
+                                weight: (Math.random() * 2 - 1) * 0.5
                             });
                         }
                     }
@@ -168,6 +216,8 @@ export class NeuralNet {
             }
         }
     }
+
+
 
     public populateLearnedOutput(targetId: string, sourceConceptId: string) {
         const target = this.modules.get(targetId);
@@ -322,6 +372,8 @@ export class NeuralNet {
                 if (newConfig.threshold !== undefined) node.threshold = newConfig.threshold;
                 if (newConfig.decay !== undefined) node.decay = newConfig.decay;
                 if (newConfig.refractoryPeriod !== undefined) node.refractoryPeriod = Number(newConfig.refractoryPeriod);
+                if (newConfig.fatigue !== undefined) node.fatigue = newConfig.fatigue;
+                if (newConfig.recovery !== undefined) node.recovery = newConfig.recovery;
                 if (newConfig.activationType !== undefined) {
                     const typeInput = String(newConfig.activationType).toUpperCase();
                     node.activationType = (typeInput === 'SUSTAINED') ? 'SUSTAINED' : 'PULSE';
@@ -337,6 +389,13 @@ export class NeuralNet {
             if (needsRewiring) {
                 this.rewireInternalConnections(id);
             }
+
+            // USER RULE: Update weights if Max Potential OR Gain changes for SUSTAINED_OUTPUT
+            if ((newConfig.maxPotential !== undefined || newConfig.gain !== undefined) && module.type === 'SUSTAINED_OUTPUT') {
+                const relevantNodes = Array.from(this.nodes.values()).filter(n => n.id.startsWith(id + '-'));
+                relevantNodes.forEach(node => this.normalizeSustainedWeights(node.id));
+            }
+
             return;
         }
 
@@ -781,6 +840,11 @@ export class NeuralNet {
             }
         }
 
+        // Check Source Type for Weight Initialization
+        const sourceMod = this.modules.get(sourceId);
+        const isSourceSustainedOutput = sourceMod && sourceMod.type === 'SUSTAINED_OUTPUT';
+        const initialWeight = isSourceSustainedOutput ? 1.0 : undefined; // Undefined = Random logic later
+
         sourceNodes.forEach((src, srcIndex) => {
             // Determine Candidate Pool for this Source Node
             let candidates: Node[] = [...targetNodes];
@@ -850,7 +914,7 @@ export class NeuralNet {
                     id: `c-${src.id}-${tgt.id}`,
                     sourceId: src.id,
                     targetId: tgt.id,
-                    weight: Math.random() // Positive only
+                    weight: initialWeight !== undefined ? initialWeight : Math.random() // Positive only
                 });
                 connectedTargets.add(tgt.id);
             }
@@ -972,16 +1036,69 @@ export class NeuralNet {
 
             incomingConns.forEach(conn => {
                 const sourceNode = this.nodes.get(conn.sourceId);
-                if (sourceNode) {
-                    const rawSignal = sourceNode.activation * conn.weight;
+                const sourceModId = this.nodeModuleMap.get(conn.sourceId);
 
-                    const sourceModId = this.nodeModuleMap.get(sourceNode.id);
+                if (sourceNode) {
+                    let sourceIsSustained = sourceNode.activationType === 'SUSTAINED'; // Check flag, assuming BRAIN/SUSTAINED_OUTPUT have this
+
+                    let rawSignal = 0;
+
+                    // SPECIAL LOGIC: Sustained Source
+                    if (sourceIsSustained && sourceModId) {
+                        const sourceMod = this.modules.get(sourceModId);
+
+                        // Check if it is strictly a SUSTAINED_OUTPUT module (or Brain?)
+                        // "Importantantly, this is only the case if the connection is to another Sustained node" implies:
+                        // If Source is Sustained_Output -> Target Sustained_Output: Add Signal
+                        // If Source is Sustained_Output -> Target Pulse: Gate Signal
+
+                        const isSourceSustainedOutput = sourceMod && sourceMod.type === 'SUSTAINED_OUTPUT';
+                        const isTargetSustainedOutput = node.activationType === 'SUSTAINED'; // "another Sustained node"
+
+                        if (isSourceSustainedOutput) {
+                            if (isTargetSustainedOutput) {
+                                // Logic 1: Sustained -> Sustained
+                                // "calculate the increase in potential. So if a brain node fires, it fires 1, it is then multiplied by the weight of the connection."
+                                // Note: Sustained Nodes always 'fire' if they have potential? Or only if firing?
+                                // "if a brain node fires, it fires 1"
+
+                                if (sourceNode.isFiring) {
+                                    rawSignal = 1.0 * conn.weight;
+                                }
+                            } else {
+                                // Logic 2: Sustained -> Pulse ("normal")
+                                // "it only fires if the weight is less than its current potential" (Gate condition)
+                                if (sourceNode.potential > conn.weight) {
+                                    if (sourceNode.isFiring) {
+                                        rawSignal = 1.0 * conn.weight;
+                                    }
+                                } else {
+                                    rawSignal = 0; // Gated
+                                }
+                            }
+                        } else {
+                            // Standard Brain/Other Sustained
+                            rawSignal = sourceNode.activation * conn.weight;
+                        }
+
+                    } else {
+                        // Standard Pulse Source
+                        rawSignal = sourceNode.activation * conn.weight;
+                    }
+
                     const targetModId = this.nodeModuleMap.get(node.id);
 
                     let isExternalBrain = false;
                     if (sourceModId && sourceModId !== targetModId) {
                         const sourceMod = this.modules.get(sourceModId);
-                        if (sourceMod && sourceMod.type === 'BRAIN') {
+                        // Apply normalization ONLY if NOT Sustained Output source
+                        // "please remove the calculation at runtime for the sustained nodes" check
+                        // EDIT: Also check TARGET. If target is SUSTAINED_OUTPUT, we SKIP external brain normalization
+                        // because we pre-calculated the weights to be 'Gain / Count'.
+                        const targetMod = this.modules.get(targetModId || '');
+                        const isTargetSustainedOutput = targetMod && targetMod.type === 'SUSTAINED_OUTPUT';
+
+                        if (sourceMod && sourceMod.type === 'BRAIN' && !isTargetSustainedOutput) {
                             isExternalBrain = true;
                         }
                     }
@@ -1080,7 +1197,7 @@ export class NeuralNet {
                         conn.weight += delta;
 
                         // Limit Max Weight
-                        if (conn.weight > 2.0) conn.weight = 2.0;
+                        if (conn.weight > 1.0) conn.weight = 1.0;
 
                         // PRUNING
                         if (Math.abs(conn.weight) < pruningThreshold) {
@@ -1152,14 +1269,7 @@ export class NeuralNet {
         this.moduleConnections.delete(`${modId2}-${modId1}`);
     }
 
-    private rebuildIncomingMap() {
-        this.incoming.clear();
-        this.connections.forEach(c => {
-            const list = this.incoming.get(c.targetId);
-            if (list) list.push(c);
-            else this.incoming.set(c.targetId, [c]);
-        });
-    }
+
 
     public getNodeConnections(nodeId: string) {
         // Retrieve all connections where this node is source or target
@@ -1229,8 +1339,15 @@ export class NeuralNet {
 
             // Better check based on our Logic:
             if (n.type === NodeType.OUTPUT || n.type === NodeType.INTERPRETATION) {
-                // FORCE these to stay at 1.0
-                n.decay = 1.0;
+                // FORCE Pulse Outputs/Layers to stay at 1.0 (Instant)
+                // Exception: Sustained Output should obey global decay (or its own decay?)
+                // User Request: "Decaying should apply to all Sustained Nodes"
+                // Assuming this means they participate in the global setting, OR they just shouldn't be forced to 1.0.
+                if (n.activationType === 'SUSTAINED') {
+                    n.decay = decay; // Apply global decay to Sustained Outputs too
+                } else {
+                    n.decay = 1.0;
+                }
             } else if (n.type !== NodeType.INPUT) {
                 // Only Brain nodes get the slider value
                 n.decay = decay;

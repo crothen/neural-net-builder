@@ -301,11 +301,27 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
             const wy = (pos.y - transform.y) / transform.k;
 
             for (const mod of netRef.current.modules.values()) {
-                if (mod.type === 'LEARNED_OUTPUT' || mod.type === 'TRAINING_DATA' || (mod.nodeCount === 0 && mod.type === 'CONCEPT')) {
-                    // It's a box
-                    const w = mod.width || 100; // Default width
-                    const h = mod.height || 600; // Default height
-                    // Renderer draws centered
+                if (mod.type === 'LEARNED_OUTPUT' || mod.type === 'TRAINING_DATA' || mod.type === 'CONCEPT') {
+                    // Check collapsed Concept specifically
+                    if (mod.type === 'CONCEPT' && mod.collapsed) {
+                        // Small hitbox for triangle (r=15) + label
+                        const r = 30; // generous hit radius
+                        const dist = Math.sqrt(Math.pow(wx - mod.x, 2) + Math.pow(wy - (mod.y - 10), 2));
+                        if (dist < r) {
+                            setDraggingModuleId(mod.id);
+                            dragStartRef.current = { x: wx - mod.x, y: wy - mod.y };
+                            if (onModuleSelect) onModuleSelect(mod.id);
+                            return;
+                        }
+                        continue;
+                    }
+
+                    // For others (or non-collapsed concept with 0 nodes?)
+                    if (mod.type === 'CONCEPT' && mod.nodeCount > 0 && !mod.collapsed) continue;
+
+                    // Standard Box Hitbox (Learned Output / Training Data / Empty Concept)
+                    const w = mod.width || 100;
+                    const h = mod.height || 600;
                     if (wx >= mod.x - w / 2 && wx <= mod.x + w / 2 &&
                         wy >= mod.y - h / 2 && wy <= mod.y + h / 2) {
 

@@ -41,7 +41,7 @@ function App() {
 
   // --- Creation State ---
   const [newModule, setNewModule] = useState<{
-    type: 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT' | 'CONCEPT' | 'LEARNED_OUTPUT' | 'TRAINING_DATA',
+    type: 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT' | 'SUSTAINED_OUTPUT' | 'CONCEPT' | 'LEARNED_OUTPUT' | 'TRAINING_DATA',
     nodes: number,
     depth: number,
     x: number,
@@ -149,39 +149,42 @@ function App() {
     const id = `${newModule.type.toLowerCase()}-${Date.now()}`;
     const displayName = newModule.name.trim() || id;
 
+    // Parse Concepts if needed
+    let parsedConcepts: { id: string; label: string }[] | undefined = undefined;
+    if (newModule.type === 'CONCEPT' && conceptCSV) {
+      parsedConcepts = conceptCSV.split('\n').filter(l => l.trim()).map((l, idx) => {
+        if (csvHasHeaders && idx === 0) return null;
+        const parts = l.split(conceptDelimiter);
+        if (parts.length <= Math.max(idColumnIndex, labelColumnIndex)) return null;
+        const cid = parts[idColumnIndex]?.trim();
+        const clog = parts[labelColumnIndex]?.trim();
+        if (!cid || !clog) return null;
+        return { id: cid, label: clog };
+      }).filter(c => c !== null) as { id: string; label: string }[];
+    }
+
     const config: ModuleConfig = {
       id,
       type: newModule.type,
       x: newModule.x,
       y: newModule.y,
-      nodeCount: newModule.nodes,
+      nodeCount: (newModule.type === 'CONCEPT' && parsedConcepts) ? parsedConcepts.length : newModule.nodes,
       // Constraint: Input always depth 1
       depth: newModule.type === 'INPUT' ? 1 : newModule.depth,
       label: displayName,
       name: displayName,
       activationType: newModule.type === 'BRAIN' ? 'SUSTAINED' : 'PULSE',
-      threshold: newModule.type === 'BRAIN' ? 0.5 : 0.5,
+      threshold: (newModule.type === 'BRAIN' || newModule.type === 'SUSTAINED_OUTPUT') ? 1.0 : 0.5,
+      maxPotential: (newModule.type === 'BRAIN' || newModule.type === 'SUSTAINED_OUTPUT') ? 3.0 : 4.0,
+      gain: newModule.type === 'SUSTAINED_OUTPUT' ? 3.0 : undefined,
+      decay: (newModule.type === 'BRAIN' || newModule.type === 'SUSTAINED_OUTPUT') ? 0.9 : 0.1,
       refractoryPeriod: newModule.type === 'BRAIN' ? 1 : 2,
       // Hebbian Default: Enable for Brains
       hebbianLearning: newModule.type === 'BRAIN' ? true : undefined,
       learningRate: newModule.type === 'BRAIN' ? 0.01 : undefined,
       radius: 200,
       height: 600,
-      concepts: newModule.type === 'CONCEPT' ? conceptCSV.split('\n').filter(l => l.trim()).map((l, idx) => {
-        // Skip header if needed
-        if (csvHasHeaders && idx === 0) return null;
-
-        const parts = l.split(conceptDelimiter);
-        // Ensure we have enough columns
-        if (parts.length <= Math.max(idColumnIndex, labelColumnIndex)) return null;
-
-        const cid = parts[idColumnIndex]?.trim();
-        const clog = parts[labelColumnIndex]?.trim();
-
-        if (!cid || !clog) return null;
-
-        return { id: cid, label: clog };
-      }).filter(c => c !== null) as { id: string; label: string }[] : undefined,
+      concepts: parsedConcepts,
 
       // Initialize Training Data with empty config
       trainingConfig: newModule.type === 'TRAINING_DATA' ? {
@@ -396,10 +399,25 @@ function App() {
                 <div className="input-row">
                   <label>
                     <div>Color <Tooltip text="Visual color tint" /></div>
+                    {/* Uncontrolled input with key to reset on module change.
+                            onChange updates Canvas directly (fast).
+                            onBlur syncs React state (slow).
+                        */}
                     <input
+                      key={`${selectedModule.id}-color`}
                       type="color"
-                      value={selectedModule.color || (selectedModule.type === 'INPUT' ? '#ff00ff' : selectedModule.type === 'OUTPUT' ? '#ffff00' : '#00ffff')}
-                      onChange={(e) => handleUpdateConfig(selectedModule.id, { color: e.target.value })}
+                      defaultValue={selectedModule.color || (selectedModule.type === 'INPUT' ? '#ff00ff' : selectedModule.type === 'OUTPUT' ? '#ffff00' : '#00ffff')}
+                      onInput={(e) => {
+                        const val = (e.target as HTMLInputElement).value;
+                        // Fast preview
+                        if (canvasRef.current) {
+                          canvasRef.current.updateModule(selectedModule.id, { color: val });
+                        }
+                      }}
+                      onBlur={(e) => {
+                        // Commit to state
+                        handleUpdateConfig(selectedModule.id, { color: e.target.value });
+                      }}
                       style={{ width: '100%', padding: '2px', height: '30px' }}
                     />
                   </label>
@@ -428,6 +446,37 @@ function App() {
                         onChange={(e) => handleUpdateConfig(selectedModule.id, { depth: parseInt(e.target.value) })}
                       />
                     </label>
+                  </div>
+                )}
+
+                {selectedModule.type === 'CONCEPT' && (
+                  <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #333' }}>
+                    {/* Concept Toggle */}
+                    <div className="toggle-container" style={{ marginBottom: '10px' }}>
+                      <span className="toggle-label">Show as Triangle <Tooltip text="Collapsed visualization" /></span>
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          checked={!!selectedModule.collapsed}
+                          onChange={(e) => handleUpdateConfig(selectedModule.id, { collapsed: e.target.checked })}
+                        />
+                        <span className="slider"></span>
+                      </label>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setConceptListModal({
+                          isOpen: true,
+                          moduleId: selectedModule.id,
+                          title: selectedModule.name || 'Concepts',
+                          concepts: selectedModule.concepts || []
+                        });
+                      }}
+                      style={{ width: '100%', background: '#444', height: 'auto', padding: '6px' }}
+                    >
+                      View Word List ({selectedModule.concepts?.length || 0})
+                    </button>
                   </div>
                 )}
 
@@ -534,14 +583,14 @@ function App() {
                   </div>
                 )}
 
-                {selectedModule.type !== 'INPUT' && selectedModule.type !== 'TRAINING_DATA' && (
+                {(selectedModule.type === 'BRAIN' || selectedModule.type === 'SUSTAINED_OUTPUT') && (
                   <div className="input-row">
                     <label>
-                      <div>Threshold: {selectedModule.threshold !== undefined ? selectedModule.threshold.toFixed(1) : '1.0'} <Tooltip text="Voltage required to fire (Lower = Sensitive)" /></div>
+                      <div>Firing-Threshold: {selectedModule.threshold !== undefined ? selectedModule.threshold.toFixed(1) : '1.0'} <Tooltip text="Voltage required to fire (Lower = Sensitive)" /></div>
                       <input
-                        type="range"
+                        type="number"
                         min="0.1"
-                        max="5.0"
+                        max="10.0"
                         step="0.1"
                         value={selectedModule.threshold !== undefined ? selectedModule.threshold : 1.0}
                         onChange={(e) => handleUpdateConfig(selectedModule.id, { threshold: parseFloat(e.target.value) })}
@@ -551,8 +600,25 @@ function App() {
                   </div>
                 )}
 
+                {selectedModule.type === 'SUSTAINED_OUTPUT' && (
+                  <div className="input-row">
+                    <label>
+                      <div>Input Gain: {selectedModule.gain || 3.0} <Tooltip text="Multiplier for incoming connection weights" /></div>
+                      <input
+                        type="number"
+                        min="0.1"
+                        max="10.0"
+                        step="0.1"
+                        value={selectedModule.gain !== undefined ? selectedModule.gain : 3.0}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { gain: parseFloat(e.target.value) })}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                )}
+
                 {/* REFRACTORY */}
-                {selectedModule.type !== 'TRAINING_DATA' && (
+                {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'OUTPUT' && selectedModule.type !== 'SUSTAINED_OUTPUT' && (
                   <div className="input-row">
                     <label>
                       <div>Refractory: {selectedModule.refractoryPeriod || 0}ms <Tooltip text="Cooldown after firing" /></div>
@@ -584,6 +650,71 @@ function App() {
                       />
                     </label>
                   </div>
+                )}
+                {(selectedModule.type === 'BRAIN' || selectedModule.type === 'SUSTAINED_OUTPUT') && (
+                  <div className="input-row">
+                    <label>
+                      <div>Decay Factor: {selectedModule.decay !== undefined ? selectedModule.decay : '0.9'} <Tooltip text="Multiplier per Tick (0.9 = retain 90%)" /></div>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0.0"
+                        max="1.0"
+                        value={selectedModule.decay !== undefined ? selectedModule.decay : 0.9}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { decay: parseFloat(e.target.value) })}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                )}
+                {(selectedModule.type === 'BRAIN' || selectedModule.type === 'SUSTAINED_OUTPUT') && (
+                  <div className="input-row">
+                    <label>
+                      <div>Max Potential: {selectedModule.maxPotential !== undefined ? selectedModule.maxPotential : '3.0'} <Tooltip text="Firing ceiling (Prevents infinite charge)" /></div>
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="1.0"
+                        max="20.0"
+                        value={selectedModule.maxPotential !== undefined ? selectedModule.maxPotential : 3.0}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { maxPotential: parseFloat(e.target.value) })}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                )}
+
+                {selectedModule.type === 'BRAIN' && (
+                  <>
+                    <div className="input-row">
+                      <label>
+                        <div>Fatigue Jump: {selectedModule.fatigue || 0} <Tooltip text="Threshold jump after firing" /></div>
+                        <input
+                          type="number"
+                          step="0.1"
+                          min="0.0"
+                          max="5.0"
+                          value={selectedModule.fatigue !== undefined ? selectedModule.fatigue : 0}
+                          onChange={(e) => handleUpdateConfig(selectedModule.id, { fatigue: parseFloat(e.target.value) })}
+                          style={{ width: '100%' }}
+                        />
+                      </label>
+                    </div>
+                    <div className="input-row">
+                      <label>
+                        <div>Recovery Rate: {selectedModule.recovery || 0} <Tooltip text="Threshold recovery per tick" /></div>
+                        <input
+                          type="number"
+                          step="0.001"
+                          min="0.0"
+                          max="0.5"
+                          value={selectedModule.recovery !== undefined ? selectedModule.recovery : 0}
+                          onChange={(e) => handleUpdateConfig(selectedModule.id, { recovery: parseFloat(e.target.value) })}
+                          style={{ width: '100%' }}
+                        />
+                      </label>
+                    </div>
+                  </>
                 )}
 
                 {selectedModule.type === 'BRAIN' && (
@@ -698,19 +829,13 @@ function App() {
                           onChange={(e) => {
                             const val = parseInt(e.target.value);
                             handleUpdateConfig(selectedModule.id, { synapsesPerNode: val });
-                            // Force rewiring of internal connections immediately so user sees effect
-                            if (canvasRef.current) {
-                              // We need to trigger a rewire. The easiest way is to re-update the module's node connections via neural net logic.
-                              // Since we don't have a direct 'rewire' API exposed on canvas handle yet, we can simulate it or rely on a new method.
-                              // Logic: The 'updateModule' in NeuralNet does NOT automatically rewire unless node count changes.
-                              // We need to add logic to NeuralNet.ts updateModule to rewire if synapsesPerNode changes.
-                            }
                           }}
                           style={{ width: '100%' }}
                         />
-                        <span style={{ fontSize: '0.8rem', color: '#888', float: 'right' }}>
-                          {selectedModule.synapsesPerNode !== undefined ? selectedModule.synapsesPerNode : 2}
-                        </span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#888' }}>
+                          <span>Current: {selectedModule.synapsesPerNode !== undefined ? selectedModule.synapsesPerNode : 2}</span>
+                          <span>Suggested: {Math.round(Math.sqrt(selectedModule.nodeCount) * 1.5)}</span>
+                        </div>
                       </label>
                     </div>
                   </>
@@ -969,37 +1094,7 @@ function App() {
                 </InspectorSection>
               )}
 
-              {/* --- CONCEPT INSPECTOR --- */}
-              {selectedModule.type === 'CONCEPT' && (
-                <InspectorSection title="Concept Settings">
-                  <div className="toggle-container" style={{ marginTop: '0' }}>
-                    <span className="toggle-label">Show as Triangle (Collapsed) <Tooltip text="Hide individual nodes on canvas" /></span>
-                    <label className="switch">
-                      <input
-                        type="checkbox"
-                        checked={!!selectedModule.collapsed}
-                        onChange={(e) => handleUpdateConfig(selectedModule.id, { collapsed: e.target.checked })}
-                      />
-                      <span className="slider"></span>
-                    </label>
-                  </div>
 
-                  <div style={{ marginTop: '10px' }}>
-                    <label>Concept Count: {selectedModule.concepts?.length || 0}</label>
-                    <button
-                      style={{ marginTop: '5px', width: '100%', background: '#444' }}
-                      onClick={() => setConceptListModal({
-                        isOpen: true,
-                        moduleId: selectedModule.id,
-                        title: selectedModule.name || 'Concept List',
-                        concepts: selectedModule.concepts || []
-                      })}
-                    >
-                      View Word List
-                    </button>
-                  </div>
-                </InspectorSection>
-              )}
 
               {/* SECTION: CONNECTIONS (Hidden for TRAINING_DATA & CONCEPT) */}
               {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT' && (
@@ -1293,7 +1388,14 @@ function App() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
           <h2>Active Entities ({modules.length})</h2>
         </div>
-        <div className="module-list">
+        <div className="module-list" style={{
+          display: 'grid',
+          gridTemplateRows: 'repeat(2, auto)',
+          gridAutoFlow: 'column',
+          overflowX: 'auto',
+          gap: '10px',
+          paddingBottom: '10px',
+        }}>
           {modules.map(m => (
             <div
               key={m.id}
@@ -1305,19 +1407,7 @@ function App() {
                 {m.type}
                 {(m.type !== 'TRAINING_DATA' && m.type !== 'CONCEPT' && m.type !== 'LEARNED_OUTPUT') && ` • ${m.nodeCount} Nodes`}
               </span>
-              <div style={{ display: 'flex', gap: '8px', marginTop: '4px', fontSize: '0.75rem', opacity: 0.8 }}>
-                {(() => {
-                  const stats = canvasRef.current?.getModuleConnectivity(m.id);
-                  const inCount = stats?.filter(s => s.direction === 'in').reduce((acc, s) => acc + s.count, 0) || 0;
-                  const outCount = stats?.filter(s => s.direction === 'out').reduce((acc, s) => acc + s.count, 0) || 0;
-                  return (
-                    <>
-                      <span style={{ color: '#00aaff' }}>In: {inCount}</span>
-                      <span style={{ color: '#00ffaa' }}>Out: {outCount}</span>
-                    </>
-                  );
-                })()}
-              </div>
+
               {m.depth && m.depth > 1 && <span className="module-type">Depth: {m.depth}</span>}
             </div>
           ))}
@@ -1330,7 +1420,7 @@ function App() {
         {/* Creation */}
         < div className="control-group" >
           {/* MODULE TYPE DROPDOWN */}
-          <div className="input-row">
+          < div className="input-row" >
             <label>Type
               <select
                 value={newModule.type}
@@ -1361,6 +1451,11 @@ function App() {
                     defaults.width = 50;
                     defaults.height = 300;
                     defaults.name = "Output";
+                  } else if (type === 'SUSTAINED_OUTPUT') {
+                    defaults.nodes = 10;
+                    defaults.width = 50;
+                    defaults.height = 300;
+                    defaults.name = "Sustained Output";
                   } else if (type === 'CONCEPT') {
                     defaults.nodes = 0; // Auto-calculated
                     defaults.width = 100; // Visual width
@@ -1386,15 +1481,16 @@ function App() {
                 <option value="LAYER">Layer (Feed-Forward)</option>
                 <option value="INPUT">Input (Sensor)</option>
                 <option value="OUTPUT">Output (Actuator)</option>
+                <option value="SUSTAINED_OUTPUT">Output (Sustained)</option>
                 <option value="CONCEPT">Concept Input (CSV)</option>
                 <option value="LEARNED_OUTPUT">Learned Output (Dynamic)</option>
                 <option value="TRAINING_DATA">Training Data (Ground Truth)</option>
               </select>
             </label>
-          </div>
+          </div >
 
           {/* Common Name Input for all types */}
-          <div className="input-row">
+          < div className="input-row" >
             <label>
               <div>Name <Tooltip text="Unique display name" /></div>
               <input
@@ -1405,7 +1501,7 @@ function App() {
                 style={{ width: '100%' }}
               />
             </label>
-          </div>
+          </div >
 
           {
             newModule.type === 'CONCEPT' && (
@@ -1520,6 +1616,78 @@ function App() {
                     placeholder={`1${conceptDelimiter}Apple\n2${conceptDelimiter}Banana`}
                   />
                 </label>
+
+                <div style={{ marginTop: '5px', borderTop: '1px dashed #444', paddingTop: '5px' }}>
+                  <label className="button-upload" style={{
+                    cursor: 'pointer', background: '#2a2a2a', padding: '6px',
+                    borderRadius: '4px', textAlign: 'center', width: '100%', display: 'block',
+                    border: '1px solid #444', fontSize: '0.8rem', color: '#888'
+                  }}>
+                    Or Mass Import CSVs (Multiple Files)
+                    <input
+                      type="file"
+                      multiple
+                      accept=".csv,.txt"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files.length > 0) {
+                          Array.from(e.target.files).forEach((file, index) => {
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                              if (ev.target?.result) {
+                                const text = ev.target.result as string;
+                                let lines = text.split('\n').filter(l => l.trim().length > 0);
+                                const name = file.name.replace(/\.[^/.]+$/, "");
+
+                                // Auto-detect Header
+                                if (lines.length > 0) {
+                                  const first = lines[0].toLowerCase();
+                                  if (first.includes('id') && (first.includes('label') || first.includes('word') || first.includes('concept'))) {
+                                    lines = lines.slice(1);
+                                  }
+                                }
+
+                                if (canvasRef.current && lines.length > 0) {
+                                  const id = `concept-${Date.now()}-${index}`;
+                                  const concepts = lines.map(line => {
+                                    const parts = line.split(',');
+                                    const clean = (s: string) => s ? s.trim() : '';
+                                    if (parts.length >= 2) return { id: clean(parts[0]), label: clean(parts[1]) };
+                                    return { id: clean(line), label: clean(line) };
+                                  });
+
+                                  // Grid Layout: 2 Columns
+                                  const col = index % 2;
+                                  const row = Math.floor(index / 2);
+                                  const offsetX = -300 + (col * 100);
+                                  const offsetY = -200 + (row * 100);
+
+                                  // Random Vibrant Hex Color
+                                  const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#33FFF5', '#F5FF33', '#FF8C33', '#8C33FF', '#00DFD0', '#FF0055'];
+                                  const color = colors[Math.floor(Math.random() * colors.length)];
+
+                                  canvasRef.current.addModule({
+                                    id: id,
+                                    type: 'CONCEPT',
+                                    name: name,
+                                    x: offsetX,
+                                    y: offsetY,
+                                    color: color,
+                                    nodeCount: concepts.length,
+                                    concepts: concepts,
+                                    collapsed: true
+                                  });
+                                }
+                              }
+                            };
+                            reader.readAsText(file);
+                          });
+                          setTimeout(() => refreshModules(), 500);
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
               </div>
             )
           }
@@ -1551,6 +1719,24 @@ function App() {
         < div className="control-group" style={{ marginTop: 'auto' }
         }>
           <h2>Global</h2>
+          <div style={{ display: 'flex', gap: '5px', marginBottom: '10px' }}>
+            <button onClick={() => setSimulation({ ...simulation, paused: !simulation.paused })} style={{ flex: 2, padding: '8px' }}>
+              {simulation.paused ? '▶ Play' : '⏸ Pause'}
+            </button>
+            <button onClick={() => {
+              setSimulation(prev => ({ ...prev, paused: true }));
+              canvasRef.current?.step(1);
+            }} style={{ flex: 1 }} title="Step 1">
+              &gt;
+            </button>
+            <button onClick={() => {
+              setSimulation(prev => ({ ...prev, paused: true }));
+              canvasRef.current?.step(10);
+            }} style={{ flex: 1 }} title="Step 10">
+              &gt;&gt;
+            </button>
+          </div>
+
           <label>
             <div>Speed: {simulation.speed}ms <Tooltip text="Ticks duration (ms)" /></div>
             <input type="range" min="1" max="1000" value={simulation.speed} onChange={handleSpeedChange} style={{ width: '100%' }} />
@@ -1559,6 +1745,11 @@ function App() {
             <div>Decay: {simulation.decay ? simulation.decay.toFixed(2) : '0.10'} <Tooltip text="Global potential loss per tick" /></div>
             <input type="range" min="0.01" max="0.5" step="0.01" value={simulation.decay || 0.1} onChange={handleDecayChange} style={{ width: '100%' }} />
           </label>
+
+          <div style={{ marginTop: '10px', display: 'flex', gap: '5px' }}>
+            <button style={{ flex: 1, background: '#444' }} onClick={handleSave}>Save</button>
+            <button style={{ flex: 1, background: '#444' }} onClick={() => fileInputRef.current?.click()}>Load</button>
+          </div>
 
           <div className="toggle-container">
             <span className="toggle-label">Hide Details</span>
@@ -1571,61 +1762,10 @@ function App() {
               <span className="slider"></span>
             </label>
           </div>
-        </div>
+        </div >
 
-        <div className="control-group" style={{ marginTop: '10px' }}>
-          <h2>Mass Import</h2>
-          <label className="button-upload" style={{
-            cursor: 'pointer', background: '#333', padding: '8px',
-            borderRadius: '4px', textAlign: 'center', width: '100%', display: 'block'
-          }}>
-            Import Concept CSVs
-            <input
-              type="file"
-              multiple
-              accept=".csv,.txt"
-              style={{ display: 'none' }}
-              onChange={(e) => {
-                if (e.target.files && e.target.files.length > 0) {
-                  Array.from(e.target.files).forEach((file, index) => {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                      if (ev.target?.result) {
-                        const text = ev.target.result as string;
-                        const lines = text.split('\n').filter(l => l.trim().length > 0);
-                        const name = file.name.replace(/\.[^/.]+$/, "");
-                        if (canvasRef.current && lines.length > 0) {
-                          const id = `concept-${Date.now()}-${index}`;
-                          const concepts = lines.map(line => {
-                            const parts = line.split(',');
-                            if (parts.length < 2) return null;
-                            return { id: parts[0].trim(), label: parts[1].trim() };
-                          }).filter(c => c !== null) as { id: string; label: string }[];
 
-                          canvasRef.current.addModule({
-                            id,
-                            type: 'CONCEPT',
-                            x: 200 + (index * 50),
-                            y: 200 + (index * 50),
-                            nodeCount: 0,
-                            label: name,
-                            name: name,
-                            conceptColumn: name,
-                            concepts,
-                            collapsed: true
-                          });
-                        }
-                      }
-                    };
-                    reader.readAsText(file);
-                  });
-                  setTimeout(() => refreshModules(), 500);
-                }
-              }}
-            />
-          </label>
-        </div>
-      </aside>
+      </aside >
 
       {/* MODAL OVERLAY */}
       {

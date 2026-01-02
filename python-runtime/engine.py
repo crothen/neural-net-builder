@@ -88,9 +88,24 @@ class Engine:
 
         # 4. Hebbian Learning (Simplified Port)
         # Only if enabled.
-        for mod in self.net.modules.values():
-            if mod.type == 'BRAIN' and mod.hebbianLearning:
-                self._process_hebbian(mod)
+        if self.net.modules:
+            for mod in self.net.modules.values():
+                if mod.type == 'BRAIN' and hasattr(mod, 'hebbianLearning') and mod.hebbianLearning:
+                    self._process_hebbian(mod)
+
+        # 5. Cleanup Manual Pulses
+        self._post_step_cleanup()
+        
+        # Debug Prints
+        active_inputs = [n.id for n in self.net.nodes.values() if n.type in ('INPUT', 'CONCEPT') and n.isFiring]
+        firing_nodes = [n.id for n in self.net.nodes.values() if n.type not in ('INPUT', 'CONCEPT') and n.isFiring]
+        if active_inputs or firing_nodes:
+            print(f"Tick {self.net.tickCount}: Active Inputs={active_inputs}, Firing={firing_nodes}")
+            
+            # Check sums for debugging
+            non_zero_sums = {k: v for k, v in input_sums.items() if v > 0}
+            if non_zero_sums:
+                print(f"  Input Sums: {non_zero_sums}")
 
     def _update_input_node(self, node: Node):
         if node.inputType == 'SIN':
@@ -110,60 +125,59 @@ class Engine:
             node.potential = node.activation
         
         elif node.inputType == 'PULSE':
-            # Manual or predefined. 
+            # Manual Input
             pass
 
+    def _post_step_cleanup(self):
+        # Reset Manual PULSE inputs that fired
+        for node in self.net.nodes.values():
+            if node.type in ('INPUT', 'CONCEPT') and node.inputType == 'PULSE':
+                if node.activationType == 'PULSE':
+                    node.activation = 0.0
+                    node.potential = 0.0
+                    node.isFiring = False
+
     def _update_node(self, node: Node, input_sum: float):
-        # Refractory Period
+        # 0. Refractory Period
         if node.refractoryTimer > 0:
             node.refractoryTimer -= 1
-            node.activation = 0.0
             node.isFiring = False
-            # Potential usually resets or stays low?
-            # Node.ts: if (refractoryTimer > 0) { ... return; }
-            # But we must handle potential decay even if refractory?
-            # TS Implementation: 
-            # if (this.refractoryTimer > 0) {
-            #   this.refractoryTimer--;
-            #   this.activation = 0;
-            #   this.isFiring = false;
-            #   return; 
-            # }
+            node.activation = 0.0
+            # PULSE nodes get hard reset in refractory (TS logic)
+            if node.activationType == 'PULSE':
+                node.potential = 0.0
             return
 
-        # Add Input
-        node.potential += input_sum
+        # 1. Add Input and Bias
+        node.potential += input_sum + node.bias
         
-        # Check Firing
-        # Node.ts: if (this.potential >= this.threshold)
+        # 2. Check Firing
         if node.potential >= node.threshold:
             node.isFiring = True
+            node.activation = 1.0
             
-            if node.activationType == 'SUSTAINED':
-                node.activation = 1.0 # Or potential? TS says 1.0 usually for firing
-                # TS Logic:
-                # if SUSTAINED: activation = 1.0, potential = threshold (clamp?)
-                # actually check TS Node.ts logic carefully? 
-                # Assuming standard LIF:
-                node.activation = 1.0
-                node.potential = 0.0 # Reset after fire
-            else:
-                # PULSE
-                node.activation = 1.0
-                node.potential = 0.0
+            # Refractory + Jitter
+            jitter = 1 if random.random() < 0.5 else 0
+            node.refractoryTimer = node.refractoryPeriod + jitter
             
-            node.refractoryTimer = node.refractoryPeriod
+            if node.activationType == 'PULSE':
+                # Soft Reset: Subtract threshold, preserving "overcharge"
+                node.potential -= node.threshold
+            # SUSTAINED: Keep potential (it maintains state)
+            
         else:
             node.isFiring = False
             node.activation = 0.0
             
-            # Decay
-            # TS: this.potential *= (1 - this.decay);
-            node.potential *= (1.0 - node.decay)
-            
-            # Floor
-            if node.potential < 0.01:
-                node.potential = 0.0
+        # 3. Decay
+        node.potential *= (1.0 - node.decay)
+        
+        # 4. Clamp / Floor
+        if node.potential < 0: node.potential = 0.0
+        
+        # Clamp Max (from TS: threshold * 4.0)
+        max_pot = node.threshold * 4.0
+        if node.potential > max_pot: node.potential = max_pot
 
     def _process_hebbian(self, module):
         # Simplified copy of TS logic

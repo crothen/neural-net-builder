@@ -24,7 +24,10 @@ export interface NodeConfig {
     activationType?: ActivationType; // Configurable firing logic
     decay?: number;
     inputFrequency?: number; // Frequency/Density for INPUT nodes
+    maxPotential?: number;
     inputType?: InputType;
+    fatigue?: number; // Threshold jump after firing
+    recovery?: number; // Threshold recovery per tick
 }
 
 export interface ConnectionConfig {
@@ -45,7 +48,7 @@ export interface NodeState {
     inRefractory: boolean; // Visual feedback?
 }
 
-export type ModuleType = 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT' | 'CONCEPT' | 'LEARNED_OUTPUT' | 'TRAINING_DATA';
+export type ModuleType = 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT' | 'SUSTAINED_OUTPUT' | 'CONCEPT' | 'LEARNED_OUTPUT' | 'TRAINING_DATA';
 
 export interface ModuleConfig {
     id: string;
@@ -78,6 +81,11 @@ export interface ModuleConfig {
     refractoryPeriod?: number;
     bias?: number;
     inputFrequency?: number;
+    maxPotential?: number; // Configurable max potential cap
+    gain?: number; // Weight multiplier for Sustained Output
+    fatigue?: number; // Threshold jump
+    recovery?: number; // Threshold recovery
+
 
     // Localization
     isLocalized?: boolean;
