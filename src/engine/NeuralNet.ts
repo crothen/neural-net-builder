@@ -103,9 +103,14 @@ export class NeuralNet {
                 const r = radius * Math.sqrt((i + 1) / config.nodeCount);
 
                 const nodeId = `${config.id}-${i}`;
+                // Dale's Principle: 80% Excitatory, 20% Inhibitory (Initialize)
+                const isInhibitory = Math.random() < 0.2; // 20% chance
+                const nType = isInhibitory ? 'INHIBITORY' : 'EXCITATORY';
+
                 this.addNode({
                     id: nodeId,
                     type: NodeType.HIDDEN,
+                    neuronType: nType,
                     x: centerX + r * Math.cos(theta),
                     y: centerY + r * Math.sin(theta),
                     label: '',
@@ -690,6 +695,30 @@ export class NeuralNet {
         return diff;
     }
 
+    /**
+     * Generic Location (0.0 - 1.0)
+     * Brain: Normalized Angle (-PI..PI -> 0..1)
+     * Linear: Normalized Index (0..N -> 0..1)
+     */
+    private getRelativeLocation(node: BaseNode, mod: ModuleConfig, index: number, total: number): number {
+        if (mod.type === 'BRAIN') {
+            const angle = this.getBrainNodeAngle(node, mod);
+            // Map -PI..PI to 0..1
+            return (angle + Math.PI) / (2 * Math.PI);
+        }
+        // Linear
+        if (total <= 1) return 0.5;
+        return index / (total - 1);
+    }
+
+    private getRelativeDist(a: number, b: number, bothCircular: boolean): number {
+        let diff = Math.abs(a - b);
+        if (bothCircular) {
+            if (diff > 0.5) diff = 1.0 - diff;
+        }
+        return diff;
+    }
+
     private normalizeWeights(node: BaseNode, targetSum: number) {
         const incoming = this.incoming.get(node.id);
         if (!incoming || incoming.length === 0) return;
@@ -699,7 +728,13 @@ export class NeuralNet {
 
         if (currentSum > targetSum) {
             const factor = targetSum / currentSum;
-            incoming.forEach(c => c.weight *= factor);
+            incoming.forEach(c => {
+                // Protected Decay: Only decay "established" connections (> 0.1).
+                // Leave weak "baby" weights alone to give them a chance to grow.
+                if (Math.abs(c.weight) > 0.1) {
+                    c.weight *= factor;
+                }
+            });
         }
     }
 
@@ -794,10 +829,21 @@ export class NeuralNet {
                     let idealWeight = 1.0 / (Math.max(1, estimatedTotalInputs) * targetPercentage);
                     idealWeight = Math.min(idealWeight, 0.5); // Clamp max
 
-                    // Apply randomness (0.0 to Ideal)
-                    // Apply randomness (0.0 to Ideal) -> Now +/- Ideal
-                    // Range: [-idealWeight, +idealWeight]
-                    const finalWeight = (Math.random() - 0.5) * 2 * idealWeight;
+
+
+                    // Dale's Principle Wiring Rule:
+                    // If Source is Excitatory -> Positive Weight (Small)
+                    // If Source is Inhibitory -> Negative Weight (Large, ~3x stronger)
+                    const isExcitatory = source.neuronType === 'EXCITATORY';
+
+                    let finalWeight = 0;
+                    if (isExcitatory) {
+                        // Excitatory: Random Positive [0.5*ideal, 1.5*ideal]
+                        finalWeight = idealWeight * (0.5 + Math.random());
+                    } else {
+                        // Inhibitory: Stronger Negative (x3)
+                        finalWeight = -idealWeight * 3.0 * (0.5 + Math.random());
+                    }
 
                     this.addConnection({
                         id: `c-${source.id}-${target.id}-${k}`,
@@ -927,9 +973,8 @@ export class NeuralNet {
             sides: { src: srcSide, tgt: tgtSide }
         });
 
-        // If using Localizer, enforce IS LOCALIZED on target brain
+        // If using Localizer, enforce IS LOCALIZED on target brain (if brain)
         // Localizer is now treated as "Leak" (0 = Strict, 100 = Random)
-        // A value < 100 implies some localization structure.
         if (targetMod.type === 'BRAIN' && localizer < 100) {
             if (!targetMod.isLocalized) {
                 targetMod.isLocalized = true;
@@ -946,35 +991,43 @@ export class NeuralNet {
             // Determine Candidate Pool for this Source Node
             let candidates: BaseNode[] = [...targetNodes];
 
-            // LOCALIZATION LOGIC (Only if Target is Brain and Localizer < 100)
+            // LOCALIZATION LOGIC (Generic for ALL types now)
+            // If localizer < 100, we prefer spatially aligned nodes
+            const useLocalization = localizer < 100;
             let preferredCandidates: BaseNode[] = [];
-            const useLocalization = targetMod.type === 'BRAIN' && localizer < 100;
 
             if (useLocalization) {
-                // 1. Determine "Source Angle/Phase"
-                let srcAngle = 0;
-                const sourceMod = this.modules.get(sourceId);
+                // 1. Get Source Location (0..1)
+                // Note: If sourceMod is missing, we can't do much.
+                // We need 'sourceMod' to know if it is Brain or not.
+                // We retrieved sourceMod above.
+                if (sourceMod) {
+                    const srcLoc = this.getRelativeLocation(src, sourceMod, srcIndex, sourceNodes.length);
 
-                if (sourceMod && sourceMod.type === 'BRAIN') {
-                    // Use physical angle
-                    srcAngle = Math.atan2(src.y - sourceMod.y, src.x - sourceMod.x);
+                    // 2. Filter Targets based on Distance threshold
+                    // Threshold derived from Coverage?
+                    // E.g. Coverage 10% -> Window of 0.1? or 0.05 on each side?
+                    // Let's ensure at least some window.
+                    // Using SectorSize logic from before:
+                    // If we want "Coverage%" of the target, we should pick candidates within that range.
+                    // Window Size = (Coverage / 100). E.g. 20% -> 0.2.
+                    // Distance Threshold = Window / 2 = 0.1.
+                    // Clamp min threshold to avoid empty sets (e.g. 5% coverage on 10 nodes = 0.5 nodes -> 0)
+                    const safeCoverage = Math.max(finalCoverage, 5); // Minimum 5% spatial window
+                    const threshold = (safeCoverage / 100) / 2;
+
+                    const bothCircular = sourceMod.type === 'BRAIN' && targetMod.type === 'BRAIN';
+
+                    preferredCandidates = targetNodes.filter((tgt, tgtIndex) => {
+                        const tgtLoc = this.getRelativeLocation(tgt, targetMod, tgtIndex, targetNodes.length);
+                        return this.getRelativeDist(srcLoc, tgtLoc, bothCircular) <= threshold;
+                    });
+
+                    // Fallback if empty (e.g. extremely strict threshold or low node count)
+                    if (preferredCandidates.length === 0) preferredCandidates = [...targetNodes];
                 } else {
-                    // Linear Mapping: Map index to -PI..PI
-                    const ratio = srcIndex / sourceNodes.length;
-                    srcAngle = -Math.PI + (ratio * 2 * Math.PI);
+                    preferredCandidates = [...targetNodes];
                 }
-
-                // 2. Define Wedge around this angle
-                const sectorSize = (2 * Math.PI) / (sourceNodes.length || 1);
-                const threshold = Math.max(sectorSize / 2, 0.2); // Ensure at least some width
-
-                preferredCandidates = targetNodes.filter(tgt => {
-                    const tgtAngle = this.getBrainNodeAngle(tgt, targetMod);
-                    return this.getAngleDist(srcAngle, tgtAngle) <= threshold;
-                });
-
-                // If preferred is empty (bad luck?), fall back to all
-                if (preferredCandidates.length === 0) preferredCandidates = [...targetNodes];
             }
 
             // Generate connections
@@ -988,7 +1041,7 @@ export class NeuralNet {
                 let targetPool = candidates;
 
                 // Apply Localization Roll (Treat localizer as LEAK)
-                // If localizer is 10, there is a 10% chance to LEAK (use global), 90% chance to be LOCAL.
+                // If localizer is 10, there is a 10% chance to LEAK (use global), 90% chance to be LOCAL (use preferred).
                 if (useLocalization) {
                     const roll = Math.random() * 100;
                     if (roll > localizer) {
@@ -1007,11 +1060,28 @@ export class NeuralNet {
                 if (tgt.id === src.id) continue; // No self loops here
 
                 // Add Connection
+                // Dale's Principle (External Wiring)
+                // Check Source Type
+                const isExcitatory = src.neuronType === 'EXCITATORY';
+                let w = initialWeight !== undefined ? initialWeight : 0.2; // Default base
+
+                if (initialWeight === undefined) {
+                    // If purely random, use Sign Logic
+                    if (isExcitatory) {
+                        w = Math.random() * 0.5; // 0 to 0.5
+                    } else {
+                        w = -Math.random() * 1.5; // 0 to -1.5 (Stronger)
+                    }
+                } else {
+                    // If initialWeight provided (e.g. 1.0 for Sustained), respect it but Flip Sign if Inhibitory
+                    if (!isExcitatory) w = -w;
+                }
+
                 this.addConnection({
                     id: `c-${src.id}-${tgt.id}`,
                     sourceId: src.id,
                     targetId: tgt.id,
-                    weight: initialWeight !== undefined ? initialWeight : Math.random() // Positive only
+                    weight: w
                 });
                 connectedTargets.add(tgt.id);
             }
@@ -1032,6 +1102,7 @@ export class NeuralNet {
             nodes: Array.from(this.nodes.values()).map(n => ({
                 id: n.id,
                 type: n.type,
+                neuronType: n.neuronType, // Persist Dale's Principle type
                 x: n.x,
                 y: n.y,
                 label: n.label,
@@ -1079,6 +1150,32 @@ export class NeuralNet {
         });
 
         data.connections.forEach(c => this.addConnection(c));
+    }
+
+    public triggerInput(index: number) {
+        // 1. Get all Input Nodes
+        const inputNodes = Array.from(this.nodes.values())
+            .filter(n => n.type === NodeType.INPUT)
+            .sort((a, b) => a.id.localeCompare(b.id)); // Stable sort
+
+        // 2. Select by Index
+        if (index >= 0 && index < inputNodes.length) {
+            const node = inputNodes[index];
+
+            // 3. Trigger only if PULSE
+            if (node.activationType === 'PULSE') {
+                // Ensure it is an InputNode instance (it should be due to filter above)
+                if ('trigger' in node && typeof (node as any).trigger === 'function') {
+                    (node as any).trigger(1); // Fire for 1 tick as requested
+                } else {
+                    // Fallback
+                    node.potential = 1.0;
+                    node.isFiring = true;
+                }
+            } else {
+                console.log(`Node ${node.id} is not PULSE type.`);
+            }
+        }
     }
 
     public step() {
@@ -1244,6 +1341,12 @@ export class NeuralNet {
                 const inputSum = inputSums.get(node.id) || 0;
                 node.update(inputSum);
             }
+
+            // Dale's Principle: Track EMA Firing Rate
+            // Alpha = 0.01 (Slow moving average, ~100 steps)
+            const alpha = 0.01;
+            const fired = node.isFiring ? 1.0 : 0.0;
+            node.averageFiringRate = (alpha * fired) + ((1 - alpha) * node.averageFiringRate);
         });
 
         // Synaptic Scaling (Homeostasis)
@@ -1293,7 +1396,28 @@ export class NeuralNet {
 
                         // 1. Calculate Boost
                         const boost = rate * src.activation * tgt.activation;
-                        conn.weight += boost;
+
+                        // Dale's Principle: Plasticity Rules
+                        if (src.neuronType === 'EXCITATORY') {
+                            // Standard Hebbian for Excitatory
+                            // "Cells that fire together, wire together"
+                            // Limit max weight to avoid runways? Normalization handles that.
+                            conn.weight += boost;
+                        } else {
+                            // Homeostatic Plasticity for Inhibitory
+                            // Goal: Maintain Target Firing Rate at Set Point (e.g. 10%)
+                            const targetRate = 0.1;
+
+                            // If Target is too active -> Inhibition should INCREASE (become more negative)
+                            // "Police, there's too much noise here!"
+                            if (tgt.averageFiringRate > targetRate) {
+                                // Strengthen Inhibition (Subtract positive value)
+                                conn.weight -= 0.001;
+                            } else {
+                                // Relax Inhibition (Add positive value to negative weight -> closer to 0)
+                                conn.weight += 0.001;
+                            }
+                        }
 
                         // 2. Check Target Sum (Capacity)
                         const targetSum = module.sustainability?.targetSum || 3.0; // Default to 3
@@ -1472,12 +1596,10 @@ export class NeuralNet {
 
             // Better check based on our Logic:
             if (n.type === NodeType.OUTPUT || n.type === NodeType.INTERPRETATION) {
-                // FORCE Pulse Outputs/Layers to stay at 1.0 (Instant)
-                // Exception: Sustained Output should obey global decay (or its own decay?)
-                // User Request: "Decaying should apply to all Sustained Nodes"
-                // Assuming this means they participate in the global setting, OR they just shouldn't be forced to 1.0.
+                // FORCE Pulse Outputs/Layers to stay at 1.0 (Instant) - handled by update() anyway
+                // Logic: Sustained Output should NOT obey global decay slider. They have their own setting.
                 if (n.activationType === 'SUSTAINED') {
-                    n.decay = decay; // Apply global decay to Sustained Outputs too
+                    // Do nothing. Preserve n.decay.
                 } else {
                     n.decay = 1.0;
                 }

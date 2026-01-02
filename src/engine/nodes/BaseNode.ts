@@ -16,6 +16,10 @@ export abstract class BaseNode {
     public activation: number = 0;
     public isFiring: boolean = false;
 
+    // Dale's Principle
+    public neuronType: 'EXCITATORY' | 'INHIBITORY' = 'EXCITATORY';
+    public averageFiringRate: number = 0; // EMA of firing rate
+
     // Common Configuration
     public bias: number = 0;
 
@@ -49,6 +53,7 @@ export abstract class BaseNode {
         this.y = config.y;
         this.label = config.label || '';
         this.bias = config.bias || 0;
+        this.neuronType = config.neuronType || 'EXCITATORY'; // Default to Excitatory
 
         // Common defaults
         this.threshold = config.threshold ?? 1.0;

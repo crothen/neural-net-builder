@@ -11,10 +11,12 @@ export type NodeType = typeof NodeType[keyof typeof NodeType];
 
 export type ActivationType = 'SUSTAINED' | 'PULSE'; // New firing modes
 export type InputType = 'PULSE' | 'SIN' | 'NOISE'; // New input generator modes
+export type NeuronType = 'EXCITATORY' | 'INHIBITORY';
 
 export interface NodeConfig {
     id: string;
     type: NodeType;
+    neuronType?: NeuronType; // Dale's Principle
     x: number;
     y: number;
     label?: string;

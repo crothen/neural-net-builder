@@ -130,7 +130,7 @@ function App() {
     x: number,
     y: number,
     name: string,
-    conceptColumn: string
+    conceptColumn: string,
   }>({ type: 'BRAIN', nodes: 50, depth: 1, x: 400, y: 400, name: '', conceptColumn: '' });
 
   const [conceptCSV, setConceptCSV] = useState<string>('1,Apple\n2,Banana\n3,Cherry');
@@ -140,6 +140,28 @@ function App() {
   const [idColumnIndex, setIdColumnIndex] = useState<number>(0);
   const [labelColumnIndex, setLabelColumnIndex] = useState<number>(1);
   const [previewColumns, setPreviewColumns] = useState<string[]>([]);
+
+  // Keyboard Triggers (1-9, 0)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      // Check for number keys
+      if (e.key >= '0' && e.key <= '9') {
+        const num = parseInt(e.key);
+        // Map 1-9 -> index 0-8, 0 -> index 9
+        const index = num === 0 ? 9 : num - 1;
+
+        if (canvasRef.current && canvasRef.current.triggerInputNode) {
+          canvasRef.current.triggerInputNode(index);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Update preview columns when CSV or delimiter changes
   useEffect(() => {
@@ -1544,7 +1566,7 @@ function App() {
                       </label>
                     </div>
 
-                    {targetModule && targetModule.type === 'BRAIN' && (
+                    {targetModule && ( // Show for ALL types (User request)
                       <div className="input-row">
                         <label>Leak: {connLocalizer}% <Tooltip text="Chance for connection to ignore localization (0 = Strict)" />
                           <input

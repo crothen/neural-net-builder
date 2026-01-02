@@ -36,6 +36,7 @@ export interface NeuralCanvasHandle {
     getTickCount: () => number;
     resetState: () => void;
     populateLearnedOutput?: (targetId: string, sourceId: string) => void;
+    triggerInputNode: (index: number) => void;
 }
 
 export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
@@ -140,6 +141,9 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         },
         resetState: () => {
             netRef.current.resetState();
+        },
+        triggerInputNode: (index: number) => {
+            netRef.current.triggerInput(index);
         }
     }));
 

@@ -4,6 +4,7 @@ import { type NodeConfig } from '../types';
 export class InputNode extends BaseNode {
     // Timer for internal generation state
     private timer: number = 0;
+    private manualPulseTimer: number = 0;
 
     constructor(config: NodeConfig) {
         super(config);
@@ -13,6 +14,13 @@ export class InputNode extends BaseNode {
         // Inputs have no decay/threshold logic in the traditional sense
         this.decay = 0;
         this.threshold = 0;
+    }
+
+    /**
+     * Triggers a manual pulse for a specified duration (in ticks).
+     */
+    public trigger(duration: number = 5) {
+        this.manualPulseTimer = duration;
     }
 
     public update(_inputSum: number): void {
@@ -44,12 +52,20 @@ export class InputNode extends BaseNode {
                 this.isFiring = false;
             }
         }
-        // PULSE is manual, usually set via setInput
-        // We reset it here to ensure it only fires for one tick (One-Shot)
+
+        // PULSE Logic (Manual or Timer)
         if (this.inputType === 'PULSE') {
-            this.potential = 0;
-            this.activation = 0;
-            this.isFiring = false;
+            if (this.manualPulseTimer > 0) {
+                this.potential = 1.0;
+                this.activation = 1.0;
+                this.isFiring = true;
+                this.manualPulseTimer--;
+            } else {
+                // Reset (One-Shot behavior)
+                this.potential = 0;
+                this.activation = 0;
+                this.isFiring = false;
+            }
         }
     }
 

@@ -342,6 +342,25 @@ export class Renderer {
                 this.ctx.fillStyle = fillStyle;
                 this.ctx.fill();
 
+                // --- Dale's Principle Indicators (+/-) ---
+                if (node.type === NodeType.HIDDEN && !module.collapsed) {
+                    this.ctx.save();
+                    this.ctx.textAlign = 'center';
+                    this.ctx.textBaseline = 'middle';
+                    // Font size relative to radius (radius is 6 for hidden)
+                    this.ctx.font = 'bold 10px monospace';
+
+                    if (node.neuronType === 'INHIBITORY') {
+                        this.ctx.fillStyle = '#ff4444'; // Red for Inhibitory
+                        this.ctx.fillText('-', node.x, node.y);
+                    } else {
+                        // Default to Excitatory (Green +)
+                        this.ctx.fillStyle = '#44ff44'; // Green for Excitatory
+                        this.ctx.fillText('+', node.x, node.y + 1); // +1 offset for visual centering
+                    }
+                    this.ctx.restore();
+                }
+
                 // --- Stroke / Ring Logic (OUTER CIRCLE) ---
                 this.ctx.lineWidth = 2;
                 let strokeColor = '#333';
