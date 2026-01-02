@@ -81,6 +81,37 @@ export class NeuralNet {
 
             // Recurrent Internal Connections
             this.rewireInternalConnections(config.id);
+            // Recurrent Internal Connections
+            this.rewireInternalConnections(config.id);
+        } else if (config.type === 'CONCEPT') {
+            // CONCEPT: Nodes defined by ID/Label list
+            const concepts = config.concepts || [];
+            // Default layout: Vertical column
+            const height = config.height || (concepts.length * 60); // Dynamic height
+            const startY = config.y - (height / 2);
+            const stepY = concepts.length > 0 ? height / concepts.length : 60;
+
+            concepts.forEach((concept, i) => {
+                const nodeId = `${config.id}-${concept.id}`; // Use concept ID if unique, or index? 
+                // Concept IDs from CSV might be integers "1", "2". 
+                // Let's ensure uniqueness by prepending module ID.
+                this.addNode({
+                    id: nodeId,
+                    type: NodeType.CONCEPT,
+                    x: config.x,
+                    y: startY + (stepY * i) + (stepY / 2),
+                    label: concept.label,
+                    activationType: 'PULSE', // Input Concept is usually binary State
+                    decay: config.decay || 0.1,
+                    refractoryPeriod: config.refractoryPeriod,
+                    threshold: config.threshold,
+                    bias: config.bias
+                });
+                this.nodeModuleMap.set(nodeId, config.id);
+            });
+        } else if (config.type === 'LEARNED_OUTPUT') {
+            // LEARNED_OUTPUT: Starts empty. Nodes added dynamically during training.
+            // No nodes generated here.
         } else {
             // LAYER / INPUT / OUTPUT: Vertical Columns
             const height = config.height || 600;
@@ -136,6 +167,60 @@ export class NeuralNet {
                 }
             }
         }
+    }
+
+    public populateLearnedOutput(targetId: string, sourceConceptId: string) {
+        const target = this.modules.get(targetId);
+        const source = this.modules.get(sourceConceptId);
+
+        if (!target || target.type !== 'LEARNED_OUTPUT') return;
+        if (!source || source.type !== 'CONCEPT' || !source.concepts) return;
+
+        // Clear existing nodes if any
+        // We need to filter 'this.nodes' Map? No, it's a Map<string, Node>.
+        // Also need to update nodeModuleMap
+
+        // Naive clearing: Iterate all nodes, remove those belonging to this module
+        // Better: this.removeModule(targetId) then re-add? No, that removes connections.
+        // But Learned Output starts empty, so maybe just check if empty?
+
+        // Actually, if we re-train, we probably want to wipe and re-create.
+        // For now let's assume valid "Training" clears previous state of that module.
+
+        // Remove existing nodes for this module
+        const nodeIdsToRemove: string[] = [];
+        this.nodes.forEach(n => {
+            if (this.nodeModuleMap.get(n.id) === targetId) nodeIdsToRemove.push(n.id);
+        });
+        nodeIdsToRemove.forEach(nid => {
+            this.nodes.delete(nid);
+            this.nodeModuleMap.delete(nid);
+        });
+
+        // Create nodes for each concept
+        const concepts = source.concepts;
+        const spacing = (target.height || 600) / (concepts.length + 1);
+        const startY = target.y - ((target.height || 600) / 2) + spacing;
+
+        concepts.forEach((concept, i) => {
+            const nodeId = `${target.id}-node-${concept.id}`;
+            this.addNode({
+                id: nodeId,
+                x: target.x,
+                y: startY + (i * spacing),
+                // initialPotential: 0, // Removed: Not in NodeConfig
+                threshold: target.threshold || 0.5,
+                decay: 0.1,
+                activationType: 'SUSTAINED',
+                refractoryPeriod: 2,
+                label: concept.label,
+                type: 'LEARNED' as any
+            });
+            this.nodeModuleMap.set(nodeId, target.id);
+        });
+
+        // Update target node count
+        target.nodeCount = concepts.length;
     }
 
     /**

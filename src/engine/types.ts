@@ -2,7 +2,9 @@ export const NodeType = {
     INPUT: 'INPUT',
     HIDDEN: 'HIDDEN',
     INTERPRETATION: 'INTERPRETATION',
-    OUTPUT: 'OUTPUT'
+    OUTPUT: 'OUTPUT',
+    CONCEPT: 'CONCEPT',
+    LEARNED: 'LEARNED'
 } as const;
 
 export type NodeType = typeof NodeType[keyof typeof NodeType];
@@ -22,6 +24,7 @@ export interface NodeConfig {
     activationType?: ActivationType; // Configurable firing logic
     decay?: number;
     inputFrequency?: number; // Frequency/Density for INPUT nodes
+    inputType?: InputType;
 }
 
 export interface ConnectionConfig {
@@ -42,7 +45,7 @@ export interface NodeState {
     inRefractory: boolean; // Visual feedback?
 }
 
-export type ModuleType = 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT';
+export type ModuleType = 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT' | 'CONCEPT' | 'LEARNED_OUTPUT' | 'TRAINING_DATA';
 
 export interface ModuleConfig {
     id: string;
@@ -79,6 +82,19 @@ export interface ModuleConfig {
     isLocalized?: boolean;
     localizationLeak?: number; // 0-100 (Replaces 'localizer' for internal use basically)
     synapsesPerNode?: number; // Internal connections per node (default 2)
+
+    // Concept Data
+    concepts?: { id: string; label: string }[];
+    conceptColumn?: string;
+
+    // Training Data
+    trainingData?: any[]; // The raw CSV rows
+    trainingConfig?: {
+        idColumn: string;
+        wordColumn: string;
+        // Map ModuleID -> CSV Column Name
+        conceptMappings: Record<string, { column: string, delimiter: string }>;
+    };
 }
 
 export type ConnectionSide = 'ALL' | 'LEFT' | 'RIGHT';

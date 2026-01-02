@@ -41,12 +41,44 @@ function App() {
 
   // --- Creation State ---
   const [newModule, setNewModule] = useState<{
-    type: 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT',
+    type: 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT' | 'CONCEPT' | 'LEARNED_OUTPUT' | 'TRAINING_DATA',
     nodes: number,
     depth: number,
     x: number,
-    y: number
-  }>({ type: 'BRAIN', nodes: 50, depth: 1, x: 400, y: 400 });
+    y: number,
+    name: string,
+    conceptColumn: string
+  }>({ type: 'BRAIN', nodes: 50, depth: 1, x: 400, y: 400, name: '', conceptColumn: '' });
+
+  const [conceptCSV, setConceptCSV] = useState<string>('1,Apple\n2,Banana\n3,Cherry');
+  const [conceptDelimiter, setConceptDelimiter] = useState<string>(',');
+  // CSV Column Mapping State
+  const [csvHasHeaders, setCsvHasHeaders] = useState<boolean>(false);
+  const [idColumnIndex, setIdColumnIndex] = useState<number>(0);
+  const [labelColumnIndex, setLabelColumnIndex] = useState<number>(1);
+  const [previewColumns, setPreviewColumns] = useState<string[]>([]);
+
+  // Update preview columns when CSV or delimiter changes
+  useEffect(() => {
+    if (!conceptCSV) {
+      setPreviewColumns([]);
+      return;
+    }
+    const lines = conceptCSV.split('\n').filter(l => l.trim().length > 0);
+    if (lines.length === 0) {
+      setPreviewColumns([]);
+      return;
+    }
+    const firstLine = lines[0];
+    const parts = firstLine.split(conceptDelimiter).map(p => p.trim());
+
+    if (csvHasHeaders) {
+      setPreviewColumns(parts);
+    } else {
+      // Just generate "Column 0", "Column 1", etc. based on detected columns
+      setPreviewColumns(parts.map((_, i) => `Column ${i}`));
+    }
+  }, [conceptCSV, conceptDelimiter, csvHasHeaders]);
 
   // --- Module Management State ---
   const [modules, setModules] = useState<ModuleConfig[]>([]);
@@ -105,6 +137,9 @@ function App() {
       case 'LAYER': count = 10; depth = 5; break;
       case 'INPUT': count = 10; break;
       case 'OUTPUT': count = 10; break;
+      case 'CONCEPT': count = 0; break; // Dynamic
+      case 'LEARNED_OUTPUT': count = 0; break; // Starts empty
+      case 'TRAINING_DATA': count = 0; break; // No nodes
     }
     setNewModule(prev => ({ ...prev, type, nodes: count, depth }));
   };
@@ -124,6 +159,7 @@ function App() {
   const addModule = () => {
     if (!canvasRef.current) return;
     const id = `${newModule.type.toLowerCase()}-${Date.now()}`;
+    const displayName = newModule.name.trim() || id;
 
     const config: ModuleConfig = {
       id,
@@ -133,8 +169,8 @@ function App() {
       nodeCount: newModule.nodes,
       // Constraint: Input always depth 1
       depth: newModule.type === 'INPUT' ? 1 : newModule.depth,
-      label: id,
-      name: id,
+      label: displayName,
+      name: displayName,
       activationType: newModule.type === 'BRAIN' ? 'SUSTAINED' : 'PULSE',
       threshold: newModule.type === 'BRAIN' ? 0.5 : 0.5,
       refractoryPeriod: newModule.type === 'BRAIN' ? 1 : 2,
@@ -142,7 +178,29 @@ function App() {
       hebbianLearning: newModule.type === 'BRAIN' ? true : undefined,
       learningRate: newModule.type === 'BRAIN' ? 0.01 : undefined,
       radius: 200,
-      height: 600
+      height: 600,
+      concepts: newModule.type === 'CONCEPT' ? conceptCSV.split('\n').filter(l => l.trim()).map((l, idx) => {
+        // Skip header if needed
+        if (csvHasHeaders && idx === 0) return null;
+
+        const parts = l.split(conceptDelimiter);
+        // Ensure we have enough columns
+        if (parts.length <= Math.max(idColumnIndex, labelColumnIndex)) return null;
+
+        const cid = parts[idColumnIndex]?.trim();
+        const clog = parts[labelColumnIndex]?.trim();
+
+        if (!cid || !clog) return null;
+
+        return { id: cid, label: clog };
+      }).filter(c => c !== null) as { id: string; label: string }[] : undefined,
+
+      // Initialize Training Data with empty config
+      trainingConfig: newModule.type === 'TRAINING_DATA' ? {
+        idColumn: 'id',
+        wordColumn: 'word',
+        conceptMappings: {}
+      } : undefined
     };
 
     canvasRef.current.addModule(config);
@@ -584,7 +642,13 @@ function App() {
                       </label>
                     </div>
 
+
+
+
+
+
                     {selectedModule.isLocalized && (
+
                       <div className="input-row">
                         <label>Leak: {selectedModule.localizationLeak !== undefined ? selectedModule.localizationLeak : 0}% <Tooltip text="0% = Strict Neighbors, 100% = Random" />
                           <input
@@ -626,7 +690,212 @@ function App() {
                     </div>
                   </>
                 )}
+
               </InspectorSection>
+
+              {/* --- TRAINING DATA INSPECTOR --- */}
+              {selectedModule.type === 'TRAINING_DATA' && (
+                <div className="inspector-section" style={{ marginTop: '10px', border: '1px solid #444', borderRadius: '4px' }}>
+                  <div style={{ padding: '8px', background: '#333', fontWeight: 'bold' }}>Training Configuration</div>
+                  <div style={{ padding: '10px' }}>
+                    <div className="input-row">
+                      <label className="button-upload" style={{
+                        cursor: 'pointer', background: '#444', padding: '8px',
+                        borderRadius: '4px', textAlign: 'center', width: '100%', display: 'block'
+                      }}>
+                        {selectedModule.trainingData ? `Data Loaded (${selectedModule.trainingData.length} rows)` : 'Upload Training CSV'}
+                        <input
+                          type="file"
+                          accept=".csv,.txt"
+                          style={{ display: 'none' }}
+                          onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                              const file = e.target.files[0];
+                              const reader = new FileReader();
+                              reader.onload = (ev) => {
+                                if (ev.target?.result) {
+                                  // Simple CSV Parser
+                                  const text = ev.target.result as string;
+                                  const lines = text.split('\n').filter(l => l.trim());
+                                  if (lines.length > 0) {
+                                    // Detect delimiter from first line (comma or semicolon)
+                                    const firstLine = lines[0];
+                                    const delimiter = firstLine.includes(';') ? ';' : ',';
+                                    const headers = firstLine.split(delimiter).map(h => h.trim());
+
+                                    const data = lines.slice(1).map(line => {
+                                      const values = line.split(delimiter);
+                                      const row: any = {};
+                                      headers.forEach((h, i) => {
+                                        row[h] = values[i]?.trim();
+                                      });
+                                      return row;
+                                    });
+
+                                    // Update Module Config
+                                    handleUpdateConfig(selectedModule.id, {
+                                      trainingData: data,
+                                      // Default config if not set
+                                      trainingConfig: {
+                                        idColumn: headers[0] || 'id',
+                                        wordColumn: headers[1] || 'word',
+                                        conceptMappings: selectedModule.trainingConfig?.conceptMappings || {}
+                                      }
+                                    });
+                                  }
+                                }
+                              };
+                              reader.readAsText(file);
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+
+                    {selectedModule.trainingData && selectedModule.trainingConfig && (
+                      <>
+                        <div className="input-row">
+                          <label>ID Column
+                            <select
+                              value={selectedModule.trainingConfig.idColumn}
+                              onChange={(e) => handleUpdateConfig(selectedModule.id, {
+                                trainingConfig: {
+                                  ...selectedModule.trainingConfig!,
+                                  idColumn: e.target.value
+                                }
+                              })}
+                              style={{ width: '100%' }}
+                            >
+                              {Object.keys(selectedModule.trainingData[0]).map(k => (
+                                <option key={k} value={k}>{k}</option>
+                              ))}
+                            </select>
+                          </label>
+                        </div>
+                        <div className="input-row">
+                          <label>Word Column
+                            <select
+                              value={selectedModule.trainingConfig.wordColumn}
+                              onChange={(e) => handleUpdateConfig(selectedModule.id, {
+                                trainingConfig: {
+                                  ...selectedModule.trainingConfig!,
+                                  wordColumn: e.target.value
+                                }
+                              })}
+                              style={{ width: '100%' }}
+                            >
+                              {Object.keys(selectedModule.trainingData[0]).map(k => (
+                                <option key={k} value={k}>{k}</option>
+                              ))}
+                            </select>
+                          </label>
+                        </div>
+
+                        <div style={{ marginTop: '10px', borderTop: '1px solid #444', paddingTop: '5px' }}>
+                          <strong>Concept Mappings</strong>
+                          <div style={{ fontSize: '0.8rem', color: '#888', marginBottom: '5px' }}>
+                            Map CSV columns to connected Concept modules.
+                          </div>
+                          {/** iterate over connected modules that are CONCEPT type **/}
+                          {modules.filter(m => m.type === 'CONCEPT').map(conceptMod => {
+                            // Hacky check: is there a visual connection to this module?
+                            // In reality, we should check the connection list.
+                            // For now, let's just list ALL concept modules to make it easy to map.
+                            // Or better: Filter to only modules that are connected?
+                            // Let's just list all for simplicity of UI first.
+                            return (
+                              <div key={conceptMod.id} style={{ marginBottom: '5px', padding: '5px', background: '#222', borderRadius: '4px' }}>
+                                <div style={{ marginBottom: '2px', fontWeight: 'bold' }}>{conceptMod.name || conceptMod.label}</div>
+                                <div style={{ display: 'flex', gap: '5px' }}>
+                                  <select
+                                    value={selectedModule.trainingConfig!.conceptMappings[conceptMod.id]?.column || ''}
+                                    onChange={(e) => {
+                                      const newMappings = { ...selectedModule.trainingConfig!.conceptMappings };
+                                      if (e.target.value === '') {
+                                        delete newMappings[conceptMod.id];
+                                      } else {
+                                        newMappings[conceptMod.id] = {
+                                          column: e.target.value,
+                                          delimiter: newMappings[conceptMod.id]?.delimiter || ';'
+                                        };
+                                      }
+                                      handleUpdateConfig(selectedModule.id, {
+                                        trainingConfig: {
+                                          ...selectedModule.trainingConfig!,
+                                          conceptMappings: newMappings
+                                        }
+                                      });
+                                    }}
+                                    style={{ flex: 2, fontSize: '10px' }}
+                                  >
+                                    <option value="">(None)</option>
+                                    {Object.keys(selectedModule.trainingData![0]).map(k => (
+                                      <option key={k} value={k}>{k}</option>
+                                    ))}
+                                  </select>
+                                  <input
+                                    type="text"
+                                    placeholder="Split (;)"
+                                    value={selectedModule.trainingConfig!.conceptMappings[conceptMod.id]?.delimiter || ';'}
+                                    onChange={(e) => {
+                                      const mapping = selectedModule.trainingConfig!.conceptMappings[conceptMod.id];
+                                      if (mapping) {
+                                        const newMappings = { ...selectedModule.trainingConfig!.conceptMappings };
+                                        newMappings[conceptMod.id] = { ...mapping, delimiter: e.target.value };
+                                        handleUpdateConfig(selectedModule.id, {
+                                          trainingConfig: {
+                                            ...selectedModule.trainingConfig!,
+                                            conceptMappings: newMappings
+                                          }
+                                        });
+                                      }
+                                    }}
+                                    style={{ flex: 1, fontSize: '10px', textAlign: 'center' }}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION: TRAINING (Learned Output) */}
+              {selectedModule.type === 'LEARNED_OUTPUT' && selectedModule.nodeCount === 0 && (
+                <InspectorSection title="Training">
+                  <div style={{ padding: '10px', textAlign: 'center' }}>
+                    <p style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '10px' }}>
+                      Initialize this output module with concepts from an input module.
+                    </p>
+                    <select
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val && canvasRef.current && canvasRef.current.populateLearnedOutput) {
+                          // Find name for confirmation
+                          const srcMod = modules.find(m => m.id === val);
+                          if (window.confirm(`Populate this module with ${srcMod?.concepts?.length || 0} concepts from "${srcMod?.name}"?`)) {
+                            canvasRef.current.populateLearnedOutput(selectedModule.id, val);
+                            refreshModules();
+                            refreshInspector(selectedModule.id);
+                          }
+                        }
+                      }}
+                      value=""
+                      style={{ width: '100%', marginBottom: '5px' }}
+                    >
+                      <option value="">-- Select Source Concepts --</option>
+                      {modules.filter(m => m.type === 'CONCEPT').map(m => (
+                        <option key={m.id} value={m.id}>
+                          {m.name || m.label} ({m.concepts?.length || 0} items)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </InspectorSection>
+              )}
 
               {/* SECTION: CONNECTIONS */}
               <InspectorSection title="Connections">
@@ -902,23 +1171,164 @@ function App() {
         {/* Creation */}
         < div className="control-group" >
           <h2>Create Module</h2>
+
           <div className="input-row">
-            <select
-              value={newModule.type}
-              onChange={e => handleTypeChange(e.target.value as ModuleType)}
-              style={{ flex: 1 }}
-            >
-              <option value="BRAIN">Brain (Recurrent)</option>
-              <option value="LAYER">Layer (Feedfwd)</option>
-              <option value="INPUT">Input Layer</option>
-              <option value="OUTPUT">Output Layer</option>
-            </select>
-          </div>
-          <div className="input-row">
-            <label>Nodes <Tooltip text="Number of neurons in this module" />
-              <input type="number" placeholder="Nodes" value={newModule.nodes} onChange={e => setNewModule({ ...newModule, nodes: parseInt(e.target.value) })} style={{ width: '100%' }} />
+            <label>Type <Tooltip text="Module Function" />
+              <select
+                value={newModule.type}
+                onChange={e => handleTypeChange(e.target.value as ModuleType)}
+                style={{ width: '100%' }}
+              >
+                <option value="BRAIN">Brain (Recurrent)</option>
+                <option value="LAYER">Layer (Feedfwd)</option>
+                <option value="INPUT">Input Layer</option>
+                <option value="OUTPUT">Output Layer</option>
+                <option value="CONCEPT">Concept Input (CSV)</option>
+                <option value="LEARNED_OUTPUT">Learned Output</option>
+                <option value="TRAINING_DATA">Training Data</option>
+              </select>
             </label>
           </div>
+
+          {/* Common Name Input for all types */}
+          <div className="input-row">
+            <label>Name <Tooltip text="Unique display name" />
+              <input
+                type="text"
+                value={newModule.name}
+                onChange={e => setNewModule({ ...newModule, name: e.target.value })}
+                placeholder={newModule.type}
+                style={{ width: '100%' }}
+              />
+            </label>
+          </div>
+
+          {
+            newModule.type === 'CONCEPT' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '5px' }}>
+
+                <div className="input-row">
+                  <label>Data Column Name <Tooltip text="Column header in training data" />
+                    <input
+                      type="text"
+                      value={newModule.conceptColumn}
+                      onChange={e => setNewModule({ ...newModule, conceptColumn: e.target.value })}
+                      placeholder="e.g. fruit_type"
+                      style={{ width: '100%' }}
+                    />
+                  </label>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <label style={{ flex: 1 }}>Delimiter
+                    <input
+                      type="text"
+                      value={conceptDelimiter}
+                      onChange={e => setConceptDelimiter(e.target.value)}
+                      style={{ width: '30px', textAlign: 'center', marginLeft: '5px' }}
+                      maxLength={1}
+                    />
+                  </label>
+                  <label className="button-upload" style={{
+                    cursor: 'pointer', background: '#444', padding: '4px 8px',
+                    borderRadius: '4px', fontSize: '11px', marginLeft: '5px',
+                    border: '1px solid #666', flex: 2, textAlign: 'center'
+                  }}>
+                    Upload CSV
+                    <input
+                      type="file"
+                      accept=".csv,.txt"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          const file = e.target.files[0];
+                          const name = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
+
+                          // Auto-populate Name and Column
+                          setNewModule(prev => ({ ...prev, name: name, conceptColumn: name }));
+
+                          const reader = new FileReader();
+                          reader.onload = (ev) => {
+                            if (ev.target?.result) {
+                              setConceptCSV(ev.target.result as string);
+                              setCsvHasHeaders(true); // Default to true on upload
+                            }
+                          };
+                          reader.readAsText(file);
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
+
+                {/* CSV Columns Parsing */}
+                <div className="input-row" style={{ alignItems: 'center' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', flex: 1 }}>
+                    <input
+                      type="checkbox"
+                      checked={csvHasHeaders}
+                      onChange={e => setCsvHasHeaders(e.target.checked)}
+                      style={{ marginRight: '5px' }}
+                    />
+                    <span style={{ fontSize: '0.8rem' }}>Has Headers</span>
+                  </label>
+                </div>
+
+                <div className="input-row" style={{ justifyContent: 'space-between' }}>
+                  <label style={{ width: '48%' }}>ID Column
+                    <select
+                      value={idColumnIndex}
+                      onChange={e => setIdColumnIndex(parseInt(e.target.value))}
+                      style={{ width: '100%', fontSize: '0.8rem' }}
+                    >
+                      {previewColumns.map((col, idx) => (
+                        <option key={`id-${idx}`} value={idx}>{col}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label style={{ width: '48%' }}>Label Column
+                    <select
+                      value={labelColumnIndex}
+                      onChange={e => setLabelColumnIndex(parseInt(e.target.value))}
+                      style={{ width: '100%', fontSize: '0.8rem' }}
+                    >
+                      {previewColumns.map((col, idx) => (
+                        <option key={`lbl-${idx}`} value={idx}>{col}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+
+                <label>CSV Content (ID{conceptDelimiter}Label) <Tooltip text="List of concepts" />
+                  <textarea
+                    value={conceptCSV}
+                    onChange={e => setConceptCSV(e.target.value)}
+                    style={{
+                      width: '100%',
+                      height: '100px',
+                      fontFamily: 'monospace',
+                      fontSize: '11px',
+                      background: '#1a1a1a',
+                      border: '1px solid #333',
+                      padding: '5px',
+                      color: '#ddd'
+                    }}
+                    placeholder={`1${conceptDelimiter}Apple\n2${conceptDelimiter}Banana`}
+                  />
+                </label>
+              </div>
+            )
+          }
+
+          {
+            newModule.type !== 'LEARNED_OUTPUT' && newModule.type !== 'CONCEPT' && (
+              <div className="input-row">
+                <label>Nodes <Tooltip text="Number of neurons in this module" />
+                  <input type="number" placeholder="Nodes" value={newModule.nodes} onChange={e => setNewModule({ ...newModule, nodes: parseInt(e.target.value) })} style={{ width: '100%' }} />
+                </label>
+              </div>
+            )
+          }
           {
             newModule.type === 'LAYER' && (
               <div className="input-row">
@@ -928,7 +1338,7 @@ function App() {
               </div>
             )
           }
-          <button className="primary" onClick={addModule}>+ Add</button>
+          <button className="primary" onClick={addModule} style={{ marginTop: '10px', width: '100%' }}>+ Create Module</button>
         </div >
 
         {/* Global Controls */}
@@ -1143,65 +1553,67 @@ function App() {
         )
       }
       {/* Edit Connection Modal */}
-      {connectModal.isOpen && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
-        }}>
+      {
+        connectModal.isOpen && (
           <div style={{
-            background: '#1e1e24', padding: '20px', borderRadius: '8px', border: '1px solid #44cb82',
-            minWidth: '350px', boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
           }}>
-            <h3 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
-              Edit Connection
-            </h3>
-            <div style={{ fontSize: '0.9rem', marginBottom: '15px', color: '#aaa' }}>
-              {connectModal.sourceId} → {connectModal.targetId}
-            </div>
+            <div style={{
+              background: '#1e1e24', padding: '20px', borderRadius: '8px', border: '1px solid #44cb82',
+              minWidth: '350px', boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
+            }}>
+              <h3 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
+                Edit Connection
+              </h3>
+              <div style={{ fontSize: '0.9rem', marginBottom: '15px', color: '#aaa' }}>
+                {connectModal.sourceId} → {connectModal.targetId}
+              </div>
 
-            <div className="input-row">
-              <label>Connectivity {connectModal.params?.coverage || 100}%
-                <input type="range" min="0" max="100" value={connectModal.params?.coverage || 100}
-                  onChange={(e) => setConnectModal(prev => ({
-                    ...prev, params: { ...prev.params!, coverage: parseInt(e.target.value) }
-                  }))}
-                  style={{ width: '100%' }}
-                />
-              </label>
-            </div>
+              <div className="input-row">
+                <label>Connectivity {connectModal.params?.coverage || 100}%
+                  <input type="range" min="0" max="100" value={connectModal.params?.coverage || 100}
+                    onChange={(e) => setConnectModal(prev => ({
+                      ...prev, params: { ...prev.params!, coverage: parseInt(e.target.value) }
+                    }))}
+                    style={{ width: '100%' }}
+                  />
+                </label>
+              </div>
 
-            <div className="input-row">
-              <label>Leak {connectModal.params?.localizer || 0}%
-                <input type="range" min="0" max="100" value={connectModal.params?.localizer || 0}
-                  onChange={(e) => setConnectModal(prev => ({
-                    ...prev, params: { ...prev.params!, localizer: parseInt(e.target.value) }
-                  }))}
-                  style={{ width: '100%' }}
-                />
-              </label>
-            </div>
+              <div className="input-row">
+                <label>Leak {connectModal.params?.localizer || 0}%
+                  <input type="range" min="0" max="100" value={connectModal.params?.localizer || 0}
+                    onChange={(e) => setConnectModal(prev => ({
+                      ...prev, params: { ...prev.params!, localizer: parseInt(e.target.value) }
+                    }))}
+                    style={{ width: '100%' }}
+                  />
+                </label>
+              </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
-              <button onClick={() => setConnectModal({ ...connectModal, isOpen: false })} style={{ padding: '8px 16px', background: '#333', border: 'none', color: '#fff', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
-              <button onClick={() => {
-                if (canvasRef.current && connectModal.params) {
-                  canvasRef.current.connectModules(
-                    connectModal.sourceId,
-                    connectModal.targetId,
-                    connectModal.params.sides.src,
-                    connectModal.params.sides.tgt,
-                    connectModal.params.coverage,
-                    connectModal.params.localizer
-                  );
-                  setConnectModal({ ...connectModal, isOpen: false });
-                  // Refresh Inspector if looking at these modules
-                  refreshInspector(selectedModuleId!);
-                }
-              }} style={{ padding: '8px 16px', background: '#44cb82', border: 'none', color: '#000', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Update</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
+                <button onClick={() => setConnectModal({ ...connectModal, isOpen: false })} style={{ padding: '8px 16px', background: '#333', border: 'none', color: '#fff', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
+                <button onClick={() => {
+                  if (canvasRef.current && connectModal.params) {
+                    canvasRef.current.connectModules(
+                      connectModal.sourceId,
+                      connectModal.targetId,
+                      connectModal.params.sides.src,
+                      connectModal.params.sides.tgt,
+                      connectModal.params.coverage,
+                      connectModal.params.localizer
+                    );
+                    setConnectModal({ ...connectModal, isOpen: false });
+                    // Refresh Inspector if looking at these modules
+                    refreshInspector(selectedModuleId!);
+                  }
+                }} style={{ padding: '8px 16px', background: '#44cb82', border: 'none', color: '#000', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Update</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
     </div >
   );
 }

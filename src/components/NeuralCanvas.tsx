@@ -34,6 +34,7 @@ export interface NeuralCanvasHandle {
     step: (count: number) => void;
     getTickCount: () => number;
     resetState: () => void;
+    populateLearnedOutput?: (targetId: string, sourceId: string) => void;
 }
 
 export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
@@ -118,6 +119,9 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
             let config = netRef.current.moduleConnections.get(`${idA}-${idB}`);
             if (!config) config = netRef.current.moduleConnections.get(`${idB}-${idA}`);
             return config;
+        },
+        populateLearnedOutput: (targetId: string, sourceId: string) => {
+            netRef.current.populateLearnedOutput(targetId, sourceId);
         },
         step: (count: number) => {
             for (let i = 0; i < count; i++) {
@@ -289,6 +293,29 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
 
                     // SELECTION REMOVED FROM SINGLE CLICK (Drag only)
                     return;
+                }
+            }
+        } else {
+            // Check for Empty/Learned Output Module Hit (Body Drag)
+            const wx = (pos.x - transform.x) / transform.k;
+            const wy = (pos.y - transform.y) / transform.k;
+
+            for (const mod of netRef.current.modules.values()) {
+                if (mod.type === 'LEARNED_OUTPUT' || (mod.nodeCount === 0 && mod.type === 'CONCEPT')) {
+                    // It's a box
+                    const w = mod.width || 100; // Default width
+                    const h = mod.height || 600; // Default height
+                    // Renderer draws centered
+                    if (wx >= mod.x - w / 2 && wx <= mod.x + w / 2 &&
+                        wy >= mod.y - h / 2 && wy <= mod.y + h / 2) {
+
+                        setDraggingModuleId(mod.id);
+                        dragStartRef.current = { x: wx - mod.x, y: wy - mod.y };
+
+                        // Select on click for these since they have no nodes to click
+                        if (onModuleSelect) onModuleSelect(mod.id);
+                        return;
+                    }
                 }
             }
         }

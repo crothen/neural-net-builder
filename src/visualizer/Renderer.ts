@@ -191,6 +191,34 @@ export class Renderer {
                 this.ctx.setLineDash([]); // Reset
             }
 
+            // --- CUSTOM VISUALIZATION FOR TRAINING DATA (HEXAGON) ---
+            if (module.type === 'TRAINING_DATA') {
+                // Draw Hexagon
+                const r = 40; // Size
+                this.ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const angle = Math.PI / 3 * i;
+                    const hx = module.x + r * Math.cos(angle);
+                    const hy = module.y + r * Math.sin(angle);
+                    if (i === 0) this.ctx.moveTo(hx, hy);
+                    else this.ctx.lineTo(hx, hy);
+                }
+                this.ctx.closePath();
+
+                this.ctx.fillStyle = '#222';
+                this.ctx.fill();
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = '#44cb82'; // Greenish
+                this.ctx.stroke();
+
+                // Label
+                this.ctx.fillStyle = '#fff';
+                this.ctx.font = '14px "Inter", sans-serif';
+                this.ctx.textAlign = 'center';
+                this.ctx.textBaseline = 'middle';
+                this.ctx.fillText(module.name || 'DATA', module.x, module.y);
+            }
+
             // Draw Module Label (Prominent)
             // Visibility Check: If hiding details, only show labels for INPUT/OUTPUT
             if (!showHidden && module.type !== 'INPUT' && module.type !== 'OUTPUT') {
@@ -217,6 +245,27 @@ export class Renderer {
             // Get nodes for this module
             const nodes = net.getModuleNodes(module.id);
 
+            // Special Case: Empty Learned Output
+            if (module.type === 'LEARNED_OUTPUT' && nodes.length === 0) {
+                const w = module.width || 100;
+                const h = module.height || 600;
+                const x = module.x - w / 2;
+                const y = module.y - h / 2;
+
+                this.ctx.save();
+                this.ctx.strokeStyle = '#444';
+                this.ctx.lineWidth = 2;
+                this.ctx.setLineDash([10, 5]);
+                this.ctx.strokeRect(x, y, w, h);
+
+                this.ctx.fillStyle = '#666';
+                this.ctx.font = 'italic 16px Arial';
+                this.ctx.textAlign = 'center';
+                this.ctx.textBaseline = 'middle';
+                this.ctx.fillText('(Empty Output)', module.x, module.y);
+                this.ctx.restore();
+            }
+
             nodes.forEach(node => {
                 // Visibility Check
                 if (!showHidden) {
@@ -227,7 +276,27 @@ export class Renderer {
 
                 this.ctx.beginPath();
                 // Smaller hidden nodes, Input/Output slightly larger
-                const radius = node.type === NodeType.HIDDEN ? 6 : 12;
+                let radius = node.type === NodeType.HIDDEN ? 6 : 12;
+
+                // --- CONCEPT NODE OVERRIDE ---
+                if (node.type === NodeType.CONCEPT) {
+                    // Small dot
+                    radius = 3;
+                    this.ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = '#fff';
+                    this.ctx.fill();
+
+                    // Label (Left)
+                    this.ctx.fillStyle = '#ccc';
+                    this.ctx.font = '12px "Inter", sans-serif';
+                    this.ctx.textAlign = 'right';
+                    this.ctx.textBaseline = 'middle';
+                    this.ctx.fillText(node.label || node.id, node.x - 8, node.y);
+
+                    // Skip the rest of standard drawing (potential heatmaps, rings etc don't apply)
+                    return;
+                }
+
                 this.ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
 
                 // --- Color Logic (FILL) ---
