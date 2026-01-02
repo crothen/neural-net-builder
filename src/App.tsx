@@ -380,7 +380,8 @@ function App() {
                   </button>
                 </div>
 
-                <label>Name <Tooltip text="Module identifier" />
+                <label>
+                  <div>Name <Tooltip text="Module identifier" /></div>
                   <input
                     type="text"
                     value={selectedModule.name || selectedModule.label || ''}
@@ -389,7 +390,8 @@ function App() {
                 </label>
 
                 <div className="input-row">
-                  <label>Color <Tooltip text="Visual color tint" />
+                  <label>
+                    <div>Color <Tooltip text="Visual color tint" /></div>
                     <input
                       type="color"
                       value={selectedModule.color || (selectedModule.type === 'INPUT' ? '#ff00ff' : selectedModule.type === 'OUTPUT' ? '#ffff00' : '#00ffff')}
@@ -401,7 +403,8 @@ function App() {
 
                 {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT' && (
                   <div className="input-row">
-                    <label>Nodes <Tooltip text="Number of neurons" />
+                    <label>
+                      <div>Nodes <Tooltip text="Number of neurons" /></div>
                       <input
                         type="number"
                         value={selectedModule.nodeCount}
@@ -413,7 +416,8 @@ function App() {
 
                 {selectedModule.type === 'LAYER' && (
                   <div className="input-row">
-                    <label>Depth <Tooltip text="Number of columns (Layers only)" />
+                    <label>
+                      <div>Depth <Tooltip text="Number of columns (Layers only)" /></div>
                       <input
                         type="number"
                         value={selectedModule.depth || 1}
@@ -426,7 +430,8 @@ function App() {
                 {/* SCALING CONTROLS */}
                 {selectedModule.type === 'BRAIN' && (
                   <div className="input-row">
-                    <label>Size (Radius) <Tooltip text="Physical size of the brain on canvas" />
+                    <label>
+                      <div>Size (Radius) <Tooltip text="Physical size of the brain on canvas" /></div>
                       <input
                         type="range"
                         min="50"
@@ -441,7 +446,8 @@ function App() {
                 )}
                 {(selectedModule.type === 'LAYER' || selectedModule.type === 'INPUT' || selectedModule.type === 'OUTPUT') && (
                   <div className="input-row">
-                    <label>V-Spacing (Height) <Tooltip text="Vertical spread of nodes" />
+                    <label>
+                      <div>V-Spacing (Height) <Tooltip text="Vertical spread of nodes" /></div>
                       <input
                         type="range"
                         min="100"
@@ -456,7 +462,8 @@ function App() {
                 )}
                 {selectedModule.type === 'LAYER' && (
                   <div className="input-row">
-                    <label>H-Spacing (Width) <Tooltip text="Horizontal spread of columns" />
+                    <label>
+                      <div>H-Spacing (Width) <Tooltip text="Horizontal spread of columns" /></div>
                       <input
                         type="range"
                         min="20"
@@ -476,7 +483,8 @@ function App() {
               <InspectorSection title="Parameters">
                 {selectedModule.type === 'INPUT' && (
                   <div className="input-row">
-                    <label>Input Pattern <Tooltip text="Auto-generated signal pattern" />
+                    <label>
+                      <div>Input Pattern <Tooltip text="Auto-generated signal pattern" /></div>
                       <select
                         value={(canvasRef.current?.getModuleNodes(selectedModule.id) || [])[0]?.inputType || 'PULSE'}
                         onChange={(e) => {
@@ -499,7 +507,8 @@ function App() {
                 )}
                 {(selectedModule.type === 'INPUT') && (
                   <div className="input-row">
-                    <label>Frequency: {selectedModule.inputFrequency || 1.0} <Tooltip text="Sig/Tick (Noise) or Hz factor (Sin)" />
+                    <label>
+                      <div>Frequency: {selectedModule.inputFrequency || 1.0} <Tooltip text="Sig/Tick (Noise) or Hz factor (Sin)" /></div>
                       <input
                         type="number"
                         step="0.1"
@@ -523,7 +532,8 @@ function App() {
 
                 {selectedModule.type !== 'INPUT' && selectedModule.type !== 'TRAINING_DATA' && (
                   <div className="input-row">
-                    <label>Threshold: {selectedModule.threshold !== undefined ? selectedModule.threshold.toFixed(1) : '1.0'} <Tooltip text="Voltage required to fire (Lower = Sensitive)" />
+                    <label>
+                      <div>Threshold: {selectedModule.threshold !== undefined ? selectedModule.threshold.toFixed(1) : '1.0'} <Tooltip text="Voltage required to fire (Lower = Sensitive)" /></div>
                       <input
                         type="range"
                         min="0.1"
@@ -540,7 +550,8 @@ function App() {
                 {/* REFRACTORY */}
                 {selectedModule.type !== 'TRAINING_DATA' && (
                   <div className="input-row">
-                    <label>Refractory: {selectedModule.refractoryPeriod || 0}ms <Tooltip text="Cooldown after firing" />
+                    <label>
+                      <div>Refractory: {selectedModule.refractoryPeriod || 0}ms <Tooltip text="Cooldown after firing" /></div>
                       <input
                         type="number"
                         min="0"
@@ -556,7 +567,8 @@ function App() {
                 {/* LEAK (BRAIN ONLY) */}
                 {selectedModule.type === 'BRAIN' && (
                   <div className="input-row">
-                    <label>Leak Rate: {selectedModule.leak || 0} <Tooltip text="Signal loss per tick" />
+                    <label>
+                      <div>Leak Rate: {selectedModule.leak || 0} <Tooltip text="Signal loss per tick" /></div>
                       <input
                         type="number"
                         step="0.01"
@@ -588,7 +600,8 @@ function App() {
                       <div className="inspector-section" style={{ background: 'rgba(0,0,0,0.2)' }}>
                         <div className="section-body" style={{ padding: '10px' }}>
                           <div className="input-row">
-                            <label>Learning Rate <Tooltip text="Hebbian learning rate" />
+                            <label>
+                              <div>Learning Rate <Tooltip text="Hebbian learning rate" /></div>
                               <input
                                 type="number"
                                 step="0.001"
@@ -601,7 +614,8 @@ function App() {
                             </label>
                           </div>
                           <div className="input-row">
-                            <label>Pruning Thresh <Tooltip text="Remove connections weaker than this (abs)" />
+                            <label>
+                              <div>Pruning Thresh <Tooltip text="Remove connections weaker than this (abs)" /></div>
                               <input
                                 type="number"
                                 step="0.01"
@@ -614,7 +628,8 @@ function App() {
                             </label>
                           </div>
                           <div className="input-row">
-                            <label>Regrowth Rate <Tooltip text="New connections per tick (0.1 = 1 per 10 ticks)" />
+                            <label>
+                              <div>Regrowth Rate <Tooltip text="New connections per tick (0.1 = 1 per 10 ticks)" /></div>
                               <input
                                 type="number"
                                 step="0.1"
@@ -654,7 +669,8 @@ function App() {
                     {selectedModule.isLocalized && (
 
                       <div className="input-row">
-                        <label>Leak: {selectedModule.localizationLeak !== undefined ? selectedModule.localizationLeak : 0}% <Tooltip text="0% = Strict Neighbors, 100% = Random" />
+                        <label>
+                          <div>Leak: {selectedModule.localizationLeak !== undefined ? selectedModule.localizationLeak : 0}% <Tooltip text="0% = Strict Neighbors, 100% = Random" /></div>
                           <input
                             type="range"
                             min="0"
@@ -667,7 +683,8 @@ function App() {
                       </div>
                     )}
                     <div className="input-row">
-                      <label>Synapses/Node <Tooltip text="Internal connections per neuron" />
+                      <label>
+                        <div>Synapses/Node <Tooltip text="Internal connections per neuron" /></div>
                         <input
                           type="range"
                           min="0"
@@ -1290,7 +1307,8 @@ function App() {
 
           {/* Common Name Input for all types */}
           <div className="input-row">
-            <label>Name <Tooltip text="Unique display name" />
+            <label>
+              <div>Name <Tooltip text="Unique display name" /></div>
               <input
                 type="text"
                 value={newModule.name}
@@ -1421,7 +1439,8 @@ function App() {
           {
             newModule.type !== 'LEARNED_OUTPUT' && newModule.type !== 'CONCEPT' && newModule.type !== 'TRAINING_DATA' && (
               <div className="input-row">
-                <label>Nodes <Tooltip text="Number of neurons in this module" />
+                <label>
+                  <div>Nodes <Tooltip text="Number of neurons in this module" /></div>
                   <input type="number" placeholder="Nodes" value={newModule.nodes} onChange={e => setNewModule({ ...newModule, nodes: parseInt(e.target.value) })} style={{ width: '100%' }} />
                 </label>
               </div>
@@ -1430,7 +1449,8 @@ function App() {
           {
             newModule.type === 'LAYER' && (
               <div className="input-row">
-                <label>Depth <Tooltip text="Number of columns (Layers only)" />
+                <label>
+                  <div>Depth <Tooltip text="Number of columns (Layers only)" /></div>
                   <input type="number" placeholder="Depth" value={newModule.depth} onChange={e => setNewModule({ ...newModule, depth: parseInt(e.target.value) })} style={{ width: '100%' }} />
                 </label>
               </div>
@@ -1444,11 +1464,11 @@ function App() {
         }>
           <h2>Global</h2>
           <label>
-            Speed: {simulation.speed}ms <Tooltip text="Ticks duration (ms)" />
+            <div>Speed: {simulation.speed}ms <Tooltip text="Ticks duration (ms)" /></div>
             <input type="range" min="1" max="1000" value={simulation.speed} onChange={handleSpeedChange} style={{ width: '100%' }} />
           </label>
           <label>
-            Decay: {simulation.decay ? simulation.decay.toFixed(2) : '0.10'} <Tooltip text="Global potential loss per tick" />
+            <div>Decay: {simulation.decay ? simulation.decay.toFixed(2) : '0.10'} <Tooltip text="Global potential loss per tick" /></div>
             <input type="range" min="0.01" max="0.5" step="0.01" value={simulation.decay || 0.1} onChange={handleDecayChange} style={{ width: '100%' }} />
           </label>
 
