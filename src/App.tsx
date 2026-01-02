@@ -2124,7 +2124,7 @@ function App() {
                 {(() => {
                   const filteredIncoming = nodeConnections.incoming
                     .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.sourceId.startsWith(fid)));
-                  const incomingSum = filteredIncoming.reduce((acc: number, c: any) => acc + c.weight, 0);
+                  const incomingSum = filteredIncoming.reduce((acc: number, c: any) => acc + Math.abs(c.weight), 0);
 
                   return (
                     <>
@@ -2137,8 +2137,8 @@ function App() {
                           .map((c: any) => (
                             <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <span>← {c.sourceId}</span>
-                              <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>
-                                W: {c.weight.toFixed(3)}
+                              <span style={{ color: c.weight >= 0 ? '#4fd' : '#ff4444', fontWeight: 'bold' }}>
+                                {c.weight >= 0 ? 'W: ' : 'INHIB: '}{c.weight.toFixed(3)}
                               </span>
                             </li>
                           ))}
@@ -2150,7 +2150,7 @@ function App() {
                 {(() => {
                   const filteredOutgoing = nodeConnections.outgoing
                     .filter((c: any) => filterModuleIds.includes('ALL') || filterModuleIds.some(fid => c.targetId.startsWith(fid)));
-                  const outgoingSum = filteredOutgoing.reduce((acc: number, c: any) => acc + c.weight, 0);
+                  const outgoingSum = filteredOutgoing.reduce((acc: number, c: any) => acc + Math.abs(c.weight), 0);
 
                   return (
                     <>
@@ -2163,8 +2163,8 @@ function App() {
                           .map((c: any) => (
                             <li key={c.id} style={{ padding: '4px', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <span>→ {c.targetId}</span>
-                              <span style={{ color: c.weight > 0 ? '#4fd' : '#f55' }}>
-                                W: {c.weight.toFixed(3)}
+                              <span style={{ color: c.weight >= 0 ? '#4fd' : '#ff4444', fontWeight: 'bold' }}>
+                                {c.weight >= 0 ? 'W: ' : 'INHIB: '}{c.weight.toFixed(3)}
                               </span>
                             </li>
                           ))}

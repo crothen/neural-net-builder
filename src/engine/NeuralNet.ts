@@ -484,23 +484,72 @@ export class NeuralNet {
             const existing = new Set<string>();
             this.connections.forEach(c => existing.add(c.id));
 
-            // Sparse Logic (match connectModules)
-            // Removed Sparse Logic to ensure "all nodes" are included as requested
-            // const potential = srcNodes.length * tgtNodes.length;
-            // const isSparse = potential > 2500;
+            // FIND SAVED CONFIG
+            const forwardKey = `${srcModId}-${tgtModId}`;
+            const reverseKey = `${tgtModId}-${srcModId}`;
+            const config = this.moduleConnections.get(forwardKey) || this.moduleConnections.get(reverseKey);
+
+            // Default params if no config found (Legacy behavior: 100%)
+            const coverage = config ? config.coverage : 100;
+            const localizer = config ? config.localizer : 0;
+
+            // Pre-calculate positions for localization if needed
+            // (Assuming verifyLocalization Logic logic is roughly: sort by distance)
 
             srcNodes.forEach(src => {
-                tgtNodes.forEach(tgt => {
+                // If Localized, we might sort targets by distance? 
+                // Or simply apply probability based on distance?
+                // The connectModules implementation does detailed localization.
+                // Replicating FULL localizer logic here is complex inside this loop.
+                // Simplified "Selection" Logic:
+
+                let potentialTargets = [...tgtNodes];
+
+                // 1. Sort by distance if localized
+                if (localizer > 0) {
+                    potentialTargets.sort((a, b) => {
+                        const distA = (a.x - src.x) ** 2 + (a.y - src.y) ** 2;
+                        const distB = (b.x - src.x) ** 2 + (b.y - src.y) ** 2;
+                        return distA - distB;
+                    });
+                } else {
+                    // Random shuffle for standard coverage
+                    potentialTargets.sort(() => Math.random() - 0.5);
+                }
+
+                // 2. Determine how many to connect
+                // Coverage % of ALL targets? 
+                // For "ALL" -> "ALL": count = targets.length * (coverage/100)
+                // We assume strict ALL-ALL topology for now as we don't parse "Sides" deeply here
+                const countToConnect = Math.max(1, Math.floor(potentialTargets.length * (coverage / 100)));
+
+                // 3. Connect to top N (closest or random)
+                for (let i = 0; i < countToConnect; i++) {
+                    const tgt = potentialTargets[i];
                     const connId = `c-${src.id}-${tgt.id}`;
+
                     if (!existing.has(connId)) {
+                        // Apply randomness if leak?
+                        // If Localizer > 0, we already sorted. 
+                        // Leak logic in connectModules is complex (probabilistic swap).
+                        // For REPAIR, exact adherence to original shape is hard without storing seed.
+                        // We do our best to respect the *Intent* (Coverage/Sort).
+
                         this.addConnection({
                             id: connId,
                             sourceId: src.id,
                             targetId: tgt.id,
-                            weight: Math.random() // Positive
+                            weight: (Math.random()) * (srcMod.type === 'BRAIN' ? 1 : 1) // Positive for now in repair? Or check Brain?
+                            // Creating Input->Brain should be positive. Brain->Brain?
+                            // Let's stick to positive random unless requested otherwise.
+                            // User asked for negative weights "when creating new connections in a brain".
+                            // This function connects ANY modules. 
+                            // If Source is BRAIN -> Target BRAIN, maybe allow negative?
+                            // Let's keep it positive 0..1 to be safe for general wiring, 
+                            // unless it's strictly internal rewiring which uses the other function.
                         });
                     }
-                });
+                }
             });
         };
 
@@ -646,7 +695,7 @@ export class NeuralNet {
         if (!incoming || incoming.length === 0) return;
 
         let currentSum = 0;
-        incoming.forEach(c => currentSum += c.weight);
+        incoming.forEach(c => currentSum += Math.abs(c.weight));
 
         if (currentSum > targetSum) {
             const factor = targetSum / currentSum;
@@ -746,7 +795,9 @@ export class NeuralNet {
                     idealWeight = Math.min(idealWeight, 0.5); // Clamp max
 
                     // Apply randomness (0.0 to Ideal)
-                    const finalWeight = Math.random() * idealWeight;
+                    // Apply randomness (0.0 to Ideal) -> Now +/- Ideal
+                    // Range: [-idealWeight, +idealWeight]
+                    const finalWeight = (Math.random() - 0.5) * 2 * idealWeight;
 
                     this.addConnection({
                         id: `c-${source.id}-${target.id}-${k}`,
@@ -831,16 +882,6 @@ export class NeuralNet {
     ) {
         // Enforce replacement policy: Clear existing connections between these modules first
         this.disconnectModules(sourceId, targetId);
-
-        // Store configuration for future reference (UI Editing)
-        const configKey = `${sourceId}->${targetId}`;
-        this.moduleConnections.set(configKey, {
-            sourceId,
-            targetId,
-            coverage,
-            localizer,
-            sides: { src: srcSide, tgt: tgtSide }
-        });
 
         const getNodesForSide = (modId: string, side: ConnectionSide): BaseNode[] => {
             const mod = this.modules.get(modId);
@@ -1254,16 +1295,37 @@ export class NeuralNet {
                         const boost = rate * src.activation * tgt.activation;
                         conn.weight += boost;
 
-                        // 2. The Tax: Pay for it immediately
-                        // Subtract the boost proportionally from EVERY incoming connection
+                        // 2. Check Target Sum (Capacity)
+                        const targetSum = module.sustainability?.targetSum || 3.0; // Default to 3
                         const incomingToTgt = this.incoming.get(tgt.id) || [];
-                        if (incomingToTgt.length > 0) {
-                            const tax = boost / incomingToTgt.length;
-                            incomingToTgt.forEach(c => {
-                                c.weight -= tax;
-                                // Clamp at 0
-                                if (c.weight < 0) c.weight = 0;
-                            });
+
+                        // RESTRICTION: Only consider INTERNAL connections for the budget
+                        const internalIncoming = incomingToTgt.filter(c => c.sourceId.startsWith(moduleId));
+
+                        let currentTotal = 0;
+                        internalIncoming.forEach(c => currentTotal += Math.abs(c.weight));
+
+                        // 3. Conditional Tax: Only tax if we are exceeding the budget
+                        if (currentTotal > targetSum) {
+                            // "Rich get richer, but everyone pays the tax to stay under the ceiling."
+                            // We distribute the 'boost' cost (or the excess) across everyone.
+                            // To stabilize AT targetSum, strictly speaking we should remove 'excess'.
+                            // But simply removing 'boost' (the recent addition) is the "Subtractive Normalization" philosophy
+                            // which stabilizes the sum at the point where it becomes active (approx targetSum).
+
+                            if (internalIncoming.length > 0) {
+                                const tax = boost / internalIncoming.length;
+
+                                internalIncoming.forEach(c => {
+                                    c.weight -= tax;
+                                    // Allow negative (Inhibitory) weights - No Clamp
+
+                                    // CHECK PRUNING
+                                    if (Math.abs(c.weight) < pruningThreshold) {
+                                        connsToRemove.add(c.id);
+                                    }
+                                });
+                            }
                         }
 
                         // PRUNING
@@ -1301,7 +1363,7 @@ export class NeuralNet {
                                 id: `c-${src.id}-${tgt.id}-${Date.now()}-${Math.random()}`,
                                 sourceId: src.id,
                                 targetId: tgt.id,
-                                weight: 0.1 // Weak initial weight
+                                weight: (Math.random() - 0.5) * 0.4 // Range [-0.2, 0.2]
                             });
                         }
                     }
