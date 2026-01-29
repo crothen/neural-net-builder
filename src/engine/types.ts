@@ -68,7 +68,7 @@ export interface NodeState {
     inRefractory: boolean; // Visual feedback?
 }
 
-export type ModuleType = 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT' | 'SUSTAINED_OUTPUT' | 'CONCEPT' | 'LEARNED_OUTPUT' | 'TRAINING_DATA' | 'CHECKER';
+export type ModuleType = 'BRAIN' | 'LAYER' | 'INPUT' | 'OUTPUT' | 'SUSTAINED_OUTPUT' | 'CONCEPT' | 'LEARNED_OUTPUT' | 'TRAINING_DATA' | 'CHECKER' | 'CONCEPT_TRAINER';
 
 export interface ModuleConfig {
     id: string;
@@ -132,6 +132,15 @@ export interface ModuleConfig {
         // Map ModuleID -> CSV Column Name
         conceptMappings: Record<string, { column: string, delimiter: string }>;
     };
+
+    // Concept Trainer
+    conceptTrainerConfig?: {
+        targetBrainId?: string;
+        runPerConcept: number;
+        ticksPerConcept: number;
+        settleTime: number;
+        selectedConceptIds: string[];
+    };
 }
 
 export type ConnectionSide = 'ALL' | 'LEFT' | 'RIGHT';
@@ -147,7 +156,7 @@ export interface ModuleConnectionConfig {
     };
 }
 
-export type TrainingPhase = 'IDLE' | 'IMPRINTING' | 'ASSOCIATION';
+export type TrainingPhase = 'IDLE' | 'IMPRINTING' | 'ASSOCIATION' | 'CONCEPT_TRAINING';
 
 export interface TrainingProtocolConfig {
     iterations: number;

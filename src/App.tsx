@@ -351,7 +351,7 @@ function App() {
       depth: newModule.type === 'INPUT' ? 1 : newModule.depth,
       label: displayName,
       name: displayName,
-      activationType: newModule.type === 'BRAIN' ? 'SUSTAINED' : 'PULSE',
+      activationType: (newModule.type === 'BRAIN' || newModule.type === 'SUSTAINED_OUTPUT') ? 'SUSTAINED' : 'PULSE',
       threshold: (newModule.type === 'BRAIN' || newModule.type === 'SUSTAINED_OUTPUT') ? 1.0 : 0.5,
       maxPotential: (newModule.type === 'BRAIN' || newModule.type === 'SUSTAINED_OUTPUT') ? 3.0 : 4.0,
       gain: newModule.type === 'SUSTAINED_OUTPUT' ? 3.0 : undefined,
@@ -600,6 +600,22 @@ function App() {
                     />
                   </label>
                 </div>
+
+                {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT' && (
+                  <div className="input-row">
+                    <label>
+                      <div>Activation <Tooltip text="nodeActivation" /></div>
+                      <select
+                        value={selectedModule.activationType || 'PULSE'}
+                        onChange={(e) => handleUpdateConfig(selectedModule.id, { activationType: e.target.value as any })}
+                        style={{ width: '100%' }}
+                      >
+                        <option value="PULSE">Pulse (Spiking)</option>
+                        <option value="SUSTAINED">Sustained (Integrate)</option>
+                      </select>
+                    </label>
+                  </div>
+                )}
 
                 {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT' && (
                   <div className="input-row">
@@ -1381,6 +1397,36 @@ function App() {
                         </label>
                       </div>
 
+
+                      <div className="input-row">
+                        <label>Target Brain
+                          <select
+                            value={trainingUIConfig.targetBrainId || ''}
+                            onChange={e => setTrainingUIConfig({ ...trainingUIConfig, targetBrainId: e.target.value })}
+                            style={{ width: '100%' }}
+                          >
+                            <option value="">(None)</option>
+                            {modules.filter(m => m.type === 'BRAIN').map(m => (
+                              <option key={m.id} value={m.id}>{m.name || m.label || m.id}</option>
+                            ))}
+                          </select>
+                        </label>
+                      </div>
+                      <div className="input-row">
+                        <label>Target Output
+                          <select
+                            value={trainingUIConfig.targetOutputId || ''}
+                            onChange={e => setTrainingUIConfig({ ...trainingUIConfig, targetOutputId: e.target.value })}
+                            style={{ width: '100%' }}
+                          >
+                            <option value="">(None)</option>
+                            {modules.filter(m => m.type === 'LEARNED_OUTPUT').map(m => (
+                              <option key={m.id} value={m.id}>{m.name || m.label || m.id}</option>
+                            ))}
+                          </select>
+                        </label>
+                      </div>
+
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '10px' }}>
                         <div style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '5px' }}>
                           Status: <span style={{ color: trainingStatus.phase === 'IDLE' ? '#888' : '#0f0' }}>{trainingStatus.phase}</span>
@@ -1392,7 +1438,7 @@ function App() {
                             if (canvasRef.current && selectedModule.trainingData) {
                               canvasRef.current.setTrainingConfig(trainingUIConfig);
                               // Pass Training Data Rows to Start
-                              canvasRef.current.startTrainingPhase('IMPRINTING');
+                              canvasRef.current.startTrainingPhase('IMPRINTING', selectedModule.trainingData);
                             }
                           }}
                           className="primary"
@@ -1404,7 +1450,7 @@ function App() {
                           onClick={() => {
                             if (canvasRef.current && selectedModule.trainingData) {
                               canvasRef.current.setTrainingConfig(trainingUIConfig);
-                              canvasRef.current.startTrainingPhase('ASSOCIATION');
+                              canvasRef.current.startTrainingPhase('ASSOCIATION', selectedModule.trainingData);
                             }
                           }}
                           className="primary"
@@ -1482,8 +1528,150 @@ function App() {
                 </InspectorSection>
               )}
 
-              {/* SECTION: CONNECTIONS (Hidden for TRAINING_DATA & CONCEPT) */}
-              {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT' && (
+              {/* CONCEPT_TRAINER Inspector */}
+              {selectedModule.type === 'CONCEPT_TRAINER' && selectedModule.conceptTrainerConfig && (
+                <InspectorSection title="Concept Training">
+                  {/* Target Brain Selector */}
+                  <label>Target Brain <Tooltip text="The brain to train" />
+                    <select
+                      value={selectedModule.conceptTrainerConfig.targetBrainId || ''}
+                      onChange={e => {
+                        const newConfig = { ...selectedModule.conceptTrainerConfig, targetBrainId: e.target.value };
+                        handleUpdateConfig(selectedModule.id, { conceptTrainerConfig: newConfig as any });
+                      }}
+                      style={{ width: '100%', marginBottom: '10px' }}
+                    >
+                      <option value="">-- Select Brain --</option>
+                      {modules.filter(m => m.type === 'BRAIN').map(m => (
+                        <option key={m.id} value={m.id}>{m.name || m.label}</option>
+                      ))}
+                    </select>
+                  </label>
+
+                  {/* Concept List Management */}
+                  <div style={{ marginBottom: '10px' }}>
+                    <div style={{ fontSize: '0.8rem', marginBottom: '4px' }}>Concepts to Train</div>
+                    <div style={{ display: 'flex', gap: '5px', marginBottom: '5px' }}>
+                      <select id="concept-selector" style={{ flex: 1 }}>
+                        <option value="">-- Add Concept --</option>
+                        {modules.filter(m => m.type === 'CONCEPT').map(m => (
+                          <option key={m.id} value={m.id}>{m.name}</option>
+                        ))}
+                      </select>
+                      <button
+                        onClick={() => {
+                          const select = document.getElementById('concept-selector') as HTMLSelectElement;
+                          const val = select.value;
+                          if (val && !selectedModule.conceptTrainerConfig?.selectedConceptIds.includes(val)) {
+                            const newIds = [...(selectedModule.conceptTrainerConfig?.selectedConceptIds || []), val];
+                            const newConfig = { ...selectedModule.conceptTrainerConfig, selectedConceptIds: newIds };
+                            handleUpdateConfig(selectedModule.id, { conceptTrainerConfig: newConfig as any });
+                          }
+                        }}
+                        style={{ padding: '0 8px', background: '#444' }}
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    {/* Active List */}
+                    <div style={{ background: 'rgba(0,0,0,0.2)', padding: '5px', maxHeight: '100px', overflowY: 'auto', borderRadius: '4px' }}>
+                      {(selectedModule.conceptTrainerConfig.selectedConceptIds || []).map(cid => (
+                        <div key={cid} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', padding: '2px 0', borderBottom: '1px solid #333' }}>
+                          <span>{modules.find(m => m.id === cid)?.name || cid}</span>
+                          <span
+                            style={{ color: '#f55', cursor: 'pointer', fontWeight: 'bold' }}
+                            onClick={() => {
+                              const newIds = selectedModule.conceptTrainerConfig!.selectedConceptIds.filter(id => id !== cid);
+                              const newConfig = { ...selectedModule.conceptTrainerConfig, selectedConceptIds: newIds };
+                              handleUpdateConfig(selectedModule.id, { conceptTrainerConfig: newConfig as any });
+                            }}
+                          >
+                            ×
+                          </span>
+                        </div>
+                      ))}
+                      {(!selectedModule.conceptTrainerConfig.selectedConceptIds?.length) && <div style={{ color: '#666', fontStyle: 'italic' }}>No concepts added</div>}
+                    </div>
+                  </div>
+
+                  {/* Parameters */}
+                  <div className="input-row">
+                    <label>Run/Concept Entry <Tooltip text="How many times each concept entry is trained" />
+                      <input
+                        type="number"
+                        value={selectedModule.conceptTrainerConfig.runPerConcept}
+                        onChange={e => {
+                          const newConfig = { ...selectedModule.conceptTrainerConfig, runPerConcept: parseInt(e.target.value) };
+                          handleUpdateConfig(selectedModule.id, { conceptTrainerConfig: newConfig as any });
+                        }}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                  <div className="input-row">
+                    <label>Ticks/Concept Entry <Tooltip text="Duration (ticks) to activate nodes" />
+                      <input
+                        type="number"
+                        value={selectedModule.conceptTrainerConfig.ticksPerConcept}
+                        onChange={e => {
+                          const newConfig = { ...selectedModule.conceptTrainerConfig, ticksPerConcept: parseInt(e.target.value) };
+                          handleUpdateConfig(selectedModule.id, { conceptTrainerConfig: newConfig as any });
+                        }}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+                  <div className="input-row">
+                    <label>Settle Time <Tooltip text="Cooldown ticks between entries" />
+                      <input
+                        type="number"
+                        value={selectedModule.conceptTrainerConfig.settleTime}
+                        onChange={e => {
+                          const newConfig = { ...selectedModule.conceptTrainerConfig, settleTime: parseInt(e.target.value) };
+                          handleUpdateConfig(selectedModule.id, { conceptTrainerConfig: newConfig as any });
+                        }}
+                        style={{ width: '100%' }}
+                      />
+                    </label>
+                  </div>
+
+                  {/* Action & Progress */}
+                  <div style={{ marginTop: '15px' }}>
+                    {trainingStatus.phase === 'CONCEPT_TRAINING' ? (
+                      <div>
+                        <div style={{ fontSize: '0.8rem', marginBottom: '5px', display: 'flex', justifyContent: 'space-between' }}>
+                          <span>Training...</span>
+                          <span>{trainingStatus.sampleIndex} / ?</span>
+                        </div>
+                        <div style={{ width: '100%', height: '8px', background: '#333', borderRadius: '4px', overflow: 'hidden' }}>
+                          {/* Progress bar would need total count. For now simpler spinner/pulse */}
+                          <div style={{ width: '100%', height: '100%', background: 'linear-gradient(90deg, #444, #00ffff, #444)', animation: 'pulse 1s infinite' }}></div>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        className="primary"
+                        disabled={!selectedModule.conceptTrainerConfig.targetBrainId || !selectedModule.conceptTrainerConfig.selectedConceptIds.length}
+                        style={{ width: '100%', opacity: (!selectedModule.conceptTrainerConfig.targetBrainId) ? 0.5 : 1 }}
+                        onClick={() => {
+                          if (canvasRef.current && canvasRef.current.startFastTraining) {
+                            canvasRef.current.startFastTraining(selectedModule.id);
+                          } else {
+                            alert("Fast Training not implemented in Canvas yet.");
+                          }
+                        }}
+                      >
+                        Start Training
+                      </button>
+                    )}
+                  </div>
+                </InspectorSection>
+              )}
+
+              {/* SECTION: CONNECTIONS (Hidden for TRAINING_DATA and CONCEPT_TRAINER which manages connections itself differently? No, keeps generic connections too?) */}
+              {/* User said "make a warning if not connected to a brain". This implies standard connections exist. */}
+              {selectedModule.type !== 'TRAINING_DATA' && selectedModule.type !== 'CONCEPT_TRAINER' && (
                 <InspectorSection title="Connections">
                   {/* Connection Totals Summary */}
                   {selectedModuleStats.length > 0 && (
@@ -1879,6 +2067,11 @@ function App() {
                     defaults.width = undefined; // Hexagon
                     defaults.height = undefined;
                     defaults.name = "Training";
+                  } else if (type === 'CONCEPT_TRAINER') {
+                    defaults.nodes = 0;
+                    defaults.width = 100;
+                    defaults.height = 100;
+                    defaults.name = "Concept Trainer";
                   }
 
                   setNewModule(prev => ({ ...prev, ...defaults }));
@@ -1893,6 +2086,7 @@ function App() {
                 <option value="CONCEPT">Concept Input (CSV)</option>
                 <option value="LEARNED_OUTPUT">Learned Output (Dynamic)</option>
                 <option value="TRAINING_DATA">Training Data (Ground Truth)</option>
+                <option value="CONCEPT_TRAINER">Concept Trainer</option>
               </select>
             </label>
           </div >

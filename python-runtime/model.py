@@ -22,6 +22,7 @@ class Node:
     activation: float = 0.0
     isFiring: bool = False
     refractoryTimer: int = 0
+    currentThreshold: float = 1.0 # Dynamic threshold for Fatigue
     
     # Configuration (Defaults based on typical Node.ts values)
     label: str = ""
@@ -30,7 +31,19 @@ class Node:
     threshold: float = 0.5
     refractoryPeriod: int = 0
     activationType: str = "PULSE" # "PULSE" or "SUSTAINED"
+    neuronType: str = "EXCITATORY" # "EXCITATORY" or "INHIBITORY"
+    tickLastFire: int = 0
     
+    # Physics - Fatigue & Homeostasis
+    currentThreshold: Optional[float] = None # Defaults to threshold in __post_init__
+    fatigue: float = 0.0
+    recovery: float = 0.0
+    sustainability: Optional[Dict[str, Any]] = None # Adaptive Threshold Config
+
+    def __post_init__(self):
+        if self.currentThreshold is None:
+            self.currentThreshold = self.threshold
+
     # Input Specific
     inputType: str = "PULSE"
     inputFrequency: float = 1.0
@@ -40,6 +53,7 @@ class Node:
         self.activation = 0.0
         self.isFiring = False
         self.refractoryTimer = 0
+        self.currentThreshold = self.threshold
 
     def to_dict(self):
         return {
@@ -49,17 +63,22 @@ class Node:
             "y": self.y,
             "label": self.label,
             "activationType": self.activationType,
+            "neuronType": self.neuronType,
             "potential": self.potential,
             # We add these to ensure full state preservation if the consumer supports it
             "activation": self.activation,
             "isFiring": self.isFiring,
             "refractoryTimer": self.refractoryTimer,
+            "currentThreshold": self.currentThreshold,
             "bias": self.bias,
             "decay": self.decay,
             "threshold": self.threshold,
             "refractoryPeriod": self.refractoryPeriod,
+            "fatigue": self.fatigue,
+            "recovery": self.recovery,
             "inputType": self.inputType,
-            "inputFrequency": self.inputFrequency
+            "inputFrequency": self.inputFrequency,
+            "sustainability": self.sustainability
         }
 
 @dataclass
@@ -96,6 +115,9 @@ class ModuleConfig:
     concepts: Optional[List[Dict[str, str]]] = None
     trainingData: Optional[List[Dict[str, Any]]] = None
     trainingConfig: Optional[Dict[str, Any]] = None
+    
+    # Concept Trainer Specific
+    conceptTrainerConfig: Optional[Dict[str, Any]] = None
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]):
@@ -149,6 +171,18 @@ class NeuralNet:
         # Load Modules
         for m_data in data.get("modules", []):
             module = ModuleConfig.from_dict(m_data)
+            
+            # Apply Defaults (Match NeuralNet.ts addModule logic)
+            if module.type == 'BRAIN':
+                if module.hebbianLearning is None:
+                    module.hebbianLearning = True
+                if module.learningRate is None:
+                    module.learningRate = 0.01
+                if module.isLocalized is None:
+                    module.isLocalized = False
+                if module.localizationLeak is None:
+                    module.localizationLeak = 0.0
+                    
             self.modules[module.id] = module
 
         # Load Nodes

@@ -17,6 +17,15 @@ export class NeuralNet {
     // Cache for Node ID -> Module ID lookup
     public nodeModuleMap: Map<string, string> = new Map();
 
+    // Concept Training State
+    public conceptTrainingQueue: { conceptId: string, nodeIndex: number, nodeId: string }[] = [];
+    private conceptTrainingIndex: number = 0;
+    private conceptTrainingSettle: number = 0;
+    private conceptTrainingTick: number = 0;
+    private conceptTrainingConfig: { runPerConcept: number, ticksPerConcept: number, settleTime: number } | null = null;
+    public isConceptTrainingActive: boolean = false;
+
+
     constructor() { }
 
     public addNode(config: NodeConfig) {
@@ -114,7 +123,7 @@ export class NeuralNet {
                     x: centerX + r * Math.cos(theta),
                     y: centerY + r * Math.sin(theta),
                     label: '',
-                    activationType: config.activationType || 'PULSE',
+                    activationType: config.activationType || 'SUSTAINED',
                     decay: config.decay,
                     // Pass missing parameters to Node
                     refractoryPeriod: config.refractoryPeriod,
@@ -132,10 +141,10 @@ export class NeuralNet {
             const concepts = config.concepts || [];
             // Default layout: Vertical column
             // Default layout: Vertical column
-            const height = config.height || (concepts.length * 40); // Increased spacing for readability
+            const height = config.height || (concepts.length * 25); // Compact spacing (User Request)
             const startY = config.y - (height / 2);
             // Smaller minimum step
-            const stepY = concepts.length > 0 ? height / concepts.length : 40;
+            const stepY = concepts.length > 0 ? height / concepts.length : 25;
 
             concepts.forEach((concept, i) => {
                 const nodeId = `${config.id}-${concept.id}`; // Use concept ID if unique, or index? 
@@ -159,6 +168,20 @@ export class NeuralNet {
         } else if (config.type === 'LEARNED_OUTPUT') {
             // LEARNED_OUTPUT: Starts empty. Nodes added dynamically during training.
             // No nodes generated here.
+        } else if (config.type === 'CONCEPT_TRAINER') {
+            config.width = 100;
+            config.height = 100;
+            config.nodeCount = 0; // No nodes
+            // Initialize defaults if missing
+            if (!config.conceptTrainerConfig) {
+                config.conceptTrainerConfig = {
+                    runPerConcept: 200,
+                    ticksPerConcept: 50,
+                    settleTime: 10,
+                    selectedConceptIds: [],
+                    targetBrainId: ''
+                };
+            }
         } else {
             // LAYER / INPUT / OUTPUT: Vertical Columns
             const height = config.height || 600;
@@ -689,11 +712,7 @@ export class NeuralNet {
         return Math.atan2(node.y - mod.y, node.x - mod.x);
     }
 
-    private getAngleDist(a1: number, a2: number) {
-        let diff = Math.abs(a1 - a2);
-        if (diff > Math.PI) diff = (2 * Math.PI) - diff;
-        return diff;
-    }
+
 
     /**
      * Generic Location (0.0 - 1.0)
@@ -926,12 +945,14 @@ export class NeuralNet {
         ticksPerSample: 500,
         settleTime: 100
     };
+    // public conceptTrainingQueue: any[] = []; // REMOVED DUPLICATE
     private trainingQueue: any[] = [];
     private trainingStepIndex: number = 0;
     private trainingTick: number = 0;
     private currentTrainingSample: any = null;
 
-    public get currentSampleIndex(): number { return this.trainingStepIndex; }
+
+
 
     public setTrainingConfig(config: Partial<TrainingProtocolConfig>) {
         this.trainingConfig = { ...this.trainingConfig, ...config };
@@ -948,6 +969,119 @@ export class NeuralNet {
     public stopTraining() {
         this.trainingPhase = 'IDLE';
         this.currentTrainingSample = null;
+    }
+
+    // --- CONCEPT TRAINING ---
+    public startConceptTraining(trainerId: string) {
+        const trainer = this.modules.get(trainerId);
+        if (!trainer || !trainer.conceptTrainerConfig) return;
+
+        const config = trainer.conceptTrainerConfig;
+        this.conceptTrainingConfig = config;
+        this.isConceptTrainingActive = true;
+        this.trainingPhase = 'CONCEPT_TRAINING';
+
+        // 1. Build Queue
+        this.conceptTrainingQueue = [];
+        const runs = config.runPerConcept;
+
+        config.selectedConceptIds.forEach(conceptId => {
+            const conceptMod = this.modules.get(conceptId);
+            if (!conceptMod || !conceptMod.concepts) return;
+
+            // Iterate concepts array index to find corresponding nodes
+            conceptMod.concepts.forEach((concept, index) => {
+                const nodeId = `${conceptId}-${concept.id}`;
+                // Only add if node exists
+                if (this.nodes.has(nodeId)) {
+                    for (let r = 0; r < runs; r++) {
+                        this.conceptTrainingQueue.push({ conceptId, nodeIndex: index, nodeId });
+                    }
+                }
+            });
+        });
+
+        // 2. Shuffle Queue
+        for (let i = this.conceptTrainingQueue.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.conceptTrainingQueue[i], this.conceptTrainingQueue[j]] = [this.conceptTrainingQueue[j], this.conceptTrainingQueue[i]];
+        }
+        console.log(`[Concept Training] Queue built with ${this.conceptTrainingQueue.length} items.`);
+
+        // 3. Reset State
+        this.conceptTrainingIndex = 0;
+        this.conceptTrainingTick = 0;
+        this.conceptTrainingSettle = 0;
+
+        // Use standard properties for UI compatibility if needed, 
+        // but we mainly use conceptTrainingIndex for internal tracking.
+        // this.currentSampleIndex = 0; // Handled by getter
+    }
+
+    public stopConceptTraining() {
+        this.isConceptTrainingActive = false;
+        this.trainingPhase = 'IDLE';
+        this.conceptTrainingQueue = [];
+    }
+
+    public isConceptTrainingComplete(): boolean {
+        return !this.isConceptTrainingActive || this.conceptTrainingIndex >= this.conceptTrainingQueue.length;
+    }
+
+    // Unified Getter for UI
+    public get currentSampleIndex(): number {
+        if (this.trainingPhase === 'CONCEPT_TRAINING') return this.conceptTrainingIndex;
+        return this.trainingStepIndex; // Fallback or standard training index
+    }
+
+    public updateConceptTraining() {
+        if (!this.isConceptTrainingActive || !this.conceptTrainingConfig) return;
+
+        // Check completion
+        if (this.conceptTrainingIndex >= this.conceptTrainingQueue.length) {
+            this.stopConceptTraining();
+            console.log("Concept Training Completed.");
+            return;
+        }
+
+        const task = this.conceptTrainingQueue[this.conceptTrainingIndex];
+
+        // Logging: Output word/concept at start of its active phase (Reduced Frequency)
+        if (this.conceptTrainingTick === 0 && this.conceptTrainingSettle === 0 && this.conceptTrainingIndex % 100 === 0) {
+            const conceptMod = this.modules.get(task.conceptId);
+            // Try to find the specific concept label if possible, or just module name
+            let label = conceptMod?.name || task.conceptId;
+            // If we have access to original concept list, we could find the specific label. 
+            // But conceptMod.concepts[task.nodeIndex] should work.
+            if (conceptMod && conceptMod.concepts && conceptMod.concepts[task.nodeIndex]) {
+                label = conceptMod.concepts[task.nodeIndex].label;
+            }
+            console.log(`[Training] Processing: ${label} (Step ${this.conceptTrainingIndex + 1}/${this.conceptTrainingQueue.length})`);
+        }
+
+        // Settle Phase?
+        if (this.conceptTrainingSettle > 0) {
+            this.conceptTrainingSettle--;
+            this.update(); // Run physics/decay
+            if (this.conceptTrainingSettle <= 0) {
+                // End of Settle -> Next Task
+                this.conceptTrainingIndex++;
+                this.conceptTrainingTick = 0;
+            }
+            return;
+        }
+
+        // Active Phase
+        if (this.conceptTrainingTick < this.conceptTrainingConfig.ticksPerConcept) {
+            // Force Input High
+            this.forceNodePotential(task.nodeId, 2.0);
+
+            this.update();
+            this.conceptTrainingTick++;
+        } else {
+            // End of Active -> Start Settle
+            this.conceptTrainingSettle = this.conceptTrainingConfig.settleTime;
+        }
     }
 
     private buildTrainingQueue(data: any[]): any[] {
@@ -1000,7 +1134,7 @@ export class NeuralNet {
 
     // Called inside update()
     private updateTraining() {
-        if (this.trainingPhase === 'IDLE') return;
+        if (this.trainingPhase === 'IDLE' || this.trainingPhase === 'CONCEPT_TRAINING') return;
 
         // 1. Check if we need to load next sample
         if (this.trainingTick >= this.trainingConfig.ticksPerSample || this.trainingStepIndex === 0 && this.trainingTick === 0 && !this.currentTrainingSample) {
@@ -1012,6 +1146,12 @@ export class NeuralNet {
 
             // Load Next
             this.currentTrainingSample = this.trainingQueue[this.trainingStepIndex];
+
+            // Logging
+            if (this.currentTrainingSample) {
+                console.log(`[Training Standard] Processing: ${this.currentTrainingSample.Word || 'Unknown'} (Step ${this.trainingStepIndex + 1}/${this.trainingQueue.length})`);
+            }
+
             this.trainingStepIndex++;
             this.trainingTick = 0;
 
@@ -1069,9 +1209,8 @@ export class NeuralNet {
                             const config = this.modules.get(outModId);
                             if (config) {
                                 // Calculate position
-                                const nodesPerRow = 5; // Grid layout?
-                                const row = Math.floor(newIndex / nodesPerRow);
-                                const col = newIndex % nodesPerRow;
+
+
 
                                 // Default Output Vertical Column Layout?
                                 // If it is LEARNED_OUTPUT, maybe we do grid or spiral?
@@ -1807,14 +1946,17 @@ export class NeuralNet {
                             // Goal: Maintain Target Firing Rate at Set Point (e.g. 10%)
                             const targetRate = 0.1;
 
-                            // If Target is too active -> Inhibition should INCREASE (become more negative)
-                            // "Police, there's too much noise here!"
-                            if (tgt.averageFiringRate > targetRate) {
-                                // Strengthen Inhibition (Subtract positive value)
-                                conn.weight -= 0.001;
-                            } else {
-                                // Relax Inhibition (Add positive value to negative weight -> closer to 0)
-                                conn.weight += 0.001;
+                            // Gate with Source Firing: Only adjust if this inhibitory neuron is active
+                            if (src.isFiring) {
+                                // If Target is too active -> Inhibition should INCREASE (become more negative)
+                                // "Police, there's too much noise here!"
+                                if (tgt.averageFiringRate > targetRate) {
+                                    // Strengthen Inhibition (Subtract positive value)
+                                    conn.weight -= 0.001;
+                                } else {
+                                    // Relax Inhibition (Add positive value to negative weight -> closer to 0)
+                                    conn.weight += 0.001;
+                                }
                             }
                         }
 
@@ -1834,7 +1976,7 @@ export class NeuralNet {
                         // If Target is SUSTAINED OUTPUT, does it have 'sustainability'?
                         // Probably not. So skip norm for cross-module connections if not configured.
 
-                        const targetModule = this.modules.get(tgt.id.split('-')[0]); // Hacky ID parse?
+
                         // Or just check if Tgt is in THIS module (Internal).
                         const isInternal = tgt.id.startsWith(moduleId);
 

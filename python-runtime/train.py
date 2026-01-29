@@ -2,9 +2,9 @@ import argparse
 import json
 import os
 import time
-from .model import NeuralNet
-from .engine import Engine
-from .trainer import Trainer
+from model import NeuralNet
+from engine import Engine
+from trainer import Trainer
 
 def main():
     parser = argparse.ArgumentParser(description='Headless Neural Network Trainer')

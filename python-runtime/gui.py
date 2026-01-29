@@ -1,8 +1,13 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import json
-from .model import NeuralNet
-from .engine import Engine
+try:
+    from model import NeuralNet
+    from engine import Engine
+except ImportError:
+    # Fallback if run as package
+    from .model import NeuralNet
+    from .engine import Engine
 
 class NeuralGUI:
     def __init__(self, root):
@@ -55,7 +60,110 @@ class NeuralGUI:
         self.notebook.add(self.frame_modules, text="Modules Inspector")
         self._setup_module_inspector()
 
+        # Tab 3: Training
+        self.frame_training = tk.Frame(self.notebook, padx=10, pady=10)
+        self.notebook.add(self.frame_training, text="Training")
+        self._setup_training_tab()
+
         self._init_controls()
+
+    def _setup_training_tab(self):
+        try:
+            from trainer import Trainer
+        except ImportError:
+            from .trainer import Trainer
+
+        self.trainer = Trainer(self.net, self.engine)
+        self.is_training = False
+        self.training_config = {
+            "epochs": tk.IntVar(value=5),
+            "step_per_item": tk.IntVar(value=50),
+        }
+        
+        # Controls
+        frame_controls = tk.LabelFrame(self.frame_training, text="Training Config", padx=10, pady=10)
+        frame_controls.pack(fill="x", pady=5)
+        
+        tk.Label(frame_controls, text="Epochs:").grid(row=0, column=0, sticky="e", pady=2)
+        tk.Entry(frame_controls, textvariable=self.training_config["epochs"], width=5).grid(row=0, column=1, sticky="w", pady=2)
+        
+        tk.Label(frame_controls, text="Steps/Concept:").grid(row=0, column=2, sticky="e", pady=2)
+        tk.Entry(frame_controls, textvariable=self.training_config["step_per_item"], width=5).grid(row=0, column=3, sticky="w", pady=2)
+        
+        self.btn_train = tk.Button(self.frame_training, text="Start Training", command=self.toggle_training, bg="#ddffdd", font=("Arial", 12, "bold"))
+        self.btn_train.pack(fill="x", pady=10)
+        
+        # Progress
+        self.lbl_progress = tk.Label(self.frame_training, text="Ready", font=("Arial", 10))
+        self.lbl_progress.pack(pady=5)
+        
+        self.progress_bar = ttk.Progressbar(self.frame_training, orient="horizontal", length=200, mode="determinate")
+        self.progress_bar.pack(fill="x", pady=5)
+        
+    def toggle_training(self):
+        if self.is_training:
+            self.is_training = False
+            self.btn_train.config(text="Start Training", bg="#ddffdd")
+            self.lbl_progress.config(text="Training Stopped")
+        else:
+            self.is_training = True
+            self.btn_train.config(text="Stop Training", bg="#ffdddd")
+            self.start_training_session()
+
+    def start_training_session(self):
+        # 1. Reset Trainer Config
+        self.trainer._find_training_config()
+        if not self.trainer.data:
+             messagebox.showwarning("Training", "No Training Data found in network.")
+             self.toggle_training()
+             return
+
+        # Prepare first epoch
+        self.current_epoch = 0
+        self.total_epochs = self.training_config["epochs"].get()
+        self.steps_per_item = self.training_config["step_per_item"].get()
+        
+        self._prepare_next_epoch()
+        self.root.after(10, self._training_loop)
+
+    def _prepare_next_epoch(self):
+        self.current_epoch += 1
+        if self.current_epoch > self.total_epochs:
+            self.toggle_training()
+            self.lbl_progress.config(text="Training Completed!")
+            messagebox.showinfo("Done", "Training Completed Successfully.")
+            return False
+            
+        self.epoch_items, self.t_imprint, self.t_settle = self.trainer.prepare_epoch(self.steps_per_item)
+        self.epoch_item_idx = 0
+        self.progress_bar["maximum"] = len(self.epoch_items)
+        self.progress_bar["value"] = 0
+        self.lbl_progress.config(text=f"Epoch {self.current_epoch}/{self.total_epochs}: Starting...")
+        return True
+
+    def _training_loop(self):
+        if not self.is_training: return
+        
+        # Process One Item
+        if self.epoch_item_idx < len(self.epoch_items):
+            item = self.epoch_items[self.epoch_item_idx]
+            
+            # Run simulation steps
+            # To modify the GUI during simulation (progress), we should loop here? 
+            # Or run granular steps? 
+            # For responsiveness, let's run the whole item sync (0.1s usually)
+            self.trainer.train_item(item, self.t_imprint, self.t_settle)
+            
+            self.epoch_item_idx += 1
+            self.progress_bar["value"] = self.epoch_item_idx
+            self.lbl_progress.config(text=f"Epoch {self.current_epoch}/{self.total_epochs}: Item {self.epoch_item_idx}/{len(self.epoch_items)}")
+            
+            # Schedule next item
+            self.root.after(1, self._training_loop)
+        else:
+            # Epoch Done
+            if self._prepare_next_epoch():
+                self.root.after(1, self._training_loop)
 
     def _setup_module_inspector(self):
         # Split: List vs Details

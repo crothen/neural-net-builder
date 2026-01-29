@@ -17,8 +17,8 @@
             "nodeCount": 1,
             "label": "Brain",
             "activationType": "SUSTAINED",
-            "threshold": 0.5,
-            "decay": 0.1
+            "threshold": 0.1,
+            "decay": 0.0
         },
         {
             "id": "training-1",
@@ -35,6 +35,10 @@
                 {
                     "id": "2",
                     "color": "2"
+                },
+                {
+                    "id": "3",
+                    "color": "1;2"
                 }
             ],
             "trainingConfig": {
@@ -54,9 +58,9 @@
             "x": 100,
             "y": 400,
             "label": "Red",
-            "activationType": "PULSE",
-            "threshold": 0.5,
-            "decay": 0.1
+            "activationType": "SUSTAINED",
+            "threshold": 0.1,
+            "decay": 0.0
         },
         {
             "id": "concept-1-2",
@@ -64,9 +68,9 @@
             "x": 100,
             "y": 450,
             "label": "Blue",
-            "activationType": "PULSE",
-            "threshold": 0.5,
-            "decay": 0.1
+            "activationType": "SUSTAINED",
+            "threshold": 0.1,
+            "decay": 0.0
         },
         {
             "id": "brain-1-n0",
@@ -75,8 +79,18 @@
             "y": 400,
             "label": "Brain 0",
             "activationType": "SUSTAINED",
-            "threshold": 0.5,
-            "decay": 0.1
+            "threshold": 0.1,
+            "decay": 0.0
+        },
+        {
+            "id": "brain-1-n1",
+            "type": "HIDDEN",
+            "x": 450,
+            "y": 400,
+            "label": "Brain 1",
+            "activationType": "SUSTAINED",
+            "threshold": 0.1,
+            "decay": 0.0
         }
     ],
     "connections": [
@@ -89,8 +103,20 @@
         {
             "id": "c2",
             "sourceId": "concept-1-2",
-            "targetId": "brain-1-n0",
+            "targetId": "brain-1-n1",
             "weight": 1.0
+        },
+        {
+            "id": "c3-internal",
+            "sourceId": "brain-1-n0",
+            "targetId": "brain-1-n1",
+            "weight": 0.2
+        },
+        {
+            "id": "c4-internal",
+            "sourceId": "brain-1-n1",
+            "targetId": "brain-1-n0",
+            "weight": 0.2
         }
     ],
     "moduleConnections": []

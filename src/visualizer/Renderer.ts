@@ -67,9 +67,30 @@ export class Renderer {
             const weightAbs = Math.abs(weight);
             const isExcitatory = weight >= 0;
 
+            // Collision / Convergence Logic for Collapsed Modules
+            // If Source 's Module is Collapsed CONCEPT -> Use Module Center
+            const srcModId = net.nodeModuleMap.get(source.id);
+            const tgtModId = net.nodeModuleMap.get(target.id);
+            const srcMod = srcModId ? net.modules.get(srcModId) : undefined;
+            const tgtMod = tgtModId ? net.modules.get(tgtModId) : undefined;
+
+            let x1 = source.x;
+            let y1 = source.y;
+            let x2 = target.x;
+            let y2 = target.y;
+
+            if (srcMod && srcMod.type === 'CONCEPT' && srcMod.collapsed) {
+                x1 = srcMod.x;
+                y1 = srcMod.y;
+            }
+            if (tgtMod && tgtMod.type === 'CONCEPT' && tgtMod.collapsed) {
+                x2 = tgtMod.x;
+                y2 = tgtMod.y;
+            }
+
             this.ctx.beginPath();
-            this.ctx.moveTo(source.x, source.y);
-            this.ctx.lineTo(target.x, target.y);
+            this.ctx.moveTo(x1, y1);
+            this.ctx.lineTo(x2, y2);
 
             if (isInspected) {
                 this.ctx.strokeStyle = '#ffff00'; // Yellow highlight
@@ -265,10 +286,57 @@ export class Renderer {
                 // No text inside triangle as requested
             }
 
+            // --- CUSTOM VISUALIZATION FOR CONCEPT_TRAINER ---
+            if (module.type === 'CONCEPT_TRAINER') {
+                const w = 80;
+                const h = 80;
+                const x = module.x - w / 2;
+                const y = module.y - h / 2;
+
+                // Main Body (Dark Grey Rounded Rect)
+                this.ctx.beginPath();
+                this.ctx.roundRect(x, y, w, h, 10);
+                this.ctx.fillStyle = '#333';
+                this.ctx.fill();
+                this.ctx.strokeStyle = '#faa'; // Light Red/Orange
+                this.ctx.lineWidth = 2;
+                this.ctx.stroke();
+
+                // Icon (Simple 'GEAR' representation or text)
+                this.ctx.fillStyle = '#faa';
+                this.ctx.font = 'bold 16px Arial';
+                this.ctx.textAlign = 'center';
+                this.ctx.textBaseline = 'middle';
+                this.ctx.fillText('TRAIN', module.x, module.y);
+
+                // Warning if no Target Brain
+                if (!module.conceptTrainerConfig?.targetBrainId) {
+                    // Draw Warning Triangle (Top Right)
+                    const wx = module.x + w / 2 - 10;
+                    const wy = module.y - h / 2 + 10;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(wx, wy - 15);
+                    this.ctx.lineTo(wx + 15, wy + 10);
+                    this.ctx.lineTo(wx - 15, wy + 10);
+                    this.ctx.closePath();
+                    this.ctx.fillStyle = '#ffff00'; // Yellow
+                    this.ctx.fill();
+                    this.ctx.strokeStyle = '#000';
+                    this.ctx.lineWidth = 1;
+                    this.ctx.stroke();
+
+                    this.ctx.fillStyle = '#000';
+                    this.ctx.font = 'bold 14px Arial';
+                    this.ctx.fillText('!', wx, wy + 2);
+                }
+            }
+
             // Draw Module Label (Prominent)
-            // Visibility Check: If hiding details, only show labels for INPUT/OUTPUT
-            if (module.type === 'TRAINING_DATA' || (!showHidden && module.type !== 'INPUT' && module.type !== 'OUTPUT')) {
-                // Skip drawing label
+            // Visibility Check: If hiding details, only show labels for INPUT/OUTPUT/TRAINING_DATA/CONCEPT
+            // User Request: "title of the training should never be hidden"
+            // Also Concept titles should persist (handled by logic below mostly, but let's ensure we don't skip)
+            if (!showHidden && module.type !== 'INPUT' && module.type !== 'OUTPUT' && module.type !== 'TRAINING_DATA' && module.type !== 'CONCEPT') {
+                // Skip drawing label for others if details hidden
             } else {
                 // Use custom color if present, else faint Cyan
                 this.ctx.fillStyle = module.color || 'rgba(0, 212, 255, 0.5)';
@@ -280,11 +348,18 @@ export class Renderer {
 
                 // Position above the module
                 // For Brain, radius. For Layers, height/2.
-                const labelY = module.type === 'BRAIN'
-                    ? module.y - (module.radius || 200) - 15
-                    : module.type === 'CONCEPT' && module.collapsed
-                        ? module.y - 25 // Just above the triangle (r=15)
-                        : module.y - (module.height || 600) / 2 - 15;
+                let labelY = module.y - (module.height || 600) / 2 - 15;
+                if (module.type === 'BRAIN') {
+                    labelY = module.y - (module.radius || 200) - 15;
+                } else if (module.type === 'CONCEPT') {
+                    if (module.collapsed) {
+                        labelY = module.y - 25; // Just above the triangle (r=15)
+                    } else {
+                        // Title layout: Above the top-most node (height/2)
+                        // Height is typically (nodes * spacing).
+                        labelY = module.y - (module.height || 600) / 2 - 15;
+                    }
+                }
 
                 // Use name if available, else label
                 this.ctx.fillText(module.name || module.label!, module.x, labelY);
@@ -320,8 +395,13 @@ export class Renderer {
 
                 // Visibility Check
                 if (!showHidden) {
+                    // Standard Hidden Logic
                     if (node.type === NodeType.HIDDEN || node.type === NodeType.INTERPRETATION) {
                         return;
+                    }
+                    // CONCEPT Logic: "Hide the word list"
+                    if (node.type === NodeType.CONCEPT) {
+                        return; // Don't draw individual concept nodes if details hidden
                     }
                 }
 
@@ -455,7 +535,14 @@ export class Renderer {
 
                 let status = '';
                 if (node.isFiring) status = ' (FIRED!)';
-                const statsText = `Potential: ${node.potential.toFixed(3)}${status}`;
+
+                let statsText = '';
+                // Hide potential for Pulses/Concepts
+                if (node.type === NodeType.CONCEPT || node.activationType === 'PULSE') {
+                    statsText = node.isFiring ? 'FIRED!' : 'Pulse';
+                } else {
+                    statsText = `Potential: ${node.potential.toFixed(3)}${status}`;
+                }
 
                 this.ctx.font = '12px Courier New';
                 const labelMetrics = this.ctx.measureText(labelText);

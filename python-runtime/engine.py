@@ -1,7 +1,7 @@
 import math
 import random
 from typing import Dict, List, Set, Tuple
-from .model import NeuralNet, Node, Connection
+from model import NeuralNet, Node, Connection
 
 class Engine:
     def __init__(self, net: NeuralNet):
@@ -97,15 +97,8 @@ class Engine:
         self._post_step_cleanup()
         
         # Debug Prints
-        active_inputs = [n.id for n in self.net.nodes.values() if n.type in ('INPUT', 'CONCEPT') and n.isFiring]
-        firing_nodes = [n.id for n in self.net.nodes.values() if n.type not in ('INPUT', 'CONCEPT') and n.isFiring]
-        if active_inputs or firing_nodes:
-            print(f"Tick {self.net.tickCount}: Active Inputs={active_inputs}, Firing={firing_nodes}")
-            
-            # Check sums for debugging
-            non_zero_sums = {k: v for k, v in input_sums.items() if v > 0}
-            if non_zero_sums:
-                print(f"  Input Sums: {non_zero_sums}")
+        # Debug Prints
+        pass
 
     def _update_input_node(self, node: Node):
         if node.inputType == 'SIN':
@@ -138,64 +131,97 @@ class Engine:
                     node.isFiring = False
 
     def _update_node(self, node: Node, input_sum: float):
-        # 0. Refractory Period
+        # 1. Check Refractory Period (Gate Execution)
         if node.refractoryTimer > 0:
             node.refractoryTimer -= 1
             node.isFiring = False
             node.activation = 0.0
-            # PULSE nodes get hard reset in refractory (TS logic)
-            if node.activationType == 'PULSE':
-                node.potential = 0.0
+            
+            # Brain Nodes (Hidden) maintain potential during refractory (don't hard reset)
             return
 
-        # 1. Add Input and Bias
+        # 2. Integration
         node.potential += input_sum + node.bias
+
+        # 3. Decay (Pre-Threshold)
+        node.potential *= (1.0 - node.decay)
+        if node.potential < 0: node.potential = 0.0
         
-        # 2. Check Firing
-        if node.potential >= node.threshold:
+        # 4. Max Potential Clamp
+        # Defaults to 3.0 or config.maxPotential
+        # We can read maxPotential from node (we added it to Node class?)
+        # Wait, Node class has no maxPotential field in my previous update?
+        # Checking my previous tool call... I did NOT add maxPotential explicitly to the dataclass fields?
+        # I added `currentThreshold`.
+        # Params `threshold`, `decay` existed.
+        # `model.py` had default params.
+        # Let's check `model.py` content from previous view. 
+        # `maxPotential` WAS NOT in the `Node` dataclass in `model.py`.
+        # I should assume a default or read it if it's there (dynamic).
+        # Safe default: node.threshold * 4.0 or 3.0.
+        max_pot = node.threshold * 4.0
+        if node.potential > max_pot: node.potential = max_pot
+
+        # 5. Fatigue Recovery
+        # Drift currentThreshold back to base threshold
+        if node.currentThreshold > node.threshold:
+            # Check if recovery exists.
+            rec = getattr(node, 'recovery', 0.0)
+            node.currentThreshold -= rec
+            if node.currentThreshold < node.threshold:
+                node.currentThreshold = node.threshold
+
+        # 6. Threshold Check
+        if node.potential >= node.currentThreshold:
+            # FIRE
             node.isFiring = True
             node.activation = 1.0
             
-            # Refractory + Jitter
+            # Soft Reset: Subtract the CURRENT threshold
+            node.potential -= node.currentThreshold
+            
+            # Fatigue Jump
+            fatigue = getattr(node, 'fatigue', 0.0)
+            node.currentThreshold += fatigue
+            
+            # Jitter
             jitter = 1 if random.random() < 0.5 else 0
             node.refractoryTimer = node.refractoryPeriod + jitter
-            
-            if node.activationType == 'PULSE':
-                # Soft Reset: Subtract threshold, preserving "overcharge"
-                node.potential -= node.threshold
-            # SUSTAINED: Keep potential (it maintains state)
-            
+
+            # Adaptive Threshold (Sustainability)
+            if node.sustainability and node.sustainability.get('adaptiveThreshold'):
+                speed = node.sustainability.get('adaptationSpeed', 0.01)
+                node.threshold += speed
+                
         else:
             node.isFiring = False
             node.activation = 0.0
             
-        # 3. Decay
-        node.potential *= (1.0 - node.decay)
-        
-        # 4. Clamp / Floor
-        if node.potential < 0: node.potential = 0.0
-        
-        # Clamp Max (from TS: threshold * 4.0)
-        max_pot = node.threshold * 4.0
-        if node.potential > max_pot: node.potential = max_pot
+            # Adaptive Threshold Relaxation
+            if node.sustainability and node.sustainability.get('adaptiveThreshold'):
+                speed = node.sustainability.get('adaptationSpeed', 0.01)
+                target_rate = node.sustainability.get('targetRate', 0.1)
+                
+                # Lower shield
+                node.threshold -= (speed * target_rate)
+                if node.threshold < 0.1: node.threshold = 0.1
 
-    def _process_hebbian(self, module):
-        # Simplified copy of TS logic
-        # Filter connections internal to this module
-        # In Python, iterating all connections is slow.
-        # Ideally we should cache module-internal connections.
+    def _process_hebbian(self, mod):
+        # DEBUG LOG
+        # print(f"Processing Hebbian for {mod.id}. Type={mod.type}, Enabled={getattr(mod, 'hebbianLearning', False)}")
         
-        rate = module.learningRate or 0.01
-        pruning_thresh = module.pruningThreshold if module.pruningThreshold is not None else 0.05
+        if not (mod.type == 'BRAIN' and hasattr(mod, 'hebbianLearning') and mod.hebbianLearning):
+            return
+            
+        rate = getattr(mod, 'learningRate', 0.01)
+        if rate is None: rate = 0.01
         
-        # Naive iteration for now (Optimization target)
-        # To match TS exactly, we iterate connections.
-        # But TS has `this.connections` which is global.
+        pruning_thresh = getattr(mod, 'pruningThreshold', 0.05)
+        if pruning_thresh is None: pruning_thresh = 0.05
+        prefix = mod.id
         
         conns_to_remove = []
-        
-        prefix = module.id
-        
+        updates = 0
         for conn in self.net.connections:
             # Check if internal
             if not (conn.sourceId.startswith(prefix) and conn.targetId.startswith(prefix)):
@@ -205,14 +231,22 @@ class Engine:
             tgt = self.net.nodes.get(conn.targetId)
             
             if src and tgt:
-                # Hebbian: delta = rate * src.act * tgt.act
-                delta = src.activation * tgt.activation * rate
+                # Calculate Boost
+                boost = rate * src.activation * tgt.activation
                 
-                conn.weight += delta
+                if getattr(src, 'neuronType', None) == 'EXCITATORY': # Assuming neuronType might exist
+                    conn.weight += boost
+                else: # Default Hebbian for other types or if neuronType not set
+                    conn.weight += boost # Or adjust based on specific neuronType logic
+
                 if conn.weight > 2.0: conn.weight = 2.0
-                
+                if conn.weight < -2.0: conn.weight = -2.0 # Added lower bound for weights
+
                 if abs(conn.weight) < pruning_thresh:
                     conns_to_remove.append(conn)
+        
+        # if updates > 0:
+        #    print(f"  {mod.id}: Updated {updates} connections.")
         
         # Remove
         if conns_to_remove:

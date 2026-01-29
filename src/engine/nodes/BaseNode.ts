@@ -59,10 +59,13 @@ export abstract class BaseNode {
         this.threshold = config.threshold ?? 1.0;
         this.maxPotential = config.maxPotential ?? 3.0;
 
-        // Fatigue defaults
         this.fatigue = config.fatigue ?? 0;
         this.recovery = config.recovery ?? 0;
         this.currentThreshold = this.threshold;
+
+        this.activationType = config.activationType || 'PULSE';
+        this.inputType = config.inputType || 'PULSE';
+        this.inputFrequency = config.inputFrequency ?? 1.0;
 
         this.sustainability = config.sustainability;
     }

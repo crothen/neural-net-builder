@@ -46,6 +46,7 @@ export interface NeuralCanvasHandle {
     getTrainingState: () => { phase: TrainingPhase, sampleIndex: number, epoch: number };
     analyzeSubject: (subjectNodeId: string) => { conceptId: string, label: string, score: number }[];
     runInference: (activeConceptIds: string[]) => { id: string, label: string, activation: number }[];
+    startFastTraining: (trainerId: string) => void;
 }
 
 export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
@@ -142,7 +143,7 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         },
         step: (count: number) => {
             for (let i = 0; i < count; i++) {
-                netRef.current.step();
+                netRef.current.update();
             }
         },
         getTickCount: () => {
@@ -194,6 +195,12 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         },
         runInference: (activeConceptIds: string[]) => {
             return netRef.current ? netRef.current.runInference(activeConceptIds) : [];
+        },
+        startFastTraining: (trainerId: string) => {
+            if (netRef.current) {
+                netRef.current.startConceptTraining(trainerId);
+                fastTrainingRef.current = true;
+            }
         }
     }));
 
@@ -209,6 +216,8 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
 
     const showHiddenRef = useRef(showHidden);
     showHiddenRef.current = showHidden;
+
+    const fastTrainingRef = useRef<boolean>(false); // New Ref for Fast Mode
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -245,11 +254,66 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         rendererRef.current = new Renderer(ctx, canvas.width, canvas.height); // Size updated in resize
 
         let lastTime = 0;
-        const animate = (time: number) => {
-            const dt = time - lastTime;
 
+        const animate = (time: number) => {
+            // --- FAST TRAINING MODE ---
+            if (fastTrainingRef.current && netRef.current) {
+                // Run batches
+                // Run batches - Time Budget (Target ~12ms for logic, leaving 4ms for overhead/render in 60fps)
+                const startTime = performance.now();
+                while (performance.now() - startTime < 12) {
+                    netRef.current.updateConceptTraining();
+                    if (netRef.current.isConceptTrainingComplete()) {
+                        fastTrainingRef.current = false;
+                        netRef.current.stopConceptTraining(); // Ensure cleanup
+                        break;
+                    }
+                }
+
+                // Minimal Draw / Overlay
+                ctx.save();
+                ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform for overlay
+                ctx.fillStyle = 'rgba(10, 10, 15, 0.2)'; // Fading trail
+                ctx.fillRect(0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
+
+                ctx.fillStyle = '#00ffff';
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                const w = canvas.width / window.devicePixelRatio;
+                const h = canvas.height / window.devicePixelRatio;
+
+                const index = netRef.current.currentSampleIndex;
+                const total = netRef.current.conceptTrainingQueue.length || 1;
+                const pct = Math.floor((index / total) * 100);
+
+                ctx.fillText(`TRAINING CONCEPTS... ${pct}%`, w / 2, h / 2 - 30);
+
+                // Progress Bar
+                const barW = 300;
+                const barH = 10;
+                const barX = (w - barW) / 2;
+                const barY = h / 2;
+
+                ctx.fillStyle = 'rgba(255,255,255,0.1)';
+                ctx.fillRect(barX, barY, barW, barH);
+
+                ctx.fillStyle = '#00ffff';
+                ctx.fillRect(barX, barY, barW * (index / total), barH);
+
+                ctx.font = '16px Monospace';
+                ctx.fillStyle = '#aaaaaa';
+                ctx.fillText(`Batch: ${index} / ${total}`, w / 2, h / 2 + 35);
+
+                ctx.restore();
+
+                requestRef.current = requestAnimationFrame(animate);
+                return;
+            }
+
+            // --- NORMAL MODE ---
+            const dt = time - lastTime;
             if (!paused && dt > speed) {
-                netRef.current.step();
+                netRef.current.update();
                 lastTime = time;
             }
 
@@ -270,254 +334,259 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
             if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
             resizeObserver.disconnect();
         };
-        resizeObserver.disconnect();
+    }, [speed, paused]);
+
+    // Manual Event Listener for Non-Passive Wheel (to allow preventDefault)
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const onWheel = (e: WheelEvent) => handleWheel(e as unknown as React.WheelEvent);
+
+        canvas.addEventListener('wheel', onWheel, { passive: false });
+        return () => {
+            canvas.removeEventListener('wheel', onWheel);
+        };
+    }, [transform]); // Re-bind if transform context needs it? Actually handleWheel uses state.
+    // Better to use ref for state or useCallback if we don't want to rebind constantly.
+    // handleWheel uses 'transform' from state.
+    // If we bind it once, it will use stale closure 'transform'.
+    // We should either add [transform] to dependency array (rebinds on zoom)
+    // OR use a ref for transform inside handleWheel.
+    // We ALREADY have transformRef updated in render loop! 
+    // Let's modify handleWheel to use transformRef.current.
+
+    // --- Interaction Handlers ---
+
+    const getPointerPos = (e: React.MouseEvent) => {
+        const rect = canvasRef.current!.getBoundingClientRect();
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        };
     };
-}, [speed, paused]);
 
-// Manual Event Listener for Non-Passive Wheel (to allow preventDefault)
-useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const onWheel = (e: WheelEvent) => handleWheel(e as unknown as React.WheelEvent);
-
-    canvas.addEventListener('wheel', onWheel, { passive: false });
-    return () => {
-        canvas.removeEventListener('wheel', onWheel);
-    };
-}, [transform]); // Re-bind if transform context needs it? Actually handleWheel uses state.
-// Better to use ref for state or useCallback if we don't want to rebind constantly.
-// handleWheel uses 'transform' from state.
-// If we bind it once, it will use stale closure 'transform'.
-// We should either add [transform] to dependency array (rebinds on zoom)
-// OR use a ref for transform inside handleWheel.
-// We ALREADY have transformRef updated in render loop! 
-// Let's modify handleWheel to use transformRef.current.
-
-// --- Interaction Handlers ---
-
-const getPointerPos = (e: React.MouseEvent) => {
-    const rect = canvasRef.current!.getBoundingClientRect();
-    return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-    };
-};
-
-const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const rect = canvasRef.current!.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-
-    // Use ref for current transform to avoid stale closures in event listener
-    const currentTransform = transformRef.current;
-
-    const scaleFactor = 1.1;
-    const zoomIn = e.deltaY < 0;
-    const factor = zoomIn ? scaleFactor : 1 / scaleFactor;
-
-    // Current world position under mouse
-    const wx = (mx - currentTransform.x) / currentTransform.k;
-    const wy = (my - currentTransform.y) / currentTransform.k;
-
-    // New scale
-    const newK = currentTransform.k * factor;
-
-    setTransform({
-        x: mx - wx * newK,
-        y: my - wy * newK,
-        k: newK
-    });
-};
-
-const handleMouseDown = (e: React.MouseEvent) => {
-    // Middle Click Handling (Button 1)
-    if (e.button === 1) {
+    const handleWheel = (e: React.WheelEvent) => {
         e.preventDefault();
+        const rect = canvasRef.current!.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+
+        // Use ref for current transform to avoid stale closures in event listener
+        const currentTransform = transformRef.current;
+
+        const scaleFactor = 1.1;
+        const zoomIn = e.deltaY < 0;
+        const factor = zoomIn ? scaleFactor : 1 / scaleFactor;
+
+        // Current world position under mouse
+        const wx = (mx - currentTransform.x) / currentTransform.k;
+        const wy = (my - currentTransform.y) / currentTransform.k;
+
+        // New scale
+        const newK = currentTransform.k * factor;
+
+        setTransform({
+            x: mx - wx * newK,
+            y: my - wy * newK,
+            k: newK
+        });
+    };
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        // Middle Click Handling (Button 1)
+        if (e.button === 1) {
+            e.preventDefault();
+            if (hoveredNodeId) {
+                // New logic: Highlight all connections for this node
+                // We reuse 'inspection' state for this, but maybe we need a new state?
+                // The prompt says "highlight them in light green".
+                // And "hover over a connection => see value".
+                // I'll repurpose 'inspection' to be more flexible or add a 'highlightedNodeId' state.
+                // Actually, Renderer.draw accepts 'inspection'. I will add 'highlightedNodeId' to Renderer.draw.
+                // Let's create a state for it.
+                setHighlightedNodeId(prev => (prev === hoveredNodeId ? null : hoveredNodeId));
+            } else {
+                setHighlightedNodeId(null);
+            }
+            return;
+        }
+
+        const pos = getPointerPos(e);
+
+        // Left Click -> Check for Module Drag
         if (hoveredNodeId) {
-            // New logic: Highlight all connections for this node
-            // We reuse 'inspection' state for this, but maybe we need a new state?
-            // The prompt says "highlight them in light green".
-            // And "hover over a connection => see value".
-            // I'll repurpose 'inspection' to be more flexible or add a 'highlightedNodeId' state.
-            // Actually, Renderer.draw accepts 'inspection'. I will add 'highlightedNodeId' to Renderer.draw.
-            // Let's create a state for it.
-            setHighlightedNodeId(prev => (prev === hoveredNodeId ? null : hoveredNodeId));
-        } else {
-            setHighlightedNodeId(null);
-        }
-        return;
-    }
+            const modules = Array.from(netRef.current.modules.values());
+            let foundModId: string | null = null;
 
-    const pos = getPointerPos(e);
-
-    // Left Click -> Check for Module Drag
-    if (hoveredNodeId) {
-        const modules = Array.from(netRef.current.modules.values());
-        let foundModId: string | null = null;
-
-        // Simple prefix check
-        for (const mod of modules) {
-            if (hoveredNodeId.startsWith(mod.id + '-')) {
-                foundModId = mod.id;
-                break;
-            }
-        }
-
-        if (foundModId) {
-            const mod = netRef.current.modules.get(foundModId);
-            if (mod) {
-                setDraggingModuleId(foundModId);
-                // Store offset from module center
-                const wx = (pos.x - transform.x) / transform.k;
-                const wy = (pos.y - transform.y) / transform.k;
-
-                dragStartRef.current = { x: wx - mod.x, y: wy - mod.y };
-
-                // SELECTION REMOVED FROM SINGLE CLICK (Drag only)
-                return;
-            }
-        }
-    } else {
-        // Check for Empty/Learned Output Module Hit (Body Drag)
-        const wx = (pos.x - transform.x) / transform.k;
-        const wy = (pos.y - transform.y) / transform.k;
-
-        for (const mod of netRef.current.modules.values()) {
-            if (mod.type === 'LEARNED_OUTPUT' || mod.type === 'TRAINING_DATA' || mod.type === 'CONCEPT') {
-                // Check collapsed Concept specifically
-                if (mod.type === 'CONCEPT' && mod.collapsed) {
-                    // Small hitbox for triangle (r=15) + label
-                    const r = 30; // generous hit radius
-                    const dist = Math.sqrt(Math.pow(wx - mod.x, 2) + Math.pow(wy - (mod.y - 10), 2));
-                    if (dist < r) {
-                        setDraggingModuleId(mod.id);
-                        dragStartRef.current = { x: wx - mod.x, y: wy - mod.y };
-                        if (onModuleSelect) onModuleSelect(mod.id);
-                        return;
-                    }
-                    continue;
+            // Simple prefix check
+            for (const mod of modules) {
+                if (hoveredNodeId.startsWith(mod.id + '-')) {
+                    foundModId = mod.id;
+                    break;
                 }
+            }
 
-                // For others (or non-collapsed concept with 0 nodes?)
-                if (mod.type === 'CONCEPT' && mod.nodeCount > 0 && !mod.collapsed) continue;
+            if (foundModId) {
+                const mod = netRef.current.modules.get(foundModId);
+                if (mod) {
+                    setDraggingModuleId(foundModId);
+                    // Store offset from module center
+                    const wx = (pos.x - transform.x) / transform.k;
+                    const wy = (pos.y - transform.y) / transform.k;
 
-                // Standard Box Hitbox (Learned Output / Training Data / Empty Concept)
-                const w = mod.width || 100;
-                const h = mod.height || 600;
-                if (wx >= mod.x - w / 2 && wx <= mod.x + w / 2 &&
-                    wy >= mod.y - h / 2 && wy <= mod.y + h / 2) {
-
-                    setDraggingModuleId(mod.id);
                     dragStartRef.current = { x: wx - mod.x, y: wy - mod.y };
 
-                    // Select on click for these since they have no nodes to click
-                    if (onModuleSelect) onModuleSelect(mod.id);
+                    // SELECTION REMOVED FROM SINGLE CLICK (Drag only)
                     return;
                 }
             }
+        } else {
+            // Check for Empty/Learned Output Module Hit (Body Drag)
+            const wx = (pos.x - transform.x) / transform.k;
+            const wy = (pos.y - transform.y) / transform.k;
+
+            for (const mod of netRef.current.modules.values()) {
+                if (mod.type === 'LEARNED_OUTPUT' || mod.type === 'TRAINING_DATA' || mod.type === 'CONCEPT' || mod.type === 'CONCEPT_TRAINER') {
+                    // Check collapsed Concept specifically
+                    if (mod.type === 'CONCEPT' && mod.collapsed) {
+                        // Small hitbox for triangle (r=15) + label
+                        const r = 20; // tighter hit radius (User Request: Title + Triangle only)
+                        const dist = Math.sqrt(Math.pow(wx - mod.x, 2) + Math.pow(wy - (mod.y - 15), 2));
+                        if (dist < r) {
+                            setDraggingModuleId(mod.id);
+                            dragStartRef.current = { x: wx - mod.x, y: wy - mod.y };
+                            if (onModuleSelect) onModuleSelect(mod.id);
+                            return;
+                        }
+                        continue;
+                    }
+
+                    // For others (or non-collapsed concept with 0 nodes?)
+                    if (mod.type === 'CONCEPT' && mod.nodeCount > 0 && !mod.collapsed) continue;
+
+                    // Standard Box Hitbox (Learned Output / Training Data / Empty Concept)
+                    const w = mod.width || 100;
+                    const h = mod.height || 600;
+                    if (wx >= mod.x - w / 2 && wx <= mod.x + w / 2 &&
+                        wy >= mod.y - h / 2 && wy <= mod.y + h / 2) {
+
+                        setDraggingModuleId(mod.id);
+                        dragStartRef.current = { x: wx - mod.x, y: wy - mod.y };
+
+                        // Select on click for these since they have no nodes to click
+                        if (onModuleSelect) onModuleSelect(mod.id);
+                        return;
+                    }
+                }
+            }
         }
-    }
 
-    // Background Drag
-    setIsDragging(true);
-    dragStartRef.current = { x: pos.x - transform.x, y: pos.y - transform.y };
+        // Background Drag
+        setIsDragging(true);
+        dragStartRef.current = { x: pos.x - transform.x, y: pos.y - transform.y };
 
-    // Background Click -> Deselect REMOVED by user request
-    // if (!hoveredNodeId && onModuleSelect) onModuleSelect(null);
-};
+        // Background Click -> Deselect REMOVED by user request
+        // if (!hoveredNodeId && onModuleSelect) onModuleSelect(null);
+    };
 
-const handleDoubleClick = () => {
-    // Check selection on double click
-    if (hoveredNodeId) {
-        const modules = Array.from(netRef.current.modules.values());
-        let foundModId: string | null = null;
-        for (const mod of modules) {
-            if (hoveredNodeId.startsWith(mod.id + '-')) {
-                foundModId = mod.id;
+    const handleDoubleClick = () => {
+        // Check selection on double click
+        if (hoveredNodeId) {
+            const modules = Array.from(netRef.current.modules.values());
+            let foundModId: string | null = null;
+            for (const mod of modules) {
+                if (hoveredNodeId.startsWith(mod.id + '-')) {
+                    foundModId = mod.id;
+                    break;
+                }
+            }
+            if (foundModId && onModuleSelect) {
+                onModuleSelect(foundModId);
+            }
+        }
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        const pos = getPointerPos(e);
+
+        if (draggingModuleId && dragStartRef.current) {
+            const wx = (pos.x - transform.x) / transform.k;
+            const wy = (pos.y - transform.y) / transform.k;
+
+            const newX = wx - dragStartRef.current.x;
+            const newY = wy - dragStartRef.current.y;
+
+            netRef.current.moveModule(draggingModuleId, newX, newY);
+            return;
+        }
+
+        if (isDragging && dragStartRef.current) {
+            setTransform({
+                ...transform,
+                x: pos.x - dragStartRef.current.x,
+                y: pos.y - dragStartRef.current.y
+            });
+        }
+
+        // Hover
+        const lx = (pos.x - transform.x) / transform.k;
+        const ly = (pos.y - transform.y) / transform.k;
+
+        let foundNode = undefined;
+        for (const node of netRef.current.nodes.values()) {
+            // Fix: Ignored Collapsed Concept Nodes
+            const modId = netRef.current.nodeModuleMap.get(node.id);
+            if (modId) {
+                const mod = netRef.current.modules.get(modId);
+                if (mod && mod.type === 'CONCEPT' && mod.collapsed) continue;
+            }
+
+            const dx = lx - node.x;
+            const dy = ly - node.y;
+            if (dx * dx + dy * dy < 400) {
+                foundNode = node.id;
                 break;
             }
         }
-        if (foundModId && onModuleSelect) {
-            onModuleSelect(foundModId);
+        setHoveredNodeId(foundNode);
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+        setDraggingModuleId(null);
+        dragStartRef.current = null;
+    };
+
+    const handleClick = () => {
+        if (hoveredNodeId && !draggingModuleId) {
+            const node = netRef.current.nodes.get(hoveredNodeId);
+            if (node && node.type === NodeType.INPUT) {
+                node.setInput(1.0);
+            }
         }
-    }
-};
+    };
 
-const handleMouseMove = (e: React.MouseEvent) => {
-    const pos = getPointerPos(e);
-
-    if (draggingModuleId && dragStartRef.current) {
-        const wx = (pos.x - transform.x) / transform.k;
-        const wy = (pos.y - transform.y) / transform.k;
-
-        const newX = wx - dragStartRef.current.x;
-        const newY = wy - dragStartRef.current.y;
-
-        netRef.current.moveModule(draggingModuleId, newX, newY);
-        return;
-    }
-
-    if (isDragging && dragStartRef.current) {
-        setTransform({
-            ...transform,
-            x: pos.x - dragStartRef.current.x,
-            y: pos.y - dragStartRef.current.y
-        });
-    }
-
-    // Hover
-    const lx = (pos.x - transform.x) / transform.k;
-    const ly = (pos.y - transform.y) / transform.k;
-
-    let foundNode = undefined;
-    for (const node of netRef.current.nodes.values()) {
-        const dx = lx - node.x;
-        const dy = ly - node.y;
-        if (dx * dx + dy * dy < 400) {
-            foundNode = node.id;
-            break;
+    const handleContextMenu = (e: React.MouseEvent) => {
+        if (hoveredNodeId && onNodeContextMenu) {
+            e.preventDefault();
+            onNodeContextMenu(hoveredNodeId);
         }
-    }
-    setHoveredNodeId(foundNode);
-};
+    };
 
-const handleMouseUp = () => {
-    setIsDragging(false);
-    setDraggingModuleId(null);
-    dragStartRef.current = null;
-};
-
-const handleClick = () => {
-    if (hoveredNodeId && !draggingModuleId) {
-        const node = netRef.current.nodes.get(hoveredNodeId);
-        if (node && node.type === NodeType.INPUT) {
-            node.setInput(1.0);
-        }
-    }
-};
-
-const handleContextMenu = (e: React.MouseEvent) => {
-    if (hoveredNodeId && onNodeContextMenu) {
-        e.preventDefault();
-        onNodeContextMenu(hoveredNodeId);
-    }
-};
-
-return (
-    <div style={{ width: '100%', height: '100%', background: '#000', overflow: 'hidden' }}>
-        <canvas
-            ref={canvasRef}
-            style={{ width: '100%', height: '100%', touchAction: 'none' }}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-            onClick={handleClick}
-            onDoubleClick={handleDoubleClick}
-            onContextMenu={handleContextMenu}
-        />
-    </div>
-);
+    return (
+        <div style={{ width: '100%', height: '100%', background: '#000', overflow: 'hidden' }}>
+            <canvas
+                ref={canvasRef}
+                style={{ width: '100%', height: '100%', touchAction: 'none' }}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onClick={handleClick}
+                onDoubleClick={handleDoubleClick}
+                onContextMenu={handleContextMenu}
+            />
+        </div>
+    );
 });
