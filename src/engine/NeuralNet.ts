@@ -4,6 +4,43 @@ import { Connection } from './Connection';
 import type { NodeConfig, ConnectionConfig, ModuleConfig, ConnectionSide, ModuleConnectionConfig } from './types';
 import { NodeType } from './types';
 
+/** One incoming connection of a node, with its source resolved. */
+interface SignalSource {
+    conn: Connection;
+    src: BaseNode;
+    fromSustainedOutput: boolean;
+    plan: NodePlan;                // the target node this connection feeds
+    group: SignalSource[] | null;  // the brain group it is averaged in, or null for a standard input
+    order: number;                 // position in the target's summation order
+    raw: number;                   // signal delivered this tick (valid while queued in plan.pending)
+}
+/** Everything step() needs to sum the inputs of one node. */
+interface NodePlan {
+    node: BaseNode;
+    standard: SignalSource[];
+    brainGroups: SignalSource[][]; // one list per external source Brain, in order of first appearance
+    groupSources: string[];        // module id of each brainGroups entry
+    skipped: number;               // incoming connections whose source node no longer exists
+    pending: SignalSource[];       // inputs that carry a signal this tick (filled and emptied inside step())
+}
+/** A target node's internal incoming connections and their summed |weight| (valid while stamp matches). */
+interface WeightBudget { conns: Connection[]; total: number; prunable: boolean; stamp: number; }
+interface HebbianEntry { conn: Connection; src: BaseNode; tgt: BaseNode; budget: WeightBudget; }
+interface StepCache {
+    connections: Connection[];
+    connectionCount: number;
+    nodeVersion: number;
+    nodeCount: number;
+    moduleCount: number;
+    plans: NodePlan[];
+    planByNode: Map<string, NodePlan>;
+    outgoing: Map<BaseNode, SignalSource[]>; // the same entries, grouped by source node
+    fresh: boolean;                          // just (re)built: stale signal strengths have not been cleared yet
+    hebbian: Map<string, { entries: HebbianEntry[], budgets: Map<string, WeightBudget> }>;
+}
+
+const bySummationOrder = (a: SignalSource, b: SignalSource) => a.order - b.order;
+
 export class NeuralNet {
     public nodes: Map<string, BaseNode> = new Map();
     public connections: Connection[] = [];
@@ -21,6 +58,7 @@ export class NeuralNet {
 
     public addNode(config: NodeConfig) {
         const node = NodeFactory.create(config);
+        this.nodeVersion++;
         this.nodes.set(node.id, node);
         this.incoming.set(node.id, []);
     }
@@ -689,12 +727,6 @@ export class NeuralNet {
         return Math.atan2(node.y - mod.y, node.x - mod.x);
     }
 
-    private getAngleDist(a1: number, a2: number) {
-        let diff = Math.abs(a1 - a2);
-        if (diff > Math.PI) diff = (2 * Math.PI) - diff;
-        return diff;
-    }
-
     /**
      * Generic Location (0.0 - 1.0)
      * Brain: Normalized Angle (-PI..PI -> 0..1)
@@ -914,8 +946,52 @@ export class NeuralNet {
             n.potential = 0;
             n.activation = 0;
             n.refractoryTimer = 0;
+            n.lastFiredTick = -Infinity;
         });
         this.tickCount = 0;
+    }
+
+    /** Remove everything: modules, nodes and connections. */
+    public clear() {
+        this.nodes.clear();
+        this.connections = [];
+        this.modules.clear();
+        this.incoming.clear();
+        this.moduleConnections.clear();
+        this.nodeModuleMap.clear();
+        this.stimuli = [];
+        this.spikeCounts = null;
+        this.tickCount = 0;
+    }
+
+    // ---- Direct stimulation and spike recording (used by demos and experiments)
+
+    private stimuli: { nodes: BaseNode[], remaining: number, strength: number, onDone?: () => void }[] = [];
+    private spikeCounts: Map<string, number> | null = null;
+
+    /**
+     * Drive nodes directly: for the next `ticks` ticks, `strength` is added to their input.
+     * onDone is called at the end of the tick in which the stimulation runs out.
+     */
+    public stimulate(nodeIds: string[], ticks: number, strength: number = 3, onDone?: () => void) {
+        const nodes = nodeIds.map(id => this.nodes.get(id)).filter((n): n is BaseNode => !!n);
+        if (ticks > 0) this.stimuli.push({ nodes, remaining: ticks, strength, onDone });
+    }
+
+    public clearStimulation() {
+        this.stimuli = [];
+    }
+
+    /** Start counting spikes per node. */
+    public startRecording() {
+        this.spikeCounts = new Map();
+    }
+
+    /** Stop counting and return the spikes per node id since startRecording(). */
+    public stopRecording(): Map<string, number> {
+        const counts = this.spikeCounts || new Map<string, number>();
+        this.spikeCounts = null;
+        return counts;
     }
 
     public connectModules(
@@ -1219,120 +1295,73 @@ export class NeuralNet {
             }
         });
 
+        // Sum inputs per node - event-driven. Most nodes are silent on any given tick and a silent source
+        // delivers exactly 0, so only the outgoing connections of ACTIVE sources are visited. Each target then
+        // adds up what it received in its usual order (standard inputs first, then one averaged group per
+        // external Brain), so the result is the same number as summing every incoming connection.
+        const cache = this.getStepCache();
+        const active: BaseNode[] = [];
         this.nodes.forEach(node => {
-            if (node.type === NodeType.INPUT) return;
-
-            let sum = 0;
-            const incomingConns = this.incoming.get(node.id) || [];
-
-            // Normalization Logic: Group connections by source Brain module
-            const brainInputs = new Map<string, { conns: { conn: Connection, rawSignal: number }[] }>();
-
-            incomingConns.forEach(conn => {
-                const sourceNode = this.nodes.get(conn.sourceId);
-                const sourceModId = this.nodeModuleMap.get(conn.sourceId);
-
-                if (sourceNode) {
-                    let sourceIsSustained = sourceNode.activationType === 'SUSTAINED'; // Check flag, assuming BRAIN/SUSTAINED_OUTPUT have this
-
-                    let rawSignal = 0;
-
-                    // SPECIAL LOGIC: Sustained Source
-                    if (sourceIsSustained && sourceModId) {
-                        const sourceMod = this.modules.get(sourceModId);
-
-                        // Check if it is strictly a SUSTAINED_OUTPUT module (or Brain?)
-                        // "Importantantly, this is only the case if the connection is to another Sustained node" implies:
-                        // If Source is Sustained_Output -> Target Sustained_Output: Add Signal
-                        // If Source is Sustained_Output -> Target Pulse: Gate Signal
-
-                        const isSourceSustainedOutput = sourceMod && sourceMod.type === 'SUSTAINED_OUTPUT';
-                        const isTargetSustainedOutput = node.activationType === 'SUSTAINED'; // "another Sustained node"
-
-                        if (isSourceSustainedOutput) {
-                            if (isTargetSustainedOutput) {
-                                // Logic 1: Sustained -> Sustained
-                                // "calculate the increase in potential. So if a brain node fires, it fires 1, it is then multiplied by the weight of the connection."
-                                // Note: Sustained Nodes always 'fire' if they have potential? Or only if firing?
-                                // "if a brain node fires, it fires 1"
-
-                                if (sourceNode.isFiring) {
-                                    rawSignal = 1.0 * conn.weight;
-                                }
-                            } else {
-                                // Logic 2: Sustained -> Pulse ("normal")
-                                // "it only fires if the weight is less than its current potential" (Gate condition)
-                                if (sourceNode.potential > conn.weight) {
-                                    if (sourceNode.isFiring) {
-                                        rawSignal = 1.0 * conn.weight;
-                                    }
-                                } else {
-                                    rawSignal = 0; // Gated
-                                }
-                            }
-                        } else {
-                            // Standard Brain/Other Sustained
-                            rawSignal = sourceNode.activation * conn.weight;
-                        }
-
-                    } else {
-                        // Standard Pulse Source
-                        rawSignal = sourceNode.activation * conn.weight;
-                    }
-
-                    const targetModId = this.nodeModuleMap.get(node.id);
-
-                    let isExternalBrain = false;
-                    if (sourceModId && sourceModId !== targetModId) {
-                        const sourceMod = this.modules.get(sourceModId);
-                        // Apply normalization ONLY if NOT Sustained Output source
-                        // "please remove the calculation at runtime for the sustained nodes" check
-                        // EDIT: Also check TARGET. If target is SUSTAINED_OUTPUT, we SKIP external brain normalization
-                        // because we pre-calculated the weights to be 'Gain / Count'.
-                        const targetMod = this.modules.get(targetModId || '');
-                        const isTargetSustainedOutput = targetMod && targetMod.type === 'SUSTAINED_OUTPUT';
-
-                        if (sourceMod && sourceMod.type === 'BRAIN' && !isTargetSustainedOutput) {
-                            isExternalBrain = true;
-                        }
-                    }
-
-                    if (isExternalBrain && sourceModId) {
-                        let entry = brainInputs.get(sourceModId);
-                        if (!entry) {
-                            entry = { conns: [] };
-                            brainInputs.set(sourceModId, entry);
-                        }
-                        entry.conns.push({ conn, rawSignal });
-                    } else {
-                        // Standard processing
-                        sum += rawSignal;
-                        conn.signalStrength = Math.abs(rawSignal);
-                    }
-                }
-            });
-
-            // Process Normalized Inputs
-            brainInputs.forEach((entry) => {
-                const count = entry.conns.length;
-                if (count > 0) {
-                    // Normalization Factor: 1.0 / Total Connections from this brain
-                    // This ensures the total possible input from the brain is effectively "averaged"
-                    // preventing saturation from 100+ connections.
-                    const normFactor = 1.0 / count;
-
-                    entry.conns.forEach(item => {
-                        const normalizedSignal = item.rawSignal * normFactor;
-                        sum += normalizedSignal;
-                        // Visualizer: Use raw signal so activity is visible, 
-                        // even though physics uses normalized input.
-                        item.conn.signalStrength = Math.abs(item.rawSignal);
-                    });
-                }
-            });
-
-            inputSums.set(node.id, sum);
+            if (node.activation !== 0 || node.isFiring) active.push(node);
         });
+
+        // Visualizer bookkeeping: connections whose source is silent must show no signal.
+        if (cache.fresh) {
+            cache.outgoing.forEach(entries => {
+                for (let i = 0; i < entries.length; i++) entries[i].conn.signalStrength = 0;
+            });
+            cache.fresh = false;
+        } else if (this.activeSources.length > 0) {
+            const stillActive = new Set(active);
+            for (let a = 0; a < this.activeSources.length; a++) {
+                if (stillActive.has(this.activeSources[a])) continue;
+                const entries = cache.outgoing.get(this.activeSources[a]);
+                if (entries) for (let i = 0; i < entries.length; i++) entries[i].conn.signalStrength = 0;
+            }
+        }
+        this.activeSources = active;
+
+        const receiving: NodePlan[] = [];
+        for (let a = 0; a < active.length; a++) {
+            const entries = cache.outgoing.get(active[a]);
+            if (!entries) continue;
+            for (let i = 0; i < entries.length; i++) {
+                const entry = entries[i];
+                const rawSignal = this.rawSignal(entry, entry.plan.node);
+                // Visualizer: Use raw signal so activity is visible,
+                // even though physics uses normalized input for Brain groups.
+                entry.conn.signalStrength = Math.abs(rawSignal);
+                entry.raw = rawSignal;
+                if (entry.plan.pending.length === 0) receiving.push(entry.plan);
+                entry.plan.pending.push(entry);
+            }
+        }
+
+        for (let p = 0; p < receiving.length; p++) {
+            const pending = receiving[p].pending;
+            if (pending.length > 1) pending.sort(bySummationOrder);
+            let sum = 0;
+            for (let i = 0; i < pending.length; i++) {
+                const entry = pending[i];
+                // Normalization Factor for Brain groups: 1.0 / Total Connections from that brain.
+                // This ensures the total possible input from the brain is effectively "averaged"
+                // preventing saturation from 100+ connections.
+                sum += entry.group ? entry.raw * (1.0 / entry.group.length) : entry.raw;
+            }
+            pending.length = 0;
+            inputSums.set(receiving[p].node.id, sum);
+        }
+
+        // External stimulation
+        const finishedStimuli: (() => void)[] = [];
+        if (this.stimuli.length > 0) {
+            for (const stimulus of this.stimuli) {
+                for (const node of stimulus.nodes) inputSums.set(node.id, (inputSums.get(node.id) || 0) + stimulus.strength);
+                stimulus.remaining--;
+                if (stimulus.remaining <= 0 && stimulus.onDone) finishedStimuli.push(stimulus.onDone);
+            }
+            this.stimuli = this.stimuli.filter(stimulus => stimulus.remaining > 0);
+        }
 
         this.nodes.forEach(node => {
             if (node.type === NodeType.INPUT) {
@@ -1347,6 +1376,11 @@ export class NeuralNet {
             const alpha = 0.01;
             const fired = node.isFiring ? 1.0 : 0.0;
             node.averageFiringRate = (alpha * fired) + ((1 - alpha) * node.averageFiringRate);
+
+            if (node.isFiring) {
+                node.lastFiredTick = this.tickCount;
+                if (this.spikeCounts) this.spikeCounts.set(node.id, (this.spikeCounts.get(node.id) || 0) + 1);
+            }
         });
 
         // Synaptic Scaling (Homeostasis)
@@ -1368,102 +1402,112 @@ export class NeuralNet {
         // 3. Hebbian Learning (Phase 12)
         this.modules.forEach(module => {
             if (module.type === 'BRAIN' && module.hebbianLearning) {
+                if (module.hebbianRule === 'window') {
+                    this.applyWindowRule(module);
+                    return;
+                }
+
                 const rate = module.learningRate || 0.01;
                 const moduleId = module.id;
 
-                // Optimization: Filter global connections for internal ones
-                // Note: In a high-performance scenario, we would cache this list.
-                const internalConns = this.connections.filter(c =>
-                    c.sourceId.startsWith(moduleId) && c.targetId.startsWith(moduleId)
-                );
+                // Internal connections (and each target's internal incoming list) are cached per topology.
+                const internalConns = this.getHebbianEntries(moduleId);
 
                 const pruningThreshold = module.pruningThreshold !== undefined ? module.pruningThreshold : 0.05;
                 const connsToRemove: Set<string> = new Set();
+                const targetSum = module.sustainability?.targetSum || 3.0; // Default to 3
+                const stamp = ++this.hebbStamp;
 
-                internalConns.forEach(conn => {
-                    const src = this.nodes.get(conn.sourceId);
-                    const tgt = this.nodes.get(conn.targetId);
+                for (let k = 0; k < internalConns.length; k++) {
+                    const { conn, src, tgt, budget } = internalConns[k];
 
-                    if (src && tgt) {
-                        // Hebbian Update: W_new = W_old + rate * (Activation_src * Activation_tgt)
-                        // Standard Hebbian: "Cells that fire together, wire together"
-                        // Only increase if both are active?
-                        // Or standard delta rule?
-                        // Simple Hebbian: product of activations.
-                        // Subtractive Normalization
-                        // "Grow based on correlation, but shrink everyone to pay for it."
-                        // This maintains a fixed "weight budget" per node (Conservation of Synaptic weight).
+                    // Hebbian Update: W_new = W_old + rate * (Activation_src * Activation_tgt)
+                    // Standard Hebbian: "Cells that fire together, wire together"
+                    // Subtractive Normalization
+                    // "Grow based on correlation, but shrink everyone to pay for it."
+                    // This maintains a fixed "weight budget" per node (Conservation of Synaptic weight).
 
-                        // 1. Calculate Boost
-                        const boost = rate * src.activation * tgt.activation;
+                    // 1. Calculate Boost
+                    const boost = rate * src.activation * tgt.activation;
 
-                        // Dale's Principle: Plasticity Rules
-                        if (src.neuronType === 'EXCITATORY') {
-                            // Standard Hebbian for Excitatory
-                            // "Cells that fire together, wire together"
-                            // Limit max weight to avoid runways? Normalization handles that.
-                            conn.weight += boost;
+                    // Dale's Principle: Plasticity Rules
+                    if (src.neuronType === 'EXCITATORY') {
+                        // Standard Hebbian for Excitatory
+                        conn.weight += boost;
+                        if (boost !== 0) budget.stamp = 0;
+                    } else {
+                        // Homeostatic Plasticity for Inhibitory
+                        // Goal: Maintain Target Firing Rate at Set Point (e.g. 10%)
+                        const targetRate = 0.1;
+
+                        // If Target is too active -> Inhibition should INCREASE (become more negative)
+                        if (tgt.averageFiringRate > targetRate) {
+                            conn.weight -= 0.001;
                         } else {
-                            // Homeostatic Plasticity for Inhibitory
-                            // Goal: Maintain Target Firing Rate at Set Point (e.g. 10%)
-                            const targetRate = 0.1;
-
-                            // If Target is too active -> Inhibition should INCREASE (become more negative)
-                            // "Police, there's too much noise here!"
-                            if (tgt.averageFiringRate > targetRate) {
-                                // Strengthen Inhibition (Subtract positive value)
-                                conn.weight -= 0.001;
-                            } else {
-                                // Relax Inhibition (Add positive value to negative weight -> closer to 0)
-                                conn.weight += 0.001;
-                            }
+                            // Relax Inhibition (Add positive value to negative weight -> closer to 0)
+                            conn.weight += 0.001;
                         }
+                        budget.stamp = 0;
+                    }
 
-                        // 2. Check Target Sum (Capacity)
-                        const targetSum = module.sustainability?.targetSum || 3.0; // Default to 3
-                        const incomingToTgt = this.incoming.get(tgt.id) || [];
-
-                        // RESTRICTION: Only consider INTERNAL connections for the budget
-                        const internalIncoming = incomingToTgt.filter(c => c.sourceId.startsWith(moduleId));
-
+                    // 2. Check Target Sum (Capacity)
+                    // RESTRICTION: Only INTERNAL connections count towards the budget.
+                    // The total is only re-added when one of the weights in it has changed since the last time.
+                    const internalIncoming = budget.conns;
+                    if (budget.stamp !== stamp) {
                         let currentTotal = 0;
-                        internalIncoming.forEach(c => currentTotal += Math.abs(c.weight));
-
-                        // 3. Conditional Tax: Only tax if we are exceeding the budget
-                        if (currentTotal > targetSum) {
-                            // "Rich get richer, but everyone pays the tax to stay under the ceiling."
-                            // We distribute the 'boost' cost (or the excess) across everyone.
-                            // To stabilize AT targetSum, strictly speaking we should remove 'excess'.
-                            // But simply removing 'boost' (the recent addition) is the "Subtractive Normalization" philosophy
-                            // which stabilizes the sum at the point where it becomes active (approx targetSum).
-
-                            if (internalIncoming.length > 0) {
-                                const tax = boost / internalIncoming.length;
-
-                                internalIncoming.forEach(c => {
-                                    c.weight -= tax;
-                                    // Allow negative (Inhibitory) weights - No Clamp
-
-                                    // CHECK PRUNING
-                                    if (Math.abs(c.weight) < pruningThreshold) {
-                                        connsToRemove.add(c.id);
-                                    }
-                                });
-                            }
+                        let prunable = false;
+                        for (let i = 0; i < internalIncoming.length; i++) {
+                            const abs = Math.abs(internalIncoming[i].weight);
+                            currentTotal += abs;
+                            if (abs < pruningThreshold) prunable = true;
                         }
+                        budget.total = currentTotal;
+                        budget.prunable = prunable;
+                        budget.stamp = stamp;
+                    }
 
-                        // PRUNING
-                        if (Math.abs(conn.weight) < pruningThreshold) {
-                            connsToRemove.add(conn.id);
+                    // 3. Conditional Tax: Only tax if we are exceeding the budget
+                    if (budget.total > targetSum) {
+                        // "Rich get richer, but everyone pays the tax to stay under the ceiling."
+                        // Removing 'boost' (the recent addition) is the "Subtractive Normalization" philosophy
+                        // which stabilizes the sum at the point where it becomes active (approx targetSum).
+                        // With no boost the tax is zero, so the loop below could only flag weights that are
+                        // already under the pruning threshold - skip it when the budget holds none.
+                        if (internalIncoming.length > 0 && (boost !== 0 || budget.prunable)) {
+                            const tax = boost / internalIncoming.length;
+
+                            for (let i = 0; i < internalIncoming.length; i++) {
+                                const c = internalIncoming[i];
+                                c.weight -= tax;
+                                // Allow negative (Inhibitory) weights - No Clamp
+
+                                // CHECK PRUNING
+                                if (Math.abs(c.weight) < pruningThreshold) {
+                                    connsToRemove.add(c.id);
+                                }
+                            }
+                            if (tax !== 0) budget.stamp = 0;
                         }
                     }
-                });
+
+                    // PRUNING
+                    if (Math.abs(conn.weight) < pruningThreshold) {
+                        connsToRemove.add(conn.id);
+                    }
+                }
 
                 // Apply Pruning
                 if (connsToRemove.size > 0) {
-                    this.connections = this.connections.filter(c => !connsToRemove.has(c.id));
+                    const removed: Connection[] = [];
+                    this.connections = this.connections.filter(c => {
+                        if (!connsToRemove.has(c.id)) return true;
+                        removed.push(c);
+                        return false;
+                    });
                     // Full Rebuild of incoming map is safest/easiest given current architecture
                     this.rebuildIncomingMap();
+                    this.removeFromStepCache(removed);
                 }
 
                 // REGROWTH
@@ -1474,26 +1518,308 @@ export class NeuralNet {
                     let toAdd = count;
                     if (Math.random() < chance) toAdd++;
 
-                    const moduleNodes = this.getModuleNodes(moduleId);
-                    if (moduleNodes.length > 1) {
-                        for (let i = 0; i < toAdd; i++) {
-                            const src = moduleNodes[Math.floor(Math.random() * moduleNodes.length)];
-                            let tgt = moduleNodes[Math.floor(Math.random() * moduleNodes.length)];
-                            while (tgt.id === src.id) {
-                                tgt = moduleNodes[Math.floor(Math.random() * moduleNodes.length)];
-                            }
+                    if (toAdd > 0) {
+                        const moduleNodes = this.getModuleNodesCached(moduleId);
+                        if (moduleNodes.length > 1) {
+                            for (let i = 0; i < toAdd; i++) {
+                                const src = moduleNodes[Math.floor(Math.random() * moduleNodes.length)];
+                                let tgt = moduleNodes[Math.floor(Math.random() * moduleNodes.length)];
+                                while (tgt.id === src.id) {
+                                    tgt = moduleNodes[Math.floor(Math.random() * moduleNodes.length)];
+                                }
 
-                            this.addConnection({
-                                id: `c-${src.id}-${tgt.id}-${Date.now()}-${Math.random()}`,
-                                sourceId: src.id,
-                                targetId: tgt.id,
-                                weight: (Math.random() - 0.5) * 0.4 // Range [-0.2, 0.2]
-                            });
+                                const cacheWasCurrent = this.isStepCacheCurrent();
+                                this.addConnection({
+                                    id: `c-${src.id}-${tgt.id}-${Date.now()}-${Math.random()}`,
+                                    sourceId: src.id,
+                                    targetId: tgt.id,
+                                    weight: (Math.random() - 0.5) * 0.4 // Range [-0.2, 0.2]
+                                });
+                                if (cacheWasCurrent) this.appendToStepCache(this.connections[this.connections.length - 1]);
+                            }
                         }
                     }
                 }
             }
         });
+
+        for (const onDone of finishedStimuli) onDone();
+    }
+
+    /**
+     * 'window' Hebbian rule: neurons that fire within a few ticks of each other get wired together, up to a cap.
+     * Only excitatory -> excitatory synapses inside the Brain learn. A neuron that fired together with others
+     * every 2-3 ticks is rarely in the SAME tick as them (refractory periods put them out of step), which is
+     * why the pairing is counted over a short window instead.
+     */
+    private applyWindowRule(module: ModuleConfig) {
+        const rate = module.learningRate || 0.01;
+        const cap = module.weightCap ?? 0.25;
+        const window = module.hebbianWindow ?? 2;
+        const entries = this.getHebbianEntries(module.id);
+        for (let k = 0; k < entries.length; k++) {
+            const { conn, src, tgt } = entries[k];
+            if (!tgt.isFiring || tgt.neuronType !== 'EXCITATORY' || src.neuronType !== 'EXCITATORY') continue;
+            if (this.tickCount - src.lastFiredTick > window) continue;
+            conn.weight += rate * (1 - conn.weight / cap);
+        }
+    }
+
+    // ---- Step caches -------------------------------------------------------------------------------------------
+    // step() used to re-derive the wiring from the Maps (and re-filter / re-sort whole lists) on every tick.
+    // These caches hold that derived structure and are rebuilt only when the topology changes.
+
+    private nodeVersion: number = 0;
+    private hebbStamp: number = 0;
+    private stepCache: StepCache | null = null;
+    private activeSources: BaseNode[] = []; // nodes that delivered a signal on the previous tick
+    private moduleNodesCache: { nodeVersion: number, nodeCount: number, lists: Map<string, BaseNode[]> } | null = null;
+
+    /**
+     * Connections are only ever added with push() or removed by replacing the array, and nodes are only replaced
+     * through addNode(), so (array identity, length, node version, node count) identifies a topology.
+     */
+    private isStepCacheCurrent(): boolean {
+        const cache = this.stepCache;
+        return !!cache
+            && cache.connections === this.connections
+            && cache.connectionCount === this.connections.length
+            && cache.nodeVersion === this.nodeVersion
+            && cache.nodeCount === this.nodes.size
+            && cache.moduleCount === this.modules.size;
+    }
+
+    private getStepCache(): StepCache {
+        if (this.isStepCacheCurrent()) return this.stepCache!;
+
+        const plans: NodePlan[] = [];
+        const planByNode = new Map<string, NodePlan>();
+        const outgoing = new Map<BaseNode, SignalSource[]>();
+        this.nodes.forEach(node => {
+            if (node.type === NodeType.INPUT) return;
+
+            const plan: NodePlan = { node, standard: [], brainGroups: [], groupSources: [], skipped: 0, pending: [] };
+            (this.incoming.get(node.id) || []).forEach(conn => this.addToPlan(plan, conn, outgoing));
+            this.renumberPlan(plan);
+            plans.push(plan);
+            planByNode.set(node.id, plan);
+        });
+
+        this.stepCache = {
+            connections: this.connections,
+            connectionCount: this.connections.length,
+            nodeVersion: this.nodeVersion,
+            nodeCount: this.nodes.size,
+            moduleCount: this.modules.size,
+            plans,
+            planByNode,
+            outgoing,
+            fresh: true,
+            hebbian: new Map()
+        };
+        return this.stepCache;
+    }
+
+    /** Fix each entry's place in its target's summation order: standard inputs first, then group by group. */
+    private renumberPlan(plan: NodePlan) {
+        let order = 0;
+        for (const entry of plan.standard) { entry.group = null; entry.order = order++; }
+        for (const group of plan.brainGroups) for (const entry of group) { entry.group = group; entry.order = order++; }
+    }
+
+    /** Classify one incoming connection of plan.node (standard vs. averaged input from another Brain). */
+    private addToPlan(plan: NodePlan, conn: Connection, outgoing: Map<BaseNode, SignalSource[]>) {
+        const src = this.nodes.get(conn.sourceId);
+        if (!src) {
+            plan.skipped++;
+            return;
+        }
+
+        const targetModId = this.nodeModuleMap.get(plan.node.id);
+        const targetMod = this.modules.get(targetModId || '');
+        const isTargetSustainedOutput = !!targetMod && targetMod.type === 'SUSTAINED_OUTPUT';
+        const sourceModId = this.nodeModuleMap.get(conn.sourceId);
+        const sourceMod = sourceModId ? this.modules.get(sourceModId) : undefined;
+        const entry: SignalSource = {
+            conn,
+            src,
+            fromSustainedOutput: !!sourceMod && sourceMod.type === 'SUSTAINED_OUTPUT',
+            plan,
+            group: null,
+            order: 0,
+            raw: 0
+        };
+        const fromSource = outgoing.get(src);
+        if (fromSource) fromSource.push(entry);
+        else outgoing.set(src, [entry]);
+
+        // Inputs from ANOTHER Brain are averaged, unless the target is a Sustained Output
+        // (its weights are pre-calculated as Gain / Count).
+        const isExternalBrain = !!sourceModId && sourceModId !== targetModId
+            && !!sourceMod && sourceMod.type === 'BRAIN' && !isTargetSustainedOutput;
+
+        if (isExternalBrain && sourceModId) {
+            let g = plan.groupSources.indexOf(sourceModId);
+            if (g < 0) {
+                g = plan.groupSources.push(sourceModId) - 1;
+                plan.brainGroups.push([]);
+            }
+            plan.brainGroups[g].push(entry);
+        } else {
+            plan.standard.push(entry);
+        }
+    }
+
+    /**
+     * Pruning happens on most ticks while a Brain settles, so instead of rebuilding the whole cache the pruned
+     * connections are taken out of it. Call after this.connections / this.incoming have been updated.
+     */
+    private removeFromStepCache(removed: Connection[]) {
+        const cache = this.stepCache;
+        if (!cache) return;
+        const gone = new Set(removed);
+        const keep = (e: { conn: Connection }) => !gone.has(e.conn);
+
+        const targets = new Set(removed.map(c => c.targetId));
+        targets.forEach(targetId => {
+            const plan = cache.planByNode.get(targetId);
+            if (plan) {
+                plan.standard = plan.standard.filter(keep);
+                for (let g = plan.brainGroups.length - 1; g >= 0; g--) {
+                    plan.brainGroups[g] = plan.brainGroups[g].filter(keep);
+                    if (plan.brainGroups[g].length === 0) {
+                        plan.brainGroups.splice(g, 1);
+                        plan.groupSources.splice(g, 1);
+                    }
+                }
+                this.renumberPlan(plan);
+            }
+            cache.hebbian.forEach(h => {
+                const budget = h.budgets.get(targetId);
+                if (budget) {
+                    budget.conns = budget.conns.filter(c => !gone.has(c));
+                    budget.stamp = 0;
+                }
+            });
+        });
+        cache.hebbian.forEach(h => { h.entries = h.entries.filter(keep); });
+        const sources = new Set<BaseNode>();
+        for (const conn of removed) {
+            const src = this.nodes.get(conn.sourceId);
+            if (src) sources.add(src);
+        }
+        sources.forEach(src => {
+            const entries = cache.outgoing.get(src);
+            if (entries) cache.outgoing.set(src, entries.filter(keep));
+        });
+
+        // The incoming map was rebuilt from scratch; if it no longer matches a plan (it had been stale), start over.
+        for (const plan of cache.plans) {
+            let count = plan.standard.length + plan.skipped;
+            for (const group of plan.brainGroups) count += group.length;
+            if (count !== (this.incoming.get(plan.node.id) || []).length) {
+                this.stepCache = null;
+                return;
+            }
+        }
+
+        cache.connections = this.connections;
+        cache.connectionCount = this.connections.length;
+    }
+
+    /** Counterpart of removeFromStepCache for a connection that was just added with addConnection(). */
+    private appendToStepCache(conn: Connection) {
+        const cache = this.stepCache;
+        if (!cache) return;
+
+        const plan = cache.planByNode.get(conn.targetId);
+        if (plan) {
+            this.addToPlan(plan, conn, cache.outgoing);
+            this.renumberPlan(plan);
+        }
+
+        const src = this.nodes.get(conn.sourceId);
+        const tgt = this.nodes.get(conn.targetId);
+        cache.hebbian.forEach((h, moduleId) => {
+            if (!conn.sourceId.startsWith(moduleId)) return;
+            let budget = h.budgets.get(conn.targetId);
+            if (budget) {
+                budget.conns.push(conn);
+                budget.stamp = 0;
+            }
+            if (!conn.targetId.startsWith(moduleId) || !src || !tgt) return;
+            if (!budget) {
+                // First internal connection into this node: the incoming list already contains conn.
+                budget = this.createBudget(tgt.id, moduleId);
+                h.budgets.set(tgt.id, budget);
+            }
+            h.entries.push({ conn, src, tgt, budget });
+        });
+
+        cache.connectionCount = this.connections.length;
+    }
+
+    private createBudget(targetId: string, moduleId: string): WeightBudget {
+        const conns = (this.incoming.get(targetId) || []).filter(c => c.sourceId.startsWith(moduleId));
+        return { conns, total: 0, prunable: false, stamp: 0 };
+    }
+
+    /** The signal one connection delivers this tick. */
+    private rawSignal(entry: SignalSource, target: BaseNode): number {
+        const { conn, src } = entry;
+
+        // SPECIAL LOGIC: Sustained Source from a SUSTAINED_OUTPUT module
+        if (entry.fromSustainedOutput && src.activationType === 'SUSTAINED') {
+            if (target.activationType === 'SUSTAINED') {
+                // Logic 1: Sustained -> Sustained: if the source fires, it fires 1, multiplied by the weight.
+                return src.isFiring ? 1.0 * conn.weight : 0;
+            }
+            // Logic 2: Sustained -> Pulse: gated, only passes if the source potential exceeds the weight.
+            return (src.potential > conn.weight && src.isFiring) ? 1.0 * conn.weight : 0;
+        }
+
+        // Standard Pulse Source / Standard Brain / Other Sustained
+        return src.activation * conn.weight;
+    }
+
+    /** Internal connections of a Brain, each with the "weight budget" (internal incoming list) of its target. */
+    private getHebbianEntries(moduleId: string): HebbianEntry[] {
+        const cache = this.getStepCache();
+        const cached = cache.hebbian.get(moduleId);
+        if (cached) return cached.entries;
+
+        const entries: HebbianEntry[] = [];
+        const budgets = new Map<string, WeightBudget>();
+        for (const conn of this.connections) {
+            if (!(conn.sourceId.startsWith(moduleId) && conn.targetId.startsWith(moduleId))) continue;
+            const src = this.nodes.get(conn.sourceId);
+            const tgt = this.nodes.get(conn.targetId);
+            if (!src || !tgt) continue;
+
+            let budget = budgets.get(tgt.id);
+            if (!budget) {
+                budget = this.createBudget(tgt.id, moduleId);
+                budgets.set(tgt.id, budget);
+            }
+            entries.push({ conn, src, tgt, budget });
+        }
+        cache.hebbian.set(moduleId, { entries, budgets });
+        return entries;
+    }
+
+    /** getModuleNodes() without the per-call filter + locale sort. Do not mutate the returned array. */
+    private getModuleNodesCached(moduleId: string): BaseNode[] {
+        let cache = this.moduleNodesCache;
+        if (!cache || cache.nodeVersion !== this.nodeVersion || cache.nodeCount !== this.nodes.size) {
+            cache = { nodeVersion: this.nodeVersion, nodeCount: this.nodes.size, lists: new Map() };
+            this.moduleNodesCache = cache;
+        }
+        let list = cache.lists.get(moduleId);
+        if (!list) {
+            list = this.getModuleNodes(moduleId);
+            cache.lists.set(moduleId, list);
+        }
+        return list;
     }
 
 

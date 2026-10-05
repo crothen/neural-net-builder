@@ -674,3 +674,218 @@ z-index: 10000;
   right: -6px;
   transform: translateY(-50%) rotate(180deg);
 }
+
+/* Pattern-memory demo controls, drawn over the bottom of the canvas */
+.pattern-memory-bar {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(20, 20, 32, 0.92);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.pm-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.pm-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #888;
+  margin-right: 4px;
+}
+
+.pm-spacer {
+  flex: 1;
+}
+
+.pattern-memory-bar button {
+  flex: none;
+}
+
+.pattern-memory-bar button:disabled {
+  opacity: 0.45;
+  cursor: default;
+  filter: none;
+}
+
+.pm-row button.primary {
+  flex: 1;
+  min-width: 130px;
+  padding: 0.7rem 0.6rem;
+}
+
+.pm-chip {
+  min-width: 38px;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid #888;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.pm-chip.pm-add {
+  border-style: dashed;
+  background: transparent;
+  color: #aaa;
+}
+
+.pm-quiet {
+  background: #333;
+  color: #ccc;
+  padding: 0.4rem 0.7rem;
+}
+
+.pm-status {
+  font-size: 0.85rem;
+  line-height: 1.35;
+  min-height: 2.3em;
+}
+
+.pm-good {
+  color: #7dff6b;
+}
+
+.pm-bad {
+  color: #ff6b5f;
+}
+
+.pm-legend {
+  font-size: 0.7rem;
+  color: #777;
+}
+
+/* Mobile-only chrome (hidden on desktop) */
+.mobile-bar,
+.mobile-backdrop,
+.drawer-close {
+  display: none;
+}
+
+/* Narrow screens: canvas fills the screen, sidebars become slide-in drawers */
+@media (max-width: 900px) {
+
+  body,
+  html,
+  #root,
+  .app-container {
+    height: 100dvh;
+  }
+
+  .app-container {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "bar"
+      "canvas"
+      "bottom";
+  }
+
+  .mobile-bar {
+    grid-area: bar;
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    background: var(--bg-sidebar);
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .mobile-bar button {
+    background: #333;
+    color: #eee;
+    padding: 0.7rem 0.4rem;
+  }
+
+  .mobile-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 150;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: min(340px, 88vw);
+    z-index: 200;
+    overflow-y: auto;
+    transition: transform 0.25s ease;
+  }
+
+  .left-sidebar {
+    left: 0;
+    transform: translateX(-105%);
+  }
+
+  .right-sidebar {
+    right: 0;
+    transform: translateX(105%);
+    padding-top: 44px;
+  }
+
+  .sidebar.open {
+    transform: none;
+  }
+
+  .drawer-close {
+    display: block;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    flex: none;
+    background: none;
+    color: #aaa;
+    font-size: 1.6rem;
+    line-height: 1;
+    padding: 4px 10px;
+    z-index: 60;
+  }
+
+  /* Bottom module list: one compact row */
+  .bottom-panel {
+    padding: 6px 8px;
+    min-width: 0;
+  }
+
+  .bottom-panel h2 {
+    font-size: 0.7rem;
+    margin: 0;
+  }
+
+  .bottom-panel>div:first-child {
+    margin-bottom: 4px !important;
+  }
+
+  .module-list {
+    grid-template-rows: auto !important;
+    padding-bottom: 4px !important;
+  }
+
+  .module-card {
+    width: 130px;
+    min-width: 130px;
+  }
+
+  /* 16px inputs stop iOS from zooming the page on focus */
+  input[type="number"],
+  input[type="text"],
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}

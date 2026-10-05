@@ -19,6 +19,7 @@ export abstract class BaseNode {
     // Dale's Principle
     public neuronType: 'EXCITATORY' | 'INHIBITORY' = 'EXCITATORY';
     public averageFiringRate: number = 0; // EMA of firing rate
+    public lastFiredTick: number = -Infinity; // NeuralNet.tickCount at the most recent spike
 
     // Common Configuration
     public bias: number = 0;
@@ -82,6 +83,7 @@ export abstract class BaseNode {
         this.isFiring = false;
         this.refractoryTimer = 0;
         this.currentThreshold = this.threshold;
+        this.lastFiredTick = -Infinity;
     }
 
     /**

@@ -1,5 +1,13 @@
 import { NeuralNet } from '../engine/NeuralNet';
 import { NodeType } from '../engine/types';
+import type { Connection } from '../engine/Connection';
+
+/** Optional overrides for what draw() shows (used by demos). */
+export interface RenderView {
+    nodeMarks?: Map<string, { color: string, bold?: boolean }>; // extra ring around these nodes
+    connectionFilter?: (conn: Connection) => boolean;            // only draw connections that pass
+    restingAlpha?: number;                                       // opacity of drawn connections that carry no signal
+}
 
 export class Renderer {
     private ctx: CanvasRenderingContext2D;
@@ -24,23 +32,28 @@ export class Renderer {
         hoveredNodeId?: string,
         inspection?: { sourceId: string | null, targetId: string | null },
         showHidden: boolean = true,
-        highlightedNodeId?: string | null
+        highlightedNodeId?: string | null,
+        view?: RenderView
     ) {
         const { x: tx, y: ty, k: zoom } = transform;
 
+        // The canvas backing store is sized in device pixels, while width/height/transform are in CSS pixels.
+        const dpr = window.devicePixelRatio || 1;
+
         // 1. Clear background
-        this.ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform for clear
+        this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // Reset transform for clear
         this.ctx.fillStyle = '#0f0f13'; // Dark background
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         // Apply Zoom/Pan Transform
-        this.ctx.setTransform(zoom, 0, 0, zoom, tx, ty);
+        this.ctx.setTransform(zoom * dpr, 0, 0, zoom * dpr, tx * dpr, ty * dpr);
 
         // 2. Draw Connections
         net.connections.forEach(conn => {
             const source = net.nodes.get(conn.sourceId);
             const target = net.nodes.get(conn.targetId);
             if (!source || !target) return;
+            if (view?.connectionFilter && !view.connectionFilter(conn)) return;
 
             // Visibility Check
             if (!showHidden) {
@@ -111,7 +124,7 @@ export class Renderer {
             } else {
                 // Dynamic styling based on Weight & Activity
                 let baseWidth = 0.5 + (weightAbs * 1.5); // Thicker connections = stronger weights
-                let baseAlpha = 0.02 + (weightAbs * 0.1); // Extremely transparent resting state
+                let baseAlpha = view?.restingAlpha ?? (0.02 + (weightAbs * 0.1)); // Extremely transparent resting state
 
                 if (intensity > 0.01) {
                     // Active Firing
@@ -402,6 +415,15 @@ export class Renderer {
                 }
                 this.ctx.stroke();
                 this.ctx.shadowBlur = 0; // Reset
+
+                const mark = view?.nodeMarks?.get(node.id);
+                if (mark) {
+                    this.ctx.beginPath();
+                    this.ctx.arc(node.x, node.y, radius + (mark.bold ? 6 : 5), 0, Math.PI * 2);
+                    this.ctx.lineWidth = mark.bold ? 4 : 2;
+                    this.ctx.strokeStyle = mark.color;
+                    this.ctx.stroke();
+                }
 
                 // Label: Only show if custom (label != id)
                 const isDefault = node.label === node.id || node.label === `${node.id}`;

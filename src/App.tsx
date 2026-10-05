@@ -4,6 +4,7 @@ import { NeuralCanvas } from './components/NeuralCanvas';
 import type { NeuralCanvasHandle } from './components/NeuralCanvas';
 import type { ModuleConfig, ConnectionSide, ModuleType } from './engine/types';
 import type { BaseNode as NeuralNode } from './engine/nodes/BaseNode';
+import { PatternMemoryBar } from './components/PatternMemoryBar';
 import './App.css';
 import tooltipConfig from './config/tooltips.json';
 // Import initial network directly (Vite/Bundler will handle JSON)
@@ -110,6 +111,10 @@ const MemoizedFilterSelect = React.memo(({ filterModuleIds, onChange, connection
     prev.onChange === next.onChange;
 });
 
+// The pattern-memory demo has its own address: .../pattern-memory/ (or ?demo=pattern-memory on any page)
+const startInPatternDemo = window.location.pathname.includes('/pattern-memory')
+  || new URLSearchParams(window.location.search).get('demo') === 'pattern-memory';
+
 function App() {
   const canvasRef = useRef<NeuralCanvasHandle>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -201,12 +206,20 @@ function App() {
   const [connCoverage, setConnCoverage] = useState<number>(100);
   const [connLocalizer, setConnLocalizer] = useState<number>(0);
   const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(false);
+  // Which sidebar drawer is open on narrow screens (ignored by the desktop layout)
+  const [mobilePanel, setMobilePanel] = useState<'left' | 'right' | null>(null);
+  // Pattern-memory demo: its controls are drawn over the canvas while this is on
+  const [patternDemo, setPatternDemo] = useState(false);
 
   // --- Initial Load ---
   useEffect(() => {
     // Small timeout to ensure Canvas is ready/mounted
     const timer = setTimeout(() => {
       if (canvasRef.current) {
+        if (startInPatternDemo) {
+          setPatternDemo(true); // builds its own Brain
+          return;
+        }
         console.log("Loading Initial Network...", initialNetwork);
         // Cast to any to bypass strict JSON type checks vs internal Types
         canvasRef.current.loadData(initialNetwork as any);
@@ -396,6 +409,7 @@ function App() {
   };
 
   const handleClear = () => {
+    setPatternDemo(false);
     if (canvasRef.current) {
       canvasRef.current.clear();
       refreshModules();
@@ -438,6 +452,7 @@ function App() {
       try {
         const json = JSON.parse(event.target?.result as string);
         if (canvasRef.current) {
+          setPatternDemo(false);
           canvasRef.current.clear();
           canvasRef.current.load(json);
           setTimeout(() => {
@@ -490,9 +505,20 @@ function App() {
 
   return (
     <div className="app-container">
+      {/* MOBILE: drawer toggles + backdrop (hidden on desktop via CSS) */}
+      <div className="mobile-bar">
+        <button onClick={() => setMobilePanel('left')}>☰ Inspect</button>
+        <button onClick={() => setSimulation({ ...simulation, paused: !simulation.paused })}>
+          {simulation.paused ? '▶ Play' : '⏸ Pause'}
+        </button>
+        <button onClick={() => setMobilePanel('right')}>＋ Build</button>
+      </div>
+      {mobilePanel && <div className="mobile-backdrop" onClick={() => setMobilePanel(null)} />}
+
       {/* 1. LEFT SIDEBAR (Inspector Only) */}
-      <aside className="sidebar left-sidebar">
+      <aside className={`sidebar left-sidebar ${mobilePanel === 'left' ? 'open' : ''}`}>
         <div className="sidebar-header">
+          <button className="drawer-close" onClick={() => setMobilePanel(null)}>×</button>
           <h1>NEURAL ARCHITECT</h1>
         </div>
 
@@ -1621,6 +1647,15 @@ function App() {
           onNodeContextMenu={handleNodeContextMenu}
         />
 
+        {patternDemo && (
+          <PatternMemoryBar
+            canvasRef={canvasRef}
+            onNetworkChanged={() => { refreshModules(); handleModuleSelect(null); }}
+            onRun={() => setSimulation(prev => ({ ...prev, paused: false, speed: Math.min(prev.speed, 150) }))}
+            onClose={() => setPatternDemo(false)}
+          />
+        )}
+
         {/* Global HUD / Overlay Controls */}
         <div className="hud-overlay">
           <div className="actions" style={{ display: 'flex', gap: '5px' }}>
@@ -1689,7 +1724,7 @@ function App() {
             <div
               key={m.id}
               className={`module-card ${selectedModuleId === m.id ? 'selected' : ''}`}
-              onClick={() => handleModuleSelect(m.id)}
+              onClick={() => { handleModuleSelect(m.id); setMobilePanel('left'); }}
             >
               <span className="module-name">{m.name || m.label}</span>
               <span className="module-type">
@@ -1705,7 +1740,23 @@ function App() {
       </section >
 
       {/* 4. RIGHT SIDEBAR (Creation & Global) */}
-      < aside className="sidebar right-sidebar" >
+      < aside className={`sidebar right-sidebar ${mobilePanel === 'right' ? 'open' : ''}`} >
+        <button className="drawer-close" onClick={() => setMobilePanel(null)}>×</button>
+        {/* Demos */}
+        <div className="control-group">
+          <h2>Demos</h2>
+          <button
+            className="primary"
+            onClick={() => {
+              if (modules.length > 0 && !patternDemo && !window.confirm('This replaces the current network with a 105-neuron memory Brain. Continue?')) return;
+              setPatternDemo(true);
+              setMobilePanel(null);
+            }}
+          >
+            Pattern memory
+          </button>
+          <div style={{ fontSize: '0.75rem', color: '#888' }}>A Brain that stores patterns with Hebbian learning and completes them from half.</div>
+        </div>
         {/* Creation */}
         < div className="control-group" >
           {/* MODULE TYPE DROPDOWN */}
@@ -2208,7 +2259,7 @@ function App() {
           }}>
             <div style={{
               background: '#1e1e24', padding: '20px', borderRadius: '8px', border: '1px solid #44cb82',
-              minWidth: '350px', boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
+              minWidth: 'min(350px, 90vw)', maxWidth: '90vw', boxSizing: 'border-box', boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
             }}>
               <h3 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
                 Edit Connection

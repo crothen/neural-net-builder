@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { NeuralNet } from '../engine/NeuralNet';
 import { Renderer } from '../visualizer/Renderer';
+import type { RenderView } from '../visualizer/Renderer';
 import { NodeType } from '../engine/types';
 import type { ModuleConfig, ConnectionSide, ModuleConnectionConfig } from '../engine/types';
 import { BaseNode as NeuralNode } from '../engine/nodes/BaseNode';
@@ -37,6 +38,9 @@ export interface NeuralCanvasHandle {
     resetState: () => void;
     populateLearnedOutput?: (targetId: string, sourceId: string) => void;
     triggerInputNode: (index: number) => void;
+    getNet: () => NeuralNet;
+    setView: (view: RenderView | undefined) => void;
+    fitToView: (insets?: { top?: number, bottom?: number }) => void;
 }
 
 export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
@@ -64,6 +68,43 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
 
 
 
+    // Touch State (active pointers + pinch gesture)
+    const pointersRef = useRef<Map<number, { x: number, y: number }>>(new Map());
+    const pinchRef = useRef<{ dist: number, mid: { x: number, y: number }, transform: { x: number, y: number, k: number } } | null>(null);
+    const tapRef = useRef<{ x: number, y: number, nodeId?: string } | null>(null);
+
+    // Demo overrides for the renderer (node rings, which connections to draw)
+    const viewRef = useRef<RenderView | undefined>(undefined);
+
+    // On narrow (mobile) canvases the default 1:1 view shows only a corner of the net, so zoom out to fit it.
+    const fitToViewIfNarrow = () => fitToView(true);
+
+    const fitToView = (onlyIfNarrow: boolean = false, insets: { top?: number, bottom?: number } = {}) => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width === 0 || (onlyIfNarrow && rect.width >= 900)) return;
+
+        const nodes = Array.from(netRef.current.nodes.values());
+        if (nodes.length === 0) return;
+
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        nodes.forEach(n => {
+            minX = Math.min(minX, n.x); maxX = Math.max(maxX, n.x);
+            minY = Math.min(minY, n.y); maxY = Math.max(maxY, n.y);
+        });
+
+        const pad = 40;
+        const top = insets.top ?? 0;
+        const height = Math.max(100, rect.height - top - (insets.bottom ?? 0));
+        const k = Math.min(1, rect.width / (maxX - minX + pad * 2), height / (maxY - minY + pad * 2));
+        setTransform({
+            x: rect.width / 2 - ((minX + maxX) / 2) * k,
+            y: top + height / 2 - ((minY + maxY) / 2) * k,
+            k
+        });
+    };
+
     // Expose Save/Load
     const justLoadedRef = useRef(false);
 
@@ -73,10 +114,12 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         },
         load: (data: any) => {
             netRef.current.fromJSON(data);
+            fitToViewIfNarrow();
             justLoadedRef.current = true;
         },
         loadData: (data: any) => {
             netRef.current.fromJSON(data);
+            fitToViewIfNarrow();
             // We don't necessarily set justLoadedRef here if we want simulation to start immediately or behave differently
             // But for initial load, it's fine.
             justLoadedRef.current = true;
@@ -110,12 +153,8 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
             return netRef.current.getNodeConnections(nodeId);
         },
         clear: () => {
-            netRef.current.nodes.clear();
-            netRef.current.connections = [];
-            netRef.current.modules.clear();
-            netRef.current.incoming.clear();
-            netRef.current.moduleConnections.clear();
-            netRef.current.tickCount = 0;
+            netRef.current.clear();
+            viewRef.current = undefined;
         },
         removeModule: (id: string) => {
             netRef.current.removeModule(id);
@@ -144,7 +183,10 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         },
         triggerInputNode: (index: number) => {
             netRef.current.triggerInput(index);
-        }
+        },
+        getNet: () => netRef.current,
+        setView: (view) => { viewRef.current = view; },
+        fitToView: (insets) => fitToView(false, insets)
     }));
 
     // Initialize Network (Generation Logic Removed)
@@ -209,7 +251,8 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
                 hoveredNodeIdRef.current,
                 undefined, // inspection
                 showHiddenRef.current,
-                highlightedNodeIdRef.current
+                highlightedNodeIdRef.current,
+                viewRef.current
             );
             requestRef.current = requestAnimationFrame(animate);
         };
@@ -230,6 +273,37 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
             x: e.clientX - rect.left,
             y: e.clientY - rect.top
         };
+    };
+
+    const findNodeAt = (pos: { x: number, y: number }): string | undefined => {
+        const lx = (pos.x - transform.x) / transform.k;
+        const ly = (pos.y - transform.y) / transform.k;
+        for (const node of netRef.current.nodes.values()) {
+            const dx = lx - node.x;
+            const dy = ly - node.y;
+            if (dx * dx + dy * dy < 400) return node.id;
+        }
+        return undefined;
+    };
+
+    const findModuleIdForNode = (nodeId: string): string | null => {
+        for (const mod of netRef.current.modules.values()) {
+            if (nodeId.startsWith(mod.id + '-')) return mod.id;
+        }
+        return null;
+    };
+
+    const startPinch = () => {
+        const [a, b] = Array.from(pointersRef.current.values());
+        pinchRef.current = {
+            dist: Math.hypot(a.x - b.x, a.y - b.y) || 1,
+            mid: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 },
+            transform
+        };
+        setIsDragging(false);
+        setDraggingModuleId(null);
+        dragStartRef.current = null;
+        tapRef.current = null;
     };
 
     const handleWheel = (e: React.WheelEvent) => {
@@ -258,7 +332,24 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         });
     };
 
-    const handleMouseDown = (e: React.MouseEvent) => {
+    const handleMouseDown = (e: React.PointerEvent) => {
+        const pos = getPointerPos(e);
+
+        // Touch has no hover phase, so hit-test at the press position instead of relying on the last mouse move.
+        const hoveredNodeId = findNodeAt(pos);
+        setHoveredNodeId(hoveredNodeId);
+
+        if (e.pointerType === 'touch') {
+            canvasRef.current?.setPointerCapture(e.pointerId);
+            pointersRef.current.set(e.pointerId, pos);
+            if (pointersRef.current.size === 2) {
+                startPinch();
+                return;
+            }
+            if (pointersRef.current.size > 2) return;
+            tapRef.current = { x: pos.x, y: pos.y, nodeId: hoveredNodeId };
+        }
+
         // Middle Click Handling (Button 1)
         if (e.button === 1) {
             e.preventDefault();
@@ -277,20 +368,9 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
             return;
         }
 
-        const pos = getPointerPos(e);
-
         // Left Click -> Check for Module Drag
         if (hoveredNodeId) {
-            const modules = Array.from(netRef.current.modules.values());
-            let foundModId: string | null = null;
-
-            // Simple prefix check
-            for (const mod of modules) {
-                if (hoveredNodeId.startsWith(mod.id + '-')) {
-                    foundModId = mod.id;
-                    break;
-                }
-            }
+            const foundModId = findModuleIdForNode(hoveredNodeId);
 
             if (foundModId) {
                 const mod = netRef.current.modules.get(foundModId);
@@ -358,22 +438,37 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
     const handleDoubleClick = () => {
         // Check selection on double click
         if (hoveredNodeId) {
-            const modules = Array.from(netRef.current.modules.values());
-            let foundModId: string | null = null;
-            for (const mod of modules) {
-                if (hoveredNodeId.startsWith(mod.id + '-')) {
-                    foundModId = mod.id;
-                    break;
-                }
-            }
+            const foundModId = findModuleIdForNode(hoveredNodeId);
             if (foundModId && onModuleSelect) {
                 onModuleSelect(foundModId);
             }
         }
     };
 
-    const handleMouseMove = (e: React.MouseEvent) => {
+    const handleMouseMove = (e: React.PointerEvent) => {
         const pos = getPointerPos(e);
+
+        if (e.pointerType === 'touch') {
+            if (!pointersRef.current.has(e.pointerId)) return;
+            pointersRef.current.set(e.pointerId, pos);
+
+            // Two fingers: pinch-zoom + pan around the gesture midpoint
+            const pinch = pinchRef.current;
+            if (pinch && pointersRef.current.size >= 2) {
+                const [a, b] = Array.from(pointersRef.current.values());
+                const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+                const k = pinch.transform.k * (Math.hypot(a.x - b.x, a.y - b.y) / pinch.dist);
+                const wx = (pinch.mid.x - pinch.transform.x) / pinch.transform.k;
+                const wy = (pinch.mid.y - pinch.transform.y) / pinch.transform.k;
+                setTransform({ x: mid.x - wx * k, y: mid.y - wy * k, k });
+                return;
+            }
+
+            // Moving past a small threshold turns a tap into a drag
+            if (tapRef.current && Math.hypot(pos.x - tapRef.current.x, pos.y - tapRef.current.y) > 8) {
+                tapRef.current = null;
+            }
+        }
 
         if (draggingModuleId && dragStartRef.current) {
             const wx = (pos.x - transform.x) / transform.k;
@@ -395,22 +490,23 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
         }
 
         // Hover
-        const lx = (pos.x - transform.x) / transform.k;
-        const ly = (pos.y - transform.y) / transform.k;
-
-        let foundNode = undefined;
-        for (const node of netRef.current.nodes.values()) {
-            const dx = lx - node.x;
-            const dy = ly - node.y;
-            if (dx * dx + dy * dy < 400) {
-                foundNode = node.id;
-                break;
-            }
-        }
-        setHoveredNodeId(foundNode);
+        setHoveredNodeId(findNodeAt(pos));
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e: React.PointerEvent) => {
+        if (e.pointerType === 'touch') {
+            pointersRef.current.delete(e.pointerId);
+            if (pointersRef.current.size < 2) pinchRef.current = null;
+
+            // Single tap on a node selects its module (touch has no practical double-click)
+            const tap = tapRef.current;
+            tapRef.current = null;
+            if (tap?.nodeId && e.type === 'pointerup' && onModuleSelect) {
+                const modId = findModuleIdForNode(tap.nodeId);
+                if (modId) onModuleSelect(modId);
+            }
+        }
+
         setIsDragging(false);
         setDraggingModuleId(null);
         dragStartRef.current = null;
@@ -438,10 +534,11 @@ export const NeuralCanvas = forwardRef<NeuralCanvasHandle, NeuralCanvasProps>((
                 ref={canvasRef}
                 style={{ width: '100%', height: '100%', touchAction: 'none' }}
                 onWheel={handleWheel}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
+                onPointerDown={handleMouseDown}
+                onPointerMove={handleMouseMove}
+                onPointerUp={handleMouseUp}
+                onPointerCancel={handleMouseUp}
+                onPointerLeave={handleMouseUp}
                 onClick={handleClick}
                 onDoubleClick={handleDoubleClick}
                 onContextMenu={handleContextMenu}

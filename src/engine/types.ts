@@ -86,6 +86,15 @@ export interface ModuleConfig {
     // Hebbian Learning
     hebbianLearning?: boolean;
     learningRate?: number;
+    // Which rule hebbianLearning applies inside a Brain:
+    //   'classic' (default): same-tick product with weight budget, pruning and regrowth.
+    //   'window': bounded coincidence rule for storing patterns. When an excitatory neuron fires, each of its
+    //             excitatory inputs that fired within hebbianWindow ticks moves towards weightCap:
+    //             w += learningRate * (1 - w / weightCap). Nothing is weakened, pruned or regrown, and synapses
+    //             to or from inhibitory neurons are left as wired.
+    hebbianRule?: 'classic' | 'window';
+    hebbianWindow?: number; // 'window' rule: how many ticks back a sender still counts (default 2)
+    weightCap?: number; // 'window' rule: largest weight a learned synapse can reach (default 0.25)
     pruningThreshold?: number; // Remove weak connections below this
     regrowthRate?: number; // New connections per tick
     leak?: number; // For Brain modules (general signal leak/decay modifier)
