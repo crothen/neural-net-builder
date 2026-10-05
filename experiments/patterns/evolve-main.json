@@ -1,0 +1,1034 @@
+{
+ "args": {
+  "pop": 32,
+  "gens": 30,
+  "workers": 4,
+  "seeds": "1,2,3,4",
+  "finalSeeds": "101,102,103,104,105,106,107,108",
+  "tag": "main"
+ },
+ "history": [
+  {
+   "gen": 0,
+   "best": {
+    "fitness": 0.6708333333333333,
+    "k5": 1,
+    "k10": 0.8499999999999999,
+    "seqSteps": 0.41666666666666663,
+    "seqOrder": 0,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 1,
+    "retention": 0.838,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 1.706,
+    "wIE": 0.207,
+    "exposures": 1
+   },
+   "mean": 0.08020833333333333
+  },
+  {
+   "gen": 1,
+   "best": {
+    "fitness": 0.6708333333333333,
+    "k5": 1,
+    "k10": 0.8499999999999999,
+    "seqSteps": 0.41666666666666663,
+    "seqOrder": 0,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 1,
+    "retention": 0.838,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 1.706,
+    "wIE": 0.207,
+    "exposures": 1
+   },
+   "mean": 0.15345052083333333
+  },
+  {
+   "gen": 2,
+   "best": {
+    "fitness": 0.6708333333333333,
+    "k5": 1,
+    "k10": 0.8499999999999999,
+    "seqSteps": 0.41666666666666663,
+    "seqOrder": 0,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 1,
+    "retention": 0.838,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 1.706,
+    "wIE": 0.207,
+    "exposures": 1
+   },
+   "mean": 0.19804687499999998
+  },
+  {
+   "gen": 3,
+   "best": {
+    "fitness": 0.6708333333333333,
+    "k5": 1,
+    "k10": 0.8499999999999999,
+    "seqSteps": 0.41666666666666663,
+    "seqOrder": 0,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 1,
+    "retention": 0.838,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 1.706,
+    "wIE": 0.207,
+    "exposures": 1
+   },
+   "mean": 0.1981119791666667
+  },
+  {
+   "gen": 4,
+   "best": {
+    "fitness": 0.6708333333333333,
+    "k5": 1,
+    "k10": 0.8499999999999999,
+    "seqSteps": 0.41666666666666663,
+    "seqOrder": 0,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 1,
+    "retention": 0.838,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 1.706,
+    "wIE": 0.207,
+    "exposures": 1
+   },
+   "mean": 0.19212239583333338
+  },
+  {
+   "gen": 5,
+   "best": {
+    "fitness": 0.6708333333333333,
+    "k5": 1,
+    "k10": 0.8499999999999999,
+    "seqSteps": 0.41666666666666663,
+    "seqOrder": 0,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 1,
+    "retention": 0.838,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 1.706,
+    "wIE": 0.207,
+    "exposures": 1
+   },
+   "mean": 0.23567708333333331
+  },
+  {
+   "gen": 6,
+   "best": {
+    "fitness": 0.7104166666666666,
+    "k5": 1,
+    "k10": 0.6749999999999999,
+    "seqSteps": 0.5833333333333333,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1382,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 1,
+    "retention": 0.95,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.4292,
+    "wIE": 0.207,
+    "exposures": 1
+   },
+   "mean": 0.285546875
+  },
+  {
+   "gen": 7,
+   "best": {
+    "fitness": 0.7104166666666666,
+    "k5": 1,
+    "k10": 0.6749999999999999,
+    "seqSteps": 0.5833333333333333,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1382,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 1,
+    "retention": 0.95,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.4292,
+    "wIE": 0.207,
+    "exposures": 1
+   },
+   "mean": 0.25755208333333335
+  },
+  {
+   "gen": 8,
+   "best": {
+    "fitness": 0.7104166666666666,
+    "k5": 1,
+    "k10": 0.6749999999999999,
+    "seqSteps": 0.5833333333333333,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1382,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 1,
+    "retention": 0.95,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.4292,
+    "wIE": 0.207,
+    "exposures": 1
+   },
+   "mean": 0.3621093749999999
+  },
+  {
+   "gen": 9,
+   "best": {
+    "fitness": 0.7104166666666666,
+    "k5": 1,
+    "k10": 0.6749999999999999,
+    "seqSteps": 0.5833333333333333,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1382,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 1,
+    "retention": 0.95,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.4292,
+    "wIE": 0.207,
+    "exposures": 1
+   },
+   "mean": 0.3092447916666666
+  },
+  {
+   "gen": 10,
+   "best": {
+    "fitness": 0.8020833333333333,
+    "k5": 1,
+    "k10": 0.875,
+    "seqSteps": 0.6666666666666666,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 4,
+    "sameTick": 1,
+    "retention": 0.8313,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.3619,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.1238,
+    "wIE": 0.1431,
+    "exposures": 1
+   },
+   "mean": 0.3344401041666667
+  },
+  {
+   "gen": 11,
+   "best": {
+    "fitness": 0.8020833333333333,
+    "k5": 1,
+    "k10": 0.875,
+    "seqSteps": 0.6666666666666666,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 4,
+    "sameTick": 1,
+    "retention": 0.8313,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.3619,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.1238,
+    "wIE": 0.1431,
+    "exposures": 1
+   },
+   "mean": 0.35768229166666665
+  },
+  {
+   "gen": 12,
+   "best": {
+    "fitness": 0.8020833333333333,
+    "k5": 1,
+    "k10": 0.875,
+    "seqSteps": 0.6666666666666666,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 4,
+    "sameTick": 1,
+    "retention": 0.8313,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.3619,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.1238,
+    "wIE": 0.1431,
+    "exposures": 1
+   },
+   "mean": 0.3648003472222222
+  },
+  {
+   "gen": 13,
+   "best": {
+    "fitness": 0.8020833333333333,
+    "k5": 1,
+    "k10": 0.875,
+    "seqSteps": 0.6666666666666666,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 4,
+    "sameTick": 1,
+    "retention": 0.8313,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.3619,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.1238,
+    "wIE": 0.1431,
+    "exposures": 1
+   },
+   "mean": 0.36056857638888884
+  },
+  {
+   "gen": 14,
+   "best": {
+    "fitness": 0.8020833333333333,
+    "k5": 1,
+    "k10": 0.875,
+    "seqSteps": 0.6666666666666666,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 4,
+    "sameTick": 1,
+    "retention": 0.8313,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.3619,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.1238,
+    "wIE": 0.1431,
+    "exposures": 1
+   },
+   "mean": 0.41569010416666674
+  },
+  {
+   "gen": 15,
+   "best": {
+    "fitness": 0.8020833333333333,
+    "k5": 1,
+    "k10": 0.875,
+    "seqSteps": 0.6666666666666666,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 4,
+    "sameTick": 1,
+    "retention": 0.8313,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.3619,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.1238,
+    "wIE": 0.1431,
+    "exposures": 1
+   },
+   "mean": 0.4403428819444443
+  },
+  {
+   "gen": 16,
+   "best": {
+    "fitness": 0.8020833333333333,
+    "k5": 1,
+    "k10": 0.875,
+    "seqSteps": 0.6666666666666666,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 4,
+    "sameTick": 1,
+    "retention": 0.8313,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.3619,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.1238,
+    "wIE": 0.1431,
+    "exposures": 1
+   },
+   "mean": 0.4556640625000001
+  },
+  {
+   "gen": 17,
+   "best": {
+    "fitness": 0.8020833333333333,
+    "k5": 1,
+    "k10": 0.875,
+    "seqSteps": 0.6666666666666666,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 4,
+    "sameTick": 1,
+    "retention": 0.8313,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.3619,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.1238,
+    "wIE": 0.1431,
+    "exposures": 1
+   },
+   "mean": 0.46269531250000007
+  },
+  {
+   "gen": 18,
+   "best": {
+    "fitness": 0.8020833333333333,
+    "k5": 1,
+    "k10": 0.875,
+    "seqSteps": 0.6666666666666666,
+    "seqOrder": 0.25,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.111,
+    "lr": 0.028,
+    "rule": "keep",
+    "window": 4,
+    "sameTick": 1,
+    "retention": 0.8313,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.3619,
+    "nInh": 5,
+    "wEI": 0.041,
+    "wEIspread": 2.1238,
+    "wIE": 0.1431,
+    "exposures": 1
+   },
+   "mean": 0.48717447916666673
+  },
+  {
+   "gen": 19,
+   "best": {
+    "fitness": 0.9333333333333333,
+    "k5": 0.95,
+    "k10": 0.9499999999999998,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0814,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2723,
+    "exposures": 2
+   },
+   "mean": 0.47610677083333325
+  },
+  {
+   "gen": 20,
+   "best": {
+    "fitness": 0.9333333333333333,
+    "k5": 0.95,
+    "k10": 0.9499999999999998,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0814,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2723,
+    "exposures": 2
+   },
+   "mean": 0.4899739583333333
+  },
+  {
+   "gen": 21,
+   "best": {
+    "fitness": 0.9333333333333333,
+    "k5": 0.95,
+    "k10": 0.9499999999999998,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0814,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2723,
+    "exposures": 2
+   },
+   "mean": 0.5193359375
+  },
+  {
+   "gen": 22,
+   "best": {
+    "fitness": 0.9333333333333333,
+    "k5": 0.95,
+    "k10": 0.9499999999999998,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0814,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2723,
+    "exposures": 2
+   },
+   "mean": 0.51171875
+  },
+  {
+   "gen": 23,
+   "best": {
+    "fitness": 0.9333333333333333,
+    "k5": 0.95,
+    "k10": 0.9499999999999998,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0814,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2723,
+    "exposures": 2
+   },
+   "mean": 0.4641276041666666
+  },
+  {
+   "gen": 24,
+   "best": {
+    "fitness": 0.9333333333333333,
+    "k5": 0.95,
+    "k10": 0.9499999999999998,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0814,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2723,
+    "exposures": 2
+   },
+   "mean": 0.5166015624999999
+  },
+  {
+   "gen": 25,
+   "best": {
+    "fitness": 0.9333333333333333,
+    "k5": 0.95,
+    "k10": 0.9499999999999998,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0814,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2723,
+    "exposures": 2
+   },
+   "mean": 0.5197916666666664
+  },
+  {
+   "gen": 26,
+   "best": {
+    "fitness": 0.9333333333333333,
+    "k5": 0.95,
+    "k10": 0.9499999999999998,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0814,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2723,
+    "exposures": 2
+   },
+   "mean": 0.466015625
+  },
+  {
+   "gen": 27,
+   "best": {
+    "fitness": 0.9333333333333333,
+    "k5": 0.95,
+    "k10": 0.9499999999999998,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0814,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2723,
+    "exposures": 2
+   },
+   "mean": 0.5141927083333333
+  },
+  {
+   "gen": 28,
+   "best": {
+    "fitness": 0.975,
+    "k5": 1,
+    "k10": 0.8999999999999999,
+    "seqSteps": 1,
+    "seqOrder": 1,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0758,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.28,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.1588,
+    "exposures": 2
+   },
+   "mean": 0.5560980902777778
+  },
+  {
+   "gen": 29,
+   "best": {
+    "fitness": 0.975,
+    "k5": 1,
+    "k10": 0.8999999999999999,
+    "seqSteps": 1,
+    "seqOrder": 1,
+    "seqIntruders": 0
+   },
+   "bestGenome": {
+    "cap": 0.1928,
+    "lr": 0.0758,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.28,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.1588,
+    "exposures": 2
+   },
+   "mean": 0.5546875000000001
+  }
+ ],
+ "final": [
+  {
+   "genome": {
+    "cap": 0.111,
+    "lr": 0.0642,
+    "rule": "keep",
+    "window": 2,
+    "sameTick": 0,
+    "retention": 0.95,
+    "refractory": 0,
+    "fatigue": 0,
+    "recovery": 0.1277,
+    "nInh": 5,
+    "wEI": 0.0436,
+    "wEIspread": 2.6631,
+    "wIE": 0.2194,
+    "exposures": 2
+   },
+   "search": {
+    "fitness": 0.9041666666666666,
+    "k5": 1,
+    "k10": 0.95,
+    "seqSteps": 0.8333333333333333,
+    "seqOrder": 0.5,
+    "seqIntruders": 0
+   },
+   "fresh": {
+    "fitness": 0.8552083333333333,
+    "k5": 1,
+    "k10": 0.8374999999999999,
+    "seqSteps": 0.7916666666666666,
+    "seqOrder": 0.375,
+    "seqIntruders": 0
+   }
+  },
+  {
+   "genome": {
+    "cap": 0.1928,
+    "lr": 0.0814,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2723,
+    "exposures": 2
+   },
+   "search": {
+    "fitness": 0.9333333333333333,
+    "k5": 0.95,
+    "k10": 0.9499999999999998,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "fresh": {
+    "fitness": 0.834375,
+    "k5": 1,
+    "k10": 0.8374999999999999,
+    "seqSteps": 0.75,
+    "seqOrder": 0.375,
+    "seqIntruders": 0
+   }
+  },
+  {
+   "genome": {
+    "cap": 0.1928,
+    "lr": 0.0758,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2352,
+    "exposures": 2
+   },
+   "search": {
+    "fitness": 0.9333333333333333,
+    "k5": 1,
+    "k10": 0.8999999999999999,
+    "seqSteps": 0.9166666666666666,
+    "seqOrder": 0.75,
+    "seqIntruders": 0
+   },
+   "fresh": {
+    "fitness": 0.7947916666666666,
+    "k5": 0.95,
+    "k10": 0.8125,
+    "seqSteps": 0.7083333333333333,
+    "seqOrder": 0.375,
+    "seqIntruders": 0
+   }
+  },
+  {
+   "genome": {
+    "cap": 0.1928,
+    "lr": 0.0758,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.1084,
+    "recovery": 0.0213,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.2352,
+    "exposures": 2
+   },
+   "search": {
+    "fitness": 0.975,
+    "k5": 1,
+    "k10": 0.8999999999999999,
+    "seqSteps": 1,
+    "seqOrder": 1,
+    "seqIntruders": 0
+   },
+   "fresh": {
+    "fitness": 0.7708333333333333,
+    "k5": 0.95,
+    "k10": 0.7999999999999999,
+    "seqSteps": 0.6666666666666666,
+    "seqOrder": 0.375,
+    "seqIntruders": 0
+   }
+  },
+  {
+   "genome": {
+    "cap": 0.1928,
+    "lr": 0.0758,
+    "rule": "keep",
+    "window": 3,
+    "sameTick": 1,
+    "retention": 0.764,
+    "refractory": 0,
+    "fatigue": 0.28,
+    "recovery": 0.0219,
+    "nInh": 5,
+    "wEI": 0.0825,
+    "wEIspread": 2.5861,
+    "wIE": 0.1588,
+    "exposures": 2
+   },
+   "search": {
+    "fitness": 0.975,
+    "k5": 1,
+    "k10": 0.8999999999999999,
+    "seqSteps": 1,
+    "seqOrder": 1,
+    "seqIntruders": 0
+   },
+   "fresh": {
+    "fitness": 0.7260416666666667,
+    "k5": 0.875,
+    "k10": 0.3625,
+    "seqSteps": 0.8333333333333333,
+    "seqOrder": 0.625,
+    "seqIntruders": 0
+   }
+  }
+ ],
+ "seedFresh": {
+  "fitness": 0.55625,
+  "k5": 0.9,
+  "k10": 0.5750000000000001,
+  "seqSteps": 0.375,
+  "seqOrder": 0,
+  "seqIntruders": 0
+ },
+ "evaluated": 719,
+ "seconds": 555.266
+}

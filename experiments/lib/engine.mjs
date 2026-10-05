@@ -1562,7 +1562,7 @@ var NeuralNet = class {
 var PATTERN_MEMORY_DEFAULTS = {
   neurons: 100,
   // excitatory neurons that can take part in patterns
-  inhibitory: 5,
+  inhibitory: 10,
   // feedback inhibition: keeps total activity to about one pattern's worth
   patternSize: 10,
   teachTicks: 20,
@@ -1570,19 +1570,23 @@ var PATTERN_MEMORY_DEFAULTS = {
   cueTicks: 20,
   stimulation: 3,
   // input added to a stimulated neuron each tick
-  weightCap: 0.111,
+  weightCap: 0.1011,
   // largest weight a learned synapse can reach
-  learningRate: 0.028,
-  window: 2,
+  learningRate: 0.0468,
+  window: 3,
   // ticks back a sender still counts as "fired together"
-  retention: 0.838,
+  retention: 0.849,
   // share of its potential a neuron keeps per tick (the engine calls this "decay")
   refractory: 0,
-  excToInh: 0.041,
+  fatigue: 0.1762,
+  // threshold jump after each spike ...
+  recovery: 0.4464,
+  // ... and how fast it comes back down per tick
+  excToInh: 0.0821,
   // excitatory -> inhibitory weight, lowest ...
-  excToInhSpread: 1.706,
-  // ... up to this many times that, so inhibitory neurons switch on one after another
-  inhToExc: 0.207,
+  excToInhSpread: 1,
+  // ... up to this many times that (1 = all the same)
+  inhToExc: 0.0962,
   // inhibitory -> excitatory weight (subtracted)
   cameOnSpikes: 2
   // a neuron "came on" during a cue if it fired at least this often
@@ -1638,6 +1642,8 @@ var PatternMemory = class {
         node.neuronType = "EXCITATORY";
         this.excitatoryIds.push(id);
       }
+      node.fatigue = o.fatigue;
+      node.recovery = o.recovery;
     }
     const inhibitory = new Set(this.inhibitoryIds);
     for (const conn of net.connections) {

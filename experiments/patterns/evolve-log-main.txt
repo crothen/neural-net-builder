@@ -1,0 +1,45 @@
+gen  0 | best fitness 0.671 | patterns 100% / 85% exact | sequence 42% of steps, whole chain 0%, intruders 0% | mean 0.080 | 16s
+gen  1 | best fitness 0.671 | patterns 100% / 85% exact | sequence 42% of steps, whole chain 0%, intruders 0% | mean 0.153 | 28s
+gen  2 | best fitness 0.671 | patterns 100% / 85% exact | sequence 42% of steps, whole chain 0%, intruders 0% | mean 0.198 | 39s
+gen  3 | best fitness 0.671 | patterns 100% / 85% exact | sequence 42% of steps, whole chain 0%, intruders 0% | mean 0.198 | 54s
+gen  4 | best fitness 0.671 | patterns 100% / 85% exact | sequence 42% of steps, whole chain 0%, intruders 0% | mean 0.192 | 70s
+gen  5 | best fitness 0.671 | patterns 100% / 85% exact | sequence 42% of steps, whole chain 0%, intruders 0% | mean 0.236 | 85s
+gen  6 | best fitness 0.710 | patterns 100% / 68% exact | sequence 58% of steps, whole chain 25%, intruders 0% | mean 0.286 | 98s
+gen  7 | best fitness 0.710 | patterns 100% / 68% exact | sequence 58% of steps, whole chain 25%, intruders 0% | mean 0.258 | 111s
+gen  8 | best fitness 0.710 | patterns 100% / 68% exact | sequence 58% of steps, whole chain 25%, intruders 0% | mean 0.362 | 126s
+gen  9 | best fitness 0.710 | patterns 100% / 68% exact | sequence 58% of steps, whole chain 25%, intruders 0% | mean 0.309 | 137s
+gen 10 | best fitness 0.802 | patterns 100% / 88% exact | sequence 67% of steps, whole chain 25%, intruders 0% | mean 0.334 | 152s
+gen 11 | best fitness 0.802 | patterns 100% / 88% exact | sequence 67% of steps, whole chain 25%, intruders 0% | mean 0.358 | 170s
+gen 12 | best fitness 0.802 | patterns 100% / 88% exact | sequence 67% of steps, whole chain 25%, intruders 0% | mean 0.365 | 189s
+gen 13 | best fitness 0.802 | patterns 100% / 88% exact | sequence 67% of steps, whole chain 25%, intruders 0% | mean 0.361 | 204s
+gen 14 | best fitness 0.802 | patterns 100% / 88% exact | sequence 67% of steps, whole chain 25%, intruders 0% | mean 0.416 | 221s
+gen 15 | best fitness 0.802 | patterns 100% / 88% exact | sequence 67% of steps, whole chain 25%, intruders 0% | mean 0.440 | 239s
+gen 16 | best fitness 0.802 | patterns 100% / 88% exact | sequence 67% of steps, whole chain 25%, intruders 0% | mean 0.456 | 260s
+gen 17 | best fitness 0.802 | patterns 100% / 88% exact | sequence 67% of steps, whole chain 25%, intruders 0% | mean 0.463 | 274s
+gen 18 | best fitness 0.802 | patterns 100% / 88% exact | sequence 67% of steps, whole chain 25%, intruders 0% | mean 0.487 | 291s
+gen 19 | best fitness 0.933 | patterns 95% / 95% exact | sequence 92% of steps, whole chain 75%, intruders 0% | mean 0.476 | 306s
+gen 20 | best fitness 0.933 | patterns 95% / 95% exact | sequence 92% of steps, whole chain 75%, intruders 0% | mean 0.490 | 324s
+gen 21 | best fitness 0.933 | patterns 95% / 95% exact | sequence 92% of steps, whole chain 75%, intruders 0% | mean 0.519 | 343s
+gen 22 | best fitness 0.933 | patterns 95% / 95% exact | sequence 92% of steps, whole chain 75%, intruders 0% | mean 0.512 | 363s
+gen 23 | best fitness 0.933 | patterns 95% / 95% exact | sequence 92% of steps, whole chain 75%, intruders 0% | mean 0.464 | 384s
+gen 24 | best fitness 0.933 | patterns 95% / 95% exact | sequence 92% of steps, whole chain 75%, intruders 0% | mean 0.517 | 402s
+gen 25 | best fitness 0.933 | patterns 95% / 95% exact | sequence 92% of steps, whole chain 75%, intruders 0% | mean 0.520 | 419s
+gen 26 | best fitness 0.933 | patterns 95% / 95% exact | sequence 92% of steps, whole chain 75%, intruders 0% | mean 0.466 | 443s
+gen 27 | best fitness 0.933 | patterns 95% / 95% exact | sequence 92% of steps, whole chain 75%, intruders 0% | mean 0.514 | 458s
+gen 28 | best fitness 0.975 | patterns 100% / 90% exact | sequence 100% of steps, whole chain 100%, intruders 0% | mean 0.556 | 482s
+gen 29 | best fitness 0.975 | patterns 100% / 90% exact | sequence 100% of steps, whole chain 100%, intruders 0% | mean 0.555 | 496s
+
+Fresh-seed check (8 seeds):
+  starting point (demo settings): fitness 0.556 | patterns 90% / 58% exact | sequence 38% of steps, whole chain 0%, intruders 0%
+  finalist 1: fitness 0.855 | patterns 100% / 84% exact | sequence 79% of steps, whole chain 38%, intruders 0%
+      {"cap":0.111,"lr":0.0642,"rule":"keep","window":2,"sameTick":0,"retention":0.95,"refractory":0,"fatigue":0,"recovery":0.1277,"nInh":5,"wEI":0.0436,"wEIspread":2.6631,"wIE":0.2194,"exposures":2}
+  finalist 2: fitness 0.834 | patterns 100% / 84% exact | sequence 75% of steps, whole chain 38%, intruders 0%
+      {"cap":0.1928,"lr":0.0814,"rule":"keep","window":3,"sameTick":1,"retention":0.764,"refractory":0,"fatigue":0.1084,"recovery":0.0219,"nInh":5,"wEI":0.0825,"wEIspread":2.5861,"wIE":0.2723,"exposures":2}
+  finalist 3: fitness 0.795 | patterns 95% / 81% exact | sequence 71% of steps, whole chain 38%, intruders 0%
+      {"cap":0.1928,"lr":0.0758,"rule":"keep","window":3,"sameTick":1,"retention":0.764,"refractory":0,"fatigue":0.1084,"recovery":0.0219,"nInh":5,"wEI":0.0825,"wEIspread":2.5861,"wIE":0.2352,"exposures":2}
+  finalist 4: fitness 0.771 | patterns 95% / 80% exact | sequence 67% of steps, whole chain 38%, intruders 0%
+      {"cap":0.1928,"lr":0.0758,"rule":"keep","window":3,"sameTick":1,"retention":0.764,"refractory":0,"fatigue":0.1084,"recovery":0.0213,"nInh":5,"wEI":0.0825,"wEIspread":2.5861,"wIE":0.2352,"exposures":2}
+  finalist 5: fitness 0.726 | patterns 88% / 36% exact | sequence 83% of steps, whole chain 63%, intruders 0%
+      {"cap":0.1928,"lr":0.0758,"rule":"keep","window":3,"sameTick":1,"retention":0.764,"refractory":0,"fatigue":0.28,"recovery":0.0219,"nInh":5,"wEI":0.0825,"wEIspread":2.5861,"wIE":0.1588,"exposures":2}
+
+719 settings evaluated in 509s

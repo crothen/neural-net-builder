@@ -1748,7 +1748,7 @@ function App() {
           <button
             className="primary"
             onClick={() => {
-              if (modules.length > 0 && !patternDemo && !window.confirm('This replaces the current network with a 105-neuron memory Brain. Continue?')) return;
+              if (modules.length > 0 && !patternDemo && !window.confirm('This replaces the current network with a 110-neuron memory Brain. Continue?')) return;
               setPatternDemo(true);
               setMobilePanel(null);
             }}

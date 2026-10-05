@@ -1,5 +1,7 @@
-// Pattern-completion trial on a small brain with configurable dynamics, learning rule and feedback inhibition.
-// Used by search.mjs (parameter search) and capacity.mjs (how many patterns fit).
+// Small-brain Hebbian tasks with configurable dynamics, learning rule and feedback inhibition:
+//   trial()         pattern completion (store K patterns, cue each with half)
+//   sequenceTrial() sequence replay (store A -> B -> C -> D, cue A, do the others follow in order?)
+// Used by search.mjs, capacity.mjs and evolve.mjs. No teacher anywhere: the brain learns by itself.
 import { NeuralNet } from '../lib/engine.mjs';
 import { seedRandom, shuffled } from '../lib/harness.mjs';
 
@@ -8,29 +10,27 @@ export const DEFAULTS = {
     cap: 0.25,          // largest weight a learned excitatory synapse can reach
     lr: 0.1,            // learning rate
     rule: 'window',     // 'window': silent senders are weakened | 'keep': silent senders are left alone
-    window: 2,          // how many ticks back a sender still counts as "active together" with the receiver
+    window: 2,          // how many ticks back a sender still counts as "fired together" with the receiver
+    sameTick: 1,        // 1: a sender firing in the same tick counts too | 0: only earlier ticks (sender before receiver)
     retention: 0.8,     // share of the potential a neuron keeps per tick (the engine calls this "decay")
     refractory: 1,
     threshold: 1,
+    fatigue: 0,         // threshold jump after each spike ...
+    recovery: 0.1,      // ... and how fast it comes back down per tick
     nInh: 0,            // inhibitory neurons (fixed weights, not learned)
     wEI: 0.05,          // excitatory -> inhibitory weight, lowest
     wEIspread: 1.6,     // highest = lowest x spread, so inhibitory neurons switch on one after another
     wIE: 0.3,           // inhibitory -> excitatory weight (subtracted)
-    exposures: 3,
-    exposeTicks: 20,
-    cueTicks: 20,
+    exposures: 3,       // how often each pattern / sequence is shown
+    exposeTicks: 20,    // pattern completion: one exposure stimulates the pattern for this long
+    cueTicks: 20,       // pattern completion: the half-pattern cue lasts this long
+    seqTicks: 10,       // sequences: each element is stimulated for this long, one after the other
+    seqCueTicks: 5,     // sequences: the first element is cued for this long, then the brain runs free
     stim: 3,            // weight of the direct stimulation input
 };
 
-/**
- * Teach K random patterns of `size` neurons (out of N excitatory ones), then cue each with a random half.
- * Returns averages over the K patterns:
- *   completed  share of the pattern's missing neurons that came on
- *   intruders  share of the neurons outside the pattern that came on
- *   exact      1 if all missing neurons came on and nothing else did
- *   lingers    share of the pattern still firing 20-30 ticks after the cue stopped
- */
-export function trial(params, { N = 100, size = 10, K = 5, seed = 1, cueFraction = 0.5 } = {}) {
+/** Build the brain: N excitatory neurons (+ an inhibitory pool), all-to-all, each with its own stimulation input. */
+export function buildBrain(params, N, seed) {
     const p = { ...DEFAULTS, ...params };
     seedRandom(seed);
     const net = new NeuralNet();
@@ -43,7 +43,7 @@ export function trial(params, { N = 100, size = 10, K = 5, seed = 1, cueFraction
     const neurons = Array.from({ length: N }, (_, i) => net.nodes.get(`brain-${i}`));
     const stim = Array.from({ length: N }, (_, i) => net.nodes.get(`stim-0-${i}`));
     const inhibitory = new Set(Array.from({ length: p.nInh }, (_, i) => `brain-${N + i}`));
-    for (const n of neurons) n.neuronType = 'EXCITATORY';
+    for (const n of neurons) { n.neuronType = 'EXCITATORY'; n.fatigue = p.fatigue; n.recovery = p.recovery; }
     for (const id of inhibitory) net.nodes.get(id).neuronType = 'INHIBITORY';
     const index = new Map(neurons.map((n, i) => [n.id, i]));
     const incoming = Array.from({ length: N }, () => []);
@@ -55,27 +55,40 @@ export function trial(params, { N = 100, size = 10, K = 5, seed = 1, cueFraction
     }
     for (let i = 0; i < N; i++) net.addConnection({ id: `s-${i}`, sourceId: stim[i].id, targetId: neurons[i].id, weight: p.stim });
 
-    // recent[i] = ticks since neuron i last fired (large when it has not)
-    const recent = new Uint8Array(N).fill(255), cur = new Uint8Array(N);
-    const run = (on, ticks, learn) => {
+    const recent = new Uint8Array(N).fill(255); // ticks since each neuron last fired
+    const cur = new Uint8Array(N);
+    /** Run `ticks` ticks with `on` stimulated; learn if asked. Returns spike counts, and per-tick firing if wanted. */
+    const run = (on, ticks, learn, perTick) => {
         const counts = new Float32Array(N);
+        const frames = perTick ? [] : null;
         for (let t = 0; t < ticks; t++) {
             for (const i of on) stim[i].trigger(1);
             net.step();
             for (let i = 0; i < N; i++) { cur[i] = neurons[i].isFiring ? 1 : 0; counts[i] += cur[i]; if (cur[i]) recent[i] = 0; else if (recent[i] < 255) recent[i]++; }
+            if (frames) frames.push(Uint8Array.from(cur));
             if (learn) for (let j = 0; j < N; j++) {
                 if (!cur[j]) continue;
                 for (const { conn, src } of incoming[j]) {
-                    const pre = recent[src] <= p.window ? 1 : 0;
+                    const r = recent[src];
+                    const pre = r <= p.window && (p.sameTick || r >= 1) ? 1 : 0;
                     if (p.rule === 'keep') conn.weight += p.lr * pre * (1 - conn.weight / p.cap);
                     else conn.weight += p.lr * (pre - conn.weight / p.cap);
                 }
             }
         }
-        return counts;
+        return frames ? { counts, frames } : counts;
     };
-    const reset = () => { net.resetState(); recent.fill(255); };
+    const reset = () => { net.resetState(); recent.fill(255); for (const n of neurons) n.currentThreshold = n.threshold; };
+    return { p, net, neurons, run, reset, N };
+}
 
+/**
+ * Pattern completion: teach K random patterns of `size` neurons, then cue each with a random half.
+ * Returns averages over the K patterns: completed, intruders, exact (all missing came on, nothing else), lingers.
+ */
+export function trial(params, { N = 100, size = 10, K = 5, seed = 1, cueFraction = 0.5 } = {}) {
+    const b = buildBrain(params, N, seed);
+    const { p, run, reset } = b;
     const all = Array.from({ length: N }, (_, i) => i);
     const patterns = Array.from({ length: K }, () => shuffled(all).slice(0, size));
     for (let e = 0; e < p.exposures; e++) for (const k of shuffled(patterns.map((_, i) => i))) { reset(); run(patterns[k], p.exposeTicks, true); }
@@ -98,9 +111,58 @@ export function trial(params, { N = 100, size = 10, K = 5, seed = 1, cueFraction
     return m;
 }
 
+/**
+ * Sequence replay: teach a chain of `length` patterns shown one after the other (each for seqTicks, no gap),
+ * `exposures` times. Then cue only the first pattern briefly and let the brain run free.
+ * A pattern counts as "on" at tick t when at least half of its neurons fired in ticks t-2..t.
+ * Returns:
+ *   steps     share of the later patterns that came on, each after the one before it (0..1)
+ *   order     1 if every later pattern came on in the right order, else 0
+ *   intruders share of neurons outside the chain that fired at least twice during the free run
+ *   score     steps x (1 - intruders)
+ */
+export function sequenceTrial(params, { N = 100, size = 10, length = 4, seed = 1 } = {}) {
+    const b = buildBrain(params, N, seed);
+    const { p, run, reset } = b;
+    const all = shuffled(Array.from({ length: N }, (_, i) => i));
+    const chain = Array.from({ length }, (_, k) => all.slice(k * size, (k + 1) * size)); // disjoint patterns
+
+    for (let e = 0; e < p.exposures; e++) { reset(); for (const pat of chain) run(pat, p.seqTicks, true); }
+
+    reset();
+    const freeTicks = length * p.seqTicks * 2;
+    const cue = run(chain[0], p.seqCueTicks, false, true);
+    const free = run([], freeTicks, false, true);
+    const frames = [...cue.frames, ...free.frames];
+    const inChain = new Set(chain.flat());
+
+    // onset of each pattern: first tick where >= half its neurons fired within the last 3 ticks
+    const onset = chain.map(pat => {
+        for (let t = 0; t < frames.length; t++) {
+            let on = 0;
+            for (const i of pat) if (frames[t][i] || (t > 0 && frames[t - 1][i]) || (t > 1 && frames[t - 2][i])) on++;
+            if (on * 2 >= pat.length) return t;
+        }
+        return -1;
+    });
+    let steps = 0;
+    for (let k = 1; k < length; k++) if (onset[k] >= 0 && onset[k - 1] >= 0 && onset[k] > onset[k - 1]) steps++;
+    let intr = 0, out = 0;
+    for (let i = 0; i < N; i++) if (!inChain.has(i)) { out++; if (free.counts[i] >= 2) intr++; }
+    const intruders = out ? intr / out : 0;
+    return { steps: steps / (length - 1), order: steps === length - 1 ? 1 : 0, intruders, onset, score: (steps / (length - 1)) * (1 - intruders) };
+}
+
 /** Average of trial() over seeds. */
 export function score(params, opts, seeds) {
     const acc = { completed: 0, intruders: 0, exact: 0, lingers: 0 };
     for (const seed of seeds) { const r = trial(params, { ...opts, seed }); for (const k of Object.keys(acc)) acc[k] += r[k] / seeds.length; }
+    return acc;
+}
+
+/** Average of sequenceTrial() over seeds. */
+export function sequenceScore(params, opts, seeds) {
+    const acc = { steps: 0, order: 0, intruders: 0, score: 0 };
+    for (const seed of seeds) { const r = sequenceTrial(params, { ...opts, seed }); for (const k of Object.keys(acc)) acc[k] += r[k] / seeds.length; }
     return acc;
 }

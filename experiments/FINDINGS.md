@@ -619,6 +619,48 @@ shaky. An ideal memory of this kind would hold roughly 30 such patterns, because
 when nearly all cue neurons point at it; here about three links suffice. Not yet done: sequences (A then B),
 other pattern sizes and brain sizes, and running the rule inside the engine instead of from a script.
 
+## Finding 12 — evolving brains that learn by themselves
+
+A closed test with a learning phase and a verification phase, used as the fitness for evolving brain settings
+(`patterns/evolve.mjs`, four worker processes, 32 settings per generation, tournament selection with mutation).
+No teacher anywhere: in the learning phase the brain is shown patterns and sequences with its Hebbian rule on; in
+the verification phase learning is off.
+
+- **Pattern task:** store 5 (and separately 10) random patterns of 10 neurons; cue each with half; score = share
+  recalled exactly.
+- **Sequence task:** store a chain of four patterns shown one after the other (10 ticks each, no gap); cue only
+  the first for 5 ticks; score = share of the later patterns that come on, each after the one before it, times
+  (1 − share of outside neurons that fire).
+- **Genes:** weight cap, learning rate, rule (weaken silent senders or leave them), timing window and whether the
+  same tick counts, retention, refractory, fatigue and recovery, size of the inhibitory pool and its three
+  weights, number of exposures.
+- Fitness = ¼ pattern-5 + ¼ pattern-10 + ½ sequence, over 4 seeds (run 1, 30 generations) or 8 seeds (run 2,
+  40 generations). Finalists re-scored on 12 seeds the search never saw.
+
+Same 12 fresh seeds for all three (exact recall / sequence):
+
+| Setup | 5 patterns | 10 | 15 | 20 | 4-step chain: steps / whole | 3-step chain: steps / whole |
+|---|---|---|---|---|---|---|
+| Demo settings before (Finding 11) | 90% | 59% | 32% | 2% | 42% / 0% | 58% / 17% |
+| Run 1 best (sequence-leaning) | 98% | 86% | 71% | 18% | 78% / 33% | 100% / 100% |
+| Run 2 best (pattern-leaning) | 100% | 96% | 87% | 73% | 50% / 8% | 54% / 8% |
+
+- **Evolution works for this.** Pattern capacity went from "shaky at 10" to 96% at 10 and 73% at 20 (run 2),
+  and 3-step sequences from 17% to 100% whole chains (run 1).
+- **The two tasks pull in different directions.** Run 1 traded pattern capacity for replay; run 2 the reverse.
+  The sequence run prefers senders that fired *before* the receiver (no same-tick credit), two exposures, a
+  higher learning rate and high retention; the pattern run keeps same-tick credit, one exposure, twice the
+  inhibitory neurons with equal thresholds, and a little fatigue with fast recovery.
+- **Overfitting to the search seeds is real:** run 1's best scored 0.975 on its 4 search seeds (whole 4-step
+  chain 100%) and 0.855 on fresh ones. Eight seeds per evaluation gave a more honest search.
+- **Nothing outside the chain fires** in any evolved setup.
+- Both runs: 719 and 961 settings evaluated, 8.5 and 24 minutes on four cores.
+
+The deployed demo (`src/demos/patternMemory.ts`) now uses run 2's settings: in-app check 100% / 100% / 100% /
+95% / 72% exact at 1 / 2 / 5 / 10 / 20 stored patterns (20 seeds).
+
+Not done: a run with sequence weighted higher, longer chains, and the sequence task in the app.
+
 ## Engine speed-up
 
 `step()` took about 13 ms per tick with learning on, mostly from filtering and locale-sorting all brain nodes
@@ -692,6 +734,8 @@ Run from the repo root.
 | `node experiments/patterns/completion.mjs 40 10 1 0,1,2,5 same,causal,window 20` | Pattern completion, one pattern, three timing rules |
 | `node experiments/patterns/capacity.mjs best 100 10 1,2,5,10,15,20 20` | How many patterns fit (use `first` for the hand-picked setup) |
 | `node experiments/patterns/search.mjs 150 1` | Random search over the small-brain setup |
+| `node experiments/patterns/evolve.mjs --pop 32 --gens 40 --workers 4 --seeds 1,2,3,4,5,6,7,8` | Evolve settings for self-taught pattern completion + sequence replay (Finding 12) |
+| `node experiments/patterns/app-check.mjs 1,2,5,10,20 20` | The in-app pattern memory, headless |
 | `node experiments/hebbian/diag.mjs default medium 21` | What the engine's Hebbian rule strengthens, and where the growth comes from |
 | `node experiments/hebbian/twostage-v2.mjs default causal` | Two-stage training with the corrected rule (rules: causal, same, shrink; then datasets, seeds, stage-1 lengths, rate, cap factor) |
 

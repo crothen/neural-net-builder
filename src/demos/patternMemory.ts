@@ -5,23 +5,27 @@ import type { Connection } from '../engine/Connection';
  * Pattern memory: a small Brain that stores patterns with Hebbian learning alone (no teacher, no error signal)
  * and brings a whole pattern back when part of it is stimulated.
  *
- * The numbers below are the setup found in experiments/patterns (see experiments/FINDINGS.md, Finding 11).
+ * The numbers below were found by evolving brain settings on the pattern-completion and sequence tasks
+ * (experiments/patterns/evolve.mjs; see experiments/FINDINGS.md, Findings 11 and 12). On fresh seeds this setup
+ * recalls 10 stored patterns of 10 neurons exactly 96% of the time, and 20 patterns 73%.
  */
 export const PATTERN_MEMORY_DEFAULTS = {
     neurons: 100,          // excitatory neurons that can take part in patterns
-    inhibitory: 5,         // feedback inhibition: keeps total activity to about one pattern's worth
+    inhibitory: 10,        // feedback inhibition: keeps total activity to about one pattern's worth
     patternSize: 10,
     teachTicks: 20,        // one exposure = the whole pattern stimulated for this long
     cueTicks: 20,
     stimulation: 3,        // input added to a stimulated neuron each tick
-    weightCap: 0.111,      // largest weight a learned synapse can reach
-    learningRate: 0.028,
-    window: 2,             // ticks back a sender still counts as "fired together"
-    retention: 0.838,      // share of its potential a neuron keeps per tick (the engine calls this "decay")
+    weightCap: 0.1011,     // largest weight a learned synapse can reach
+    learningRate: 0.0468,
+    window: 3,             // ticks back a sender still counts as "fired together"
+    retention: 0.849,      // share of its potential a neuron keeps per tick (the engine calls this "decay")
     refractory: 0,
-    excToInh: 0.041,       // excitatory -> inhibitory weight, lowest ...
-    excToInhSpread: 1.706, // ... up to this many times that, so inhibitory neurons switch on one after another
-    inhToExc: 0.207,       // inhibitory -> excitatory weight (subtracted)
+    fatigue: 0.1762,       // threshold jump after each spike ...
+    recovery: 0.4464,      // ... and how fast it comes back down per tick
+    excToInh: 0.0821,      // excitatory -> inhibitory weight, lowest ...
+    excToInhSpread: 1,     // ... up to this many times that (1 = all the same)
+    inhToExc: 0.0962,      // inhibitory -> excitatory weight (subtracted)
     cameOnSpikes: 2,       // a neuron "came on" during a cue if it fired at least this often
 };
 
@@ -79,6 +83,8 @@ export class PatternMemory {
             const node = net.nodes.get(id)!;
             if (i < o.inhibitory) { node.neuronType = 'INHIBITORY'; this.inhibitoryIds.push(id); this.inhibitorySet.add(id); }
             else { node.neuronType = 'EXCITATORY'; this.excitatoryIds.push(id); }
+            node.fatigue = o.fatigue;   // addModule does not pass these two on to the neurons
+            node.recovery = o.recovery;
         }
         const inhibitory = new Set(this.inhibitoryIds);
         for (const conn of net.connections) {
