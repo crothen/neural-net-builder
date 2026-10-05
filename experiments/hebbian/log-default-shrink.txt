@@ -1,0 +1,10 @@
+
+=== default | medium (20 words) | brain 200 | rule "shrink" lr 0.05 wMax x2 | 3 seeds
+stage-1 passes | after stage 1: brain partial-cue ceiling, word similarity, active, mean / largest excitatory weight | after 5 word passes: full / missing | after 20: full / missing
+       0       |  59% ceiling, similarity 0.93, active  98%, w 0.176 / 0.372 (cap 0.352) |   8% /   0% |  43% /   6%
+       1       |  98% ceiling, similarity 0.44, active  41%, w 0.039 / 0.082 (cap 0.352) |  85% /  61% | 100% /  92%
+
+=== default | short (50 words) | brain 200 | rule "shrink" lr 0.05 wMax x2 | 3 seeds
+stage-1 passes | after stage 1: brain partial-cue ceiling, word similarity, active, mean / largest excitatory weight | after 5 word passes: full / missing | after 20: full / missing
+       0       |  42% ceiling, similarity 0.95, active 100%, w 0.176 / 0.372 (cap 0.352) |   1% /   0% |   8% /   0%
+       1       |  98% ceiling, similarity 0.70, active  68%, w 0.039 / 0.082 (cap 0.352) |  44% /  20% |  95% /  87%

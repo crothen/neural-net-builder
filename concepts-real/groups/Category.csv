@@ -1,0 +1,283 @@
+ID,Word
+1,Living thing
+2,Animal
+3,Plant
+4,Fungus
+5,Food
+6,Drink
+7,Produce
+8,Artifact
+9,Place
+10,Natural feature
+11,Phenomenon
+12,Substance
+13,Body part
+14,Person
+15,Mammal
+16,Bird
+17,Fish
+18,Reptile
+19,Amphibian
+20,Insect
+21,Arachnid
+22,Crustacean
+23,Mollusk
+24,Invertebrate
+25,Domestic animal
+26,Pet
+27,Livestock
+28,Working animal
+29,Predator
+30,Pest
+31,Parasite
+32,Canine
+33,Feline
+34,Big cat
+35,Rodent
+36,Primate
+37,Ape
+38,Hoofed animal
+39,Equine
+40,Deer family
+41,Weasel family
+42,Marsupial
+43,Marine mammal
+44,Bird of prey
+45,Waterfowl
+46,Songbird
+47,Seabird
+48,Wading bird
+49,Flightless bird
+50,Poultry
+51,Game bird
+52,Crow family
+53,Parrot family
+54,Shellfish
+55,Cephalopod
+56,Snake
+57,Lizard
+58,Crocodilian
+59,Social insect
+60,Seafood
+61,Game animal
+62,Freshwater fish
+63,Saltwater fish
+64,Tree
+65,Conifer
+66,Broadleaf tree
+67,Flower
+68,Shrub
+69,Grass
+70,Vine
+71,Succulent
+72,Aquatic plant
+73,Wildflower
+74,Garden plant
+75,Houseplant
+76,Weed
+77,Crop
+78,Herb
+79,Spice
+80,Fruit
+81,Citrus
+82,Berry
+83,Stone fruit
+84,Tropical fruit
+85,Melon
+86,Pome fruit
+87,Dried fruit
+88,Nut
+89,Vegetable
+90,Root vegetable
+91,Leafy green
+92,Allium
+93,Legume
+94,Gourd
+95,Cabbage family
+96,Grain
+97,Tuber
+98,Baked good
+99,Bread
+100,Pastry
+101,Dessert
+102,Snack
+103,Dairy
+104,Meat
+105,Cured meat
+106,Staple food
+107,Condiment
+108,Pasta
+109,Confection
+110,Fast food
+111,Dish
+112,Seasoning
+113,Sweetener
+114,Spread
+115,Breakfast food
+116,Hot drink
+117,Cold drink
+118,Alcoholic drink
+119,Soft drink
+120,Spirit
+121,Tool
+122,Hand tool
+123,Power tool
+124,Cutting tool
+125,Garden tool
+126,Farm tool
+127,Measuring tool
+128,Fastener
+129,Cleaning tool
+130,Striking tool
+131,Digging tool
+132,Writing tool
+133,Stationery
+134,Cutlery
+135,Cookware
+136,Tableware
+137,Drinkware
+138,Kitchen utensil
+139,Kitchen appliance
+140,Home appliance
+141,Container
+142,Furniture
+143,Seating
+144,Storage furniture
+145,Bedding
+146,Lighting
+147,Fixture
+148,Decoration
+149,Floor covering
+150,Clothing
+151,Outerwear
+152,Top
+153,Legwear
+154,Footwear
+155,Headwear
+156,Accessory
+157,Jewelry
+158,Formal wear
+159,Casual wear
+160,Sleepwear
+161,Sportswear
+162,Protective gear
+163,Bag
+164,Vehicle
+165,Land vehicle
+166,Motor vehicle
+167,Aircraft
+168,Watercraft
+169,Rail vehicle
+170,Spacecraft
+171,Cycle
+172,Public transport
+173,Emergency vehicle
+174,Heavy machinery
+175,Military vehicle
+176,Human-powered vehicle
+177,Animal-drawn vehicle
+178,Musical instrument
+179,String instrument
+180,Bowed string
+181,Plucked string
+182,Wind instrument
+183,Woodwind
+184,Brass instrument
+185,Percussion
+186,Keyboard instrument
+187,Reed instrument
+188,Sports equipment
+189,Ball
+190,Toy
+191,Game
+192,Playground equipment
+193,Weapon
+194,Electronic device
+195,Computer
+196,Communication device
+197,Audio device
+198,Optical instrument
+199,Scientific instrument
+200,Machine
+201,Timepiece
+202,Light source
+203,Heating device
+204,Cooling device
+205,Toiletry
+206,Money
+207,Printed matter
+208,Building
+209,Dwelling
+210,Shelter
+211,Shop
+212,Public building
+213,Place of worship
+214,Educational institution
+215,Entertainment venue
+216,Sports venue
+217,Transport hub
+218,Infrastructure
+219,Workplace
+220,Farm building
+221,Outdoor space
+222,Eating place
+223,Medical facility
+224,Cultural institution
+225,Landform
+226,Body of water
+227,Waterway
+228,Wetland
+229,Biome
+230,Coastal feature
+231,Farmland
+232,Weather
+233,Precipitation
+234,Storm
+235,Wind
+236,Celestial body
+237,Light phenomenon
+238,Natural disaster
+239,Time of day
+240,Material
+241,Metal
+242,Precious metal
+243,Alloy
+244,Gemstone
+245,Rock
+246,Mineral
+247,Fabric
+248,Natural fiber
+249,Synthetic material
+250,Fuel
+251,Building material
+252,Natural material
+253,Man-made material
+254,Residue
+255,Organ
+256,Internal organ
+257,Limb
+258,Joint
+259,Sense organ
+260,Facial feature
+261,Bone
+262,Tissue
+263,Digit
+264,Profession
+265,Performer
+266,Royalty
+267,Medical
+268,Education
+269,Science
+270,Technical
+271,Agriculture
+272,Food trade
+273,Service
+274,Craft
+275,Transport
+276,Military
+277,Emergency service
+278,Legal
+279,Religious
+280,Criminal
+281,Arts
+282,Media

@@ -1,0 +1,578 @@
+[
+ {
+  "size": 50,
+  "name": "evolved-n50",
+  "dataset": "tiny",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.06855263157894737,
+    "activeFrac": 0.23249999999999998,
+    "pairCos": 0.4511366406028138
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.07861842105263157,
+    "activeFrac": 0.265,
+    "pairCos": 0.4396338572990693
+   },
+   {
+    "seed": 23,
+    "fullFire": 1,
+    "partialFire": 0.6666666666666666,
+    "fullDrive": 1,
+    "partialDrive": 0.6666666666666666,
+    "rate": 0.06065789473684211,
+    "activeFrac": 0.1975,
+    "pairCos": 0.43671543279156694
+   },
+   {
+    "seed": 24,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.08473684210526317,
+    "activeFrac": 0.28500000000000003,
+    "pairCos": 0.44663085081649667
+   },
+   {
+    "seed": 25,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.0680921052631579,
+    "activeFrac": 0.22999999999999998,
+    "pairCos": 0.3786153711996459
+   }
+  ]
+ },
+ {
+  "size": 50,
+  "name": "evolved-n50",
+  "dataset": "medium",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 1,
+    "partialFire": 0.9411764705882353,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.07905263157894735,
+    "activeFrac": 0.25099999999999995,
+    "pairCos": 0.43313708880773355
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 0.8823529411764706,
+    "fullDrive": 1,
+    "partialDrive": 0.8823529411764706,
+    "rate": 0.084,
+    "activeFrac": 0.29600000000000004,
+    "pairCos": 0.40289798757908646
+   },
+   {
+    "seed": 23,
+    "fullFire": 1,
+    "partialFire": 0.9411764705882353,
+    "fullDrive": 1,
+    "partialDrive": 0.9411764705882353,
+    "rate": 0.09484210526315788,
+    "activeFrac": 0.30800000000000005,
+    "pairCos": 0.43534954615679533
+   },
+   {
+    "seed": 24,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.0942105263157895,
+    "activeFrac": 0.30599999999999994,
+    "pairCos": 0.405244390073556
+   },
+   {
+    "seed": 25,
+    "fullFire": 1,
+    "partialFire": 0.8823529411764706,
+    "fullDrive": 1,
+    "partialDrive": 0.8823529411764706,
+    "rate": 0.07697368421052632,
+    "activeFrac": 0.261,
+    "pairCos": 0.3768651604497182
+   }
+  ]
+ },
+ {
+  "size": 50,
+  "name": "evolved-n50",
+  "dataset": "short",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 0.98,
+    "partialFire": 0.9653846153846154,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9807692307692307,
+    "rate": 0.1667578947368421,
+    "activeFrac": 0.5424,
+    "pairCos": 0.6221139709132288
+   },
+   {
+    "seed": 22,
+    "fullFire": 0.98,
+    "partialFire": 0.9576923076923077,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9884615384615385,
+    "rate": 0.17590526315789476,
+    "activeFrac": 0.5596,
+    "pairCos": 0.6255308410151832
+   },
+   {
+    "seed": 23,
+    "fullFire": 0.98,
+    "partialFire": 0.9769230769230769,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9884615384615385,
+    "rate": 0.17436842105263162,
+    "activeFrac": 0.5432,
+    "pairCos": 0.6327745919591824
+   },
+   {
+    "seed": 24,
+    "fullFire": 0.98,
+    "partialFire": 0.9730769230769231,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9846153846153847,
+    "rate": 0.19481052631578943,
+    "activeFrac": 0.5832,
+    "pairCos": 0.6727177606771576
+   },
+   {
+    "seed": 25,
+    "fullFire": 0.96,
+    "partialFire": 0.95,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9807692307692307,
+    "rate": 0.17031578947368423,
+    "activeFrac": 0.5415999999999999,
+    "pairCos": 0.6665437130761145
+   }
+  ]
+ },
+ {
+  "size": 50,
+  "name": "threshold-1.5 + weak-recurrence",
+  "dataset": "tiny",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 1,
+    "partialFire": 0.6666666666666666,
+    "fullDrive": 1,
+    "partialDrive": 0.6666666666666666,
+    "rate": 0.0325,
+    "activeFrac": 0.26749999999999996,
+    "pairCos": 0.39227275751350577
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.032236842105263154,
+    "activeFrac": 0.29000000000000004,
+    "pairCos": 0.3719979152326029
+   },
+   {
+    "seed": 23,
+    "fullFire": 1,
+    "partialFire": 0.3333333333333333,
+    "fullDrive": 1,
+    "partialDrive": 0.3333333333333333,
+    "rate": 0.025855263157894735,
+    "activeFrac": 0.23999999999999996,
+    "pairCos": 0.3993935720401531
+   },
+   {
+    "seed": 24,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.029013157894736838,
+    "activeFrac": 0.2575,
+    "pairCos": 0.3896969704515402
+   },
+   {
+    "seed": 25,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.028815789473684208,
+    "activeFrac": 0.265,
+    "pairCos": 0.42396418539472436
+   }
+  ]
+ },
+ {
+  "size": 50,
+  "name": "threshold-1.5 + weak-recurrence",
+  "dataset": "medium",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 1,
+    "partialFire": 0.8235294117647058,
+    "fullDrive": 1,
+    "partialDrive": 0.8823529411764706,
+    "rate": 0.03528947368421052,
+    "activeFrac": 0.309,
+    "pairCos": 0.38765224728392694
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 0.8823529411764706,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.03584210526315789,
+    "activeFrac": 0.313,
+    "pairCos": 0.40728941636514265
+   },
+   {
+    "seed": 23,
+    "fullFire": 1,
+    "partialFire": 0.9411764705882353,
+    "fullDrive": 1,
+    "partialDrive": 0.9411764705882353,
+    "rate": 0.03489473684210526,
+    "activeFrac": 0.29000000000000004,
+    "pairCos": 0.4000264051421078
+   },
+   {
+    "seed": 24,
+    "fullFire": 1,
+    "partialFire": 0.9411764705882353,
+    "fullDrive": 1,
+    "partialDrive": 0.9411764705882353,
+    "rate": 0.03928947368421053,
+    "activeFrac": 0.308,
+    "pairCos": 0.4215133881033957
+   },
+   {
+    "seed": 25,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.03747368421052632,
+    "activeFrac": 0.31400000000000006,
+    "pairCos": 0.3629515615705573
+   }
+  ]
+ },
+ {
+  "size": 50,
+  "name": "threshold-1.5 + weak-recurrence",
+  "dataset": "short",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 0.92,
+    "partialFire": 0.823076923076923,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9807692307692307,
+    "rate": 0.07993684210526318,
+    "activeFrac": 0.5844,
+    "pairCos": 0.6542524453042434
+   },
+   {
+    "seed": 22,
+    "fullFire": 0.94,
+    "partialFire": 0.7769230769230769,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9615384615384616,
+    "rate": 0.08242105263157896,
+    "activeFrac": 0.5960000000000001,
+    "pairCos": 0.6827252866030135
+   },
+   {
+    "seed": 23,
+    "fullFire": 0.86,
+    "partialFire": 0.7,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9576923076923077,
+    "rate": 0.08744210526315788,
+    "activeFrac": 0.6327999999999998,
+    "pairCos": 0.6944949346182075
+   },
+   {
+    "seed": 24,
+    "fullFire": 0.9,
+    "partialFire": 0.7884615384615384,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9615384615384616,
+    "rate": 0.08074736842105264,
+    "activeFrac": 0.5895999999999999,
+    "pairCos": 0.6463983073580821
+   },
+   {
+    "seed": 25,
+    "fullFire": 0.96,
+    "partialFire": 0.8615384615384616,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9769230769230769,
+    "rate": 0.08065263157894739,
+    "activeFrac": 0.6116000000000001,
+    "pairCos": 0.6671004917434323
+   }
+  ]
+ },
+ {
+  "size": 50,
+  "name": "default-frozen",
+  "dataset": "tiny",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 0.625,
+    "partialFire": 0,
+    "fullDrive": 0.625,
+    "partialDrive": 0.3333333333333333,
+    "rate": 0.1550657894736842,
+    "activeFrac": 0.9875,
+    "pairCos": 0.9642532524917204
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 0.6666666666666666,
+    "fullDrive": 1,
+    "partialDrive": 0.6666666666666666,
+    "rate": 0.0899342105263158,
+    "activeFrac": 0.8375000000000001,
+    "pairCos": 0.7126490157267347
+   },
+   {
+    "seed": 23,
+    "fullFire": 0.625,
+    "partialFire": 0.3333333333333333,
+    "fullDrive": 0.75,
+    "partialDrive": 0.3333333333333333,
+    "rate": 0.1406578947368421,
+    "activeFrac": 0.9924999999999999,
+    "pairCos": 0.9403568052937581
+   },
+   {
+    "seed": 24,
+    "fullFire": 0.625,
+    "partialFire": 0.3333333333333333,
+    "fullDrive": 0.75,
+    "partialDrive": 0.3333333333333333,
+    "rate": 0.14796052631578946,
+    "activeFrac": 1,
+    "pairCos": 0.9602376833928747
+   },
+   {
+    "seed": 25,
+    "fullFire": 0.375,
+    "partialFire": 0,
+    "fullDrive": 0.5,
+    "partialDrive": 0,
+    "rate": 0.14822368421052629,
+    "activeFrac": 0.99,
+    "pairCos": 0.9553177161570706
+   }
+  ]
+ },
+ {
+  "size": 50,
+  "name": "default-frozen",
+  "dataset": "medium",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 0.2,
+    "partialFire": 0,
+    "fullDrive": 0.25,
+    "partialDrive": 0.11764705882352941,
+    "rate": 0.15373684210526314,
+    "activeFrac": 0.9920000000000002,
+    "pairCos": 0.9622140825841973
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 0.7058823529411765,
+    "fullDrive": 1,
+    "partialDrive": 0.8823529411764706,
+    "rate": 0.09618421052631579,
+    "activeFrac": 0.851,
+    "pairCos": 0.7207574351980222
+   },
+   {
+    "seed": 23,
+    "fullFire": 0.3,
+    "partialFire": 0.058823529411764705,
+    "fullDrive": 0.55,
+    "partialDrive": 0.29411764705882354,
+    "rate": 0.14347368421052634,
+    "activeFrac": 0.991,
+    "pairCos": 0.9435320387397295
+   },
+   {
+    "seed": 24,
+    "fullFire": 0.15,
+    "partialFire": 0,
+    "fullDrive": 0.45,
+    "partialDrive": 0.17647058823529413,
+    "rate": 0.1544473684210526,
+    "activeFrac": 0.999,
+    "pairCos": 0.9632896896718621
+   },
+   {
+    "seed": 25,
+    "fullFire": 0.35,
+    "partialFire": 0,
+    "fullDrive": 0.45,
+    "partialDrive": 0.29411764705882354,
+    "rate": 0.14297368421052628,
+    "activeFrac": 0.9970000000000001,
+    "pairCos": 0.9225649888202571
+   }
+  ]
+ },
+ {
+  "size": 50,
+  "name": "default-frozen",
+  "dataset": "short",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 0.02,
+    "partialFire": 0,
+    "fullDrive": 0.1,
+    "partialDrive": 0.019230769230769232,
+    "rate": 0.16148421052631579,
+    "activeFrac": 0.9975999999999998,
+    "pairCos": 0.9655020053874582
+   },
+   {
+    "seed": 22,
+    "fullFire": 0.5,
+    "partialFire": 0.11153846153846154,
+    "fullDrive": 0.88,
+    "partialDrive": 0.5153846153846153,
+    "rate": 0.12494736842105261,
+    "activeFrac": 0.9068,
+    "pairCos": 0.8577966321491459
+   },
+   {
+    "seed": 23,
+    "fullFire": 0.02,
+    "partialFire": 0,
+    "fullDrive": 0.14,
+    "partialDrive": 0.06538461538461539,
+    "rate": 0.16238947368421053,
+    "activeFrac": 0.9984000000000001,
+    "pairCos": 0.9632048395571144
+   },
+   {
+    "seed": 24,
+    "fullFire": 0.02,
+    "partialFire": 0,
+    "fullDrive": 0.1,
+    "partialDrive": 0.019230769230769232,
+    "rate": 0.16326315789473686,
+    "activeFrac": 1,
+    "pairCos": 0.966600767291355
+   },
+   {
+    "seed": 25,
+    "fullFire": 0.02,
+    "partialFire": 0,
+    "fullDrive": 0.14,
+    "partialDrive": 0.023076923076923078,
+    "rate": 0.1621578947368421,
+    "activeFrac": 1,
+    "pairCos": 0.968108951881822
+   }
+  ]
+ }
+]

@@ -1,0 +1,51 @@
+Word,Category,Color,Appearance,Shape,Weight,Texture,Material,State,Temperature,Smell,Function,Action,Process,Sound,Movement,Location,Region,Danger,Property,Emotion,Value,Era
+Iron,Substance; Material; Metal,Gray,Dull; Metallic,,Heavy,Hard; Smooth,Ore,Solid,,,Tools; Weapons,,Mined; Smelted; Forged,,,,,,Conducts electricity; Recyclable; Rusts; Magnetic; Strong,,Cheap,Ancient
+Steel,Substance; Material; Metal; Alloy; Building material,Gray,Shiny; Metallic,,Heavy,Hard; Smooth,Iron; Carbon,Solid,,,Tools; Weapons; Building,,Smelted; Alloyed; Forged,,,,,,Conducts electricity; Recyclable; Rusts; Magnetic; Strong; Durable,,Cheap,Industrial
+Copper,Substance; Material; Metal,Reddish-brown,Shiny; Metallic,,Heavy,Hard; Smooth,Ore,Solid,,,Wiring; Plumbing; Coinage,,Mined; Smelted,,,,,,Conducts electricity; Recyclable; Malleable; Tarnishes,,Affordable,Ancient
+Bronze,Substance; Material; Metal; Alloy,Brown,Shiny; Metallic,,Heavy,Hard; Smooth,Copper; Tin,Solid,,,Sculpture; Weapons,,Smelted; Alloyed; Cast,,,,,,Conducts electricity; Recyclable; Malleable; Tarnishes; Durable,,Affordable,Ancient
+Brass,Substance; Material; Metal; Alloy,Gold,Shiny; Metallic,,Heavy,Hard; Smooth,Copper; Zinc,Solid,,,Plumbing; Decoration,,Smelted; Alloyed; Cast,,,,,,Conducts electricity; Recyclable; Malleable; Tarnishes,,Affordable,Ancient
+Gold,Substance; Material; Metal; Precious metal,Gold,Shiny; Metallic,,Very heavy,Soft; Smooth,Ore,Solid,,,Jewelry; Coinage,,Mined; Refined; Cast,,,,,,Conducts electricity; Recyclable; Malleable; Rustproof,,Precious,Ancient
+Silver,Substance; Material; Metal; Precious metal,Silver,Shiny; Metallic,,Heavy,Hard; Smooth,Ore,Solid,,,Jewelry; Coinage,,Mined; Refined; Cast,,,,,,Conducts electricity; Recyclable; Malleable; Tarnishes,,Precious,Ancient
+Aluminum,Substance; Material; Metal,Silver,Shiny; Metallic,,Light,Hard; Smooth,Ore,Solid,,,Cans; Packaging,,Mined; Smelted; Recycled,,,,,,Conducts electricity; Recyclable; Malleable; Rustproof; Lightweight,,Cheap,Modern
+Lead,Substance; Material; Metal,Gray,Dull; Metallic,,Very heavy,Soft; Smooth,Ore,Solid,,,Plumbing; Roofing,,Mined; Smelted,,,,,Toxic,Recyclable; Malleable,,Cheap,Ancient
+Tin,Substance; Material; Metal,Silver,Shiny; Metallic,,Heavy,Soft; Smooth,Ore,Solid,,,Cans,,Mined; Smelted,,,,,,Conducts electricity; Recyclable; Malleable; Rustproof,,Affordable,Ancient
+Stone,Substance; Material; Natural material; Rock; Building material,Gray,,,Heavy,Hard; Rough,,Solid,,,Building; Paving; Sculpture,,Quarried; Carved,,,,,,Durable,,Cheap,Prehistoric
+Marble,Substance; Material; Natural material; Rock; Building material,White,Patterned; Glossy,,Heavy,Hard; Smooth,,Solid,,,Sculpture; Flooring; Countertops,,Quarried; Carved; Polished,,,,Italy; Greece,,Durable,,Expensive,Ancient
+Granite,Substance; Material; Natural material; Rock; Building material,Gray,Speckled,,Heavy,Hard; Rough,,Solid,,,Building; Paving; Countertops,,Quarried; Cut; Polished,,,,,,Durable; Scratch-resistant,,Expensive,Ancient
+Chalk,Substance; Material; Natural material; Rock,White,,,Light,Soft; Powdery,Limestone,Solid,,,Writing; Drawing,,Quarried,,,Classroom,,,Erasable; Fragile,,Cheap,
+Clay,Substance; Material; Natural material,Reddish-brown,,,,Soft; Sticky,Mineral; Water,Soft solid,,Earthy,Pottery; Building; Sculpture,,Dug; Molded; Fired,,,,,,Malleable,,Cheap,Prehistoric
+Sand,Substance; Material; Natural material,Tan,,,,Grainy; Dry,Rock; Mineral,Granular,,,Building; Play,,Dug; Sieved,,,Beach; Desert,,,,,Cheap,
+Gravel,Substance; Material; Natural material; Building material,Gray,,,,Gritty; Hard,Rock,Granular,,,Paving; Road surfacing; Draining,,Quarried; Crushed,Crunch,,Driveway,,,,,Cheap,
+Mud,Substance; Natural material,Brown,,,,Wet; Sticky; Soft,Soil; Water,Paste,,Earthy,Building,,,,,Riverbank,,Slipping; Staining,,,Free,
+Dust,Substance; Residue,Gray,,,Very light,Powdery; Fine; Dry,Soil,Powder,,,,Dust; Sweep,,,Floats,Attic; Shelf,,Irritant; Allergenic,,,Free,
+Ash,Substance; Residue,Gray,,,Very light,Powdery; Fine; Dry,Carbon,Powder,,Smoky,Fertilizer,Sweep,Burned,,,Fireplace,,Irritant,,,Free,
+Rust,Substance; Residue,Reddish-brown,,,,Flaky; Rough,Iron,Solid,,Metallic,,Scrub,,,,,,Staining,,,Free,
+Cotton,Substance; Material; Fabric; Natural fiber; Natural material,White,,,Light,Soft; Fluffy,Plant fiber,Solid,,,Clothing,,Spun; Woven; Harvested,,,,,,Washable; Breathable; Renewable; Absorbent; Shrinks; Wrinkles,,Cheap,Ancient
+Linen,Substance; Material; Fabric; Natural fiber; Natural material,Beige,,,Light,Soft; Crisp,Plant fiber,Solid,,,Clothing,,Spun; Woven; Harvested,,,,,,Washable; Breathable; Renewable; Absorbent; Wrinkles; Strong,,Expensive,Ancient
+Wool,Substance; Material; Fabric; Natural fiber; Natural material,Cream,,,Light,Soft; Woolly,Fleece,Solid,,,Clothing,,Sheared; Spun,,,,,Itching,Washable; Breathable; Renewable; Warm; Shrinks; Insulating,,Affordable,Ancient
+Silk,Substance; Material; Fabric; Natural fiber; Natural material,White,Shiny,,Light,Soft; Silky,,Solid,,,Clothing,,Spun; Woven; Dyed,,,,China,,Washable; Breathable; Renewable; Strong; Lightweight,,Luxury,Ancient
+Nylon,Substance; Material; Fabric; Synthetic material; Man-made material,,,,Light,Soft; Smooth,Petroleum,Solid,,,Clothing; Bags,,Extruded; Woven,,,,,,Washable; Strong; Stretchable; Lightweight,,Cheap,Modern
+Denim,Substance; Material; Fabric; Man-made material,Blue,,,Light,Tough,Cotton,Solid,,,Clothing,,Woven; Dyed; Sewn,,,,,,Washable; Durable; Strong,,Affordable,Industrial
+Leather,Substance; Material; Natural material,Brown,,,,Leathery; Tough,Animal hide,Solid,,,Shoes; Bags; Clothing,,Tanned; Dyed; Sewn,,,,,,Durable; Strong,,Expensive,Prehistoric
+Plastic,Substance; Material; Synthetic material; Man-made material,Multicolored,,,Light,Smooth,Petroleum,Solid,,,Packaging,,Molded; Extruded; Recycled,,,,,Pollution,Waterproof; Lightweight; Recyclable; Insulating,,Cheap,Modern
+Rubber,Substance; Material; Natural material,Black,,,,Rubbery; Elastic,Latex,Solid,,,Shoes; Sealing,,Harvested; Molded,,,,Southeast Asia,,Waterproof; Stretchable; Insulating,,Cheap,Industrial
+Cardboard,Substance; Material; Man-made material,Brown,,,Light,Rigid,Wood pulp,Solid,,Papery,Packaging,,Pressed; Recycled,,,,,,Recyclable; Foldable; Flammable; Lightweight,,Cheap,Industrial
+Wood,Substance; Material; Natural material; Building material; Fuel,Brown,,,,Hard; Fibrous,Logs,Solid,,Woody,Building; Furniture making; Heating fuel,,Cut; Carved,,,,,Splinters; Fire hazard,Flammable; Floats; Renewable,,Affordable,Prehistoric
+Concrete,Substance; Material; Man-made material; Building material,Gray,,,Heavy,Hard; Rough,Sand; Gravel,Solid,,,Building; Paving; Road surfacing,Pour; Mix,Mixed with water; Cast,,,,,,Durable; Strong; Fireproof,,Cheap,Ancient
+Cement,Substance; Material; Man-made material; Building material,Gray,,,Heavy,Powdery; Fine,Limestone; Clay,Powder,,,Building,Mix,Fired; Ground; Mixed with water,,,,,Irritant,Durable; Strong,,Cheap,Ancient
+Brick,Substance; Material; Man-made material; Building material,Reddish-brown,,Rectangular,Heavy,Hard; Rough,Clay,Solid,,,Building; Paving,Lay bricks; Stack,Molded; Fired,,,,,,Durable; Strong; Fireproof; Stackable,,Cheap,Ancient
+Ceramic,Substance; Material; Man-made material,White,Glossy,,,Hard; Smooth; Brittle,Clay,Solid,,,Pottery; Flooring,,Molded; Fired,,,,China,Shatters,Fragile; Heat-resistant; Waterproof,,Affordable,Ancient
+Asphalt,Substance; Material; Man-made material; Building material,Black,,,Heavy,Hard; Rough,Petroleum; Gravel,Solid,,Oily,Road surfacing; Paving; Roofing,,Mixed; Melted; Rolled,,,Road; Highway,,Fumes,Waterproof; Durable; Melts,,Cheap,Industrial
+Coal,Substance; Material; Fuel; Natural material; Rock,Black,Dull,,,Hard; Brittle,Carbon,Solid,,Smoky,Fuel; Heating fuel; Power supply,,Mined; Burned,,,Mine,,Pollution; Fumes,Flammable; Non-renewable,,Cheap,Industrial
+Charcoal,Substance; Material; Fuel; Man-made material,Black,Dull,,Light,Brittle; Porous,Carbon,Solid,,Smoky,Fuel; Cooking; Drawing,,Burned,,,Barbecue,,Fumes; Staining,Flammable; Renewable,,Cheap,Prehistoric
+Petroleum,Substance; Material; Fuel; Natural material,Black,Glossy,,,Oily; Viscous,,Liquid,,Fuel,Fuel; Power supply,,Extracted; Refined,,,Underground,Middle East,Pollution; Fumes; Fire hazard; Toxic,Flammable; Non-renewable,,Expensive,Industrial
+Gasoline,Substance; Material; Fuel; Man-made material,Pale yellow,Transparent,,,Oily,Petroleum,Liquid,,Fuel,Fuel,,Refined; Burned,,,Garage,,Pollution; Fumes; Fire hazard; Toxic; Explosive,Flammable; Non-renewable,,Expensive,Industrial
+Wax,Substance; Material; Natural material,Cream,Translucent,,,Waxy; Soft,,Solid,,Waxy,Illumination; Sealing,,Melted; Molded,,,,,,Melts; Waterproof; Flammable,,Cheap,Ancient
+Diamond,Substance; Material; Gemstone; Mineral,Colorless,Sparkling; Transparent,,,Hard; Smooth,Carbon,Solid; Crystalline,,,Jewelry; Gift; Cutting,,Mined; Cut; Polished,,,Jewelry shop,Africa,,Durable; Scratch-resistant,Romance,Precious,
+Ruby,Substance; Material; Gemstone; Mineral,Red,Sparkling; Transparent,,,Hard; Smooth,Mineral,Solid; Crystalline,,,Jewelry; Gift,,Mined; Cut; Polished,,,Jewelry shop,Asia,,Durable; Scratch-resistant,,Precious,
+Emerald,Substance; Material; Gemstone; Mineral,Green,Sparkling; Transparent,,,Hard; Smooth,Mineral,Solid; Crystalline,,,Jewelry; Gift,,Mined; Cut; Polished,,,Jewelry shop,South America,,Scratch-resistant,,Precious,
+Pearl,Substance; Material; Gemstone,White; Cream,Iridescent; Shiny,Spherical,,Hard; Smooth,,Solid,,,Jewelry; Gift,,Harvested,,,Jewelry shop; Seabed,Japan,,,,Precious,
+Ice,Substance,Colorless,Transparent,,,Hard; Slippery,Water,Solid; Crystalline,Freezing,,Cooling; Preserving; Skating,,Frozen,,,,,Slipping; Frostbite,Melts; Floats,,Cheap,
+Steam,Substance,White,Translucent,,,,Water vapor,Gas,Hot,,Cooking; Power supply; Heating,,Boiled; Evaporated,Hiss,Rises,,,Scalds,,,,Industrial
+Paint,Substance; Man-made material,Multicolored,Glossy; Opaque,,,Viscous; Wet,Resin,Liquid,,Chemical,Painting; Decoration; Protection,Mix; Dip,Mixed,,,Studio; Shed,,Staining; Fumes; Toxic,,,Affordable,
+Ink,Substance; Man-made material,Black; Blue,,,,Watery; Wet,Carbon; Water,Liquid,,,Writing; Printing; Drawing,Write; Print; Dip,Mixed,,,Desk,,Staining,,,Cheap,Ancient

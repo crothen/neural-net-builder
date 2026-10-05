@@ -1,0 +1,341 @@
+ID,Word
+1,Companionship
+2,Guarding
+3,Hunting aid
+4,Riding
+5,Pulling loads
+6,Milk source
+7,Meat source
+8,Wool source
+9,Egg source
+10,Leather source
+11,Honey source
+12,Fur source
+13,Feather source
+14,Pest control
+15,Pollination
+16,Sport fishing
+17,Timber
+18,Firewood
+19,Shade
+20,Ornament
+21,Paper making
+22,Furniture making
+23,Medicine
+24,Perfume
+25,Fodder
+26,Gift
+27,Fiber
+28,Oil production
+29,Building
+30,Salad
+31,Juice
+32,Pie filling
+33,Jam
+34,Garnish
+35,Flavoring
+36,Snacking
+37,Sauce
+38,Soup
+39,Side dish
+40,Bread making
+41,Wine making
+42,Seasoning
+43,Tea
+44,Sweetening
+45,Thickening
+46,Baking
+47,Cooking
+48,Frying
+49,Brewing
+50,Preserving
+51,Nutrition
+52,Hydration
+53,Celebration
+54,Refreshment
+55,Stimulant
+56,Relaxation
+57,Sandwich filling
+58,Topping
+59,Dipping
+60,Spreading
+61,Gripping
+62,Cutting
+63,Sawing
+64,Chopping
+65,Carving
+66,Digging
+67,Mowing
+68,Harvesting
+69,Lifting
+70,Carrying
+71,Hauling
+72,Climbing
+73,Fastening
+74,Joining
+75,Sticking
+76,Measuring
+77,Painting
+78,Cleaning
+79,Sweeping
+80,Mopping
+81,Wiping
+82,Washing
+83,Drying
+84,Holding
+85,Clamping
+86,Writing
+87,Drawing
+88,Erasing
+89,Reading
+90,Wrapping
+91,Storing
+92,Packaging
+93,Eating
+94,Drinking
+95,Serving
+96,Scooping
+97,Whisking
+98,Mixing
+99,Pouring
+100,Boiling
+101,Heating
+102,Cooling
+103,Opening
+104,Weighing
+105,Keeping cold
+106,Dishwashing
+107,Food storage
+108,Sitting
+109,Sleeping
+110,Resting
+111,Dining
+112,Studying
+113,Displaying
+114,Storing clothes
+115,Storing books
+116,Decoration
+117,Warmth
+118,Comfort
+119,Privacy
+120,Entry
+121,Reflection
+122,Timekeeping
+123,Illumination
+124,Bathing
+125,Handwashing
+126,Floor covering
+127,Enclosure
+128,Security
+129,Covering body
+130,Protection
+131,Rain protection
+132,Sun protection
+133,Cold protection
+134,Foot protection
+135,Fashion
+136,Adornment
+137,Formality
+138,Vision correction
+139,Swimming
+140,Sports
+141,Passenger transport
+142,Cargo transport
+143,Personal transport
+144,Mass transit
+145,Emergency response
+146,Firefighting
+147,Rescue
+148,Farming
+149,Construction
+150,Warfare
+151,Travel
+152,Commuting
+153,Recreation
+154,Racing
+155,Exploration
+156,Fishing
+157,Shipping
+158,Space travel
+159,Air travel
+160,Sea travel
+161,Delivery
+162,Snow travel
+163,Camping
+164,Living
+165,Shelter
+166,Worship
+167,Education
+168,Healthcare
+169,Shopping
+170,Entertainment
+171,Manufacturing
+172,Lodging
+173,Banking
+174,Defense
+175,Imprisonment
+176,Burial
+177,Performance
+178,Navigation
+179,Crossing
+180,Transport link
+181,Animal housing
+182,Research
+183,Book lending
+184,Exercise
+185,Play
+186,Socializing
+187,Commerce
+188,Food service
+189,Drink service
+190,Medicine supply
+191,Money handling
+192,Office work
+193,Vehicle repair
+194,Growing food
+195,Growing plants
+196,Keeping animals
+197,Nature conservation
+198,Hiking
+199,Skiing
+200,Irrigation
+201,Drinking water
+202,Grazing
+203,Tourism
+204,Mining
+205,Hunting
+206,Logging
+207,Wind power
+208,Light
+209,Heat
+210,Jewelry
+211,Coinage
+212,Wiring
+213,Plumbing
+214,Tools
+215,Sculpture
+216,Clothing
+217,Shoes
+218,Bags
+219,Fuel
+220,Road surfacing
+221,Roofing
+222,Paving
+223,Pottery
+224,Coloring
+225,Printing
+226,Cans
+227,Fertilizer
+228,Melody
+229,Harmony
+230,Rhythm
+231,Bass line
+232,Accompaniment
+233,Signaling
+234,Classical music
+235,Folk music
+236,Jazz
+237,Rock music
+238,Pop music
+239,Military music
+240,Dance music
+241,Children music
+242,Soccer
+243,Basketball
+244,Baseball
+245,Volleyball
+246,Tennis
+247,Badminton
+248,Hockey
+249,Archery
+250,Sailing
+251,Throwing game
+252,Board game
+253,Puzzle solving
+254,Pretend play
+255,Soothing
+256,Combat
+257,Computing
+258,Communication
+259,Calling
+260,Messaging
+261,Internet access
+262,Photography
+263,Broadcasting
+264,Listening
+265,Watching
+266,Sound output
+267,Power supply
+268,Connecting
+269,Switching
+270,Calculating
+271,Temperature measurement
+272,Magnification
+273,Observation
+274,Direction finding
+275,Shaving
+276,Laundry
+277,Cleaning teeth
+278,Grooming
+279,Vertical transport
+280,Seeing
+281,Hearing
+282,Smelling
+283,Tasting
+284,Touching
+285,Chewing
+286,Speaking
+287,Breathing
+288,Thinking
+289,Pumping blood
+290,Digestion
+291,Filtering blood
+292,Grasping
+293,Walking
+294,Running
+295,Bending
+296,Supporting body
+297,Protecting organs
+298,Movement
+299,Sensation
+300,Balance
+301,Swallowing
+302,Oxygen transport
+303,Detoxification
+304,Healing
+305,Surgery
+306,Teaching
+307,Law enforcement
+308,Justice
+309,Religious service
+310,Ruling
+311,Art
+312,Acting
+313,Metalworking
+314,Design
+315,Flying aircraft
+316,Bread baking
+317,Bait
+318,Delicacy
+319,Repair
+320,Robbery
+321,Literature
+322,Fire starting
+323,Blues
+324,Typing
+325,Gaming
+326,Amplification
+327,Charging
+328,Weather forecasting
+329,Mobility aid
+330,Sealing
+331,Draining
+332,Solar power
+333,Boating
+334,Heating fuel
+335,Flooring
+336,Countertops
+337,Weapons
+338,Skating
+339,Flying kites
+340,Cuddling

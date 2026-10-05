@@ -1,0 +1,36 @@
+Word,Category,Appearance,Shape,Size,Texture,Material,Parts,Function,Action,Power,Sound,Smell,Location,User,Danger,Property,Sociality,BodyPart,Time,Emotion,Era
+Pen,Artifact; Writing tool; Stationery,,Long; Thin,Small,,Plastic; Ink,Tip; Ink cartridge,Writing,Write,,Click,,Desk; Pocket,Student; Office worker,,,,,,,
+Pencil,Artifact; Writing tool; Stationery,,Long; Thin,Small,,Wood; Graphite,Tip,Writing; Drawing,Write,,Scratching,,Desk; Pencil case,Student; Artist,,Erasable,,,,,
+Crayon,Artifact; Writing tool; Stationery,Colorful,Stick-shaped,Tiny,Waxy,Wax,Tip,Drawing; Coloring,Draw,,,Waxy,Classroom; Pencil case,Child,,,,,,,
+Eraser,Artifact; Stationery,,Rectangular,Tiny,Rubbery,Rubber,,Erasing,Rub,,,,Desk; Pencil case,Student,,,,,,,
+Paper,Artifact; Stationery,,Flat; Thin,Small,Smooth,Wood pulp,,Writing; Printing; Wrapping,Write; Fold,,Rustle,,Desk; Office,Student; Office worker,Cuts,Recyclable; Flammable,,,,,
+Notebook,Artifact; Stationery,,Rectangular; Flat,Small,,Paper; Cardboard,Pages; Cover; Spine,Writing,Write; Open,,,,Desk; Bag,Student,,Portable,,,,,
+Book,Artifact; Printed matter,,Rectangular,Small,,Paper; Cardboard,Pages; Cover; Spine; Text,Reading; Education,Read; Open,,Rustle,Papery,Library; Shelf,Student,,Portable,,,,,
+Newspaper,Artifact; Printed matter,Printed,Flat; Thin,Small,,Paper; Ink,Pages; Text; Pictures,Reading,Read; Fold,,Rustle,Papery,Cafe; Shop,Commuter,,Disposable; Recyclable,,,Daily,,
+Envelope,Artifact; Stationery,,Rectangular; Flat,Small,,Paper,Flap,Packaging; Communication,Open,,,,Post office; Desk,,,,,,,,
+Stapler,Artifact; Stationery; Tool,,,Small,,Steel; Plastic,Hinges; Springs,,Press,Muscle,Click,,Desk; Office,Office worker,Pricks,,,,,,
+Tape,Artifact; Stationery; Fastener,Transparent,Rolled; Thin,Small,Sticky,Plastic,,Sticking; Sealing; Wrapping,Pull; Cut,,,,Drawer; Desk,Everyone,,Adhesive,,,,,
+Glue,Artifact; Stationery,,,Small,Sticky,Resin,Nozzle; Screw cap,Sticking; Joining,Squeeze; Spread,,,Chemical,Desk; Workshop,Child; Carpenter,Fumes,Adhesive,,,,,
+Broom,Artifact; Cleaning tool,,Long,Medium,,Wood; Bristle,Handle; Bristles,Sweeping,Sweep,Muscle,Swish,,Cupboard; Kitchen,Cleaner,,,,,,,
+Mop,Artifact; Cleaning tool,,Long,Medium,,Plastic; Cotton,Handle,Mopping,Wipe,Muscle,Sloshing,,Cupboard; Bathroom,Cleaner,Slipping,Absorbent,,,,,
+Bucket,Artifact; Container,,Cylindrical; Hollow,Medium,,Plastic; Metal,Handle; Rim,Carrying; Cleaning,Fill; Carry,,Splash,,Cupboard; Garden,Cleaner,,Stackable,,,,,
+Sponge,Artifact; Cleaning tool,,Rectangular,Small,Spongy; Porous,Foam,Holes,Wiping; Dishwashing,Scrub; Squeeze,Muscle,,,Sink; Bathroom,Everyone,,Absorbent,,,,,
+Towel,Artifact; Toiletry,,Rectangular; Flat,Medium,Soft; Fluffy,Cotton,,Drying,Dry; Hang,,,,Bathroom; Beach,Everyone; Swimmer,,Absorbent; Washable,,,,,
+Soap,Artifact; Toiletry,Foamy,Oval,Small,Slippery; Smooth,Fat; Oil,,Handwashing; Bathing,Wash,,,,Bathroom; Sink,Everyone,Slipping; Irritant,Soluble,,Hands,,,
+Toothbrush,Artifact; Toiletry,,Long; Thin,Small,,Plastic; Nylon,Handle; Bristles,Cleaning teeth,Brush; Rinse,Muscle,,,Bathroom,Everyone,,,Personal,Teeth; Mouth,Morning; Bedtime,,
+Comb,Artifact; Toiletry,,Flat,Small,,Plastic,Teeth,Grooming,Comb; Style,Muscle,,,Bathroom; Pocket,Everyone; Barber,,,Personal,Hair,,,
+Razor,Artifact; Toiletry; Cutting tool,,T-shaped,Small,Sharp,Steel; Plastic,Handle; Blade; Head,Shaving,Shave; Rinse,Muscle,Scraping,,Bathroom; Barbershop,Man; Barber,Cuts,Disposable,Personal,Face,Morning,,
+Candle,Artifact; Light source; Decoration,Flickering,Cylindrical,Small,Waxy,Wax,Wick; Flame,Illumination; Decoration; Celebration,Light; Blow,,,Waxy,Table; Church,,Fire hazard; Burns,Melts,,,Evening,Romance,Ancient
+Match,Artifact; Tool,,Thin; Stick-shaped,Tiny,,Wood,Head; Shaft,Fire starting,Strike; Light,,Scratching; Hiss,Sulfurous,Kitchen; Campsite,Camper,Fire hazard; Burns,Disposable; Flammable,,,,,
+Lighter,Artifact; Tool,,Compact,Tiny,,Plastic; Metal,Wheel; Flame; Tank,Fire starting,Click; Light,Gas,Click; Hiss,,Pocket; Campsite,Camper,Fire hazard; Burns,Portable,,,,,
+Key,Artifact; Tool,,Flat; Jagged,Tiny,,Brass,Teeth; Blade,Opening; Security,Turn; Lock; Unlock,,Jingle; Click,,Pocket; Doorway,Homeowner; Driver,,Portable,Personal,,,,
+Lock,Artifact; Fastener,,Compact,Small,,Steel; Brass,Slot; Springs,Security; Fastening,Lock; Unlock,,Click,,Doorway,Homeowner; Cyclist,,Durable,,,,,
+Bag,Artifact; Bag; Container,,Hollow,Medium,,Fabric; Plastic,Handle,Carrying; Shopping,Carry; Pack,,Rustle,,Shop; Supermarket,Customer,Suffocation,Portable; Foldable,,Hands,,,
+Backpack,Artifact; Bag,,,Medium,Padded,Fabric; Nylon,Shoulder straps; Zipper; Pockets,Carrying; Travel,Wear; Pack,,Zip,,School; Trail,Student; Hiker,Strain,Portable; Wearable,,Back; Shoulders,,,
+Suitcase,Artifact; Bag; Container,,Box-shaped,Medium,,Fabric; Plastic,Handle; Wheels; Zipper,Carrying; Travel,Pack; Pull,,Rumble,,Airport; Hotel,Traveler; Tourist,Strain,Portable; Lockable; Wheeled,,,,,
+Basket,Artifact; Container,,Round; Hollow,Medium,,Plant fiber,Handle,Carrying; Storing,Carry; Fill,,Creak,,Market; Picnic,,,Lightweight,,,,,Ancient
+Box,Artifact; Container,,Box-shaped; Hollow,Medium,,Cardboard,Lid,Storing; Packaging; Delivery,Open; Pack; Stack,,Thud,,Warehouse; Attic,,,Stackable; Recyclable,,,,,
+Barrel,Artifact; Container,,Cylindrical; Hollow,Large,,Wood; Iron,Band; Tap,Storing; Wine making,Fill; Roll; Tap,,Rumble,,Cellar; Warehouse,,,Durable,,,,,Traditional
+Can,Artifact; Container,,Cylindrical; Hollow,Small,,Tin; Aluminum,Lid; Rim,Preserving; Packaging,Open,,Pop; Clatter,,Cupboard; Supermarket,Everyone,Cuts,Recyclable; Airtight,,,,,Industrial
+Coin,Artifact; Money,Shiny,Disc-shaped; Flat,Tiny,,Copper,Edge,Commerce,Pay; Flip,,Jingle; Clink,,Pocket; Bank,Customer; Cashier,Choking hazard,Durable,,,,,Ancient
+Banknote,Artifact; Money,Printed,Rectangular; Thin,Small,,Paper,Pictures; Text,Commerce,Pay; Fold,,Rustle,,Pocket; Bank,Customer; Cashier,,Foldable; Tearable,,,,,

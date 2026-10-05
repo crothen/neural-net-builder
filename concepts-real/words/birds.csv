@@ -1,0 +1,44 @@
+Word,Category,Color,Appearance,Size,Covering,Sound,Movement,Speed,Location,Region,Diet,Parts,Behavior,Growth,Sociality,Time,Danger,Function
+Chicken,Living thing; Animal; Bird; Poultry; Domestic animal; Livestock,Brown,,Small,Feathers,Cluck,Walks,,Farm,,Omnivore; Grain,Wings; Beak; Comb,Pecks,Lays eggs,Flock,,,Egg source; Meat source
+Turkey,Living thing; Animal; Bird; Poultry; Domestic animal; Livestock,Brown,,Medium,Feathers,Gobble,Walks,,Farm,,Omnivore; Grain,Wings; Beak; Wattle,Displays tail,Lays eggs,Flock,,,Meat source
+Duck,Living thing; Animal; Bird; Waterfowl; Poultry,Brown,,Small,Feathers,,Swims; Flies,,Pond,,Omnivore; Aquatic plants,Wings; Bill; Webbed feet,,Lays eggs; Migrates,Flock,,,Meat source; Egg source
+Goose,Living thing; Animal; Bird; Waterfowl; Poultry,Gray,,Medium,Feathers,Honk,Swims; Flies,,Lake,,Herbivore; Grass,Wings; Bill; Webbed feet; Long neck,,Lays eggs; Migrates,Flock,,Pecks,Meat source; Feather source
+Swan,Living thing; Animal; Bird; Waterfowl,White,,Medium,Feathers,Hiss,Swims; Flies,,Lake,,Herbivore; Aquatic plants,Wings; Bill; Webbed feet; Long neck,,Lays eggs; Mates for life,Pairs,,Pecks,
+Pigeon,Living thing; Animal; Bird; Pest,Gray,Iridescent,Small,Feathers,Coo,Flies; Walks,,City,,Herbivore; Grain,Wings; Beak,Homing,Lays eggs,Flock,,Spreads disease,Messaging
+Dove,Living thing; Animal; Bird,White,,Small,Feathers,Coo,Flies; Walks,,Garden,,Herbivore; Grain,Wings; Beak,Gentle,Lays eggs; Mates for life,Pairs,,,
+Sparrow,Living thing; Animal; Bird; Songbird,Brown,,Tiny,Feathers,Chirp,Flies; Hops,,City,,Omnivore; Seeds,Wings; Beak,,Lays eggs,Flock,,,
+Finch,Living thing; Animal; Bird; Songbird,Red,,Tiny,Feathers,Birdsong,Flies; Hops,,Woodland,,Herbivore; Seeds,Wings; Beak,Sings,Lays eggs,Flock,,,
+Canary,Living thing; Animal; Bird; Songbird; Domestic animal; Pet,Yellow,,Tiny,Feathers,Birdsong,Flies; Hops,,Cage,,Herbivore; Seeds,Wings; Beak,Sings,Lays eggs,Lives with humans,,,Companionship
+Robin,Living thing; Animal; Bird; Songbird,Brown; Orange,,Tiny,Feathers,Birdsong,Flies; Hops,,Garden,,Omnivore; Worms,Wings; Beak,Sings,Lays eggs,Solitary,,,
+Blackbird,Living thing; Animal; Bird; Songbird,Black,,Small,Feathers,Birdsong,Flies; Hops,,Garden,,Omnivore; Worms,Wings; Beak,Sings,Lays eggs,Pairs,,,
+Starling,Living thing; Animal; Bird; Songbird; Pest,Black,Iridescent,Small,Feathers,Chatter,Flies; Walks,,Farmland,,Omnivore; Insects,Wings; Beak,Swarms,Lays eggs,Flock,,Damages crops,
+Swallow,Living thing; Animal; Bird; Songbird,Blue,,Tiny,Feathers,,Flies; Glides,,Farmland,,Insectivore; Insects,Long wings; Beak; Forked tail,Hunts on the wing,Lays eggs; Migrates,Flock,,,
+Crow,Living thing; Animal; Bird; Crow family,Black,,Small,Feathers,Caw,Flies; Walks,,Farmland,,Omnivore; Carrion,Wings; Beak,Scavenges,Lays eggs,Flock,,Damages crops,
+Raven,Living thing; Animal; Bird; Crow family,Black,,Small,Feathers,Croak,Flies; Soars,,Mountain,,Omnivore; Carrion,Wings; Beak,Scavenges,Lays eggs; Mates for life,Pairs,,,
+Magpie,Living thing; Animal; Bird; Crow family,Black; White,Black-and-white,Small,Feathers,Chatter,Flies; Walks,,Farmland,,Omnivore,Wings; Beak; Long tail,Raids nests,Lays eggs,Pairs,,,
+Eagle,Living thing; Animal; Bird; Bird of prey; Predator,Brown,,Medium,Feathers,Screech,Flies; Soars,,Mountain,,Carnivore; Meat,Wings; Hooked beak; Talons,Swoops,Lays eggs,Pairs,,,
+Hawk,Living thing; Animal; Bird; Bird of prey; Predator,Brown,Banded,Small,Feathers,Screech,Flies; Soars,,Woodland,,Carnivore; Small mammals,Wings; Hooked beak; Talons,Swoops,Lays eggs,Solitary,,,Hunting aid
+Falcon,Living thing; Animal; Bird; Bird of prey; Predator,Gray,,Small,Feathers,Screech,Flies; Dives,Very fast,Cliff,,Carnivore,Wings; Hooked beak; Talons,Swoops,Lays eggs,Pairs,,,Hunting aid
+Owl,Living thing; Animal; Bird; Bird of prey; Predator,Brown,Mottled,Small,Feathers,Hoot,Flies; Glides,,Woodland,,Carnivore; Small mammals,Wings; Hooked beak; Talons; Large eyes,,Lays eggs,Solitary,Nocturnal,,Pest control
+Vulture,Living thing; Animal; Bird; Bird of prey,Brown,,Medium,Feathers,Hiss,Flies; Soars,,Desert,,Scavenger; Carrion,Wings; Hooked beak; Bald head,Scavenges,Lays eggs,Flock,,,
+Parrot,Living thing; Animal; Bird; Parrot family; Pet,Green,Colorful,Small,Feathers,Squawk; Speech,Flies; Climbs,,Jungle,,Herbivore; Fruit,Wings; Hooked beak; Long tail,Mimics speech,Lays eggs,Flock,,Pecks,Companionship
+Parakeet,Living thing; Animal; Bird; Parrot family; Domestic animal; Pet,Green,Colorful,Tiny,Feathers,Chirp,Flies; Climbs,,Cage,Australia,Herbivore; Seeds,Wings; Hooked beak; Long tail,Mimics speech,Lays eggs,Lives with humans,,,Companionship
+Toucan,Living thing; Animal; Bird,Black,Colorful,Small,Feathers,Croak,Flies; Hops,,Jungle,South America,Omnivore; Fruit,Wings; Large beak,Raids nests,Lays eggs,Flock,,,
+Hummingbird,Living thing; Animal; Bird,Green,Iridescent,Tiny,Feathers,Hum,Flies; Hovers,,Garden,North America; South America,Omnivore; Nectar,Wings; Long beak,Pollinates,Lays eggs; Migrates,Solitary,,,Pollination
+Woodpecker,Living thing; Animal; Bird,Black; White,Black-and-white,Small,Feathers,Drumming,Flies; Climbs,,Forest,,Insectivore; Insects,Wings; Long tongue,Bores wood,Lays eggs,Solitary,,,Pest control
+Kingfisher,Living thing; Animal; Bird; Predator,Blue; Orange,Colorful,Tiny,Feathers,Whistle,Flies; Dives,,River,,Carnivore; Fish,Wings; Long beak,Plunge-dives,Lays eggs,Solitary,,,
+Cuckoo,Living thing; Animal; Bird,Gray,Banded,Small,Feathers,Two-note call,Flies,,Woodland,,Insectivore; Insects,Wings; Beak; Long tail,,Lays eggs; Lays eggs in other nests; Migrates,Solitary,,,
+Peacock,Living thing; Animal; Bird; Game bird,Blue,Iridescent,Medium,Feathers,Screech,Walks,,Park,India,Omnivore; Seeds,Wings; Beak; Tail feathers,Displays tail,Lays eggs,Family group,,,Ornament
+Pheasant,Living thing; Animal; Bird; Game bird,Brown,Iridescent,Small,Feathers,Crowing,Walks; Flies,,Farmland,,Omnivore; Seeds,Wings; Beak; Long tail,Pecks,Lays eggs,Solitary,,,Meat source
+Quail,Living thing; Animal; Bird; Game bird,Brown,Speckled,Small,Feathers,Whistle,Walks; Runs,,Field,,Omnivore; Seeds,Wings; Beak; Short tail,,Lays eggs; Migrates,Flock,,,Meat source; Egg source
+Penguin,Living thing; Animal; Bird; Seabird; Flightless bird; Predator,Black; White,Black-and-white,Medium,Feathers,Squawk,Swims; Waddles,,Polar ice,Antarctica,Carnivore; Fish,Flippers; Beak; Webbed feet,,Lays eggs,Colony,,,
+Puffin,Living thing; Animal; Bird; Seabird; Predator,Black; White,Black-and-white,Small,Feathers,Growl,Flies; Swims,,Cliff,Atlantic,Carnivore; Fish,Wings; Large beak; Webbed feet,Fishes,Lays eggs,Colony,,,
+Seagull,Living thing; Animal; Bird; Seabird,White,,Small,Feathers,Squawk,Flies; Soars,,Coast,,Omnivore; Fish,Wings; Beak; Webbed feet,Scavenges,Lays eggs,Colony,,,
+Albatross,Living thing; Animal; Bird; Seabird,White,,Medium,Feathers,Squawk,Flies; Soars,,Ocean,,Carnivore,Long wings; Beak; Webbed feet,Flies long distances,Lays eggs; Mates for life,Pairs,,,
+Pelican,Living thing; Animal; Bird; Seabird; Predator,White,,Medium,Feathers,,Flies; Swims,,Coast,,Carnivore; Fish,Wings; Large beak; Throat pouch,Plunge-dives,Lays eggs,Flock,,,
+Heron,Living thing; Animal; Bird; Wading bird; Predator,Gray,,Medium,Feathers,Squawk,Flies; Wades,,River,,Carnivore; Fish,Wings; Long beak; Long legs; Long neck,,Lays eggs,Solitary,,,
+Stork,Living thing; Animal; Bird; Wading bird; Predator,White; Black,,Medium,Feathers,Clatter,Flies; Soars,,Meadow; Rooftops,Europe,Carnivore,Wings; Long beak; Long legs; Long neck,Flies long distances,Lays eggs; Migrates,Pairs,,,
+Crane,Living thing; Animal; Bird; Wading bird,Gray,,Medium,Feathers,Trumpeting,Flies; Wades,,Marsh,,Omnivore; Grain,Wings; Long beak; Long legs; Long neck,,Lays eggs; Migrates,Flock,,,
+Flamingo,Living thing; Animal; Bird; Wading bird,Pink,,Medium,Feathers,Honk,Flies; Wades,,,,Filter feeder; Algae,Wings; Long legs; Long neck,Stands on one leg,Lays eggs,Colony,,,
+Ostrich,Living thing; Animal; Bird; Flightless bird,Black,,Large,Feathers,Boom,Runs,Very fast,Savanna,Africa,Herbivore; Grass,Wings; Beak; Long neck; Long legs,,Lays eggs,Herd,,Kicks,Feather source; Meat source
+Emu,Living thing; Animal; Bird; Flightless bird,Brown,,Large,Feathers,Boom,Runs,,Scrubland,Australia,Omnivore; Fruit,Wings; Beak; Long neck; Long legs,,Lays eggs,Pairs,,Kicks,Meat source

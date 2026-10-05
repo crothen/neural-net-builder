@@ -1,0 +1,40 @@
+Word,Category,Color,Appearance,Shape,Size,Texture,Covering,Taste,Parts,Growth,Climate,Process,Function,Time,Danger
+Apple,Food; Produce; Fruit; Pome fruit,Red,,Round,Small,Crisp,Thin skin,Sweet,Core; Pips,Grows on tree,Temperate,Eaten raw; Baked,Pie filling,Autumn,
+Pear,Food; Produce; Fruit; Pome fruit,Green,,Pear-shaped,Small,Juicy,Thin skin,Sweet,Core; Pips,Grows on tree,Temperate,Eaten raw; Baked,,Autumn,
+Peach,Food; Produce; Fruit; Stone fruit,Orange,,Round,Small,Juicy,Fuzz,Sweet,Stone,Grows on tree,Warm,Eaten raw; Canned,,Summer,
+Nectarine,Food; Produce; Fruit; Stone fruit,Orange,,Round,Small,Juicy,Thin skin,Sweet,Stone,Grows on tree,Warm,Eaten raw,,Summer,
+Apricot,Food; Produce; Fruit; Stone fruit,Orange,,Round,Small,Soft,Thin skin,Sweet; Tart,Stone,Grows on tree,Warm,Eaten raw; Dried,Jam,Summer,
+Plum,Food; Produce; Fruit; Stone fruit,Purple,,Oval,Small,Juicy,Thin skin,Sweet; Tart,Stone,Grows on tree,Temperate,Eaten raw; Dried,Jam,Summer,
+Cherry,Food; Produce; Fruit; Stone fruit,Red,,Round,Tiny,Juicy,Thin skin,Sweet,Stone; Stalk,Grows on tree,Temperate,Eaten raw,Pie filling,Summer,
+Lemon,Food; Produce; Fruit; Citrus,Yellow,,Oval,Small,Juicy,Peel,Sour,Segments; Pips,Grows on tree,Warm,Squeezed,Flavoring; Garnish,Winter,
+Lime,Food; Produce; Fruit; Citrus,Green,,Oval,Small,Juicy,Peel,Sour,Segments; Pips,Grows on tree,Tropical,Squeezed,Flavoring; Garnish,,
+Orange,Food; Produce; Fruit; Citrus,Orange,,Round,Small,Juicy,Peel,Sweet,Segments; Pips,Grows on tree,Warm,Peeled; Juiced,Juice,Winter,
+Mandarin,Food; Produce; Fruit; Citrus,Orange,,Round,Small,Juicy,Peel,Sweet,Segments,Grows on tree,Warm,Peeled,Snacking,Winter,
+Grapefruit,Food; Produce; Fruit; Citrus,Yellow,,Round,Small,Juicy,Peel,Bitter; Sour,Segments; Pips,Grows on tree,Warm,Juiced,Juice,Winter; Breakfast,
+Banana,Food; Produce; Fruit; Tropical fruit,Yellow,,Curved; Long,Small,Soft,Peel,Sweet,,Grows in clusters,Tropical,Peeled; Eaten raw,Snacking,,
+Pineapple,Food; Produce; Fruit; Tropical fruit,Yellow,,Oval,Medium,Juicy,Rind,Sweet; Tart,Core,Grows on low plant,Tropical,Sliced; Canned,,,
+Mango,Food; Produce; Fruit; Tropical fruit; Stone fruit,Orange,,Oval,Small,Juicy,Peel,Sweet,Stone,Grows on tree,Tropical,Peeled; Sliced,Juice,Summer,
+Papaya,Food; Produce; Fruit; Tropical fruit,Orange,,Pear-shaped,Medium,Soft,Peel,Sweet,Seeds,Grows on tree,Tropical,Peeled; Sliced,,,
+Coconut,Food; Produce; Fruit; Tropical fruit,Brown,,Round,Small,Hard,Shell; Husk,Mild; Nutty,,Grows on palm,Tropical,Grated; Dried,Oil production,,
+Kiwi,Food; Produce; Fruit,Green; Brown,,Oval,Small,Juicy,Fuzz,Sweet; Tart,Seeds,Grows on vine,Warm,Peeled; Sliced,,,
+Grape,Food; Produce; Fruit; Berry,Purple,,Round,Tiny,Juicy,Thin skin,Sweet,Pips,Grows on vine; Grows in clusters,Warm,Eaten raw,Wine making,Autumn,
+Raisin,Food; Produce; Fruit; Dried fruit,Brown,,Oval,Tiny,Chewy; Wrinkled,Thin skin,Sweet,,,,Dried,Baking; Snacking,,
+Strawberry,Food; Produce; Fruit; Berry,Red,,Heart-shaped,Tiny,Juicy,,Sweet,Seeds; Stalk,Grows on low plant,Temperate,Eaten raw; Made into jam,Jam,Summer,
+Raspberry,Food; Produce; Fruit; Berry,Red,,Round,Tiny,Soft,,Sweet; Tart,Seeds,Grows on bush,Temperate,Eaten raw; Made into jam,Jam,Summer,
+Blackberry,Food; Produce; Fruit; Berry,Black,,Round,Tiny,Juicy,,Sweet; Tart,Seeds,Grows on bush; Wild-growing,Temperate,Eaten raw; Made into jam,Jam,Autumn,
+Blueberry,Food; Produce; Fruit; Berry,Blue,,Round,Tiny,Juicy,Thin skin,Sweet,,Grows on bush,Temperate,Eaten raw; Baked,Baking,Summer,
+Cranberry,Food; Produce; Fruit; Berry,Red,,Round,Tiny,Firm,Thin skin,Tart; Sour,,Grows on low plant,Temperate,Juiced; Dried,Sauce,Autumn; Festive occasions,
+Watermelon,Food; Produce; Fruit; Melon,Green; Red,Striped,Oval,Medium,Juicy,Rind,Sweet; Refreshing,Seeds,Grows on vine,Warm,Sliced; Chilled,,Summer,
+Melon,Food; Produce; Fruit; Melon,Orange; Beige,,Round,Medium,Juicy,Rind,Sweet,Seeds,Grows on vine,Warm,Sliced; Chilled,,Summer,
+Fig,Food; Produce; Fruit,Purple,,Teardrop,Small,Soft,Thin skin,Sweet; Rich,Seeds,Grows on tree,Warm,Eaten raw; Dried,,Autumn,
+Date,Food; Produce; Fruit; Dried fruit,Brown,,Oval,Tiny,Chewy; Sticky,Thin skin,Sweet; Rich,Stone,Grows on palm; Grows in clusters,Arid,Dried,Snacking,,
+Pomegranate,Food; Produce; Fruit,Red,,Round,Small,Juicy,Rind,Sweet; Tart,Seeds,Grows on tree,Warm,Juiced,Juice,Autumn,
+Avocado,Food; Produce; Fruit,Green,,Pear-shaped,Small,Creamy,Peel,Mild; Buttery,Stone,Grows on tree,Tropical,Mashed; Sliced,Salad; Spreading,,
+Olive,Food; Produce; Fruit,Green; Black,,Oval,Tiny,Firm,Thin skin,Bitter; Salty,Stone,Grows on tree,Warm,Pickled; Pressed,Oil production; Garnish,Autumn,
+Walnut,Food; Produce; Nut,Brown,,Round,Tiny,Crunchy,Shell,Nutty; Bitter,Kernel,Grows on tree,Temperate,Shelled; Baked,Baking,Autumn,Allergenic
+Hazelnut,Food; Produce; Nut,Brown,,Round,Tiny,Crunchy,Shell,Nutty; Sweet,Kernel,Grows on bush,Temperate,Shelled; Roasted,Baking,Autumn,Allergenic
+Almond,Food; Produce; Nut,Tan,,Teardrop,Tiny,Crunchy,Shell,Nutty; Sweet,Kernel,Grows on tree,Warm,Shelled; Roasted,Baking,Autumn,Allergenic
+Peanut,Food; Produce; Nut; Legume,Tan,,Oval,Tiny,Crunchy,Shell,Nutty,Kernel,Grows underground,Warm,Roasted; Salted,Snacking; Spreading,,Allergenic
+Cashew,Food; Produce; Nut,Cream,,Kidney-shaped,Tiny,Crunchy,Shell,Nutty; Buttery,Kernel,Grows on tree,Tropical,Roasted; Salted,Snacking,,Allergenic
+Pistachio,Food; Produce; Nut,Green,,Oval,Tiny,Crunchy,Shell,Nutty,Kernel,Grows on tree,Warm,Roasted; Salted,Snacking; Flavoring,,Allergenic
+Chestnut,Food; Produce; Nut,Brown,,Round,Tiny,Soft,Shell; Husk,Sweet; Starchy,Kernel,Grows on tree,Temperate,Roasted; Peeled,Snacking,Autumn; Winter,

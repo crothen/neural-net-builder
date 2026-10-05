@@ -1,0 +1,12 @@
+
+=== default | medium (20 words) | brain 200 | rule "causal" lr 0.05 wMax x4 | 3 seeds
+stage-1 passes | after stage 1: brain partial-cue ceiling, word similarity, active, mean / largest excitatory weight | after 5 word passes: full / missing | after 20: full / missing
+       0       |  59% ceiling, similarity 0.93, active  98%, w 0.176 / 0.372 (cap 0.703) |   8% /   0% |  43% /   6%
+       5       |  82% ceiling, similarity 0.80, active  87%, w 0.125 / 0.619 (cap 0.703) |  28% /  10% |  80% /  39%
+      20       |  82% ceiling, similarity 0.81, active  88%, w 0.126 / 0.604 (cap 0.703) |  25% /  12% |  77% /  33%
+
+=== default | short (50 words) | brain 200 | rule "causal" lr 0.05 wMax x4 | 3 seeds
+stage-1 passes | after stage 1: brain partial-cue ceiling, word similarity, active, mean / largest excitatory weight | after 5 word passes: full / missing | after 20: full / missing
+       0       |  42% ceiling, similarity 0.95, active 100%, w 0.176 / 0.372 (cap 0.703) |   1% /   0% |   8% /   0%
+       5       |  71% ceiling, similarity 0.91, active  97%, w 0.136 / 0.479 (cap 0.703) |   3% /   2% |  31% /   3%
+      20       |  68% ceiling, similarity 0.92, active  98%, w 0.138 / 0.482 (cap 0.703) |   3% /   1% |  21% /   3%

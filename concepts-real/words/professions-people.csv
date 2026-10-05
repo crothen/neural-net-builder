@@ -1,0 +1,71 @@
+Word,Category,Covering,Function,Action,Material,Location,Sociality,Danger,Property,Time,Emotion,Era,Value,Sound
+Doctor,Person; Profession; Medical,White coat,Healing; Healthcare,Examine; Diagnose,Medicine,Hospital; Clinic,Works in team,Infection,Educated; Trusted,Night shift,Trust,,Well paid,
+Nurse,Person; Profession; Medical,Uniform,Healing; Healthcare; Comfort,Inject,Medicine,Hospital; Clinic,Works in team,Infection,Trusted,Night shift,Comfort,,,
+Surgeon,Person; Profession; Medical,Mask; Gloves,Healing; Surgery,Cut; Sew,,Hospital,Works in team,Infection,Educated; Precise,,Trust,,Well paid,
+Dentist,Person; Profession; Medical,White coat; Mask; Gloves,Healing; Cleaning teeth,Drill; Examine,,Clinic,,,Educated; Precise,,Fear,,Well paid,Whir
+Veterinarian,Person; Profession; Medical,White coat,Healing,Examine; Inject,Medicine,Clinic; Farm,,Bites; Infection,Educated,,Trust,,,
+Pharmacist,Person; Profession; Medical,White coat,Medicine supply; Commerce,Sell; Measure; Count,Medicine,,,,Educated; Precise,,,,,
+Teacher,Person; Profession; Education,,Teaching; Education,Teach,Books,School; Classroom,,,Educated; Patient,Day,,,,
+Professor,Person; Profession; Education,,Teaching; Research; Education,Teach; Lecture; Write,Books,University,,,Educated,,Respect,,,
+Student,Person; Education,,Studying; Education,Study; Read; Write; Learn,Books; Paper,School; University,,,Young,Day,,,,
+Scientist,Person; Profession; Science,White coat,Research; Observation,Experiment; Measure; Observe,,Laboratory; University,Works in team,,Educated; Curious,,Curiosity,Modern,,
+Engineer,Person; Profession; Technical,Helmet,Design; Construction,Calculate; Build; Draw,Steel; Concrete,Office; Construction site,Works in team,,Educated; Precise,,,Modern,Well paid,
+Programmer,Person; Profession; Technical,,Design; Computing,Type; Code; Test,,Office; Home,Works alone,Eye strain,Educated,,Concentration,Digital,Well paid,Typing
+Librarian,Person; Profession; Education,,Book lending; Storing books,Sort; Lend; Read,Books,Library,Works alone,,Educated; Quiet,,Calm,,,
+Farmer,Person; Profession; Agriculture,Overalls; Boots,Farming; Growing food; Keeping animals,Sow; Harvest; Feed,Soil; Wheat,Farm; Field,,Strain,Hardworking,Dawn,,Ancient,,
+Shepherd,Person; Profession; Agriculture,,Keeping animals,Herd; Guard,Wool,Pasture; Mountain,Works alone,,Patient,,Calm,Ancient,,Whistle
+Fisherman,Person; Profession,Boots,Fishing; Sailing,Sail,Rope,Sea; Harbor,Works in team,Drowning; Sinking,Hardworking,Dawn,,Ancient,,
+Gardener,Person; Profession; Agriculture,Gloves; Boots,Growing plants; Decoration,Plant; Prune; Water; Dig,Soil,Garden; Park,Works alone,,Patient,,Calm,,,
+Hunter,Person,Camouflage; Boots,Hunting,Hunt; Shoot; Aim,,Forest,Works alone,,Patient; Quiet; Armed,Dawn,,Prehistoric,,Bang
+Lumberjack,Person; Profession,Helmet; Boots,Logging; Timber,Chop; Saw,Wood,Forest,Works in team,Crushes; Cuts,Strong; Hardworking,,,,,Sawing
+Baker,Person; Profession; Food trade,Apron; White hat,Baking; Bread baking,Knead; Bake,Flour; Dough,Bakery,,Burns,,Night; Dawn,,Ancient,,
+Butcher,Person; Profession; Food trade,Apron,Commerce,Cut; Chop; Sell,Meat,Shop,,Cuts,Strong,,,Ancient,,
+Chef,Person; Profession; Food trade,Apron; White hat,Cooking; Food service,Cook; Chop; Taste,Meat; Vegetables,Restaurant; Kitchen,Works in team,Burns; Cuts,Creative; Skilled,Evening,,,,
+Waiter,Person; Profession; Service,Apron; Uniform,Food service; Serving,Serve; Carry; Pour,,Restaurant; Cafe,Works in team,,,Evening,,,Low paid,
+Carpenter,Person; Profession; Craft,Overalls,Construction; Furniture making,Saw; Hammer; Measure,Wood,Workshop; Construction site,,Cuts,Skilled,,,Ancient,,Hammering; Sawing
+Plumber,Person; Profession; Craft,Overalls,Repair; Plumbing,Fix; Tighten,Copper,Bathroom; Kitchen,Works alone,,Skilled,,,,,
+Electrician,Person; Profession; Craft,Overalls; Gloves,Repair; Wiring,Fix; Test; Measure,Wire; Copper,Home; Construction site,Works alone,Electric shock,Skilled,,,Modern,,
+Mechanic,Person; Profession; Craft,Overalls,Repair; Vehicle repair,Fix; Tighten; Test,Steel; Oil,Garage,,Crushes; Fumes,Skilled; Dirty,,,Modern,,
+Builder,Person; Profession; Craft,Helmet; Boots,Construction; Building,Build; Lay bricks; Lift,Brick; Concrete,Construction site,Works in team,Falls,Strong,,,Ancient,,Hammering
+Blacksmith,Person; Profession; Craft,Apron,Metalworking; Tools,Hammer; Forge; Heat,Iron; Steel,Workshop,Works alone,Burns,Strong; Skilled,,,Ancient; Medieval,,Hammering; Clang
+Tailor,Person; Profession; Craft,,Clothing,Sew; Cut; Measure,Fabric; Cotton,Tailor shop,Works alone,Pricks,Skilled; Precise,,,Ancient,,
+Miner,Person; Profession,Helmet; Boots,Mining,Dig; Drill,Ore; Rock,Mine; Underground,Works in team,Collapse; Suffocation; Explosive,Strong; Dirty,,,,,
+Pilot,Person; Profession; Transport,Uniform; Cap,Flying aircraft; Air travel; Passenger transport,Fly; Steer; Navigate,,Airport; Sky,Works in team,Crashes,Educated; Skilled,,,Modern,Well paid,
+Driver,Person; Profession; Transport,,Passenger transport; Delivery,Drive; Steer,,Road,Works alone,Crashes,,,,Modern,,
+Sailor,Person; Profession; Transport,Uniform,Sailing; Shipping; Sea travel,Sail; Navigate; Tie,Rope,Ship; Sea; Harbor,Works in team,Drowning; Sinking,,,,Ancient,,
+Astronaut,Person; Profession; Science,Spacesuit; Helmet,Exploration; Research; Space travel,Explore; Experiment,,Space; Orbit,Works in team,Suffocation,Educated; Brave,,Awe,Modern,,
+Soldier,Person; Profession; Military,Uniform; Helmet; Boots; Camouflage,Warfare; Defense,Shoot; Guard,,Battlefield; Barracks,Works in team,Deadly; Violence,Brave; Armed,,Fear,Ancient,,Bang; Footsteps
+Policeman,Person; Profession; Emergency service,Uniform; Cap,Law enforcement; Security,Arrest; Guard,,Street,Works in team,Violence,Brave; Armed; Trusted,Night shift,Security,Modern,,Siren; Whistle
+Firefighter,Person; Profession; Emergency service,Uniform; Helmet; Boots,Firefighting; Rescue; Emergency response,Climb; Rescue; Carry,Water,Fire station,Works in team,Burns; Fumes; Collapse,Brave; Strong,Night shift,Security,,,Siren
+Lifeguard,Person; Profession; Emergency service,,Rescue; Protection,Swim; Watch; Rescue,,Beach; Pool,,Drowning; Sunburn,Strong,Summer,Security,,,Whistle
+Judge,Person; Profession; Legal,Robe,Justice; Imprisonment,Listen,,Courtroom,Works alone,,Educated; Powerful,,Respect; Authority,Ancient,Well paid,
+Lawyer,Person; Profession; Legal,Suit,Justice; Office work,Write; Read,Paper,Courtroom; Office,,,Educated,,,,Well paid,
+Priest,Person; Profession; Religious,Robe,Worship; Religious service,Pray; Preach,,Church,Works alone,,Educated; Trusted; Holy,Weekend,Reverence,Ancient,,Prayer
+Monk,Person; Religious,Robe,Worship,Pray; Sing; Study,Books,Monastery,,,Holy; Quiet; Poor; Male,,Calm,Ancient; Medieval,,Chant; Prayer
+Nun,Person; Religious,Robe,Worship; Teaching,Pray; Sing; Teach,,Monastery,,,Holy; Quiet; Poor; Female,,Calm,Ancient; Medieval,,Prayer
+King,Person; Royalty,Crown; Robe,Ruling,Rule; Command,Gold,Palace; Castle,,,Powerful; Rich; Male,,Awe; Authority,Ancient; Medieval,,
+Queen,Person; Royalty,Crown; Robe,Ruling,Rule; Command,Gold,Palace; Castle,,,Powerful; Rich; Female,,Awe; Authority,Ancient; Medieval,,
+Prince,Person; Royalty,Crown,,,Gold,Palace; Castle,,,Rich; Male; Young,,Romance,Ancient; Medieval,,
+Princess,Person; Royalty,Crown,,,Gold,Palace; Castle,,,Rich; Female; Young,,Romance,Ancient; Medieval,,
+Knight,Person; Military,Armor; Helmet,Warfare; Combat,Ride; Fight; Defend,Steel,Castle; Battlefield,,Deadly,Brave; Armed; Male,,,Medieval,,Clang
+Pirate,Person; Criminal,,Robbery,Steal; Sail; Fight,Gold,Ship; Sea,Works in team,Violence; Drowning,Armed; Outlaw,,Fear,,,
+Thief,Person; Criminal,Mask,Robbery,Steal; Hide; Run,,Street,Works alone,,Outlaw; Quiet,Night,Fear,,,
+Painter,Person; Profession; Arts,Smock,Art; Painting,Paint; Draw; Mix,Paint; Canvas,Studio,Works alone,,Creative,,,,,
+Sculptor,Person; Profession; Arts,Smock,Art; Carving; Sculpture,Hammer,Stone; Clay,Studio,Works alone,Flying debris,Creative; Skilled,,,Ancient,,
+Musician,Person; Profession; Arts; Performer,,Entertainment; Performance; Accompaniment,Play; Perform; Tune,,Stage; Concert hall,Works in team,Hearing damage,Creative; Skilled,Evening,Joy,,,Music
+Singer,Person; Profession; Arts; Performer,,Entertainment; Performance; Melody,Sing; Perform,,Stage; Concert hall,,,Creative; Famous,Evening,Joy,,,Singing; Music
+Actor,Person; Profession; Arts; Performer,Costume; Makeup,Entertainment; Performance; Acting,Perform; Speak,,Stage; Theater,Works in team,,Creative; Famous,Evening,,Ancient,,Speech; Applause
+Dancer,Person; Profession; Arts; Performer,Costume,Entertainment; Performance; Exercise,Dance; Jump; Perform,,Stage; Theater,Works in team,Sprains,Creative; Strong,Evening,Joy; Elegance,,,Music; Applause
+Clown,Person; Profession; Performer,Costume; Makeup,Entertainment,Perform; Throw; Catch,,Circus,,,,,Joy; Fear; Amusement,,,Laughter; Honk
+Magician,Person; Profession; Performer,Suit,Entertainment; Performance,Perform; Hide,,Stage; Circus,Works alone,,Skilled,Evening,Wonder; Mystery,,,Applause
+Writer,Person; Profession; Arts,,Writing; Literature; Entertainment,Write; Type,Paper; Ink,Home; Office,Works alone,,Creative; Educated,,,,,
+Poet,Person; Arts,,Writing; Literature,Write; Speak,Paper; Ink,Home,Works alone,,Creative; Poor,,Sadness; Romance,Ancient,,
+Journalist,Person; Profession; Media,,Writing; Communication; Broadcasting,Write,Paper,Office; Street,,,Educated; Curious,,,Modern,,
+Photographer,Person; Profession; Media; Arts,,Photography; Art,Photograph; Focus,,Studio,Works alone,,Creative,,,Modern,,
+Athlete,Person; Profession,,Sports; Exercise; Entertainment,Run; Jump; Compete,,Stadium; Gym,,Sprains; Strain,Strong; Young; Famous,,Excitement,Ancient,,Cheering
+Barber,Person; Profession; Service,Apron,Grooming; Shaving; Cutting,Cut; Shave; Comb,,Barbershop,Works alone,,Skilled,,,Ancient,,Snip; Buzz
+Postman,Person; Profession; Service,Uniform; Cap,Delivery; Communication,Walk; Sort,Paper,Street; Post office,Works alone,Bites,,Morning,,,,
+Cashier,Person; Profession; Service,Uniform,Commerce; Money handling,Scan; Count; Sell,Money,Supermarket; Shop,,Robbery,,,,Modern,Low paid,Beep
+Shopkeeper,Person; Profession; Service,Apron,Commerce; Shopping,Sell; Count; Store,Money,Shop,Works alone,Robbery,,,,Ancient,,
+Banker,Person; Profession; Service,Suit,Banking; Money handling,Lend; Count; Calculate,Money,Bank; Office,,Robbery,Educated; Rich,,,,Well paid,
+Cleaner,Person; Profession; Service,Overalls; Gloves,Cleaning; Sweeping; Mopping,Sweep; Scrub; Wash,Water,Office; School,Works alone,Irritant; Slipping,,Night; Evening,,,Low paid,

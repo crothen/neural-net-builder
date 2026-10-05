@@ -1,0 +1,33 @@
+Word,Category,Color,Appearance,Shape,Size,Weight,Texture,Material,Parts,Function,Action,BodyPart,Sound,Movement,Speed,Location,Climate,Region,User,Sociality,Danger,Property,Emotion,Time,Era
+Football,Artifact; Sports equipment; Ball,Black; White,,Spherical,Small,,,Leather; Rubber,Valve,Sports; Play; Soccer,Kick; Throw,Feet,,Bounces; Rolls,,Sports field; Stadium,,,Player; Goalkeeper,Team,,Inflatable,Excitement,,
+Basketball,Artifact; Sports equipment; Ball,Orange,,Spherical,Small,,,Rubber; Leather,Valve,Sports; Play; Basketball,Bounce; Shoot; Throw,Hands,,Bounces; Rolls,,Court; Gym,,,Player,Team,,Inflatable,Excitement,,
+Volleyball,Artifact; Sports equipment; Ball,White,,Spherical,Small,,,Leather,Valve,Sports; Play; Volleyball,Hit; Serve; Jump,Hands; Arms,,Bounces; Rolls,,Court; Beach,,,Player,Team,,Inflatable,Excitement,,
+Baseball,Artifact; Sports equipment; Ball,White,,Spherical,Small,,Hard,Leather; Cork,,Sports; Play; Baseball,Throw; Catch; Hit,Hands,,Bounces; Rolls,,Sports field; Stadium,,North America,Player,Team,Impact injury,,Excitement,,
+Racket,Artifact; Sports equipment,,,Oval; Long,Medium,,,Graphite; Nylon,Handle; Strings; Frame,Tennis; Badminton,Swing; Hit; Serve,Hands; Arms,,,,Court,,,Player,Two players,Strain,Lightweight; Handheld,Excitement,,
+Shuttlecock,Artifact; Sports equipment,White,,Conical,Small,,,Feathers; Cork,,Badminton,Hit; Serve,,,Flies,,Court; Garden,,,Player,Two players,,Lightweight,Excitement,,
+Puck,Artifact; Sports equipment,Black,,Disc-shaped; Flat,Small,,Hard,Rubber,,Hockey,Hit; Shoot,,,Slides,,Ice rink,,,Player; Goalkeeper,Team,Impact injury,,Excitement,Winter,
+Ski,Artifact; Sports equipment,,,Long; Narrow,Large,,,Fiberglass; Steel,Edge; Tip,Sports; Skiing,Balance; Ski; Turn,Feet,,Slides,,Ski slope; Mountain,,,Athlete,Solo,Falls; Fractures,Paired,Thrill,Winter,
+Snowboard,Artifact; Sports equipment,,,Long; Flat,Large,,,Fiberglass; Wood,Edge,Sports; Recreation,Balance; Slide; Jump,Feet,,Slides,,Ski slope; Mountain,,,Athlete; Teenager,Solo,Falls; Fractures,Single,Thrill,Winter,
+Skateboard,Artifact; Sports equipment,,,Long; Flat,Medium,,,Wood; Plastic,Wheels; Deck,Sports; Recreation,Balance; Ride; Jump,Feet,,Rolls,,Sidewalk; Park,,,Teenager; Skater,Solo,Falls; Fractures,Wheeled; Unpowered,Thrill,,
+Surfboard,Artifact; Sports equipment,,,Long; Flat,Large,,,Fiberglass; Foam,Fins; Deck,Sports; Recreation,Balance; Ride; Paddle,Feet,,Floats; Glides,,Beach; Ocean,,,Athlete,Solo,Drowning; Strong currents,,Thrill,Summer,
+Skate,Artifact; Sports equipment; Footwear,,,,Small,,,Leather; Steel,Blade; Laces,Skating; Hockey,Skate; Lace; Balance,Feet,,Slides; Glides,,Ice rink; Lake,,,Skater,,Falls; Cuts,Paired,Thrill,Winter,
+Kite,Artifact; Toy,Multicolored,,Flat,Medium,,,Nylon; Bamboo; String,String; Tail; Frame,Play; Recreation; Flying kites,Fly; Run; Hold,,,Flies; Soars,,Beach; Park,Windy,China,Child,,,Lightweight,Joy; Freedom,,
+Frisbee,Artifact; Toy; Sports equipment,,,Flat; Disc-shaped,Small,,,Plastic,Rim,Play; Recreation; Throwing game,Throw; Catch,,,Flies; Spins,,Beach; Park,,,Child; Teenager,,,Lightweight,Fun,Summer,
+Dart,Artifact; Sports equipment,,,Pointed; Thin,Small,,,Steel; Plastic,Tip; Fletching; Shaft,Throwing game,Throw; Aim,,,Flies,,Bar; Club,,,Player,Two players,Pricks; Eye injury,,Concentration,,
+Bow,Artifact; Weapon; Sports equipment,,,Curved; Long,Medium,,,Wood; String,String; Grip,Warfare; Hunting; Archery,Aim; Pull; Shoot,Arms; Hands,,,,Battlefield; Forest,,,Archer; Hunter,,Deadly,,Concentration,,Prehistoric
+Arrow,Artifact; Weapon; Sports equipment,,,Long; Thin; Pointed,Medium,,,Wood; Steel; Feathers,Tip; Fletching; Shaft,Warfare; Hunting; Archery,Aim; Shoot,,,Flies,Fast,Battlefield; Forest,,,Archer; Hunter,,Deadly; Pricks,,,,Prehistoric
+Sword,Artifact; Weapon,,Shiny,Long; Pointed; Straight,Medium,,,Steel,Blade; Handle; Tip,Warfare; Combat,Swing; Fight; Defend,Hands; Arms,,,,Battlefield; Museum,,,Knight; Soldier,,Deadly; Cuts,,,,Ancient
+Dumbbell,Artifact; Sports equipment,,,Compact,Small,,,Iron; Rubber,Grip,Exercise; Lifting,Lift; Flex,Arms; Hands,,,,Gym; Home,,,Weightlifter; Athlete,Solo,Strain,Paired; Handheld,Energy,,
+Trampoline,Artifact; Playground equipment; Sports equipment,,,Round; Flat,Large,,Springy,Steel; Nylon,Springs; Net; Frame,Play; Exercise,Jump; Bounce; Flip,Legs,,Bounces,,Garden; Gym,,,Child,,Falls; Bruises; Sprains,Fixed,Joy; Fun,,
+Swing,Artifact; Playground equipment,,,,Large,,,Steel; Wood,Seat; Chain; Frame,Play,Swing; Sit on; Push,,,Swings,,Playground; Park; Garden,,,Child,,Falls; Bruises,Fixed,Joy; Fun,,
+Slide,Artifact; Playground equipment,,,Long; Sloped,Large,,Smooth; Slippery,Steel; Plastic,Platform,Play,Slide; Climb,,,Slides,,Playground; Park; Garden,,,Child,,Falls; Bruises,Fixed,Joy; Fun,,
+Seesaw,Artifact; Playground equipment,,,Long,Large,,,Steel; Wood,Seats; Handle,Play,Sit on; Push; Balance,,,Tilts; Rocks,,Playground; Park; Garden,,,Child,Two players,Falls; Bruises,Fixed; Balanced,Joy; Fun,,
+Doll,Artifact; Toy,,,,Small,,,Plastic; Fabric,Head; Legs,Play; Pretend play; Cuddling,Hug; Carry,,,,,Nursery; Toy shop; Bedroom,,,Child,,,,Joy; Affection,,
+Teddy,Artifact; Toy,Brown,,,Small,,Soft; Fluffy,Fabric; Cotton,Head; Paws,Play; Cuddling; Soothing,Hug; Carry; Squeeze,,,,,Nursery; Toy shop; Bedroom,,,Child; Baby,,,Washable,Comfort; Affection,Bedtime,
+Puppet,Artifact; Toy,,,,Small,,,Fabric; Wood,Head; String,Play; Pretend play; Entertainment,Perform; Pull,,,Dances,,Theater; Toy shop,,,Child,,,,Joy; Amusement,,
+Yoyo,Artifact; Toy,,,Round; Disc-shaped,Small,,,Plastic; Wood,String,Play,Throw; Catch,Fingers,,Spins,,Pocket; Toy shop,,,Child,Solo,,Pocket-sized; Handheld,Fun,,
+Rattle,Artifact; Toy,,,,Small,,,Plastic,Handle,Play; Soothing,Shake; Grasp; Chew,,,,,Nursery; Toy shop,,,Baby,,Choking hazard,Handheld; Washable,Joy; Amusement,,
+Balloon,Artifact; Toy; Decoration,Multicolored,,Round,Small,,Rubbery; Elastic,Latex; Helium,Knot; String,Play; Celebration; Decoration,Inflate; Blow; Tie,,,Floats; Rises,,Party; Fair,,,Child,,Choking hazard,Inflatable; Lightweight,Joy; Festivity,Festive occasions,
+Puzzle,Artifact; Game; Toy,,,Flat; Rectangular,Small,,,Cardboard,Pieces,Puzzle solving; Play; Relaxation,Sort; Think,,,,,Table; Living room,,,Child; Elderly,Solo,,,Concentration; Calm,,
+Chessboard,Artifact; Game,Black; White,Patterned,Flat; Square,Small,,,Wood,Pieces,Board game; Puzzle solving,Think; Play; Compete,,,,,Table; Club,,India,Player; Elderly,Two players,,,Concentration,,Medieval
+Dice,Artifact; Game,White,Spotted,Box-shaped,Tiny,,,Plastic,,Board game; Play,Roll; Throw; Shake,,,Rolls,,Table,,,Player; Child,Multiplayer,,Numbered; Pocket-sized,Luck; Excitement,,Ancient

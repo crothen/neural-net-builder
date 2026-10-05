@@ -1,0 +1,578 @@
+[
+ {
+  "size": 50,
+  "name": "evolved-n200",
+  "dataset": "tiny",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 0.875,
+    "partialFire": 0.3333333333333333,
+    "fullDrive": 1,
+    "partialDrive": 0.3333333333333333,
+    "rate": 0.048223684210526314,
+    "activeFrac": 0.245,
+    "pairCos": 0.4058721877992337
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 0.6666666666666666,
+    "fullDrive": 1,
+    "partialDrive": 0.6666666666666666,
+    "rate": 0.040197368421052634,
+    "activeFrac": 0.19000000000000003,
+    "pairCos": 0.3546667526217498
+   },
+   {
+    "seed": 23,
+    "fullFire": 1,
+    "partialFire": 0.6666666666666666,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.04999999999999999,
+    "activeFrac": 0.24749999999999997,
+    "pairCos": 0.4610455716605002
+   },
+   {
+    "seed": 24,
+    "fullFire": 1,
+    "partialFire": 0.3333333333333333,
+    "fullDrive": 1,
+    "partialDrive": 0.6666666666666666,
+    "rate": 0.050065789473684216,
+    "activeFrac": 0.2425,
+    "pairCos": 0.346330215753661
+   },
+   {
+    "seed": 25,
+    "fullFire": 1,
+    "partialFire": 0.6666666666666666,
+    "fullDrive": 1,
+    "partialDrive": 0.6666666666666666,
+    "rate": 0.04638157894736842,
+    "activeFrac": 0.22499999999999998,
+    "pairCos": 0.38404441757824287
+   }
+  ]
+ },
+ {
+  "size": 50,
+  "name": "evolved-n200",
+  "dataset": "medium",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 1,
+    "partialFire": 0.5882352941176471,
+    "fullDrive": 1,
+    "partialDrive": 0.5882352941176471,
+    "rate": 0.05826315789473683,
+    "activeFrac": 0.271,
+    "pairCos": 0.38221939805177474
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 0.8235294117647058,
+    "fullDrive": 1,
+    "partialDrive": 0.8235294117647058,
+    "rate": 0.05536842105263158,
+    "activeFrac": 0.264,
+    "pairCos": 0.35132834801930085
+   },
+   {
+    "seed": 23,
+    "fullFire": 0.95,
+    "partialFire": 0.47058823529411764,
+    "fullDrive": 1,
+    "partialDrive": 0.5294117647058824,
+    "rate": 0.04131578947368421,
+    "activeFrac": 0.207,
+    "pairCos": 0.3363880062073212
+   },
+   {
+    "seed": 24,
+    "fullFire": 1,
+    "partialFire": 0.5882352941176471,
+    "fullDrive": 1,
+    "partialDrive": 0.6470588235294118,
+    "rate": 0.05442105263157894,
+    "activeFrac": 0.2520000000000001,
+    "pairCos": 0.4341454689607711
+   },
+   {
+    "seed": 25,
+    "fullFire": 1,
+    "partialFire": 0.6470588235294118,
+    "fullDrive": 1,
+    "partialDrive": 0.6470588235294118,
+    "rate": 0.06015789473684212,
+    "activeFrac": 0.2859999999999999,
+    "pairCos": 0.3192911314804634
+   }
+  ]
+ },
+ {
+  "size": 50,
+  "name": "evolved-n200",
+  "dataset": "short",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 0.92,
+    "partialFire": 0.7884615384615384,
+    "fullDrive": 0.96,
+    "partialDrive": 0.8769230769230769,
+    "rate": 0.1683263157894737,
+    "activeFrac": 0.6751999999999998,
+    "pairCos": 0.7228109370361462
+   },
+   {
+    "seed": 22,
+    "fullFire": 0.94,
+    "partialFire": 0.8653846153846154,
+    "fullDrive": 0.94,
+    "partialDrive": 0.9307692307692308,
+    "rate": 0.14793684210526314,
+    "activeFrac": 0.6096,
+    "pairCos": 0.67040553914261
+   },
+   {
+    "seed": 23,
+    "fullFire": 0.94,
+    "partialFire": 0.8615384615384616,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9538461538461539,
+    "rate": 0.14733684210526315,
+    "activeFrac": 0.6232000000000003,
+    "pairCos": 0.6167621443356364
+   },
+   {
+    "seed": 24,
+    "fullFire": 0.92,
+    "partialFire": 0.8076923076923077,
+    "fullDrive": 0.94,
+    "partialDrive": 0.8576923076923076,
+    "rate": 0.14585263157894743,
+    "activeFrac": 0.6148,
+    "pairCos": 0.6668820935399844
+   },
+   {
+    "seed": 25,
+    "fullFire": 0.9,
+    "partialFire": 0.7923076923076923,
+    "fullDrive": 0.94,
+    "partialDrive": 0.8846153846153846,
+    "rate": 0.1436947368421053,
+    "activeFrac": 0.5972,
+    "pairCos": 0.6619365029858918
+   }
+  ]
+ },
+ {
+  "size": 200,
+  "name": "evolved-n200",
+  "dataset": "tiny",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.037746710526315785,
+    "activeFrac": 0.185,
+    "pairCos": 0.34406541445917516
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.04024671052631579,
+    "activeFrac": 0.19,
+    "pairCos": 0.40651461836071123
+   },
+   {
+    "seed": 23,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.04031250000000001,
+    "activeFrac": 0.18499999999999997,
+    "pairCos": 0.40412567980004294
+   },
+   {
+    "seed": 24,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.04110197368421053,
+    "activeFrac": 0.1925,
+    "pairCos": 0.36436277558650815
+   },
+   {
+    "seed": 25,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.035312500000000004,
+    "activeFrac": 0.166875,
+    "pairCos": 0.3331924200810394
+   }
+  ]
+ },
+ {
+  "size": 200,
+  "name": "evolved-n200",
+  "dataset": "medium",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 1,
+    "partialFire": 0.8235294117647058,
+    "fullDrive": 1,
+    "partialDrive": 0.8823529411764706,
+    "rate": 0.046940789473684214,
+    "activeFrac": 0.21925,
+    "pairCos": 0.34470043934882477
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.05274342105263158,
+    "activeFrac": 0.2455,
+    "pairCos": 0.34050741190966655
+   },
+   {
+    "seed": 23,
+    "fullFire": 1,
+    "partialFire": 0.9411764705882353,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.0577828947368421,
+    "activeFrac": 0.26850000000000007,
+    "pairCos": 0.37096823086107805
+   },
+   {
+    "seed": 24,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.05144736842105263,
+    "activeFrac": 0.24575,
+    "pairCos": 0.3320088194437287
+   },
+   {
+    "seed": 25,
+    "fullFire": 1,
+    "partialFire": 0.8823529411764706,
+    "fullDrive": 1,
+    "partialDrive": 0.9411764705882353,
+    "rate": 0.054769736842105274,
+    "activeFrac": 0.26275,
+    "pairCos": 0.3358075376904438
+   }
+  ]
+ },
+ {
+  "size": 200,
+  "name": "evolved-n200",
+  "dataset": "short",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 0.98,
+    "partialFire": 0.9923076923076923,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9961538461538462,
+    "rate": 0.1327210526315789,
+    "activeFrac": 0.5660999999999999,
+    "pairCos": 0.6347102707993291
+   },
+   {
+    "seed": 22,
+    "fullFire": 0.98,
+    "partialFire": 0.9846153846153847,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9961538461538462,
+    "rate": 0.13948947368421052,
+    "activeFrac": 0.5927,
+    "pairCos": 0.6534409559504734
+   },
+   {
+    "seed": 23,
+    "fullFire": 0.98,
+    "partialFire": 0.9961538461538462,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9961538461538462,
+    "rate": 0.13678947368421054,
+    "activeFrac": 0.5824000000000001,
+    "pairCos": 0.6397391880313773
+   },
+   {
+    "seed": 24,
+    "fullFire": 0.98,
+    "partialFire": 0.9846153846153847,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9923076923076923,
+    "rate": 0.1435342105263158,
+    "activeFrac": 0.5960999999999999,
+    "pairCos": 0.6647687784800169
+   },
+   {
+    "seed": 25,
+    "fullFire": 0.98,
+    "partialFire": 0.9769230769230769,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9807692307692307,
+    "rate": 0.13595000000000004,
+    "activeFrac": 0.5856000000000001,
+    "pairCos": 0.6445679951391462
+   }
+  ]
+ },
+ {
+  "size": 400,
+  "name": "evolved-n200",
+  "dataset": "tiny",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 1,
+    "partialFire": 0.6666666666666666,
+    "fullDrive": 1,
+    "partialDrive": 0.6666666666666666,
+    "rate": 0.039613486842105264,
+    "activeFrac": 0.1884375,
+    "pairCos": 0.3880815764325312
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.04278782894736843,
+    "activeFrac": 0.20593750000000002,
+    "pairCos": 0.36805558990023285
+   },
+   {
+    "seed": 23,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.0437171052631579,
+    "activeFrac": 0.2075,
+    "pairCos": 0.3913654550592696
+   },
+   {
+    "seed": 24,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.03844572368421052,
+    "activeFrac": 0.181875,
+    "pairCos": 0.3527716988635404
+   },
+   {
+    "seed": 25,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.03962993421052631,
+    "activeFrac": 0.201875,
+    "pairCos": 0.3586393430081186
+   }
+  ]
+ },
+ {
+  "size": 400,
+  "name": "evolved-n200",
+  "dataset": "medium",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.05117105263157894,
+    "activeFrac": 0.23775000000000004,
+    "pairCos": 0.34489798574818037
+   },
+   {
+    "seed": 22,
+    "fullFire": 1,
+    "partialFire": 0.9411764705882353,
+    "fullDrive": 1,
+    "partialDrive": 0.9411764705882353,
+    "rate": 0.056286184210526315,
+    "activeFrac": 0.27149999999999996,
+    "pairCos": 0.35524006601636604
+   },
+   {
+    "seed": 23,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.055486842105263154,
+    "activeFrac": 0.26075,
+    "pairCos": 0.3408111639570422
+   },
+   {
+    "seed": 24,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.051115131578947356,
+    "activeFrac": 0.244625,
+    "pairCos": 0.32955728051980326
+   },
+   {
+    "seed": 25,
+    "fullFire": 1,
+    "partialFire": 1,
+    "fullDrive": 1,
+    "partialDrive": 1,
+    "rate": 0.05313815789473684,
+    "activeFrac": 0.247875,
+    "pairCos": 0.35201070957427744
+   }
+  ]
+ },
+ {
+  "size": 400,
+  "name": "evolved-n200",
+  "dataset": "short",
+  "seeds": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "rows": [
+   {
+    "seed": 21,
+    "fullFire": 0.98,
+    "partialFire": 0.9884615384615385,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9923076923076923,
+    "rate": 0.13825263157894738,
+    "activeFrac": 0.5921,
+    "pairCos": 0.6499049308198362
+   },
+   {
+    "seed": 22,
+    "fullFire": 0.98,
+    "partialFire": 0.9846153846153847,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9923076923076923,
+    "rate": 0.1461644736842105,
+    "activeFrac": 0.61055,
+    "pairCos": 0.6741618591266086
+   },
+   {
+    "seed": 23,
+    "fullFire": 0.98,
+    "partialFire": 0.9923076923076923,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9961538461538462,
+    "rate": 0.1421276315789474,
+    "activeFrac": 0.60045,
+    "pairCos": 0.656007275020168
+   },
+   {
+    "seed": 24,
+    "fullFire": 0.98,
+    "partialFire": 0.9807692307692307,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9884615384615385,
+    "rate": 0.1399302631578947,
+    "activeFrac": 0.5968999999999999,
+    "pairCos": 0.6552562634649363
+   },
+   {
+    "seed": 25,
+    "fullFire": 0.98,
+    "partialFire": 0.9769230769230769,
+    "fullDrive": 0.98,
+    "partialDrive": 0.9884615384615385,
+    "rate": 0.14423684210526316,
+    "activeFrac": 0.6057500000000001,
+    "pairCos": 0.6715899526662525
+   }
+  ]
+ }
+]

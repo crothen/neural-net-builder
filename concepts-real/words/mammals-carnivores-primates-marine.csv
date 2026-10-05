@@ -1,0 +1,38 @@
+Word,Category,Color,Appearance,Size,Covering,Sound,Movement,Speed,Location,Region,Diet,Parts,Behavior,Growth,Sociality,Time,Danger,Function
+Dog,Living thing; Animal; Mammal; Canine; Domestic animal; Pet,,,Medium,Fur,Bark,Runs,,Home,,Omnivore; Meat,Tail; Paws; Snout,Wags tail,,Lives with humans; Pack,,Bites,Companionship; Guarding
+Wolf,Living thing; Animal; Mammal; Canine; Predator,Gray,,Medium,Fur,Howl,Runs,,Forest,Northern Hemisphere,Carnivore; Meat,Tail; Paws; Snout,Hunts in packs,,Pack,,Bites,
+Coyote,Living thing; Animal; Mammal; Canine; Predator,Gray,,Medium,Fur,Howl,Runs,,Prairie,North America,Carnivore; Meat,Tail; Paws; Snout,Scavenges,,Pack,,Bites,
+Fox,Living thing; Animal; Mammal; Canine; Predator,Reddish-brown,,Small,Fur,Bark,Runs; Pounces,,Forest,Northern Hemisphere,Omnivore; Meat,Bushy tail; Paws; Snout,,,Solitary,Nocturnal,Kills livestock,Fur source
+Cat,Living thing; Animal; Mammal; Feline; Domestic animal; Pet,Gray,,Small,Fur,Meow; Purr,Climbs; Pounces,,Home,,Carnivore; Pet food,Claws; Whiskers; Tail,Grooms,,Lives with humans,Nocturnal,Scratches,Companionship; Pest control
+Lynx,Living thing; Animal; Mammal; Feline; Predator,Gray,Spotted,Medium,Fur,Growl,Climbs; Pounces,,Forest,Northern Hemisphere,Carnivore; Meat,Claws; Whiskers; Short tail,Ambushes,,Solitary,Nocturnal,Scratches,
+Lion,Living thing; Animal; Mammal; Feline; Big cat; Predator,Tan,,Large,Fur,Roar,Runs; Pounces,,Savanna,Africa,Carnivore; Meat,Claws; Fangs; Mane,Hunts in packs,,Pride,Nocturnal,Deadly,
+Tiger,Living thing; Animal; Mammal; Feline; Big cat; Predator,Orange,Striped,Large,Fur,Roar,Swims; Pounces,,Jungle,Asia,Carnivore; Meat,Claws; Fangs; Tail,Ambushes,,Solitary,Nocturnal,Deadly,
+Leopard,Living thing; Animal; Mammal; Feline; Big cat; Predator,Tan,Spotted,Medium,Fur,Growl,Climbs; Pounces,,Savanna,Africa,Carnivore; Meat,Claws; Fangs; Tail,Ambushes,,Solitary,Nocturnal,Deadly,
+Jaguar,Living thing; Animal; Mammal; Feline; Big cat; Predator,Tan,Spotted,Medium,Fur,Roar,Swims; Pounces,,Jungle,South America,Carnivore; Meat,Claws; Fangs; Powerful jaws,Ambushes,,Solitary,Nocturnal,Deadly,
+Cheetah,Living thing; Animal; Mammal; Feline; Big cat; Predator,Tan,Spotted,Medium,Fur,Purr,Sprints,Very fast,Savanna,Africa,Carnivore; Meat,Claws; Long legs; Tail,,,Solitary,,,
+Hyena,Living thing; Animal; Mammal; Predator,Tan,Spotted,Medium,Fur,Laugh,Runs,,Savanna,Africa,Carnivore; Carrion,Powerful jaws; Paws; Tail,Scavenges,,Pack,Nocturnal,Bites,
+Bear,Living thing; Animal; Mammal; Predator,Brown,,Large,Fur,Growl,Walks; Climbs,,Forest,Northern Hemisphere,Omnivore; Fish,Paws; Claws; Short tail,Fishes,Hibernates,Solitary,,,
+Panda,Living thing; Animal; Mammal,Black; White,Black-and-white,Large,Fur,Bleat,Walks; Climbs,,Forest,China,Herbivore; Bamboo,Paws; Claws; Short tail,Gentle,,Solitary,,,
+Raccoon,Living thing; Animal; Mammal,Gray,Masked,Small,Fur,Chatter,Climbs,,Forest; City,North America,Omnivore; Garbage,Striped tail; Paws,,,Solitary,Nocturnal,Spreads disease,
+Skunk,Living thing; Animal; Mammal,Black; White,Striped,Small,Fur,Hiss,Walks,,Woodland,North America,Omnivore; Insects,Bushy tail; Claws,Sprays scent,,Solitary,Nocturnal,,
+Badger,Living thing; Animal; Mammal; Weasel family,Gray,Striped,Small,Fur,Growl,Walks,,Woodland; Burrow,Europe,Omnivore; Worms,Claws; Snout; Short legs,Digs,,Family group,Nocturnal,Bites,
+Otter,Living thing; Animal; Mammal; Weasel family; Predator,Brown,,Small,Fur,Whistle,Swims; Dives,,River,Northern Hemisphere,Carnivore; Fish,Webbed feet; Whiskers; Long tail,Playful,,Family group,,,
+Weasel,Living thing; Animal; Mammal; Weasel family; Predator,Brown,,Small,Fur,Hiss,Runs,,Woodland,Northern Hemisphere,Carnivore; Meat,Short legs; Whiskers; Long tail,,,Solitary,Nocturnal,Kills livestock,Pest control
+Ferret,Living thing; Animal; Mammal; Weasel family; Domestic animal; Pet,Cream,Masked,Small,Fur,Hiss,Runs,,Home,,Carnivore; Pet food,Short legs; Whiskers; Long tail,Playful,,Lives with humans,,Bites,Companionship; Hunting aid
+Seal,Living thing; Animal; Mammal; Marine mammal; Predator,Gray,Spotted,Medium,Fur,Bark,Swims; Dives,,Coast,Arctic,Carnivore; Fish,Flippers; Whiskers,Hauls out,,Colony,,Bites,
+Walrus,Living thing; Animal; Mammal; Marine mammal,Brown,,Large,Thick hide,Bellow,Swims; Dives,,Polar ice,Arctic,Carnivore; Shellfish,Flippers; Whiskers; Tusks,Hauls out,,Herd,,Gores,
+Whale,Living thing; Animal; Mammal; Marine mammal,Gray,,Gigantic,Skin,Whale song,Swims; Dives,,Ocean,,Filter feeder; Krill,Flippers; Blowhole; Tail flukes,,Migrates,Pod,,,
+Dolphin,Living thing; Animal; Mammal; Marine mammal; Predator,Gray,,Large,Skin,Clicks,Swims; Leaps,,Ocean,,Carnivore; Fish,Flippers; Blowhole; Dorsal fin,Echolocation,,Pod,,,
+Porpoise,Living thing; Animal; Mammal; Marine mammal; Predator,Gray,,Medium,Skin,Clicks,Swims; Dives,,Coast,Northern Hemisphere,Carnivore; Fish,Flippers; Blowhole; Dorsal fin,Echolocation,,Family group,,,
+Orca,Living thing; Animal; Mammal; Marine mammal; Predator,Black; White,Black-and-white,Huge,Skin,Clicks,Swims; Leaps,,Ocean,,Carnivore,Flippers; Blowhole; Dorsal fin,Hunts in packs,,Pod,,,
+Monkey,Living thing; Animal; Mammal; Primate,Brown,,Small,Fur,Chatter,Climbs; Swings,,Jungle,,Omnivore; Fruit,Hands; Long tail,Grooms,,Troop,,Bites,
+Chimpanzee,Living thing; Animal; Mammal; Primate; Ape,Black,,Medium,Fur,Hoot,Climbs; Swings,,Jungle,Africa,Omnivore; Fruit,Hands; Long arms,Uses tools,,Troop,,Bites,
+Gorilla,Living thing; Animal; Mammal; Primate; Ape,Black,,Large,Fur,Grunt,Walks; Climbs,,Jungle,Africa,Herbivore; Leaves,Hands; Long arms,Gentle,,Troop,,Charges,
+Orangutan,Living thing; Animal; Mammal; Primate; Ape,Orange,,Medium,Fur,Bellow,Climbs; Swings,,Jungle,Asia,Herbivore; Fruit,Hands; Long arms,Uses tools,,Solitary,,,
+Bat,Living thing; Animal; Mammal,Brown,,Tiny,Fur,Squeak,Flies,,Cave,,Insectivore; Insects,Wings; Large ears,Echolocation; Hangs upside down,Hibernates,Colony,Nocturnal,Spreads disease,Pest control
+Hedgehog,Living thing; Animal; Mammal,Brown,,Small,Quills,Snort,Walks,,Garden,Europe,Insectivore; Insects,Snout; Short legs,Rolls into ball,Hibernates,Solitary,Nocturnal,Pricks,Pest control
+Mole,Living thing; Animal; Mammal,Black,,Small,Fur,,Burrows,,Underground,,Insectivore; Worms,Claws; Snout,Tunnels,,Solitary,,,
+Sloth,Living thing; Animal; Mammal,Brown,,Small,Fur,,Climbs,Very slow,Jungle,South America,Herbivore; Leaves,Claws; Long arms,Hangs upside down,,Solitary,Nocturnal,,
+Koala,Living thing; Animal; Mammal; Marsupial,Gray,,Small,Fur,Bellow,Climbs,,Forest,Australia,Herbivore; Leaves,Pouch; Claws; Large ears,,Pouch-reared,Solitary,Nocturnal,,
+Kangaroo,Living thing; Animal; Mammal; Marsupial,Brown,,Large,Fur,,Hops,,Grassland,Australia,Herbivore; Grass,Pouch; Strong hind legs; Long tail,Boxes,Pouch-reared,Herd,,Kicks,
+Wallaby,Living thing; Animal; Mammal; Marsupial,Brown,,Medium,Fur,,Hops,,Scrubland,Australia,Herbivore; Grass,Pouch; Strong hind legs; Long tail,,Pouch-reared,Solitary,Crepuscular,,

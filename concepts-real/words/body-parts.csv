@@ -1,0 +1,42 @@
+Word,Category,Color,Shape,Size,Texture,Material,Covering,Parts,Function,Action,BodyPart,Movement,Sound,Smell,Taste,State,Temperature,Property,Danger,Growth,Emotion
+Head,Body part,,Round,Small,Hard,Bone,Skin; Hair,,Thinking,Nod; Think; Turn,Upper body,Turns,,,,,,Single; Vital,Concussion,,
+Face,Body part,,Oval,Small,Soft; Smooth,Flesh; Muscle,Skin,,,Smile,Head,,,,,,,Single; Sensitive,,,
+Eye,Body part; Organ; Sense organ,Brown; Blue,Spherical,Tiny,Moist; Delicate,Nerve tissue,,Lens,Seeing,,Face; Head,,,,,,,Paired; Sensitive,Eye injury; Eye strain; Blinding,,
+Ear,Body part; Organ; Sense organ,,Curved,Tiny,Soft; Flexible,Cartilage,Skin,,Hearing; Balance,Listen,Head,,,,,,,Paired; Sensitive,Hearing damage; Infection,,
+Nose,Body part; Organ; Sense organ; Facial feature,,Pointed,Tiny,Soft,Cartilage; Bone,Skin,Holes,Smelling; Breathing,Breathe; Blow,Face,,,,,,,Single; Sensitive,Bleeding; Fractures,,
+Mouth,Body part; Facial feature,Red; Pink,Oval,Small,Moist; Soft,Muscle; Flesh,,,Eating; Speaking; Breathing,Speak; Kiss; Smile,Face,,Speech; Laughter,,,,,Single,,,
+Lip,Body part; Facial feature,Red; Pink,Curved,Tiny,Soft; Smooth; Moist,Flesh; Muscle,Skin,,Speaking,Kiss; Smile; Lick,Mouth; Face,,Whistle,,,,,Paired; Sensitive,,,
+Tongue,Body part; Organ; Sense organ,Pink,Flat,Small,Moist; Rough; Flexible,Muscle,,Tip,Tasting; Speaking; Swallowing,Taste; Lick; Speak,Mouth,,Click; Slurp,,,,,Single; Muscular; Sensitive,Burns,,
+Tooth,Body part,White,,Tiny,Hard; Smooth,,,Roots; Crown,Chewing,Chew; Bite; Brush,Mouth,,Chatter; Grinding,,,,,Many,Tooth decay,,Pain
+Hair,Body part,Brown; Black,Long; Thin,Small,Soft; Fine,Keratin,,Roots; Strands,Warmth; Adornment,Comb; Style; Cut,Head,,,,,,,Numerous,,,
+Neck,Body part,,Cylindrical; Narrow,Small,Soft; Flexible,Muscle; Bone,Skin,,Supporting body; Swallowing; Breathing,Turn; Nod; Bend,Upper body,Turns; Bends,,,,,,Single; Vital,Strain; Fractures,,
+Shoulder,Body part; Joint,,Round,Small,Firm,Bone; Muscle,Skin,Blade,Carrying; Movement,Lift; Carry,Upper body; Arms,Rotates,,,,,,Paired; Muscular,Strain; Sprains,,
+Arm,Body part; Limb,,Long,Medium,Firm,Bone; Muscle,Skin; Hair,,Lifting; Carrying,Lift; Throw; Hug,Upper body,Bends; Swings,,,,,,Paired; Muscular,Fractures; Bruises,,
+Elbow,Body part; Joint,,Pointed,Small,Hard,Bone; Cartilage,Skin,,Bending; Movement,Bend; Flex,Arms,Bends,,,,,,Paired; Hinged; Bony,Strain; Bruises,,
+Wrist,Body part; Joint,,Narrow,Small,Flexible,Bone; Cartilage,Skin,,Bending; Movement,Bend; Twist,Arms; Hands,Bends; Twists; Pulses,,,,,,Paired; Bony,Sprains; Fractures; Strain,,
+Hand,Body part,,Flat,Small,Soft,Bone; Muscle,Skin,Fingers; Thumb,Grasping; Touching; Holding,Grasp; Clap,Arms,,Applause,,,,,Paired; Sensitive,Cuts; Burns; Blisters,,
+Finger,Body part; Digit,,Long; Thin,Tiny,Soft; Flexible,Bone; Keratin,Skin,Knuckles; Tip,Touching; Grasping,Touch; Point; Press,Hands,Bends,Tapping; Click,,,,,Many; Sensitive,Pinches; Frostbite; Pricks,,
+Thumb,Body part; Digit,,Short; Thick,Tiny,Soft; Flexible,Bone; Keratin,Skin,Knuckles; Tip,Grasping; Holding,Grasp; Press; Text,Hands,Bends,,,,,,Paired,Pinches; Sprains,,
+Fingernail,Body part,Pink,Flat; Thin,Tiny,Hard; Smooth,Keratin,,Tip,Protection; Adornment,Paint; Bite,Fingers,,Scratching; Tapping,,,,,Many,Scratches,,
+Chest,Body part,,Wide,Medium,Firm,Bone; Muscle,Skin; Hair,Ribs,Breathing; Protecting organs,Breathe,Torso; Upper body,Expands,Heartbeat; Breathing,,,,,Single; Muscular,Fractures; Infection,,
+Back,Body part,,Wide; Flat,Medium,Firm,Bone; Muscle,Skin,Spine; Ribs,Supporting body; Carrying; Bending,Bend; Carry; Stretch,Torso,Bends; Twists,,,,,,Single; Muscular,Strain; Sunburn,,
+Belly,Body part,,Round,Medium,Soft,Fat; Muscle,Skin,,Digestion,Rub,Torso; Abdomen,Expands,Gurgle; Rumble,,,,,Single,Food poisoning,,
+Hip,Body part; Joint,,Round; Wide,Small,Firm,Bone; Cartilage,Skin,,Supporting body; Walking; Bending,Bend; Dance,Lower body; Waist,Rotates,,,,,,Paired; Bony,Fractures,,
+Leg,Body part; Limb,,Long,Medium,Firm,Bone; Muscle,Skin; Hair,,Walking; Running; Supporting body,Walk; Run; Kick,Lower body,Bends,,,,,,Paired; Muscular,Fractures; Bruises,,
+Knee,Body part; Joint,,Round,Small,Hard,Bone; Cartilage,Skin,Cap,Bending; Walking,Bend; Kneel; Flex,Legs,Bends,Creak,,,,,Paired; Hinged; Bony,Sprains; Bruises; Strain,,
+Ankle,Body part; Joint,,Narrow,Small,Flexible,Bone; Cartilage,Skin,,Bending; Walking; Balance,Bend; Twist; Flex,Legs; Feet,Bends; Twists,,,,,,Paired; Bony,Sprains; Fractures,,
+Foot,Body part,,Flat,Small,Tough,Bone; Muscle,Skin,Heel; Sole,Walking; Supporting body,Walk; Kick,Legs,,Footsteps,Sweaty,,,,Paired; Sensitive,Blisters; Pricks; Cuts,,
+Toe,Body part; Digit,,Short,Tiny,Soft,Bone; Keratin,Skin,Tip,Balance; Walking,,Feet,Bends,Tapping,,,,,Many,Frostbite; Fractures,,Pain
+Skin,Body part; Organ; Tissue,Pink; Brown,Thin,,Soft; Smooth; Elastic,Keratin; Fat,Hair,Layers,Protection; Touching; Sensation,Touch; Wash; Sunbathe,Whole body,,,,,,,Sensitive; Waterproof,Sunburn; Burns; Itching,Regenerates,
+Bone,Body part; Tissue,White,Long; Hollow,Small,Hard; Rigid,Mineral,,,Supporting body; Protecting organs; Movement,Set; Scan,Internal; Whole body,,,,,,,Numerous; Strong; Durable,Fractures,Regenerates,
+Skull,Body part; Bone,White,Round; Dome-shaped; Hollow,Small,Hard; Rigid,Mineral,Skin; Hair,Teeth,Protecting organs,Scan,Head; Internal,,,,,,,Single; Strong; Durable,Fractures; Concussion,,Fear
+Rib,Body part; Bone,White,Curved; Thin,Small,Hard; Flexible,Mineral; Cartilage,,,Protecting organs; Breathing,,Chest; Internal,Expands,,,,,,Many; Paired,Fractures; Bruises,,
+Spine,Body part; Bone,White,Long; Curved,Medium,Hard; Flexible,Mineral; Cartilage; Nerve tissue,,Segmented body,Supporting body; Protecting organs; Bending,Bend; Stretch,Back; Internal,Bends; Twists,,,,,,Single; Vital,Fractures; Strain,,
+Muscle,Body part; Tissue,Red,,Small,Firm; Fibrous; Elastic,Flesh,Skin,Fibers,Movement; Lifting; Supporting body,Flex; Stretch; Exercise,Whole body; Internal,,,,,,,Numerous; Strong,Strain; Bruises,,
+Heart,Body part; Organ; Internal organ,Red,Heart-shaped; Compact,Small,Firm,Muscle,,Valves,Pumping blood; Oxygen transport,Beat,Chest; Internal,Beats; Pulses,Heartbeat; Rhythmic,,,,,Single; Vital; Muscular,,,Affection; Romance
+Lung,Body part; Organ; Internal organ,Pink,Lobed,Small,Spongy; Elastic,,,Pipes; Branches,Breathing; Oxygen transport,Breathe; Blow; Inflate,Chest; Internal,Expands,Breathing,,,,,Paired; Vital,Infection; Fumes; Suffocation,,
+Brain,Body part; Organ; Internal organ,Gray; Pink,Lobed; Round,Small,Soft; Wrinkled,Nerve tissue; Fat,,Cells,Thinking; Sensation; Movement,Think; Learn,Head; Internal,,,,,,,Single; Vital,Concussion,,Curiosity
+Stomach,Body part; Organ; Internal organ,Pink,Hollow; Curved,Small,Soft; Elastic,Muscle,,Lining,Digestion; Food storage; Mixing,Fill,Abdomen; Internal,Expands,Gurgle; Rumble,,,,,Single; Muscular,Food poisoning; Infection,,Anxiety
+Liver,Body part; Organ; Internal organ,Reddish-brown,Wedge-shaped; Lobed,Small,Soft; Smooth,Flesh; Blood,,,Detoxification; Filtering blood; Digestion,,Abdomen; Internal,,,,,,,Single; Vital,Intoxicating; Toxic; Infection,Regenerates,
+Kidney,Body part; Organ; Internal organ,Reddish-brown,Kidney-shaped,Small,Firm; Smooth,Flesh; Blood,,,Filtering blood; Detoxification,,Abdomen; Internal,,,,,,,Paired; Vital,Infection; Dehydration; Toxic,,
+Blood,Body part; Tissue,Red; Dark red,,,Viscous; Sticky,Water; Iron,,Cells,Oxygen transport; Protection; Nutrition,,Whole body; Internal,Flows; Pulses,,Metallic,Salty,Liquid,Warm,Vital,Bleeding; Infection,,Fear

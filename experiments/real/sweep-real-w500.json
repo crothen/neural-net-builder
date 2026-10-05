@@ -1,0 +1,172 @@
+[
+ {
+  "dataset": "real",
+  "size": 25,
+  "nWords": 500,
+  "rows": [
+   {
+    "seed": 21,
+    "coverage": 6.020950574882242,
+    "results": {
+     "5": {
+      "all": 0.286,
+      "missing": 0.254,
+      "half": 0.082,
+      "wrong": 0.216,
+      "active": 0.3817600000000005,
+      "nMissing": 500,
+      "nHalf": 500,
+      "teachSeconds": 57.5775486
+     },
+     "15": {
+      "all": 0.484,
+      "missing": 0.46,
+      "half": 0.148,
+      "wrong": 0.352,
+      "active": 0.3816800000000006,
+      "nMissing": 500,
+      "nHalf": 500,
+      "teachSeconds": 178.741074
+     }
+    }
+   },
+   {
+    "seed": 22,
+    "coverage": 6.023976178186204,
+    "results": {
+     "5": {
+      "all": 0.254,
+      "missing": 0.228,
+      "half": 0.074,
+      "wrong": 0.178,
+      "active": 0.37504000000000015,
+      "nMissing": 500,
+      "nHalf": 500,
+      "teachSeconds": 63.69062469999999
+     },
+     "15": {
+      "all": 0.472,
+      "missing": 0.436,
+      "half": 0.13,
+      "wrong": 0.328,
+      "active": 0.37464000000000014,
+      "nMissing": 500,
+      "nHalf": 500,
+      "teachSeconds": 206.8285722
+     }
+    }
+   },
+   {
+    "seed": 23,
+    "coverage": 6.008276160079462,
+    "results": {
+     "5": {
+      "all": 0.284,
+      "missing": 0.2625250501002004,
+      "half": 0.056112224448897796,
+      "wrong": 0.206,
+      "active": 0.38936000000000065,
+      "nMissing": 499,
+      "nHalf": 499,
+      "teachSeconds": 81.86103389999992
+     },
+     "15": {
+      "all": 0.492,
+      "missing": 0.4529058116232465,
+      "half": 0.12625250501002003,
+      "wrong": 0.352,
+      "active": 0.38864000000000054,
+      "nMissing": 499,
+      "nHalf": 499,
+      "teachSeconds": 268.6167622
+     }
+    }
+   }
+  ]
+ },
+ {
+  "dataset": "real",
+  "size": 50,
+  "nWords": 500,
+  "rows": [
+   {
+    "seed": 21,
+    "coverage": 6.020950574882242,
+    "results": {
+     "5": {
+      "all": 0.856,
+      "missing": 0.822,
+      "half": 0.316,
+      "wrong": 0.708,
+      "active": 0.4937999999999995,
+      "nMissing": 500,
+      "nHalf": 500,
+      "teachSeconds": 142.9197975000001
+     },
+     "15": {
+      "all": 0.998,
+      "missing": 0.99,
+      "half": 0.7,
+      "wrong": 0.95,
+      "active": 0.4927999999999997,
+      "nMissing": 500,
+      "nHalf": 500,
+      "teachSeconds": 442.89753060000015
+     }
+    }
+   },
+   {
+    "seed": 22,
+    "coverage": 6.023976178186204,
+    "results": {
+     "5": {
+      "all": 0.85,
+      "missing": 0.824,
+      "half": 0.306,
+      "wrong": 0.684,
+      "active": 0.49728,
+      "nMissing": 500,
+      "nHalf": 500,
+      "teachSeconds": 179.9185972000002
+     },
+     "15": {
+      "all": 0.992,
+      "missing": 0.98,
+      "half": 0.714,
+      "wrong": 0.932,
+      "active": 0.49592000000000014,
+      "nMissing": 500,
+      "nHalf": 500,
+      "teachSeconds": 549.3960123999999
+     }
+    }
+   },
+   {
+    "seed": 23,
+    "coverage": 6.008276160079462,
+    "results": {
+     "5": {
+      "all": 0.83,
+      "missing": 0.8016032064128257,
+      "half": 0.32064128256513025,
+      "wrong": 0.65,
+      "active": 0.5168400000000003,
+      "nMissing": 499,
+      "nHalf": 499,
+      "teachSeconds": 185.7822128999997
+     },
+     "15": {
+      "all": 0.982,
+      "missing": 0.9819639278557114,
+      "half": 0.7194388777555111,
+      "wrong": 0.934,
+      "active": 0.5167200000000002,
+      "nMissing": 499,
+      "nHalf": 499,
+      "teachSeconds": 559.4657622999996
+     }
+    }
+   }
+  ]
+ }
+]

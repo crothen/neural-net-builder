@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Experiment output that is large or can be regenerated
+experiments/readout/traces/
+experiments/_ref/dev-*
+experiments/patterns/screens/
+experiments/patterns/search-*.json
+experiments/reverse/results-*.json

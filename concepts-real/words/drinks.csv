@@ -1,0 +1,19 @@
+Word,Category,Color,Appearance,Texture,Temperature,State,Taste,Smell,Material,Process,Region,Time,Function,Location,Danger,Property,Sound,Action,Value
+Water,Drink,Colorless,Transparent,Watery,Cool,Liquid,Tasteless; Refreshing,Odorless,,Filtered,,Daily,Hydration; Cooking,Sink,,Vital,Drip; Splash,Drink; Pour,Cheap
+Milk,Drink; Dairy,White,Opaque,Smooth,Cold,Liquid,Milky; Mild,Milky,,Pasteurized; Chilled,,Breakfast; Bedtime,Nutrition,Fridge,Allergenic,,,Drink; Pour,Cheap
+Juice,Drink; Cold drink,Orange,Opaque,Watery,Cold,Liquid,Sweet; Fruity,Fruity,Fruit,Squeezed; Chilled,,Breakfast,Refreshment,Fridge,Tooth decay,Vitamin-rich,,Drink; Pour,
+Lemonade,Drink; Cold drink; Soft drink,Pale yellow,Translucent,Watery,Cold,Liquid,Sweet; Sour,,Water,Squeezed; Sweetened,,Summer,Refreshment,Picnic,Tooth decay,,,Drink; Pour,Cheap
+Soda,Drink; Cold drink; Soft drink,Brown,Sparkling,Fizzy,Cold,Liquid,Sweet,Sweet,Water; Sugar,Carbonated; Sweetened,North America,,Refreshment,Party,Tooth decay; Unhealthy,High-sugar,Fizz; Pop,Drink,Cheap
+Smoothie,Drink; Cold drink,Pink,Opaque,Viscous,Cold,Liquid,Sweet; Fruity,Fruity,Fruit; Milk,Blended; Chilled,,Breakfast,Nutrition,Cafe,,Vitamin-rich,,Drink,
+Milkshake,Drink; Cold drink; Dessert,White,Opaque; Foamy,Viscous; Creamy,Cold,Liquid,Sweet; Milky,Vanilla,Milk; Cream,Blended; Chilled,North America,,,Diner,Unhealthy,High-sugar,Slurp,Drink; Sip,
+Tea,Drink; Hot drink,Amber,Transparent,Watery,Hot,Liquid,Bitter; Mild,,Tea leaves; Water,Brewed,China,Afternoon,Stimulant,Cafe,Scalds,Caffeinated,,Drink; Sip,
+Coffee,Drink; Hot drink,Dark brown,Opaque,Watery,Hot,Liquid,Bitter; Rich,Coffee,Coffee beans; Water,Roasted; Brewed,,Morning,Stimulant,Cafe,Scalds,Caffeinated,,Drink; Sip,
+Espresso,Drink; Hot drink,Dark brown,Opaque; Foamy,Watery,Hot,Liquid,Bitter; Rich,Coffee,Coffee beans; Water,Roasted; Brewed,Italy,Morning,Stimulant,Cafe,Scalds,Caffeinated,Hiss,Drink; Sip,
+Cocoa,Drink; Hot drink,Brown,Opaque,Creamy,Hot,Liquid,Sweet; Chocolatey,Chocolate,Cocoa; Milk,Sweetened,,Winter; Bedtime,Warmth; Comfort,Home,Scalds,,,Drink; Sip,
+Beer,Drink; Alcoholic drink; Cold drink,Gold,Foamy,Fizzy,Cold,Liquid,Bitter,,Barley; Hops,Brewed; Fermented,Germany,Evening,Socializing,Bar,Intoxicating,,Clink,Drink; Pour,Affordable
+Cider,Drink; Alcoholic drink; Cold drink,Amber,Sparkling,Fizzy,Cold,Liquid,Sweet; Tart,Fruity,Apples; Yeast,Pressed; Fermented,Britain,Autumn,Socializing,Bar,Intoxicating,,Fizz,Drink; Pour,Affordable
+Wine,Drink; Alcoholic drink,Dark red,Translucent,Smooth,,Liquid,Dry; Fruity,Fruity,Grapes,Fermented; Aged,France,Dinner,Socializing; Cooking,Cellar; Restaurant,Intoxicating; Staining,,Clink,Drink; Sip,
+Champagne,Drink; Alcoholic drink,Pale yellow,Sparkling,Fizzy,Cold,Liquid,Dry; Fruity,Fruity,Grapes,Fermented; Aged,France,Festive occasions,Celebration,Party; Wedding,Intoxicating,,Pop; Fizz,Drink; Sip,Luxury
+Whiskey,Drink; Alcoholic drink; Spirit,Amber,Transparent,Smooth,,Liquid,Smoky; Rich,Alcoholic; Smoky,Barley; Water,Distilled; Aged,Scotland,Evening,Relaxation,Bar,Intoxicating; Addictive,Flammable,Clink,Drink; Sip,Expensive
+Vodka,Drink; Alcoholic drink; Spirit,Colorless,Transparent,Watery,Cold,Liquid,Tasteless,Alcoholic,Potato; Water,Distilled; Filtered,,,Socializing; Mixing,Bar,Intoxicating; Addictive,Flammable,,Drink,Affordable
+Rum,Drink; Alcoholic drink; Spirit,Amber,Transparent,Smooth,,Liquid,Sweet,Alcoholic; Sweet,Water,Distilled; Aged,Caribbean,,Mixing; Baking,Bar,Intoxicating; Addictive,Flammable,,Drink; Sip,Affordable

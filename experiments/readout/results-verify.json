@@ -1,0 +1,567 @@
+[
+ {
+  "dataset": "tiny",
+  "plastic": true,
+  "wordEpochs": 20,
+  "lr": 0.04,
+  "decay": 0.95,
+  "hi": 3,
+  "normalize": true,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "summary": {
+   "fullDrive": {
+    "mean": 0.958,
+    "sd": 0.059,
+    "min": 0.875
+   },
+   "fullFire": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "partialDrive": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "partialFire": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "brainFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "brainPartial": {
+    "mean": 0.778,
+    "sd": 0.157,
+    "min": 0.667
+   }
+  },
+  "rows": [
+   {
+    "seed": 1,
+    "fullDrive": 0.875,
+    "fullFire": 1,
+    "partialDrive": 1,
+    "partialFire": 1,
+    "nFull": 8,
+    "nPartial": 3,
+    "rate": 0.08863486842105261,
+    "activeFrac": 0.59125,
+    "wrong": [
+     {
+      "word": "Lemon",
+      "got": "Fire"
+     }
+    ],
+    "brainFull": 1,
+    "brainPartial": 0.6666666666666666
+   },
+   {
+    "seed": 2,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 1,
+    "partialFire": 1,
+    "nFull": 8,
+    "nPartial": 3,
+    "rate": 0.08435855263157896,
+    "activeFrac": 0.574375,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 1
+   },
+   {
+    "seed": 3,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 1,
+    "partialFire": 1,
+    "nFull": 8,
+    "nPartial": 3,
+    "rate": 0.08098684210526316,
+    "activeFrac": 0.529375,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 0.6666666666666666
+   }
+  ]
+ },
+ {
+  "dataset": "medium",
+  "plastic": true,
+  "wordEpochs": 20,
+  "lr": 0.04,
+  "decay": 0.95,
+  "hi": 3,
+  "normalize": true,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "summary": {
+   "fullDrive": {
+    "mean": 0.967,
+    "sd": 0.024,
+    "min": 0.95
+   },
+   "fullFire": {
+    "mean": 0.917,
+    "sd": 0.024,
+    "min": 0.9
+   },
+   "partialDrive": {
+    "mean": 0.784,
+    "sd": 0.1,
+    "min": 0.647
+   },
+   "partialFire": {
+    "mean": 0.745,
+    "sd": 0.073,
+    "min": 0.647
+   },
+   "brainFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "brainPartial": {
+    "mean": 0.765,
+    "sd": 0.096,
+    "min": 0.647
+   }
+  },
+  "rows": [
+   {
+    "seed": 1,
+    "fullDrive": 1,
+    "fullFire": 0.9,
+    "partialDrive": 0.6470588235294118,
+    "partialFire": 0.6470588235294118,
+    "nFull": 20,
+    "nPartial": 17,
+    "rate": 0.08732894736842105,
+    "activeFrac": 0.6487499999999999,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 0.6470588235294118
+   },
+   {
+    "seed": 2,
+    "fullDrive": 0.95,
+    "fullFire": 0.95,
+    "partialDrive": 0.8823529411764706,
+    "partialFire": 0.8235294117647058,
+    "nFull": 20,
+    "nPartial": 17,
+    "rate": 0.08323684210526316,
+    "activeFrac": 0.627,
+    "wrong": [
+     {
+      "word": "Ice",
+      "got": "Night"
+     }
+    ],
+    "brainFull": 1,
+    "brainPartial": 0.8823529411764706
+   },
+   {
+    "seed": 3,
+    "fullDrive": 0.95,
+    "fullFire": 0.9,
+    "partialDrive": 0.8235294117647058,
+    "partialFire": 0.7647058823529411,
+    "nFull": 20,
+    "nPartial": 17,
+    "rate": 0.08416447368421053,
+    "activeFrac": 0.62175,
+    "wrong": [
+     {
+      "word": "Cloud",
+      "got": "Snow"
+     }
+    ],
+    "brainFull": 1,
+    "brainPartial": 0.7647058823529411
+   }
+  ]
+ },
+ {
+  "dataset": "tiny",
+  "plastic": false,
+  "wordEpochs": 20,
+  "lr": 0.04,
+  "decay": 0.95,
+  "hi": 3,
+  "normalize": true,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "summary": {
+   "fullDrive": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "fullFire": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "partialDrive": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "partialFire": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "brainFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "brainPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   }
+  },
+  "rows": [
+   {
+    "seed": 1,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 1,
+    "partialFire": 1,
+    "nFull": 8,
+    "nPartial": 3,
+    "rate": 0.07646381578947369,
+    "activeFrac": 0.660625,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 1
+   },
+   {
+    "seed": 2,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 1,
+    "partialFire": 1,
+    "nFull": 8,
+    "nPartial": 3,
+    "rate": 0.07541118421052631,
+    "activeFrac": 0.650625,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 1
+   },
+   {
+    "seed": 3,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 1,
+    "partialFire": 1,
+    "nFull": 8,
+    "nPartial": 3,
+    "rate": 0.07657894736842107,
+    "activeFrac": 0.676875,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 1
+   }
+  ]
+ },
+ {
+  "dataset": "medium",
+  "plastic": false,
+  "wordEpochs": 20,
+  "lr": 0.04,
+  "decay": 0.95,
+  "hi": 3,
+  "normalize": true,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "summary": {
+   "fullDrive": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "fullFire": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "partialDrive": {
+    "mean": 0.902,
+    "sd": 0.028,
+    "min": 0.882
+   },
+   "partialFire": {
+    "mean": 0.882,
+    "sd": 0,
+    "min": 0.882
+   },
+   "brainFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "brainPartial": {
+    "mean": 0.843,
+    "sd": 0.028,
+    "min": 0.824
+   }
+  },
+  "rows": [
+   {
+    "seed": 1,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 0.9411764705882353,
+    "partialFire": 0.8823529411764706,
+    "nFull": 20,
+    "nPartial": 17,
+    "rate": 0.06670394736842107,
+    "activeFrac": 0.5617500000000001,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 0.8235294117647058
+   },
+   {
+    "seed": 2,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 0.8823529411764706,
+    "partialFire": 0.8823529411764706,
+    "nFull": 20,
+    "nPartial": 17,
+    "rate": 0.06490789473684211,
+    "activeFrac": 0.5567500000000002,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 0.8823529411764706
+   },
+   {
+    "seed": 3,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 0.8823529411764706,
+    "partialFire": 0.8823529411764706,
+    "nFull": 20,
+    "nPartial": 17,
+    "rate": 0.06705263157894736,
+    "activeFrac": 0.5660000000000001,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 0.8235294117647058
+   }
+  ]
+ },
+ {
+  "dataset": "tiny",
+  "plastic": true,
+  "wordEpochs": 40,
+  "lr": 0.04,
+  "decay": 0.95,
+  "hi": 3,
+  "normalize": true,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "summary": {
+   "fullDrive": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "fullFire": {
+    "mean": 0.958,
+    "sd": 0.059,
+    "min": 0.875
+   },
+   "partialDrive": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "partialFire": {
+    "mean": 0.889,
+    "sd": 0.157,
+    "min": 0.667
+   },
+   "brainFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "brainPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   }
+  },
+  "rows": [
+   {
+    "seed": 1,
+    "fullDrive": 1,
+    "fullFire": 0.875,
+    "partialDrive": 1,
+    "partialFire": 1,
+    "nFull": 8,
+    "nPartial": 3,
+    "rate": 0.08672697368421052,
+    "activeFrac": 0.5981249999999999,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 1
+   },
+   {
+    "seed": 2,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 1,
+    "partialFire": 1,
+    "nFull": 8,
+    "nPartial": 3,
+    "rate": 0.08332236842105263,
+    "activeFrac": 0.56375,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 1
+   },
+   {
+    "seed": 3,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 1,
+    "partialFire": 0.6666666666666666,
+    "nFull": 8,
+    "nPartial": 3,
+    "rate": 0.08225328947368421,
+    "activeFrac": 0.53625,
+    "wrong": [],
+    "brainFull": 1,
+    "brainPartial": 1
+   }
+  ]
+ },
+ {
+  "dataset": "medium",
+  "plastic": true,
+  "wordEpochs": 40,
+  "lr": 0.04,
+  "decay": 0.95,
+  "hi": 3,
+  "normalize": true,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "summary": {
+   "fullDrive": {
+    "mean": 0.967,
+    "sd": 0.024,
+    "min": 0.95
+   },
+   "fullFire": {
+    "mean": 0.933,
+    "sd": 0.047,
+    "min": 0.9
+   },
+   "partialDrive": {
+    "mean": 0.706,
+    "sd": 0.083,
+    "min": 0.647
+   },
+   "partialFire": {
+    "mean": 0.745,
+    "sd": 0.073,
+    "min": 0.647
+   },
+   "brainFull": {
+    "mean": 0.9,
+    "sd": 0.041,
+    "min": 0.85
+   },
+   "brainPartial": {
+    "mean": 0.608,
+    "sd": 0.073,
+    "min": 0.529
+   }
+  },
+  "rows": [
+   {
+    "seed": 1,
+    "fullDrive": 0.95,
+    "fullFire": 0.9,
+    "partialDrive": 0.6470588235294118,
+    "partialFire": 0.6470588235294118,
+    "nFull": 20,
+    "nPartial": 17,
+    "rate": 0.08710526315789476,
+    "activeFrac": 0.7827500000000001,
+    "wrong": [
+     {
+      "word": "Night",
+      "got": "Ice"
+     }
+    ],
+    "brainFull": 0.85,
+    "brainPartial": 0.5882352941176471
+   },
+   {
+    "seed": 2,
+    "fullDrive": 0.95,
+    "fullFire": 0.9,
+    "partialDrive": 0.8235294117647058,
+    "partialFire": 0.8235294117647058,
+    "nFull": 20,
+    "nPartial": 17,
+    "rate": 0.0818223684210526,
+    "activeFrac": 0.6847499999999999,
+    "wrong": [
+     {
+      "word": "Grass",
+      "got": "Leaf"
+     }
+    ],
+    "brainFull": 0.95,
+    "brainPartial": 0.7058823529411765
+   },
+   {
+    "seed": 3,
+    "fullDrive": 1,
+    "fullFire": 1,
+    "partialDrive": 0.6470588235294118,
+    "partialFire": 0.7647058823529411,
+    "nFull": 20,
+    "nPartial": 17,
+    "rate": 0.08882894736842105,
+    "activeFrac": 0.8089999999999999,
+    "wrong": [],
+    "brainFull": 0.9,
+    "brainPartial": 0.5294117647058824
+   }
+  ]
+ }
+]

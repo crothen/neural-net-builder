@@ -1,0 +1,7 @@
+[07:22:17] brain 20000: built in 836 s, 1100000 connections, 595 MB
+[07:50:21] pass 1 done: 1684 s of teaching so far (348.0 ms/tick)
+[08:10:02] pass 2 done: 2866 s of teaching so far (296.0 ms/tick)
+[08:29:40] pass 3 done: 4044 s of teaching so far (278.5 ms/tick)
+[08:49:33] pass 4 done: 5236 s of teaching so far (270.5 ms/tick)
+[10:07:57] after 4 passes (5236 s teaching): FIRES all 100% half 100% quarter 0% ten 0% | STRONGEST all 100% half 100% quarter 100% ten 100% | only the right word fires 100% | 53% active | test 4704 s
+[10:07:57] DONE

@@ -1,0 +1,159 @@
+{
+ "full|100|5|3": {
+  "n": 100,
+  "cov": 5,
+  "epochs": 3,
+  "seeds": [
+   1,
+   2
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linHalf": {
+    "mean": 0.99,
+    "sd": 0.002,
+    "min": 0.988
+   },
+   "linTrain": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncHalf": {
+    "mean": 0.986,
+    "sd": 0.002,
+    "min": 0.983
+   },
+   "meanPairCos": {
+    "mean": 0.607,
+    "sd": 0.002,
+    "min": 0.605
+   },
+   "rate": {
+    "mean": 0.089,
+    "sd": 0,
+    "min": 0.088
+   },
+   "activeFrac": {
+    "mean": 0.714,
+    "sd": 0,
+    "min": 0.713
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.678,
+    "sd": 0.021,
+    "min": 2.657
+   },
+   "nPartial": {
+    "mean": 121,
+    "sd": 0,
+    "min": 121
+   },
+   "nHalf": {
+    "mean": 242,
+    "sd": 0,
+    "min": 242
+   },
+   "ms": {
+    "mean": 25930.5,
+    "sd": 3514.5,
+    "min": 22416
+   },
+   "trainMsPerTick": {
+    "mean": 1.171,
+    "sd": 0.149,
+    "min": 1.021
+   },
+   "connsBefore": {
+    "mean": 2000,
+    "sd": 0,
+    "min": 2000
+   },
+   "connsAfter": {
+    "mean": 1456,
+    "sd": 19,
+    "min": 1437
+   },
+   "meanAbsBefore": {
+    "mean": 0.251,
+    "sd": 0.002,
+    "min": 0.249
+   },
+   "meanAbsAfter": {
+    "mean": 3.467,
+    "sd": 0.048,
+    "min": 3.419
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.9917355371900827,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.987603305785124,
+    "meanPairCos": 0.6052229900697851,
+    "rate": 0.08829273597216178,
+    "activeFrac": 0.7133471074380165,
+    "satFrac": 0,
+    "meanThr": 2.657076500000749,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 22416,
+    "trainMsPerTick": 1.0213498622589532,
+    "connsBefore": 2000,
+    "connsAfter": 1437,
+    "meanAbsBefore": 0.25317905527134477,
+    "meanAbsAfter": 3.5155428737118166
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.987603305785124,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.9834710743801653,
+    "meanPairCos": 0.6093978213164182,
+    "rate": 0.08873858199217055,
+    "activeFrac": 0.7140495867768595,
+    "satFrac": 0,
+    "meanThr": 2.699740000000894,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 29445,
+    "trainMsPerTick": 1.3200413223140497,
+    "connsBefore": 2000,
+    "connsAfter": 1475,
+    "meanAbsBefore": 0.2488433374913411,
+    "meanAbsAfter": 3.418906909041437
+   }
+  ]
+ }
+}

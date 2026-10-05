@@ -1,0 +1,1730 @@
+{
+ "DEFAULT": {
+  "cfg": {},
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.8864925479915026,
+    "rate": 0.10474342105263157,
+    "active": 0.88325,
+    "silentWords": 0,
+    "meanThr": 0.7743207500000163,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9309139859711992,
+    "rate": 0.11804605263157894,
+    "active": 0.9559999999999998,
+    "silentWords": 0,
+    "meanThr": 0.8222115000000154,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9117476058130353,
+    "rate": 0.1111315789473684,
+    "active": 0.9110000000000001,
+    "silentWords": 0,
+    "meanThr": 0.796534000000016,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.863,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.824,
+    "sd": 0
+   },
+   "pairCos": {
+    "mean": 0.91,
+    "sd": 0.018
+   },
+   "rate": {
+    "mean": 0.111,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.917,
+    "sd": 0.03
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.798,
+    "sd": 0.02
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr1.5": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.4148985132652654,
+    "rate": 0.04576973684210526,
+    "active": 0.41600000000000004,
+    "silentWords": 0,
+    "meanThr": 1.4905442499996149,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.4367012631039856,
+    "rate": 0.04833552631578948,
+    "active": 0.43249999999999994,
+    "silentWords": 0,
+    "meanThr": 1.5009887499996162,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.45871572383902054,
+    "rate": 0.0475657894736842,
+    "active": 0.43274999999999997,
+    "silentWords": 0,
+    "meanThr": 1.496478499999615,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.437,
+    "sd": 0.018
+   },
+   "rate": {
+    "mean": 0.047,
+    "sd": 0.001
+   },
+   "active": {
+    "mean": 0.427,
+    "sd": 0.008
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.496,
+    "sd": 0.004
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr2": {
+  "cfg": {
+   "brain": {
+    "threshold": 2
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.3681366902773805,
+    "rate": 0.030927631578947366,
+    "active": 0.33325,
+    "silentWords": 0,
+    "meanThr": 1.9301339999997669,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.36934031328035194,
+    "rate": 0.031677631578947374,
+    "active": 0.34199999999999997,
+    "silentWords": 0,
+    "meanThr": 1.9317292499997774,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.3963172792899968,
+    "rate": 0.0319078947368421,
+    "active": 0.3415,
+    "silentWords": 0,
+    "meanThr": 1.933499249999788,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.378,
+    "sd": 0.013
+   },
+   "rate": {
+    "mean": 0.032,
+    "sd": 0
+   },
+   "active": {
+    "mean": 0.339,
+    "sd": 0.004
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.932,
+    "sd": 0.001
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr1.5 adOff": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5,
+    "sustainability": {
+     "adaptiveThreshold": false
+    }
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.41703554685483823,
+    "rate": 0.04553947368421053,
+    "active": 0.40499999999999997,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.44099075572494917,
+    "rate": 0.049078947368421055,
+    "active": 0.429,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.46112883209581434,
+    "rate": 0.048263157894736834,
+    "active": 0.42600000000000005,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.961,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.44,
+    "sd": 0.018
+   },
+   "rate": {
+    "mean": 0.048,
+    "sd": 0.002
+   },
+   "active": {
+    "mean": 0.42,
+    "sd": 0.011
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.5,
+    "sd": 0
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr2 adOff": {
+  "cfg": {
+   "brain": {
+    "threshold": 2,
+    "sustainability": {
+     "adaptiveThreshold": false
+    }
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.36906440748042385,
+    "rate": 0.03019736842105263,
+    "active": 0.32825000000000004,
+    "silentWords": 0,
+    "meanThr": 2,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.3735734057061823,
+    "rate": 0.0309078947368421,
+    "active": 0.33625,
+    "silentWords": 0,
+    "meanThr": 2,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.3992130764549274,
+    "rate": 0.03155263157894737,
+    "active": 0.337,
+    "silentWords": 0,
+    "meanThr": 2,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.381,
+    "sd": 0.013
+   },
+   "rate": {
+    "mean": 0.031,
+    "sd": 0.001
+   },
+   "active": {
+    "mean": 0.334,
+    "sd": 0.004
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 2,
+    "sd": 0
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr1.5 iwm1": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5,
+    "initialWeightModifier": 1
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.3768710263672884,
+    "rate": 0.03700657894736843,
+    "active": 0.33049999999999996,
+    "silentWords": 0,
+    "meanThr": 1.455322249999609,
+    "wMeanAbs": 0.050827320627523105,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.35217617345182634,
+    "rate": 0.03629605263157895,
+    "active": 0.3185,
+    "silentWords": 0,
+    "meanThr": 1.4517747499996099,
+    "wMeanAbs": 0.049405131929956124,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.39163650074094825,
+    "rate": 0.03838157894736842,
+    "active": 0.3385,
+    "silentWords": 0,
+    "meanThr": 1.4595014999996092,
+    "wMeanAbs": 0.05012267665741446,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "pairCos": {
+    "mean": 0.374,
+    "sd": 0.016
+   },
+   "rate": {
+    "mean": 0.037,
+    "sd": 0.001
+   },
+   "active": {
+    "mean": 0.329,
+    "sd": 0.008
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.456,
+    "sd": 0.003
+   },
+   "wMeanAbs": {
+    "mean": 0.05,
+    "sd": 0.001
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr1.5 iwm1 adOff": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5,
+    "initialWeightModifier": 1,
+    "sustainability": {
+     "adaptiveThreshold": false
+    }
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.38198380252705944,
+    "rate": 0.03682236842105263,
+    "active": 0.3275,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.050827320627523105,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.35514411760195896,
+    "rate": 0.03569078947368421,
+    "active": 0.31199999999999994,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.049405131929956124,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.39673355981859154,
+    "rate": 0.03827631578947367,
+    "active": 0.333,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.05012267665741446,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "pairCos": {
+    "mean": 0.378,
+    "sd": 0.017
+   },
+   "rate": {
+    "mean": 0.037,
+    "sd": 0.001
+   },
+   "active": {
+    "mean": 0.324,
+    "sd": 0.009
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.5,
+    "sd": 0
+   },
+   "wMeanAbs": {
+    "mean": 0.05,
+    "sd": 0.001
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "iwm1 adOff": {
+  "cfg": {
+   "brain": {
+    "initialWeightModifier": 1,
+    "sustainability": {
+     "adaptiveThreshold": false
+    }
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.46158138266404836,
+    "rate": 0.06896052631578946,
+    "active": 0.44525,
+    "silentWords": 0,
+    "meanThr": 0.5,
+    "wMeanAbs": 0.050827320627523105,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8823529411764706,
+    "pairCos": 0.44184542739192356,
+    "rate": 0.06824342105263158,
+    "active": 0.4357500000000001,
+    "silentWords": 0,
+    "meanThr": 0.5,
+    "wMeanAbs": 0.049405131929956124,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.46491520603452235,
+    "rate": 0.06938157894736842,
+    "active": 0.44299999999999995,
+    "silentWords": 0,
+    "meanThr": 0.5,
+    "wMeanAbs": 0.05012267665741446,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.961,
+    "sd": 0.055
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.961,
+    "sd": 0.055
+   },
+   "pairCos": {
+    "mean": 0.456,
+    "sd": 0.01
+   },
+   "rate": {
+    "mean": 0.069,
+    "sd": 0
+   },
+   "active": {
+    "mean": 0.441,
+    "sd": 0.004
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.5,
+    "sd": 0
+   },
+   "wMeanAbs": {
+    "mean": 0.05,
+    "sd": 0.001
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr1 inh0.5": {
+  "cfg": {
+   "brain": {
+    "threshold": 1
+   },
+   "inhibitoryFraction": 0.5
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.3802739188716461,
+    "rate": 0.037828947368421045,
+    "active": 0.3265,
+    "silentWords": 0,
+    "meanThr": 0.9581644999998892,
+    "wMeanAbs": 0.3605248873870613,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.4033466237832695,
+    "rate": 0.043217105263157904,
+    "active": 0.36324999999999996,
+    "silentWords": 0,
+    "meanThr": 0.9804699999998627,
+    "wMeanAbs": 0.342410850258478,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.9411764705882353,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.37845034051322585,
+    "rate": 0.03976973684210526,
+    "active": 0.33649999999999997,
+    "silentWords": 0,
+    "meanThr": 0.9671997499998684,
+    "wMeanAbs": 0.34013797047153377,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.387,
+    "sd": 0.011
+   },
+   "rate": {
+    "mean": 0.04,
+    "sd": 0.002
+   },
+   "active": {
+    "mean": 0.342,
+    "sd": 0.016
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.969,
+    "sd": 0.009
+   },
+   "wMeanAbs": {
+    "mean": 0.348,
+    "sd": 0.009
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr1.5 inh0.3 iwm0.4": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5,
+    "initialWeightModifier": 0.4
+   },
+   "inhibitoryFraction": 0.3
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.3902429064437476,
+    "rate": 0.03528289473684211,
+    "active": 0.32075000000000004,
+    "silentWords": 0,
+    "meanThr": 1.4482394999996098,
+    "wMeanAbs": 0.14630947059218094,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.3933094884638303,
+    "rate": 0.039782894736842114,
+    "active": 0.3375,
+    "silentWords": 0,
+    "meanThr": 1.4662199999996102,
+    "wMeanAbs": 0.13733657214378073,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.3914335615828872,
+    "rate": 0.03940131578947368,
+    "active": 0.344,
+    "silentWords": 0,
+    "meanThr": 1.4648142499996109,
+    "wMeanAbs": 0.1386743564743988,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.392,
+    "sd": 0.001
+   },
+   "rate": {
+    "mean": 0.038,
+    "sd": 0.002
+   },
+   "active": {
+    "mean": 0.334,
+    "sd": 0.01
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.46,
+    "sd": 0.008
+   },
+   "wMeanAbs": {
+    "mean": 0.141,
+    "sd": 0.004
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr1.5 loc30": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5
+   },
+   "inputLink": {
+    "localizer": 30
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.44954213951203126,
+    "rate": 0.04918421052631579,
+    "active": 0.4485,
+    "silentWords": 0,
+    "meanThr": 1.5046612499996166,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.47899148584410145,
+    "rate": 0.05405921052631579,
+    "active": 0.49375,
+    "silentWords": 0,
+    "meanThr": 1.5264954999996194,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.48165019838286305,
+    "rate": 0.04930263157894737,
+    "active": 0.45549999999999996,
+    "silentWords": 0,
+    "meanThr": 1.507051499999617,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "pairCos": {
+    "mean": 0.47,
+    "sd": 0.015
+   },
+   "rate": {
+    "mean": 0.051,
+    "sd": 0.002
+   },
+   "active": {
+    "mean": 0.466,
+    "sd": 0.02
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.513,
+    "sd": 0.01
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr1.5 iwm1 loc30 adOff": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5,
+    "initialWeightModifier": 1,
+    "sustainability": {
+     "adaptiveThreshold": false
+    }
+   },
+   "inputLink": {
+    "localizer": 30
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.4135530252285367,
+    "rate": 0.04284210526315789,
+    "active": 0.34975,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.050827320627523105,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.3977574810182392,
+    "rate": 0.04088157894736842,
+    "active": 0.3430000000000001,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.049405131929956124,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.42190991267184547,
+    "rate": 0.04038815789473684,
+    "active": 0.33225,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.05012267665741446,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "pairCos": {
+    "mean": 0.411,
+    "sd": 0.01
+   },
+   "rate": {
+    "mean": 0.041,
+    "sd": 0.001
+   },
+   "active": {
+    "mean": 0.342,
+    "sd": 0.007
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.5,
+    "sd": 0
+   },
+   "wMeanAbs": {
+    "mean": 0.05,
+    "sd": 0.001
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr2 iwm1000 fat0 adOff (pure FF)": {
+  "cfg": {
+   "brain": {
+    "threshold": 2,
+    "initialWeightModifier": 1000,
+    "fatigue": 0,
+    "recovery": 0,
+    "sustainability": {
+     "adaptiveThreshold": false
+    }
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.35350293237786035,
+    "rate": 0.02451973684210526,
+    "active": 0.26225,
+    "silentWords": 0,
+    "meanThr": 2,
+    "wMeanAbs": 0.00005082732062752306,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.3267915906831011,
+    "rate": 0.023151315789473683,
+    "active": 0.24875000000000003,
+    "silentWords": 0,
+    "meanThr": 2,
+    "wMeanAbs": 0.00004940513192995619,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.35541649170633716,
+    "rate": 0.02554605263157895,
+    "active": 0.27775000000000005,
+    "silentWords": 0,
+    "meanThr": 2,
+    "wMeanAbs": 0.000050122676657414195,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.345,
+    "sd": 0.013
+   },
+   "rate": {
+    "mean": 0.024,
+    "sd": 0.001
+   },
+   "active": {
+    "mean": 0.263,
+    "sd": 0.012
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 2,
+    "sd": 0
+   },
+   "wMeanAbs": {
+    "mean": 0,
+    "sd": 0
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr1.5 iwm1 fat0 adOff": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5,
+    "initialWeightModifier": 1,
+    "fatigue": 0,
+    "recovery": 0,
+    "sustainability": {
+     "adaptiveThreshold": false
+    }
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.3792792558301979,
+    "rate": 0.03910526315789474,
+    "active": 0.3275,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.050827320627523105,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.35320271045477386,
+    "rate": 0.03758552631578947,
+    "active": 0.31275,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.049405131929956124,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.39266016661031056,
+    "rate": 0.04059868421052631,
+    "active": 0.33399999999999996,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.05012267665741446,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.375,
+    "sd": 0.016
+   },
+   "rate": {
+    "mean": 0.039,
+    "sd": 0.001
+   },
+   "active": {
+    "mean": 0.325,
+    "sd": 0.009
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.5,
+    "sd": 0
+   },
+   "wMeanAbs": {
+    "mean": 0.05,
+    "sd": 0.001
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "asApp thr1.5": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5
+   },
+   "paramMode": "asApp"
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.42168625534250737,
+    "rate": 0.05355921052631579,
+    "active": 0.42824999999999996,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.9411764705882353,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.4615837520175833,
+    "rate": 0.06098026315789473,
+    "active": 0.46725000000000005,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.46793595979705016,
+    "rate": 0.0577828947368421,
+    "active": 0.44975000000000004,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.45,
+    "sd": 0.02
+   },
+   "rate": {
+    "mean": 0.057,
+    "sd": 0.003
+   },
+   "active": {
+    "mean": 0.448,
+    "sd": 0.016
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.5,
+    "sd": 0
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "asApp thr1.5 iwm1": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5,
+    "initialWeightModifier": 1
+   },
+   "paramMode": "asApp"
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.3792792558301979,
+    "rate": 0.03910526315789474,
+    "active": 0.3275,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.050827320627523105,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.35320271045477386,
+    "rate": 0.03758552631578947,
+    "active": 0.31275,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.049405131929956124,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.39266016661031056,
+    "rate": 0.04059868421052631,
+    "active": 0.33399999999999996,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.05012267665741446,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.375,
+    "sd": 0.016
+   },
+   "rate": {
+    "mean": 0.039,
+    "sd": 0.001
+   },
+   "active": {
+    "mean": 0.325,
+    "sd": 0.009
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.5,
+    "sd": 0
+   },
+   "wMeanAbs": {
+    "mean": 0.05,
+    "sd": 0.001
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "thr1.5 cov10 iwm1 adOff": {
+  "cfg": {
+   "brain": {
+    "threshold": 1.5,
+    "initialWeightModifier": 1,
+    "sustainability": {
+     "adaptiveThreshold": false
+    }
+   },
+   "inputLink": {
+    "coverage": 10
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.25625792789992624,
+    "rate": 0.019611842105263157,
+    "active": 0.17825000000000005,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.050827320627523105,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.25812456131732353,
+    "rate": 0.018157894736842102,
+    "active": 0.16225000000000003,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.049405131929956124,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.27209471904650606,
+    "rate": 0.01919078947368421,
+    "active": 0.17149999999999999,
+    "silentWords": 0,
+    "meanThr": 1.5,
+    "wMeanAbs": 0.05012267665741446,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "pairCos": {
+    "mean": 0.262,
+    "sd": 0.007
+   },
+   "rate": {
+    "mean": 0.019,
+    "sd": 0.001
+   },
+   "active": {
+    "mean": 0.171,
+    "sd": 0.007
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 1.5,
+    "sd": 0
+   },
+   "wMeanAbs": {
+    "mean": 0.05,
+    "sd": 0.001
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ }
+}

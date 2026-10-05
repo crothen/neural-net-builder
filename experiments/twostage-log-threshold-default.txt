@@ -1,0 +1,20 @@
+
+=== threshold | medium (20 words) | brain 200 | plasticity "default" | 3 seeds
+stage-1 passes | after stage 1: brain partial-cue ceiling, word similarity, active, connections, max weight | after 5 word passes: full / missing | after 20: full / missing
+       0       | 100% ceiling, similarity 0.27, active  16%,  4000 conns, max w  0.2 |  95% /  86% | 100% / 100%
+       1       | 100% ceiling, similarity 0.28, active  17%,   496 conns, max w  0.9 |  87% /  82% | 100% / 100%
+       2       | 100% ceiling, similarity 0.28, active  17%,   552 conns, max w  1.7 |  95% /  80% | 100% /  94%
+       5       | 100% ceiling, similarity 0.30, active  19%,   714 conns, max w  3.9 |  92% /  80% | 100% /  98%
+      10       | 100% ceiling, similarity 0.35, active  23%,   934 conns, max w  7.9 |  92% /  82% | 100% /  96%
+      20       | 100% ceiling, similarity 0.52, active  37%,  1246 conns, max w 15.8 |  77% /  37% |  98% /  90%
+      50       |  94% ceiling, similarity 0.93, active  94%,  1506 conns, max w 32.2 |  10% /   0% |  72% /  29%
+
+=== threshold | short (50 words) | brain 200 | plasticity "default" | 3 seeds
+stage-1 passes | after stage 1: brain partial-cue ceiling, word similarity, active, connections, max weight | after 5 word passes: full / missing | after 20: full / missing
+       0       |  99% ceiling, similarity 0.53, active  37%,  4000 conns, max w  0.2 |  73% /  61% |  97% /  97%
+       1       |  99% ceiling, similarity 0.55, active  39%,   573 conns, max w  1.9 |  75% /  57% |  97% /  96%
+       2       |  99% ceiling, similarity 0.59, active  43%,   688 conns, max w  3.7 |  71% /  49% |  97% /  96%
+       5       |  99% ceiling, similarity 0.76, active  64%,   899 conns, max w 10.0 |  23% /  13% |  91% /  80%
+      10       |  95% ceiling, similarity 0.94, active  92%,  1076 conns, max w 19.5 |   1% /   0% |  19% /   5%
+      20       |  96% ceiling, similarity 0.92, active  97%,  1496 conns, max w 39.8 |   1% /   0% |  28% /  11%
+      50       |  90% ceiling, similarity 0.85, active  93%,  2168 conns, max w 94.7 |   3% /   0% |  46% /  17%

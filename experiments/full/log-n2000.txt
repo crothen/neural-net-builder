@@ -1,0 +1,15 @@
+[07:08:26] brain 2000: built in 4 s, 110000 connections, 237 MB
+[07:09:48] pass 1 done: 83 s of teaching so far (17.1 ms/tick)
+[07:11:41] pass 2 done: 195 s of teaching so far (20.2 ms/tick)
+[07:19:03] after 2 passes (195 s teaching): FIRES all 99% half 14% quarter 0% ten 0% | STRONGEST all 99% half 99% quarter 99% ten 98% | only the right word fires 89% | 53% active | test 442 s
+[07:21:02] pass 3 done: 314 s of teaching so far (21.6 ms/tick)
+[07:22:41] pass 4 done: 413 s of teaching so far (21.3 ms/tick)
+[07:28:44] after 4 passes (413 s teaching): FIRES all 100% half 100% quarter 0% ten 0% | STRONGEST all 100% half 100% quarter 100% ten 100% | only the right word fires 100% | 53% active | test 363 s
+[07:30:10] pass 5 done: 499 s of teaching so far (20.6 ms/tick)
+[07:31:35] pass 6 done: 584 s of teaching so far (20.1 ms/tick)
+[07:33:01] pass 7 done: 670 s of teaching so far (19.8 ms/tick)
+[07:34:26] pass 8 done: 755 s of teaching so far (19.5 ms/tick)
+[07:35:50] pass 9 done: 839 s of teaching so far (19.3 ms/tick)
+[07:37:18] pass 10 done: 927 s of teaching so far (19.1 ms/tick)
+[07:44:13] after 10 passes (927 s teaching): FIRES all 100% half 100% quarter 28% ten 0% | STRONGEST all 100% half 100% quarter 100% ten 100% | only the right word fires 100% | 53% active | test 415 s
+[07:44:13] DONE

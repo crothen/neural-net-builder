@@ -1,0 +1,33 @@
+Word,Category,Color,Shape,Size,Texture,Temperature,State,Taste,Smell,Material,Covering,Process,Region,Time,Function,Location,Danger,Property,Sound,Action
+Bread,Food; Baked good; Bread; Staple food,Brown,,Small,Soft,,,Mild,Fresh-baked,Flour; Water; Yeast,Crust,Baked; Sliced,,,,Bakery,,,,
+Toast,Food; Baked good; Bread; Breakfast food,Brown,Flat,Small,Crisp,Warm,,Toasty,,Bread,,Toasted; Sliced,,Breakfast,,,,,Crunch,Spread
+Baguette,Food; Baked good; Bread,Brown,Long,Small,Crisp,,,Mild,Fresh-baked,Flour; Water; Yeast,Crust,Baked,France,,,Bakery,,,,
+Bun,Food; Baked good; Bread,Brown,Round,Small,Soft,,,Mild,Fresh-baked,Flour; Water; Yeast,,Baked,,,,Bakery,,,,
+Bagel,Food; Baked good; Bread; Breakfast food,Brown,Ring-shaped,Small,Chewy,,,Mild,Fresh-baked,Flour; Water; Yeast,,Boiled; Baked,North America,Breakfast,,Bakery,,,,
+Pretzel,Food; Baked good; Snack,Brown,Loop,Small,Chewy,,,Salty,Fresh-baked,Flour; Water; Yeast; Salt,,Baked,Germany,,Snacking,Bakery,,,,
+Croissant,Food; Baked good; Pastry; Breakfast food,Gold,Crescent,Small,Flaky,,,Buttery,Buttery,Flour; Butter; Yeast,,Baked,France,Breakfast,,Bakery,,,,
+Cake,Food; Baked good; Dessert,,Round,Medium,Spongy,,,Sweet,Sweet,Flour; Sugar; Egg; Butter,Icing,Baked; Iced,,Festive occasions,Celebration,,,,,
+Cupcake,Food; Baked good; Dessert,,Round,Small,Spongy,,,Sweet,Sweet,Flour; Sugar; Egg; Butter,Icing; Wrapper,Baked; Iced,,Festive occasions,Celebration,,,,,
+Muffin,Food; Baked good; Breakfast food,Brown,Round,Small,Soft,,,Sweet,Sweet,Flour; Sugar; Egg; Butter,Wrapper,Baked,,Breakfast,,,,,,
+Cookie,Food; Baked good; Snack,Brown,Round; Flat,Tiny,Crunchy,,,Sweet,Sweet,Flour; Sugar; Butter,,Baked,,,Snacking,,,,,
+Cracker,Food; Baked good; Snack,Beige,Square; Flat,Tiny,Crisp,,,Salty,,Flour; Water; Salt,,Baked,,,Snacking,,,,,
+Pie,Food; Baked good; Dessert,Gold,Round,Medium,Flaky,Warm,,Sweet,Fresh-baked,Flour; Butter; Fruit; Sugar,Crust,Baked; Filled,,,,,,,,
+Pancake,Food; Breakfast food,Gold,Round; Flat,Small,Fluffy,Warm,,Mild,,Flour; Milk; Egg,,Fried,,Breakfast,,,,,,
+Waffle,Food; Breakfast food,Gold,Square,Small,Crisp,Warm,,Mild,,Flour; Milk; Egg,,Baked,,Breakfast,,,,,,
+Donut,Food; Pastry; Snack,Brown,Ring-shaped,Small,Soft,,,Sweet,Fried,Flour; Sugar; Oil,,Deep-fried,North America,,Snacking,,Unhealthy,,,
+Egg,Food; Breakfast food,White; Yellow,Oval,Tiny,Smooth,,,Mild; Rich,Sulfurous,Egg yolk,Shell,Boiled; Fried,,Breakfast,Baking,,Food poisoning,Fragile,,
+Omelet,Food; Dish; Breakfast food,Yellow,Flat,Small,Fluffy,Hot,,Savory; Buttery,,Egg; Butter; Cheese,,Fried; Folded,France,Breakfast,,,,,,
+Cheese,Food; Dairy,Yellow,Wedge-shaped,Small,Firm,,,Cheesy; Salty,Cheesy; Pungent,Milk; Salt,Rind,Curdled; Aged; Pressed,,,Sandwich filling; Topping,Fridge,,Melts,,
+Butter,Food; Dairy; Spread,Pale yellow,Rectangular,Small,Creamy; Greasy,Cold,Soft solid,Buttery; Rich,Buttery,Cream; Salt,Wrapper,Churned,,Breakfast,Spreading; Baking; Frying,Fridge,,Melts,,Spread
+Yogurt,Food; Dairy; Breakfast food,White,,Small,Creamy; Smooth,Cold,Soft solid,Tangy; Sour,Milky,Milk,,Fermented; Chilled,,Breakfast,,Fridge,,,,
+Cream,Food; Dairy,White,,,Smooth; Viscous,Cold,Liquid,Rich; Milky,Milky,Milk,,Chilled,,,Topping; Baking,Fridge,,,,Pour
+Gelato,Food; Dairy; Dessert,,Round,Small,Creamy; Smooth,Freezing,Soft solid,Sweet; Milky,,Milk; Cream; Sugar,,Frozen; Churned,Italy,Summer,Refreshment,Cafe,,Melts,,Lick
+Chocolate,Food; Confection; Snack,Dark brown,Rectangular; Flat,Small,Smooth; Brittle,,,Sweet; Rich; Chocolatey,Chocolate,Cocoa; Sugar; Milk,Wrapper,Roasted; Ground; Molded,,Festive occasions,Gift,,Tooth decay,Melts,,
+Candy,Food; Confection; Snack,Multicolored,,Tiny,Hard; Sticky,,,Sweet; Fruity,Sweet,Sugar; Syrup,Wrapper,Boiled; Molded,,Festive occasions,,,Tooth decay,,,
+Lollipop,Food; Confection,Multicolored,Round,Tiny,Hard; Sticky,,,Sweet; Fruity,Sweet,Sugar; Syrup,Wrapper,Boiled; Molded,,,,Fair,Tooth decay,,,Lick
+Honey,Food; Sweetener; Spread,Amber,,,Sticky; Viscous,,Liquid,Sweet; Floral,Sweet; Floral,Nectar,,Extracted; Filtered,,Breakfast,Sweetening; Spreading; Medicine,Hive,,Non-perishable,,Pour
+Jam,Food; Spread,Red,,,Sticky,,,Sweet; Fruity,Fruity,Fruit; Sugar,,Boiled; Sweetened,,Breakfast,Spreading; Preserving,Cupboard,,,,Spread
+Sugar,Food; Sweetener,White,,Tiny,Grainy; Dry,,Granular,Sweet,Odorless,,,Refined; Extracted,Caribbean,,Sweetening; Baking; Preserving,Kitchen,Tooth decay; Unhealthy,Soluble,,
+Salt,Food; Seasoning; Mineral,White,,Tiny,Grainy; Dry,,Granular,Salty,Odorless,,,Mined; Evaporated,,,Seasoning; Preserving,Kitchen; Table,Unhealthy,Soluble,,
+Peppercorn,Food; Seasoning; Spice,Black,Round,Tiny,Hard; Dry,,,Peppery; Pungent,,,,Dried; Ground,India,,Seasoning,Table,Irritant,,,
+Flour,Food; Staple food,White,,,Powdery; Fine; Dry,,Powder,Bland,,Wheat,,Milled; Sieved,,,Bread making; Baking; Thickening,Kitchen; Bakery,Allergenic,,,

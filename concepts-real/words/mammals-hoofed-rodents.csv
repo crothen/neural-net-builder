@@ -1,0 +1,32 @@
+Word,Category,Color,Appearance,Size,Covering,Sound,Movement,Speed,Location,Region,Diet,Parts,Behavior,Growth,Sociality,Time,Danger,Function
+Horse,Living thing; Animal; Mammal; Hoofed animal; Equine; Domestic animal; Working animal,Brown,,Large,Hair,Neigh,Gallops,,Stable,,Herbivore; Hay,Hooves; Mane; Long tail,Grazes,,Herd,,Kicks,Riding; Racing
+Donkey,Living thing; Animal; Mammal; Hoofed animal; Equine; Domestic animal; Working animal,Gray,,Medium,Hair,Bray,Walks,,Stable,,Herbivore; Hay,Hooves; Mane; Long ears,Stubborn,,Herd,,Kicks,Carrying; Pulling loads
+Mule,Living thing; Animal; Mammal; Hoofed animal; Equine; Domestic animal; Working animal,Brown,,Large,Hair,Bray,Walks,,Stable,,Herbivore; Hay,Hooves; Mane; Long ears,Stubborn,,,,Kicks,Carrying; Pulling loads
+Zebra,Living thing; Animal; Mammal; Hoofed animal; Equine,Black; White,Striped,Large,Hair,Bray,Gallops,,Savanna,Africa,Herbivore; Grass,Hooves; Mane; Tail,Grazes,Migrates,Herd,,Kicks,
+Cow,Living thing; Animal; Mammal; Hoofed animal; Domestic animal; Livestock,Black; White,Patched,Large,Hair,Moo,Walks,,Pasture,,Herbivore; Grass,Hooves; Horns; Udder,Chews cud,,Herd,,Kicks,Milk source; Meat source
+Buffalo,Living thing; Animal; Mammal; Hoofed animal; Domestic animal; Livestock; Working animal,Black,,Large,Hair,Bellow,Walks; Wades,,Swamp,Asia,Herbivore; Grass,Hooves; Horns,Wallows,,Herd,,Charges,Milk source; Pulling loads
+Bison,Living thing; Animal; Mammal; Hoofed animal,Brown,,Large,Hair,Grunt,Walks; Runs,,Prairie,North America,Herbivore; Grass,Hooves; Horns; Hump,,,Herd,,Charges,
+Sheep,Living thing; Animal; Mammal; Hoofed animal; Domestic animal; Livestock,White,,Medium,Wool,Bleat,Walks,,Pasture,,Herbivore; Grass,Hooves; Short tail,Grazes,,Flock,,,Wool source; Meat source
+Goat,Living thing; Animal; Mammal; Hoofed animal; Domestic animal; Livestock,White,,Medium,Hair,Bleat,Walks; Climbs,,Pasture,,Herbivore; Leaves,Hooves; Horns; Beard,Browses,,Herd,,Charges,Milk source; Meat source
+Llama,Living thing; Animal; Mammal; Hoofed animal; Domestic animal; Livestock,Brown,,Large,Wool,Hum,Walks,,Mountain,South America,Herbivore; Grass,Long neck; Pointed ears,Spits,,Herd,,,Carrying; Wool source
+Alpaca,Living thing; Animal; Mammal; Hoofed animal; Domestic animal; Livestock,White,,Medium,Wool,Hum,Walks,,Mountain,South America,Herbivore; Grass,Long neck; Pointed ears,Spits,,Herd,,,Wool source
+Camel,Living thing; Animal; Mammal; Hoofed animal; Domestic animal; Working animal,Tan,,Large,Hair,Bellow,Walks,,Desert,Middle East,Herbivore; Leaves,Long neck; Long legs; Hump,Spits,,Herd,,Bites,Riding; Carrying
+Pig,Living thing; Animal; Mammal; Hoofed animal; Domestic animal; Livestock,Pink,,Medium,Bristles,Oink,Walks,,,,Omnivore,Snout; Hooves; Curly tail,Wallows,,Herd,,,Meat source
+Boar,Living thing; Animal; Mammal; Hoofed animal; Game animal,Brown,,Medium,Bristles,Grunt,Runs,,Forest,Europe,Omnivore,Snout; Hooves; Tusks,Wallows,,Herd,Nocturnal,Gores,
+Deer,Living thing; Animal; Mammal; Hoofed animal; Deer family; Game animal,Brown,,Medium,Hair,,Runs; Leaps,,Forest,Northern Hemisphere,Herbivore; Leaves,Hooves; Antlers; Short tail,Browses,Sheds antlers,Herd,Crepuscular,Collision,
+Moose,Living thing; Animal; Mammal; Hoofed animal; Deer family; Game animal,Brown,,Large,Hair,Bellow,Walks; Wades,,Forest,Northern Hemisphere,Herbivore; Leaves,Hooves; Antlers; Long legs,Browses,Sheds antlers,Solitary,Crepuscular,Collision,
+Reindeer,Living thing; Animal; Mammal; Hoofed animal; Deer family; Working animal,Brown,,Medium,Hair,Grunt,Runs,,,Arctic,Herbivore; Grass,Hooves; Antlers; Short tail,Grazes,Sheds antlers; Migrates,Herd,,,Pulling loads; Meat source
+Antelope,Living thing; Animal; Mammal; Hoofed animal; Game animal,Tan,,Medium,Hair,,Runs; Leaps,Very fast,Savanna,Africa,Herbivore; Grass,Hooves; Horns; Long legs,Grazes,,Herd,,,
+Giraffe,Living thing; Animal; Mammal; Hoofed animal,Tan,Patched,Huge,Hair,,Walks,,Savanna,Africa,Herbivore; Leaves,Hooves; Long neck; Long legs,Browses,,Herd,,Kicks,
+Elephant,Living thing; Animal; Mammal,Gray,,Huge,Thick hide,Trumpeting,Walks,,Savanna,Africa; Asia,Herbivore; Grass,Trunk; Tusks; Large ears,Wallows,,Herd,,,
+Rhinoceros,Living thing; Animal; Mammal; Hoofed animal,Gray,,Huge,Thick hide,Snort,Walks,,Savanna,Africa; Asia,Herbivore; Grass,Horns; Hooves,Wallows,,Solitary,,Charges,
+Hippopotamus,Living thing; Animal; Mammal; Hoofed animal,Gray,,Huge,Thick hide,Grunt,Walks; Wades,,River,Africa,Herbivore; Grass,Tusks; Powerful jaws; Short legs,Wallows,,Herd,Nocturnal,Deadly,
+Mouse,Living thing; Animal; Mammal; Rodent; Pest,Gray,,Tiny,Fur,Squeak,Scurries,,Home,,Omnivore; Grain,Incisors; Whiskers; Long tail,Gnaws,,Colony,Nocturnal,,
+Rat,Living thing; Animal; Mammal; Rodent; Pest,Brown,,Small,Fur,Squeak,Scurries,,Sewer,,Omnivore; Garbage,Incisors; Whiskers; Long tail,Gnaws,,Colony,Nocturnal,Spreads disease,
+Hamster,Living thing; Animal; Mammal; Rodent; Domestic animal; Pet,Brown,,Small,Fur,Squeak,Scurries,,Cage,,Omnivore; Seeds,Incisors; Cheek pouches; Short tail,Hoards food,,Solitary,Nocturnal,,Companionship
+Squirrel,Living thing; Animal; Mammal; Rodent,Gray,,Small,Fur,Chatter,Climbs; Leaps,,Forest,,Herbivore; Nuts,Incisors; Bushy tail; Claws,Hoards food,,Solitary,,,
+Chipmunk,Living thing; Animal; Mammal; Rodent,Brown,Striped,Tiny,Fur,Chirp,Scurries; Climbs,,Forest,North America,Herbivore; Seeds,Incisors; Cheek pouches; Tail,Hoards food,Hibernates,Solitary,,,
+Beaver,Living thing; Animal; Mammal; Rodent,Brown,,Medium,Fur,Splash,Swims; Dives,,River,Northern Hemisphere,Herbivore; Bark,Incisors; Flat tail; Webbed feet,Builds dam,,Family group,Nocturnal,,Fur source
+Porcupine,Living thing; Animal; Mammal; Rodent,Brown,,Medium,Quills,Grunt,Walks; Climbs,,Forest,,Herbivore; Bark,Incisors; Short legs,Gnaws,,Solitary,Nocturnal,Pricks,
+Rabbit,Living thing; Animal; Mammal; Pet,Gray,,Small,Fur,,Hops,,Meadow; Burrow,,Herbivore; Grass,Long ears; Short tail; Strong hind legs,Digs,,Colony,Crepuscular,Damages crops,Companionship; Meat source
+Hare,Living thing; Animal; Mammal; Game animal,Brown,,Small,Fur,,Runs,Very fast,Meadow,,Herbivore; Grass,Long ears; Short tail; Strong hind legs,Boxes,,Solitary,Crepuscular,,

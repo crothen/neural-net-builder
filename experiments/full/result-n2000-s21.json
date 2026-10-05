@@ -1,0 +1,63 @@
+{
+ "size": 2000,
+ "seed": 21,
+ "coverage": 2,
+ "wMax": 1,
+ "words": 121,
+ "concepts": 1000,
+ "checkpoints": [
+  {
+   "epoch": 2,
+   "trainSeconds": 195.15167330000003,
+   "msPerTick": 20.1602968285124,
+   "full": 0.9917355371900827,
+   "half": 0.14049586776859505,
+   "quarter": 0,
+   "ten": 0,
+   "driveFull": 0.9917355371900827,
+   "driveHalf": 0.9917355371900827,
+   "driveQuarter": 0.9917355371900827,
+   "driveTen": 0.9834710743801653,
+   "onlyRightWordFires": 0.8925619834710744,
+   "rate": 0.15950043497172675,
+   "activeFrac": 0.5269132231404959,
+   "evalSeconds": 442.4687988
+  },
+  {
+   "epoch": 4,
+   "trainSeconds": 413.27616580000006,
+   "msPerTick": 21.34690939049587,
+   "full": 1,
+   "half": 1,
+   "quarter": 0,
+   "ten": 0,
+   "driveFull": 1,
+   "driveHalf": 1,
+   "driveQuarter": 1,
+   "driveTen": 1,
+   "onlyRightWordFires": 1,
+   "rate": 0.15955339277946942,
+   "activeFrac": 0.526900826446281,
+   "evalSeconds": 362.9735502999999
+  },
+  {
+   "epoch": 10,
+   "trainSeconds": 926.7525863999999,
+   "msPerTick": 19.1477807107438,
+   "full": 1,
+   "half": 1,
+   "quarter": 0.2809917355371901,
+   "ten": 0,
+   "driveFull": 1,
+   "driveHalf": 1,
+   "driveQuarter": 1,
+   "driveTen": 1,
+   "onlyRightWordFires": 1,
+   "rate": 0.15954273597216181,
+   "activeFrac": 0.5267272727272726,
+   "evalSeconds": 415.32079619999973
+  }
+ ],
+ "buildSeconds": 4.466894099999999,
+ "connections": 110000
+}

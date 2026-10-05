@@ -1,0 +1,497 @@
+{
+ "localizer 0": {
+  "cfg": {
+   "inputLink": {
+    "localizer": 0
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.7647058823529411,
+    "pairCos": 0.8733178048155184,
+    "rate": 0.09696052631578947,
+    "active": 0.86825,
+    "silentWords": 0,
+    "meanThr": 0.7482825000000167,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.7058823529411765,
+    "sepFull": 1,
+    "sepPart": 0.7647058823529411,
+    "pairCos": 0.9220197067099459,
+    "rate": 0.11357894736842104,
+    "active": 0.9582499999999999,
+    "silentWords": 0,
+    "meanThr": 0.803913250000016,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.7058823529411765,
+    "pairCos": 0.9092333566785814,
+    "rate": 0.10665789473684213,
+    "active": 0.91625,
+    "silentWords": 0,
+    "meanThr": 0.7806845000000157,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.784,
+    "sd": 0.055
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.745,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.902,
+    "sd": 0.021
+   },
+   "rate": {
+    "mean": 0.106,
+    "sd": 0.007
+   },
+   "active": {
+    "mean": 0.914,
+    "sd": 0.037
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.778,
+    "sd": 0.023
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "localizer 10": {
+  "cfg": {
+   "inputLink": {
+    "localizer": 10
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.8864925479915026,
+    "rate": 0.10474342105263157,
+    "active": 0.88325,
+    "silentWords": 0,
+    "meanThr": 0.7743207500000163,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9309139859711992,
+    "rate": 0.11804605263157894,
+    "active": 0.9559999999999998,
+    "silentWords": 0,
+    "meanThr": 0.8222115000000154,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9117476058130353,
+    "rate": 0.1111315789473684,
+    "active": 0.9110000000000001,
+    "silentWords": 0,
+    "meanThr": 0.796534000000016,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.863,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.824,
+    "sd": 0
+   },
+   "pairCos": {
+    "mean": 0.91,
+    "sd": 0.018
+   },
+   "rate": {
+    "mean": 0.111,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.917,
+    "sd": 0.03
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.798,
+    "sd": 0.02
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "localizer 30": {
+  "cfg": {
+   "inputLink": {
+    "localizer": 30
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.8930385533380162,
+    "rate": 0.11279605263157895,
+    "active": 0.9042500000000002,
+    "silentWords": 0,
+    "meanThr": 0.7958562500000163,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.9411764705882353,
+    "sepFull": 1,
+    "sepPart": 0.7647058823529411,
+    "pairCos": 0.9301255961117272,
+    "rate": 0.12471710526315789,
+    "active": 0.9594999999999999,
+    "silentWords": 0,
+    "meanThr": 0.8432130000000153,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.9141156174653516,
+    "rate": 0.11921052631578948,
+    "active": 0.9424999999999999,
+    "silentWords": 0,
+    "meanThr": 0.8151082500000161,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.902,
+    "sd": 0.1
+   },
+   "pairCos": {
+    "mean": 0.912,
+    "sd": 0.015
+   },
+   "rate": {
+    "mean": 0.119,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.935,
+    "sd": 0.023
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.818,
+    "sd": 0.019
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "localizer 60": {
+  "cfg": {
+   "inputLink": {
+    "localizer": 60
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.9411764705882353,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.9024724588730237,
+    "rate": 0.11461184210526316,
+    "active": 0.9219999999999999,
+    "silentWords": 0,
+    "meanThr": 0.7981585000000166,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.935880287603469,
+    "rate": 0.12567105263157893,
+    "active": 0.9642499999999996,
+    "silentWords": 0,
+    "meanThr": 0.8485195000000156,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.8823529411764706,
+    "pairCos": 0.9186029340257987,
+    "rate": 0.11938157894736845,
+    "active": 0.931,
+    "silentWords": 0,
+    "meanThr": 0.8235680000000162,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.941,
+    "sd": 0.048
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.902,
+    "sd": 0.073
+   },
+   "pairCos": {
+    "mean": 0.919,
+    "sd": 0.014
+   },
+   "rate": {
+    "mean": 0.12,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.939,
+    "sd": 0.018
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.823,
+    "sd": 0.021
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "localizer 100": {
+  "cfg": {
+   "inputLink": {
+    "localizer": 100
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.9411764705882353,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.9083185194634871,
+    "rate": 0.11688815789473683,
+    "active": 0.9192500000000001,
+    "silentWords": 0,
+    "meanThr": 0.8147025000000154,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.9443022440567841,
+    "rate": 0.12874999999999998,
+    "active": 0.97775,
+    "silentWords": 0,
+    "meanThr": 0.858698500000015,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.9411764705882353,
+    "sepFull": 1,
+    "sepPart": 0.8823529411764706,
+    "pairCos": 0.9184215470788427,
+    "rate": 0.12272368421052633,
+    "active": 0.9417500000000001,
+    "silentWords": 0,
+    "meanThr": 0.8311462500000156,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.961,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.922,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.924,
+    "sd": 0.015
+   },
+   "rate": {
+    "mean": 0.123,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.946,
+    "sd": 0.024
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.835,
+    "sd": 0.018
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ }
+}

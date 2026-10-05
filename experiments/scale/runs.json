@@ -1,0 +1,5570 @@
+{
+ "probe|full:25:100:d:d:d:d": {
+  "tag": "probe",
+  "spec": "full:25:100:d:d:d:d",
+  "dataset": "full",
+  "nWords": 25,
+  "seeds": [
+   1
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.52,
+    "sd": 0,
+    "min": 0.52
+   },
+   "linPartial": {
+    "mean": 0.36,
+    "sd": 0,
+    "min": 0.36
+   },
+   "linHalf": {
+    "mean": 0.22,
+    "sd": 0,
+    "min": 0.22
+   },
+   "ncFull": {
+    "mean": 0.6,
+    "sd": 0,
+    "min": 0.6
+   },
+   "ncPartial": {
+    "mean": 0.28,
+    "sd": 0,
+    "min": 0.28
+   },
+   "ncHalf": {
+    "mean": 0.22,
+    "sd": 0,
+    "min": 0.22
+   },
+   "meanPairCos": {
+    "mean": 0.993,
+    "sd": 0,
+    "min": 0.993
+   },
+   "rate": {
+    "mean": 0.157,
+    "sd": 0,
+    "min": 0.157
+   },
+   "activeFrac": {
+    "mean": 0.999,
+    "sd": 0,
+    "min": 0.999
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.365,
+    "sd": 0,
+    "min": 1.365
+   },
+   "buildMs": {
+    "mean": 64,
+    "sd": 0,
+    "min": 64
+   },
+   "ms": {
+    "mean": 10721,
+    "sd": 0,
+    "min": 10721
+   },
+   "conns": {
+    "mean": 20733,
+    "sd": 0,
+    "min": 20733
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.52,
+    "linPartial": 0.36,
+    "linHalf": 0.22,
+    "linTrain": 0.94,
+    "ncFull": 0.6,
+    "ncPartial": 0.28,
+    "ncHalf": 0.22,
+    "meanPairCos": 0.9929162187838155,
+    "rate": 0.15736315789473687,
+    "activeFrac": 0.9994,
+    "satFrac": 0,
+    "meanThr": 1.3652009999997676,
+    "nPartial": 25,
+    "nHalf": 50,
+    "ms": 10721,
+    "buildMs": 64,
+    "conns": 20733
+   }
+  ]
+ },
+ "probe|full:25:100:5:d:d:d": {
+  "tag": "probe",
+  "spec": "full:25:100:5:d:d:d",
+  "dataset": "full",
+  "nWords": 25,
+  "seeds": [
+   1
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linHalf": {
+    "mean": 0.98,
+    "sd": 0,
+    "min": 0.98
+   },
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncHalf": {
+    "mean": 0.98,
+    "sd": 0,
+    "min": 0.98
+   },
+   "meanPairCos": {
+    "mean": 0.896,
+    "sd": 0,
+    "min": 0.896
+   },
+   "rate": {
+    "mean": 0.153,
+    "sd": 0,
+    "min": 0.153
+   },
+   "activeFrac": {
+    "mean": 0.977,
+    "sd": 0,
+    "min": 0.977
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.232,
+    "sd": 0,
+    "min": 1.232
+   },
+   "buildMs": {
+    "mean": 50,
+    "sd": 0,
+    "min": 50
+   },
+   "ms": {
+    "mean": 4701,
+    "sd": 0,
+    "min": 4701
+   },
+   "conns": {
+    "mean": 6706,
+    "sd": 0,
+    "min": 6706
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.98,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.98,
+    "meanPairCos": 0.8957887580560202,
+    "rate": 0.15314210526315786,
+    "activeFrac": 0.9772,
+    "satFrac": 0,
+    "meanThr": 1.232289499999811,
+    "nPartial": 25,
+    "nHalf": 50,
+    "ms": 4701,
+    "buildMs": 50,
+    "conns": 6706
+   }
+  ]
+ },
+ "probe|full:25:100:d:0.03:d:d": {
+  "tag": "probe",
+  "spec": "full:25:100:d:0.03:d:d",
+  "dataset": "full",
+  "nWords": 25,
+  "seeds": [
+   1
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.96,
+    "sd": 0,
+    "min": 0.96
+   },
+   "linHalf": {
+    "mean": 0.72,
+    "sd": 0,
+    "min": 0.72
+   },
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.88,
+    "sd": 0,
+    "min": 0.88
+   },
+   "ncHalf": {
+    "mean": 0.64,
+    "sd": 0,
+    "min": 0.64
+   },
+   "meanPairCos": {
+    "mean": 0.969,
+    "sd": 0,
+    "min": 0.969
+   },
+   "rate": {
+    "mean": 0.147,
+    "sd": 0,
+    "min": 0.147
+   },
+   "activeFrac": {
+    "mean": 0.994,
+    "sd": 0,
+    "min": 0.994
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.072,
+    "sd": 0,
+    "min": 1.072
+   },
+   "buildMs": {
+    "mean": 136,
+    "sd": 0,
+    "min": 136
+   },
+   "ms": {
+    "mean": 13504,
+    "sd": 0,
+    "min": 13504
+   },
+   "conns": {
+    "mean": 20733,
+    "sd": 0,
+    "min": 20733
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.96,
+    "linHalf": 0.72,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.88,
+    "ncHalf": 0.64,
+    "meanPairCos": 0.9693594908718495,
+    "rate": 0.14743157894736844,
+    "activeFrac": 0.9941999999999999,
+    "satFrac": 0,
+    "meanThr": 1.072165499999886,
+    "nPartial": 25,
+    "nHalf": 50,
+    "ms": 13504,
+    "buildMs": 136,
+    "conns": 20733
+   }
+  ]
+ },
+ "full|full:121:100:5:d:d:d": {
+  "tag": "full",
+  "spec": "full:121:100:5:d:d:d",
+  "dataset": "full",
+  "nWords": 121,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linHalf": {
+    "mean": 0.989,
+    "sd": 0.004,
+    "min": 0.983
+   },
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncHalf": {
+    "mean": 0.975,
+    "sd": 0.01,
+    "min": 0.963
+   },
+   "meanPairCos": {
+    "mean": 0.846,
+    "sd": 0.015,
+    "min": 0.83
+   },
+   "rate": {
+    "mean": 0.141,
+    "sd": 0.002,
+    "min": 0.139
+   },
+   "activeFrac": {
+    "mean": 0.905,
+    "sd": 0.014,
+    "min": 0.89
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.913,
+    "sd": 0.032,
+    "min": 2.873
+   },
+   "buildMs": {
+    "mean": 52.333,
+    "sd": 13.021,
+    "min": 34
+   },
+   "ms": {
+    "mean": 25328,
+    "sd": 3105.316,
+    "min": 22497
+   },
+   "conns": {
+    "mean": 6707.667,
+    "sd": 3.859,
+    "min": 6704
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.9834710743801653,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.9752066115702479,
+    "meanPairCos": 0.8300935296727695,
+    "rate": 0.13861244019138758,
+    "activeFrac": 0.8896694214876031,
+    "satFrac": 0,
+    "meanThr": 2.8727005000006165,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 22497,
+    "buildMs": 60,
+    "conns": 6706
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.9917355371900827,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.987603305785124,
+    "meanPairCos": 0.8416687671748359,
+    "rate": 0.14089495432796867,
+    "activeFrac": 0.9014876033057851,
+    "satFrac": 0,
+    "meanThr": 2.914979000000742,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 29651,
+    "buildMs": 34,
+    "conns": 6713
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.9917355371900827,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.9628099173553719,
+    "meanPairCos": 0.8664903122631331,
+    "rate": 0.1441431056981296,
+    "activeFrac": 0.923429752066115,
+    "satFrac": 0,
+    "meanThr": 2.9499745000007995,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 23836,
+    "buildMs": 63,
+    "conns": 6704
+   }
+  ]
+ },
+ "full|full:121:100:2:d:d:d": {
+  "tag": "full",
+  "spec": "full:121:100:2:d:d:d",
+  "dataset": "full",
+  "nWords": 121,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linHalf": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncHalf": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "meanPairCos": {
+    "mean": 0.714,
+    "sd": 0.027,
+    "min": 0.688
+   },
+   "rate": {
+    "mean": 0.115,
+    "sd": 0.004,
+    "min": 0.112
+   },
+   "activeFrac": {
+    "mean": 0.811,
+    "sd": 0.025,
+    "min": 0.786
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.154,
+    "sd": 0.075,
+    "min": 2.094
+   },
+   "buildMs": {
+    "mean": 35.667,
+    "sd": 8.994,
+    "min": 23
+   },
+   "ms": {
+    "mean": 23034.333,
+    "sd": 1249.407,
+    "min": 21317
+   },
+   "conns": {
+    "mean": 3991.667,
+    "sd": 1.886,
+    "min": 3989
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 1,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 1,
+    "meanPairCos": 0.687740899238561,
+    "rate": 0.11190082644628091,
+    "activeFrac": 0.7859090909090908,
+    "satFrac": 0,
+    "meanThr": 2.0941239999988084,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 21317,
+    "buildMs": 41,
+    "conns": 3993
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 1,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 1,
+    "meanPairCos": 0.7040331993070158,
+    "rate": 0.11303719008264457,
+    "activeFrac": 0.8010743801652894,
+    "satFrac": 0,
+    "meanThr": 2.1074459999988284,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 23533,
+    "buildMs": 43,
+    "conns": 3993
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 1,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 1,
+    "meanPairCos": 0.7516167705483978,
+    "rate": 0.12020443671161371,
+    "activeFrac": 0.8459090909090908,
+    "satFrac": 0,
+    "meanThr": 2.259129999999484,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 24253,
+    "buildMs": 23,
+    "conns": 3989
+   }
+  ]
+ },
+ "full|full:121:100:5:d:100:d": {
+  "tag": "full",
+  "spec": "full:121:100:5:d:100:d",
+  "dataset": "full",
+  "nWords": 121,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.994,
+    "sd": 0.004,
+    "min": 0.992
+   },
+   "linHalf": {
+    "mean": 0.927,
+    "sd": 0.024,
+    "min": 0.897
+   },
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.992,
+    "sd": 0.007,
+    "min": 0.983
+   },
+   "ncHalf": {
+    "mean": 0.927,
+    "sd": 0.035,
+    "min": 0.88
+   },
+   "meanPairCos": {
+    "mean": 0.938,
+    "sd": 0.012,
+    "min": 0.929
+   },
+   "rate": {
+    "mean": 0.155,
+    "sd": 0.002,
+    "min": 0.153
+   },
+   "activeFrac": {
+    "mean": 0.972,
+    "sd": 0.008,
+    "min": 0.964
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.981,
+    "sd": 0.015,
+    "min": 2.96
+   },
+   "buildMs": {
+    "mean": 17.667,
+    "sd": 4.497,
+    "min": 14
+   },
+   "ms": {
+    "mean": 30077.333,
+    "sd": 570.325,
+    "min": 29380
+   },
+   "conns": {
+    "mean": 7000,
+    "sd": 0,
+    "min": 7000
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.9917355371900827,
+    "linHalf": 0.9297520661157025,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.9917355371900827,
+    "ncHalf": 0.9380165289256198,
+    "meanPairCos": 0.9312211979812262,
+    "rate": 0.15373314484558503,
+    "activeFrac": 0.969752066115702,
+    "satFrac": 0,
+    "meanThr": 2.9913195000010364,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 30777,
+    "buildMs": 24,
+    "conns": 7000
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.9545454545454546,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.9834710743801653,
+    "ncHalf": 0.9628099173553719,
+    "meanPairCos": 0.9291804554395199,
+    "rate": 0.15283057851239673,
+    "activeFrac": 0.9635537190082636,
+    "satFrac": 0,
+    "meanThr": 2.9598075000009785,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 30075,
+    "buildMs": 14,
+    "conns": 7000
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.9917355371900827,
+    "linHalf": 0.8966942148760331,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.8801652892561983,
+    "meanPairCos": 0.9545637775554132,
+    "rate": 0.15701500652457587,
+    "activeFrac": 0.9825619834710743,
+    "satFrac": 0,
+    "meanThr": 2.9911670000010657,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 29380,
+    "buildMs": 15,
+    "conns": 7000
+   }
+  ]
+ },
+ "full|full:121:100:5:0.1:d:d": {
+  "tag": "full",
+  "spec": "full:121:100:5:0.1:d:d",
+  "dataset": "full",
+  "nWords": 121,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linHalf": {
+    "mean": 0.972,
+    "sd": 0.012,
+    "min": 0.959
+   },
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncHalf": {
+    "mean": 0.899,
+    "sd": 0.047,
+    "min": 0.839
+   },
+   "meanPairCos": {
+    "mean": 0.745,
+    "sd": 0.028,
+    "min": 0.716
+   },
+   "rate": {
+    "mean": 0.097,
+    "sd": 0.005,
+    "min": 0.092
+   },
+   "activeFrac": {
+    "mean": 0.836,
+    "sd": 0.022,
+    "min": 0.814
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.549,
+    "sd": 0.094,
+    "min": 1.458
+   },
+   "buildMs": {
+    "mean": 23.333,
+    "sd": 8.34,
+    "min": 16
+   },
+   "ms": {
+    "mean": 27558.667,
+    "sd": 256.479,
+    "min": 27209
+   },
+   "conns": {
+    "mean": 6707.667,
+    "sd": 3.859,
+    "min": 6704
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.987603305785124,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.9545454545454546,
+    "meanPairCos": 0.7157974056048182,
+    "rate": 0.09159199652022618,
+    "activeFrac": 0.8140909090909093,
+    "satFrac": 0,
+    "meanThr": 1.457870999997628,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 27817,
+    "buildMs": 35,
+    "conns": 6706
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.9710743801652892,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.9049586776859504,
+    "meanPairCos": 0.7369686498119578,
+    "rate": 0.09530665506742055,
+    "activeFrac": 0.8290495867768598,
+    "satFrac": 0,
+    "meanThr": 1.511209499997549,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 27650,
+    "buildMs": 19,
+    "conns": 6713
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.9586776859504132,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.8388429752066116,
+    "meanPairCos": 0.7830719739241162,
+    "rate": 0.10335254458460197,
+    "activeFrac": 0.8660330578512395,
+    "satFrac": 0,
+    "meanThr": 1.6775709999976698,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 27209,
+    "buildMs": 16,
+    "conns": 6704
+   }
+  ]
+ },
+ "full|full:121:25:5:d:d:d": {
+  "tag": "full",
+  "spec": "full:121:25:5:d:d:d",
+  "dataset": "full",
+  "nWords": 121,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linHalf": {
+    "mean": 0.829,
+    "sd": 0.042,
+    "min": 0.773
+   },
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncHalf": {
+    "mean": 0.818,
+    "sd": 0.033,
+    "min": 0.773
+   },
+   "meanPairCos": {
+    "mean": 0.784,
+    "sd": 0.018,
+    "min": 0.766
+   },
+   "rate": {
+    "mean": 0.133,
+    "sd": 0.002,
+    "min": 0.13
+   },
+   "activeFrac": {
+    "mean": 0.864,
+    "sd": 0.017,
+    "min": 0.846
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.779,
+    "sd": 0.031,
+    "min": 2.744
+   },
+   "buildMs": {
+    "mean": 7.667,
+    "sd": 2.357,
+    "min": 6
+   },
+   "ms": {
+    "mean": 10224,
+    "sd": 77.188,
+    "min": 10131
+   },
+   "conns": {
+    "mean": 1500,
+    "sd": 0,
+    "min": 1500
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.7727272727272727,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.7727272727272727,
+    "meanPairCos": 0.80818727762491,
+    "rate": 0.1358677685950413,
+    "activeFrac": 0.8861157024793382,
+    "satFrac": 0,
+    "meanThr": 2.81993000000061,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 10221,
+    "buildMs": 11,
+    "conns": 1500
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.871900826446281,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.8305785123966942,
+    "meanPairCos": 0.7781327296765317,
+    "rate": 0.13178773379730316,
+    "activeFrac": 0.8611570247933877,
+    "satFrac": 0,
+    "meanThr": 2.7716820000004003,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 10320,
+    "buildMs": 6,
+    "conns": 1500
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.8429752066115702,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.8512396694214877,
+    "meanPairCos": 0.7657116318070494,
+    "rate": 0.13040887342322746,
+    "activeFrac": 0.8457851239669418,
+    "satFrac": 0,
+    "meanThr": 2.7440200000003943,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 10131,
+    "buildMs": 6,
+    "conns": 1500
+   }
+  ]
+ },
+ "full|full:121:50:5:d:d:d": {
+  "tag": "full",
+  "spec": "full:121:50:5:d:d:d",
+  "dataset": "full",
+  "nWords": 121,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linHalf": {
+    "mean": 0.967,
+    "sd": 0.003,
+    "min": 0.963
+   },
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncHalf": {
+    "mean": 0.961,
+    "sd": 0.007,
+    "min": 0.955
+   },
+   "meanPairCos": {
+    "mean": 0.78,
+    "sd": 0.021,
+    "min": 0.75
+   },
+   "rate": {
+    "mean": 0.132,
+    "sd": 0.003,
+    "min": 0.127
+   },
+   "activeFrac": {
+    "mean": 0.856,
+    "sd": 0.023,
+    "min": 0.824
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.739,
+    "sd": 0.078,
+    "min": 2.629
+   },
+   "buildMs": {
+    "mean": 13,
+    "sd": 1.633,
+    "min": 11
+   },
+   "ms": {
+    "mean": 16910.667,
+    "sd": 811.447,
+    "min": 16188
+   },
+   "conns": {
+    "mean": 2910.667,
+    "sd": 2.357,
+    "min": 2909
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.9669421487603306,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.9586776859504132,
+    "meanPairCos": 0.7926316807703264,
+    "rate": 0.13411918225315347,
+    "activeFrac": 0.8697520661157021,
+    "satFrac": 0,
+    "meanThr": 2.7891210000005247,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 18044,
+    "buildMs": 13,
+    "conns": 2914
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.9710743801652892,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.9710743801652892,
+    "meanPairCos": 0.7500877089165109,
+    "rate": 0.12718138321009131,
+    "activeFrac": 0.8244628099173551,
+    "satFrac": 0,
+    "meanThr": 2.6290540000000755,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 16500,
+    "buildMs": 15,
+    "conns": 2909
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.9628099173553719,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.9545454545454546,
+    "meanPairCos": 0.7973959847407119,
+    "rate": 0.13404523705959112,
+    "activeFrac": 0.8752066115702481,
+    "satFrac": 0,
+    "meanThr": 2.7996050000004935,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 16188,
+    "buildMs": 11,
+    "conns": 2909
+   }
+  ]
+ },
+ "full|full:121:50:d:d:d:d": {
+  "tag": "full",
+  "spec": "full:121:50:d:d:d:d",
+  "dataset": "full",
+  "nWords": 121,
+  "seeds": [
+   1,
+   2
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.19,
+    "sd": 0.008,
+    "min": 0.182
+   },
+   "linPartial": {
+    "mean": 0.165,
+    "sd": 0,
+    "min": 0.165
+   },
+   "linHalf": {
+    "mean": 0.12,
+    "sd": 0.021,
+    "min": 0.099
+   },
+   "ncFull": {
+    "mean": 0.231,
+    "sd": 0.025,
+    "min": 0.207
+   },
+   "ncPartial": {
+    "mean": 0.219,
+    "sd": 0.004,
+    "min": 0.215
+   },
+   "ncHalf": {
+    "mean": 0.124,
+    "sd": 0.025,
+    "min": 0.099
+   },
+   "meanPairCos": {
+    "mean": 0.991,
+    "sd": 0.001,
+    "min": 0.99
+   },
+   "rate": {
+    "mean": 0.157,
+    "sd": 0,
+    "min": 0.157
+   },
+   "activeFrac": {
+    "mean": 0.997,
+    "sd": 0.001,
+    "min": 0.996
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 3,
+    "sd": 0,
+    "min": 3
+   },
+   "buildMs": {
+    "mean": 38,
+    "sd": 1,
+    "min": 37
+   },
+   "ms": {
+    "mean": 27140.5,
+    "sd": 2921.5,
+    "min": 24219
+   },
+   "conns": {
+    "mean": 10291.5,
+    "sd": 10.5,
+    "min": 10281
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.19834710743801653,
+    "linPartial": 0.1652892561983471,
+    "linHalf": 0.09917355371900827,
+    "linTrain": 0.7272727272727273,
+    "ncFull": 0.256198347107438,
+    "ncPartial": 0.21487603305785125,
+    "ncHalf": 0.09917355371900827,
+    "meanPairCos": 0.9922219647137315,
+    "rate": 0.15682035667681607,
+    "activeFrac": 0.9971900826446279,
+    "satFrac": 0,
+    "meanThr": 3.0004430000011473,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 24219,
+    "buildMs": 37,
+    "conns": 10302
+   },
+   {
+    "linFull": 0.18181818181818182,
+    "linPartial": 0.1652892561983471,
+    "linHalf": 0.14049586776859505,
+    "linTrain": 0.7644628099173554,
+    "ncFull": 0.2066115702479339,
+    "ncPartial": 0.2231404958677686,
+    "ncHalf": 0.1487603305785124,
+    "meanPairCos": 0.9898939595191846,
+    "rate": 0.15659852109612885,
+    "activeFrac": 0.9960330578512394,
+    "satFrac": 0,
+    "meanThr": 3.0003730000011433,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 30062,
+    "buildMs": 39,
+    "conns": 10281
+   }
+  ]
+ },
+ "full|full:121:50:d:0.05:d:d": {
+  "tag": "full",
+  "spec": "full:121:50:d:0.05:d:d",
+  "dataset": "full",
+  "nWords": 121,
+  "seeds": [
+   1,
+   2
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linHalf": {
+    "mean": 0.663,
+    "sd": 0.043,
+    "min": 0.62
+   },
+   "ncFull": {
+    "mean": 0.996,
+    "sd": 0.004,
+    "min": 0.992
+   },
+   "ncPartial": {
+    "mean": 0.996,
+    "sd": 0.004,
+    "min": 0.992
+   },
+   "ncHalf": {
+    "mean": 0.477,
+    "sd": 0.064,
+    "min": 0.413
+   },
+   "meanPairCos": {
+    "mean": 0.891,
+    "sd": 0.014,
+    "min": 0.876
+   },
+   "rate": {
+    "mean": 0.125,
+    "sd": 0.005,
+    "min": 0.12
+   },
+   "activeFrac": {
+    "mean": 0.943,
+    "sd": 0.015,
+    "min": 0.928
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.125,
+    "sd": 0.084,
+    "min": 2.041
+   },
+   "buildMs": {
+    "mean": 40.5,
+    "sd": 5.5,
+    "min": 35
+   },
+   "ms": {
+    "mean": 27814,
+    "sd": 2226,
+    "min": 25588
+   },
+   "conns": {
+    "mean": 10291.5,
+    "sd": 10.5,
+    "min": 10281
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.6198347107438017,
+    "linTrain": 1,
+    "ncFull": 0.9917355371900827,
+    "ncPartial": 0.9917355371900827,
+    "ncHalf": 0.4132231404958678,
+    "meanPairCos": 0.9053060776634773,
+    "rate": 0.12959330143540665,
+    "activeFrac": 0.9576033057851231,
+    "satFrac": 0,
+    "meanThr": 2.208905999999741,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 30040,
+    "buildMs": 46,
+    "conns": 10302
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": 0.7066115702479339,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": 0.5413223140495868,
+    "meanPairCos": 0.8764184706457719,
+    "rate": 0.12036320139190951,
+    "activeFrac": 0.928181818181818,
+    "satFrac": 0,
+    "meanThr": 2.040927999999069,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 25588,
+    "buildMs": 35,
+    "conns": 10281
+   }
+  ]
+ },
+ "full|full:121:50:10:d:d:d": {
+  "tag": "full",
+  "spec": "full:121:50:10:d:d:d",
+  "dataset": "full",
+  "nWords": 121,
+  "seeds": [
+   1,
+   2
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.905,
+    "sd": 0.021,
+    "min": 0.884
+   },
+   "linPartial": {
+    "mean": 0.81,
+    "sd": 0.017,
+    "min": 0.793
+   },
+   "linHalf": {
+    "mean": 0.556,
+    "sd": 0.027,
+    "min": 0.529
+   },
+   "ncFull": {
+    "mean": 0.926,
+    "sd": 0.008,
+    "min": 0.917
+   },
+   "ncPartial": {
+    "mean": 0.831,
+    "sd": 0.029,
+    "min": 0.802
+   },
+   "ncHalf": {
+    "mean": 0.581,
+    "sd": 0.043,
+    "min": 0.537
+   },
+   "meanPairCos": {
+    "mean": 0.937,
+    "sd": 0.009,
+    "min": 0.928
+   },
+   "rate": {
+    "mean": 0.153,
+    "sd": 0.001,
+    "min": 0.152
+   },
+   "activeFrac": {
+    "mean": 0.963,
+    "sd": 0.008,
+    "min": 0.955
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.999,
+    "sd": 0.001,
+    "min": 2.998
+   },
+   "buildMs": {
+    "mean": 17.5,
+    "sd": 2.5,
+    "min": 15
+   },
+   "ms": {
+    "mean": 23042,
+    "sd": 787,
+    "min": 22255
+   },
+   "conns": {
+    "mean": 5646.5,
+    "sd": 17.5,
+    "min": 5629
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.8842975206611571,
+    "linPartial": 0.7933884297520661,
+    "linHalf": 0.5289256198347108,
+    "linTrain": 1,
+    "ncFull": 0.9338842975206612,
+    "ncPartial": 0.8016528925619835,
+    "ncHalf": 0.5371900826446281,
+    "meanPairCos": 0.9455834758636954,
+    "rate": 0.15476294040887348,
+    "activeFrac": 0.9704958677685943,
+    "satFrac": 0,
+    "meanThr": 2.997697000001074,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 23829,
+    "buildMs": 20,
+    "conns": 5629
+   },
+   {
+    "linFull": 0.9256198347107438,
+    "linPartial": 0.8264462809917356,
+    "linHalf": 0.5826446280991735,
+    "linTrain": 1,
+    "ncFull": 0.9173553719008265,
+    "ncPartial": 0.859504132231405,
+    "ncHalf": 0.6239669421487604,
+    "meanPairCos": 0.9276879779686288,
+    "rate": 0.1521509351892129,
+    "activeFrac": 0.9550413223140484,
+    "satFrac": 0,
+    "meanThr": 2.9993090000010327,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 22255,
+    "buildMs": 15,
+    "conns": 5664
+   }
+  ]
+ },
+ "wiring|medium:d:100:d:d:d:5": {
+  "tag": "wiring",
+  "spec": "medium:d:100:d:d:d:5",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.765,
+    "sd": 0.127,
+    "min": 0.647
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.745,
+    "sd": 0.073,
+    "min": 0.647
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.898,
+    "sd": 0.023,
+    "min": 0.878
+   },
+   "rate": {
+    "mean": 0.128,
+    "sd": 0.007,
+    "min": 0.121
+   },
+   "activeFrac": {
+    "mean": 0.947,
+    "sd": 0.025,
+    "min": 0.925
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.885,
+    "sd": 0.033,
+    "min": 0.85
+   },
+   "buildMs": {
+    "mean": 15.333,
+    "sd": 7.134,
+    "min": 8
+   },
+   "ms": {
+    "mean": 895.667,
+    "sd": 39.161,
+    "min": 852
+   },
+   "conns": {
+    "mean": 719.667,
+    "sd": 2.625,
+    "min": 716
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.6470588235294118,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.6470588235294118,
+    "ncHalf": null,
+    "meanPairCos": 0.8784214635897494,
+    "rate": 0.12068421052631578,
+    "activeFrac": 0.925,
+    "satFrac": 0,
+    "meanThr": 0.8498695000000167,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 947,
+    "buildMs": 25,
+    "conns": 722
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.9411764705882353,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.8846738778390808,
+    "rate": 0.12576315789473688,
+    "activeFrac": 0.9343333333333333,
+    "satFrac": 0,
+    "meanThr": 0.8757025000000159,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 888,
+    "buildMs": 13,
+    "conns": 721
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.7058823529411765,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7647058823529411,
+    "ncHalf": null,
+    "meanPairCos": 0.9294742383522109,
+    "rate": 0.136859649122807,
+    "activeFrac": 0.9821666666666663,
+    "satFrac": 0,
+    "meanThr": 0.9284810000000105,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 852,
+    "buildMs": 8,
+    "conns": 716
+   }
+  ]
+ },
+ "wiring|medium:d:100:d:d:d:10": {
+  "tag": "wiring",
+  "spec": "medium:d:100:d:d:d:10",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.983,
+    "sd": 0.024,
+    "min": 0.95
+   },
+   "linPartial": {
+    "mean": 0.784,
+    "sd": 0.1,
+    "min": 0.647
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.983,
+    "sd": 0.024,
+    "min": 0.95
+   },
+   "ncPartial": {
+    "mean": 0.686,
+    "sd": 0.1,
+    "min": 0.588
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.945,
+    "sd": 0.012,
+    "min": 0.928
+   },
+   "rate": {
+    "mean": 0.138,
+    "sd": 0.006,
+    "min": 0.129
+   },
+   "activeFrac": {
+    "mean": 0.992,
+    "sd": 0.007,
+    "min": 0.982
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.933,
+    "sd": 0.034,
+    "min": 0.887
+   },
+   "buildMs": {
+    "mean": 8,
+    "sd": 1.414,
+    "min": 6
+   },
+   "ms": {
+    "mean": 984.667,
+    "sd": 59.723,
+    "min": 902
+   },
+   "conns": {
+    "mean": 1216,
+    "sd": 4.967,
+    "min": 1212
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.8823529411764706,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.9280005361076133,
+    "rate": 0.12902192982456143,
+    "activeFrac": 0.9816666666666664,
+    "satFrac": 0,
+    "meanThr": 0.8872065000000129,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1041,
+    "buildMs": 6,
+    "conns": 1212
+   },
+   {
+    "linFull": 0.95,
+    "linPartial": 0.8235294117647058,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.95,
+    "ncPartial": 0.6470588235294118,
+    "ncHalf": null,
+    "meanPairCos": 0.951013732699885,
+    "rate": 0.13973684210526321,
+    "activeFrac": 0.9966666666666668,
+    "satFrac": 0,
+    "meanThr": 0.9429900000000034,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1011,
+    "buildMs": 9,
+    "conns": 1223
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.6470588235294118,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.5882352941176471,
+    "ncHalf": null,
+    "meanPairCos": 0.9563137143561838,
+    "rate": 0.1443728070175439,
+    "activeFrac": 0.9964999999999999,
+    "satFrac": 0,
+    "meanThr": 0.9691904999999985,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 902,
+    "buildMs": 9,
+    "conns": 1213
+   }
+  ]
+ },
+ "wiring|medium:d:100:d:d:d:40": {
+  "tag": "wiring",
+  "spec": "medium:d:100:d:d:d:40",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.882,
+    "sd": 0.083,
+    "min": 0.765
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.784,
+    "sd": 0.055,
+    "min": 0.706
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.781,
+    "sd": 0.039,
+    "min": 0.746
+   },
+   "rate": {
+    "mean": 0.106,
+    "sd": 0.008,
+    "min": 0.101
+   },
+   "activeFrac": {
+    "mean": 0.864,
+    "sd": 0.037,
+    "min": 0.83
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.779,
+    "sd": 0.037,
+    "min": 0.751
+   },
+   "buildMs": {
+    "mean": 11.333,
+    "sd": 1.247,
+    "min": 10
+   },
+   "ms": {
+    "mean": 1403.333,
+    "sd": 60.007,
+    "min": 1356
+   },
+   "conns": {
+    "mean": 4220.333,
+    "sd": 1.7,
+    "min": 4218
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.9411764705882353,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.7616939842037941,
+    "rate": 0.10083333333333332,
+    "activeFrac": 0.8469999999999998,
+    "satFrac": 0,
+    "meanThr": 0.7545355000000201,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1366,
+    "buildMs": 10,
+    "conns": 4218
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.9411764705882353,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.7455776561370361,
+    "rate": 0.10093859649122806,
+    "activeFrac": 0.8295,
+    "satFrac": 0,
+    "meanThr": 0.7510805000000205,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1356,
+    "buildMs": 11,
+    "conns": 4222
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.7647058823529411,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7058823529411765,
+    "ncHalf": null,
+    "meanPairCos": 0.8346909932396269,
+    "rate": 0.11715789473684209,
+    "activeFrac": 0.9143333333333334,
+    "satFrac": 0,
+    "meanThr": 0.8314285000000187,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1488,
+    "buildMs": 13,
+    "conns": 4221
+   }
+  ]
+ },
+ "wiring|medium:d:100:5:d:d:d": {
+  "tag": "wiring",
+  "spec": "medium:d:100:5:d:d:d",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.983,
+    "sd": 0.024,
+    "min": 0.95
+   },
+   "linPartial": {
+    "mean": 0.882,
+    "sd": 0.048,
+    "min": 0.824
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.95,
+    "sd": 0.041,
+    "min": 0.9
+   },
+   "ncPartial": {
+    "mean": 0.686,
+    "sd": 0.073,
+    "min": 0.588
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.769,
+    "sd": 0.105,
+    "min": 0.627
+   },
+   "rate": {
+    "mean": 0.083,
+    "sd": 0.015,
+    "min": 0.063
+   },
+   "activeFrac": {
+    "mean": 0.84,
+    "sd": 0.089,
+    "min": 0.721
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.656,
+    "sd": 0.071,
+    "min": 0.567
+   },
+   "buildMs": {
+    "mean": 14,
+    "sd": 4.32,
+    "min": 10
+   },
+   "ms": {
+    "mean": 1159.667,
+    "sd": 30.944,
+    "min": 1119
+   },
+   "conns": {
+    "mean": 2055,
+    "sd": 1.633,
+    "min": 2053
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.8235294117647058,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.95,
+    "ncPartial": 0.7647058823529411,
+    "ncHalf": null,
+    "meanPairCos": 0.6266933239980168,
+    "rate": 0.06316666666666665,
+    "activeFrac": 0.7208333333333334,
+    "satFrac": 0,
+    "meanThr": 0.5673415000000223,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1119,
+    "buildMs": 10,
+    "conns": 2055
+   },
+   {
+    "linFull": 0.95,
+    "linPartial": 0.8823529411764706,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.9,
+    "ncPartial": 0.5882352941176471,
+    "ncHalf": null,
+    "meanPairCos": 0.8042767824705059,
+    "rate": 0.08402631578947367,
+    "activeFrac": 0.8640000000000002,
+    "satFrac": 0,
+    "meanThr": 0.6593945000000214,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1166,
+    "buildMs": 20,
+    "conns": 2057
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.9411764705882353,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7058823529411765,
+    "ncHalf": null,
+    "meanPairCos": 0.8762305226254471,
+    "rate": 0.10063596491228075,
+    "activeFrac": 0.9361666666666667,
+    "satFrac": 0,
+    "meanThr": 0.7413235000000205,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1194,
+    "buildMs": 12,
+    "conns": 2053
+   }
+  ]
+ },
+ "wiring|medium:d:100:10:d:d:d": {
+  "tag": "wiring",
+  "spec": "medium:d:100:10:d:d:d",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.882,
+    "sd": 0,
+    "min": 0.882
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.95,
+    "sd": 0,
+    "min": 0.95
+   },
+   "ncPartial": {
+    "mean": 0.784,
+    "sd": 0.055,
+    "min": 0.706
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.873,
+    "sd": 0.042,
+    "min": 0.817
+   },
+   "rate": {
+    "mean": 0.107,
+    "sd": 0.009,
+    "min": 0.096
+   },
+   "activeFrac": {
+    "mean": 0.934,
+    "sd": 0.031,
+    "min": 0.895
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.769,
+    "sd": 0.04,
+    "min": 0.726
+   },
+   "buildMs": {
+    "mean": 10.667,
+    "sd": 1.7,
+    "min": 9
+   },
+   "ms": {
+    "mean": 1143.667,
+    "sd": 15.173,
+    "min": 1131
+   },
+   "conns": {
+    "mean": 2109,
+    "sd": 1.414,
+    "min": 2108
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.8823529411764706,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.95,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.8167179834907063,
+    "rate": 0.09623245614035086,
+    "activeFrac": 0.8951666666666667,
+    "satFrac": 0,
+    "meanThr": 0.7260985000000205,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1135,
+    "buildMs": 13,
+    "conns": 2108
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8823529411764706,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.95,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.8850049706132411,
+    "rate": 0.10614473684210526,
+    "activeFrac": 0.936833333333333,
+    "satFrac": 0,
+    "meanThr": 0.7578500000000199,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1165,
+    "buildMs": 10,
+    "conns": 2111
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8823529411764706,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.95,
+    "ncPartial": 0.7058823529411765,
+    "ncHalf": null,
+    "meanPairCos": 0.9165224398995795,
+    "rate": 0.11853508771929824,
+    "activeFrac": 0.9706666666666661,
+    "satFrac": 0,
+    "meanThr": 0.8225340000000191,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1131,
+    "buildMs": 9,
+    "conns": 2108
+   }
+  ]
+ },
+ "wiring|medium:d:100:50:d:d:d": {
+  "tag": "wiring",
+  "spec": "medium:d:100:50:d:d:d",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.745,
+    "sd": 0.073,
+    "min": 0.647
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.686,
+    "sd": 0.055,
+    "min": 0.647
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.917,
+    "sd": 0.017,
+    "min": 0.904
+   },
+   "rate": {
+    "mean": 0.145,
+    "sd": 0.005,
+    "min": 0.14
+   },
+   "activeFrac": {
+    "mean": 0.974,
+    "sd": 0.012,
+    "min": 0.965
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.977,
+    "sd": 0.026,
+    "min": 0.955
+   },
+   "buildMs": {
+    "mean": 12,
+    "sd": 3.742,
+    "min": 8
+   },
+   "ms": {
+    "mean": 1157.333,
+    "sd": 50.632,
+    "min": 1112
+   },
+   "conns": {
+    "mean": 2512.333,
+    "sd": 7.364,
+    "min": 2503
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.8235294117647058,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7647058823529411,
+    "ncHalf": null,
+    "meanPairCos": 0.9040550532173725,
+    "rate": 0.14034210526315788,
+    "activeFrac": 0.9651666666666668,
+    "satFrac": 0,
+    "meanThr": 0.9549150000000058,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1132,
+    "buildMs": 17,
+    "conns": 2513
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.7647058823529411,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.6470588235294118,
+    "ncHalf": null,
+    "meanPairCos": 0.9064595792940504,
+    "rate": 0.1419342105263158,
+    "activeFrac": 0.9649999999999999,
+    "satFrac": 0,
+    "meanThr": 0.9631954999999975,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1112,
+    "buildMs": 8,
+    "conns": 2503
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.6470588235294118,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.6470588235294118,
+    "ncHalf": null,
+    "meanPairCos": 0.9416440658065082,
+    "rate": 0.15219736842105258,
+    "activeFrac": 0.9909999999999997,
+    "satFrac": 0,
+    "meanThr": 1.0131724999999898,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 1228,
+    "buildMs": 11,
+    "conns": 2521
+   }
+  ]
+ },
+ "wiring|medium:d:400:d:d:d:5": {
+  "tag": "wiring",
+  "spec": "medium:d:400:d:d:d:5",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.863,
+    "sd": 0.028,
+    "min": 0.824
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.804,
+    "sd": 0.028,
+    "min": 0.765
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.897,
+    "sd": 0.008,
+    "min": 0.89
+   },
+   "rate": {
+    "mean": 0.125,
+    "sd": 0.002,
+    "min": 0.123
+   },
+   "activeFrac": {
+    "mean": 0.95,
+    "sd": 0.01,
+    "min": 0.938
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.87,
+    "sd": 0.01,
+    "min": 0.857
+   },
+   "buildMs": {
+    "mean": 123.333,
+    "sd": 9.177,
+    "min": 111
+   },
+   "ms": {
+    "mean": 3305.333,
+    "sd": 158.529,
+    "min": 3142
+   },
+   "conns": {
+    "mean": 2883,
+    "sd": 11.776,
+    "min": 2871
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.8823529411764706,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.890110716677646,
+    "rate": 0.12252192982456138,
+    "activeFrac": 0.9381250000000002,
+    "satFrac": 0,
+    "meanThr": 0.8568496250000152,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 3142,
+    "buildMs": 111,
+    "conns": 2871
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8823529411764706,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7647058823529411,
+    "ncHalf": null,
+    "meanPairCos": 0.8923385136592273,
+    "rate": 0.12519736842105264,
+    "activeFrac": 0.9477916666666665,
+    "satFrac": 0,
+    "meanThr": 0.872648375000014,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 3520,
+    "buildMs": 133,
+    "conns": 2879
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8235294117647058,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.9076443173485275,
+    "rate": 0.12759758771929827,
+    "activeFrac": 0.962958333333333,
+    "satFrac": 0,
+    "meanThr": 0.8814126250000119,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 3254,
+    "buildMs": 126,
+    "conns": 2899
+   }
+  ]
+ },
+ "wiring|medium:d:400:d:d:d:10": {
+  "tag": "wiring",
+  "spec": "medium:d:400:d:d:d:10",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.824,
+    "sd": 0.048,
+    "min": 0.765
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.804,
+    "sd": 0.028,
+    "min": 0.765
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.933,
+    "sd": 0.007,
+    "min": 0.925
+   },
+   "rate": {
+    "mean": 0.135,
+    "sd": 0.003,
+    "min": 0.131
+   },
+   "activeFrac": {
+    "mean": 0.984,
+    "sd": 0.005,
+    "min": 0.978
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.922,
+    "sd": 0.015,
+    "min": 0.901
+   },
+   "buildMs": {
+    "mean": 113.333,
+    "sd": 10.873,
+    "min": 98
+   },
+   "ms": {
+    "mean": 3571.333,
+    "sd": 107.444,
+    "min": 3437
+   },
+   "conns": {
+    "mean": 4891.333,
+    "sd": 10.077,
+    "min": 4881
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.8823529411764706,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.9250536655786061,
+    "rate": 0.1313936403508772,
+    "activeFrac": 0.9784583333333331,
+    "satFrac": 0,
+    "meanThr": 0.9013207500000102,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 3437,
+    "buildMs": 122,
+    "conns": 4888
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.7647058823529411,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7647058823529411,
+    "ncHalf": null,
+    "meanPairCos": 0.9340351370259812,
+    "rate": 0.13604166666666673,
+    "activeFrac": 0.9835416666666668,
+    "satFrac": 0,
+    "meanThr": 0.9285328750000038,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 3700,
+    "buildMs": 120,
+    "conns": 4905
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8235294117647058,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.9413433094332267,
+    "rate": 0.1376940789473684,
+    "activeFrac": 0.9899999999999994,
+    "satFrac": 0,
+    "meanThr": 0.9372403750000048,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 3577,
+    "buildMs": 98,
+    "conns": 4881
+   }
+  ]
+ },
+ "wiring|medium:d:400:d:d:d:40": {
+  "tag": "wiring",
+  "spec": "medium:d:400:d:d:d:40",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.902,
+    "sd": 0.055,
+    "min": 0.824
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.863,
+    "sd": 0.073,
+    "min": 0.765
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.758,
+    "sd": 0.029,
+    "min": 0.718
+   },
+   "rate": {
+    "mean": 0.103,
+    "sd": 0.005,
+    "min": 0.096
+   },
+   "activeFrac": {
+    "mean": 0.832,
+    "sd": 0.029,
+    "min": 0.798
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.763,
+    "sd": 0.021,
+    "min": 0.735
+   },
+   "buildMs": {
+    "mean": 124,
+    "sd": 10.614,
+    "min": 111
+   },
+   "ms": {
+    "mean": 6367.333,
+    "sd": 150.675,
+    "min": 6209
+   },
+   "conns": {
+    "mean": 16888.667,
+    "sd": 6.018,
+    "min": 16883
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.9411764705882353,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8823529411764706,
+    "ncHalf": null,
+    "meanPairCos": 0.7176662104841205,
+    "rate": 0.09648355263157894,
+    "activeFrac": 0.797583333333333,
+    "satFrac": 0,
+    "meanThr": 0.7350513750000204,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 6570,
+    "buildMs": 111,
+    "conns": 16897
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8235294117647058,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7647058823529411,
+    "ncHalf": null,
+    "meanPairCos": 0.7727742783410148,
+    "rate": 0.10372697368421052,
+    "activeFrac": 0.8310416666666669,
+    "satFrac": 0,
+    "meanThr": 0.7685943750000203,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 6323,
+    "buildMs": 124,
+    "conns": 16886
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.9411764705882353,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.9411764705882353,
+    "ncHalf": null,
+    "meanPairCos": 0.7827761679071219,
+    "rate": 0.10806688596491229,
+    "activeFrac": 0.8684166666666668,
+    "satFrac": 0,
+    "meanThr": 0.7864446250000183,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 6209,
+    "buildMs": 137,
+    "conns": 16883
+   }
+  ]
+ },
+ "wiring|medium:d:400:5:d:d:d": {
+  "tag": "wiring",
+  "spec": "medium:d:400:5:d:d:d",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.98,
+    "sd": 0.028,
+    "min": 0.941
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.983,
+    "sd": 0.024,
+    "min": 0.95
+   },
+   "ncPartial": {
+    "mean": 0.922,
+    "sd": 0.073,
+    "min": 0.824
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.858,
+    "sd": 0.024,
+    "min": 0.826
+   },
+   "rate": {
+    "mean": 0.089,
+    "sd": 0.007,
+    "min": 0.08
+   },
+   "activeFrac": {
+    "mean": 0.902,
+    "sd": 0.021,
+    "min": 0.874
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.687,
+    "sd": 0.03,
+    "min": 0.648
+   },
+   "buildMs": {
+    "mean": 132,
+    "sd": 4.32,
+    "min": 128
+   },
+   "ms": {
+    "mean": 4871.333,
+    "sd": 321.905,
+    "min": 4419
+   },
+   "conns": {
+    "mean": 8224,
+    "sd": 3.742,
+    "min": 8220
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.9411764705882353,
+    "ncHalf": null,
+    "meanPairCos": 0.826231355870625,
+    "rate": 0.07997149122807015,
+    "activeFrac": 0.8741666666666668,
+    "satFrac": 0,
+    "meanThr": 0.6482283750000214,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 4419,
+    "buildMs": 128,
+    "conns": 8220
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 1,
+    "ncHalf": null,
+    "meanPairCos": 0.8646734033509091,
+    "rate": 0.08938706140350874,
+    "activeFrac": 0.9064166666666669,
+    "satFrac": 0,
+    "meanThr": 0.6919315000000215,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 5142,
+    "buildMs": 138,
+    "conns": 8223
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.9411764705882353,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.95,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.8841956933562333,
+    "rate": 0.09621052631578947,
+    "activeFrac": 0.9247916666666668,
+    "satFrac": 0,
+    "meanThr": 0.7200302500000206,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 5053,
+    "buildMs": 130,
+    "conns": 8229
+   }
+  ]
+ },
+ "wiring|medium:d:400:10:d:d:d": {
+  "tag": "wiring",
+  "spec": "medium:d:400:10:d:d:d",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.961,
+    "sd": 0.028,
+    "min": 0.941
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.882,
+    "sd": 0.048,
+    "min": 0.824
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.872,
+    "sd": 0.014,
+    "min": 0.853
+   },
+   "rate": {
+    "mean": 0.102,
+    "sd": 0.004,
+    "min": 0.097
+   },
+   "activeFrac": {
+    "mean": 0.933,
+    "sd": 0.011,
+    "min": 0.919
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.751,
+    "sd": 0.019,
+    "min": 0.729
+   },
+   "buildMs": {
+    "mean": 150.333,
+    "sd": 33.089,
+    "min": 124
+   },
+   "ms": {
+    "mean": 5187.667,
+    "sd": 266.555,
+    "min": 4813
+   },
+   "conns": {
+    "mean": 8444,
+    "sd": 3.559,
+    "min": 8439
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.9411764705882353,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.8530401058757887,
+    "rate": 0.09680372807017543,
+    "activeFrac": 0.9189166666666667,
+    "satFrac": 0,
+    "meanThr": 0.7287252500000203,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 4813,
+    "buildMs": 130,
+    "conns": 8439
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8823529411764706,
+    "ncHalf": null,
+    "meanPairCos": 0.8751377663285005,
+    "rate": 0.10266776315789478,
+    "activeFrac": 0.9357500000000001,
+    "satFrac": 0,
+    "meanThr": 0.74958687500002,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 5339,
+    "buildMs": 197,
+    "conns": 8446
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.9411764705882353,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.9411764705882353,
+    "ncHalf": null,
+    "meanPairCos": 0.886457107447943,
+    "rate": 0.10715021929824559,
+    "activeFrac": 0.9448333333333333,
+    "satFrac": 0,
+    "meanThr": 0.7753508750000195,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 5411,
+    "buildMs": 124,
+    "conns": 8447
+   }
+  ]
+ },
+ "wiring|medium:d:400:50:d:d:d": {
+  "tag": "wiring",
+  "spec": "medium:d:400:50:d:d:d",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.882,
+    "sd": 0.048,
+    "min": 0.824
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.784,
+    "sd": 0.028,
+    "min": 0.765
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.917,
+    "sd": 0.007,
+    "min": 0.908
+   },
+   "rate": {
+    "mean": 0.143,
+    "sd": 0.002,
+    "min": 0.141
+   },
+   "activeFrac": {
+    "mean": 0.974,
+    "sd": 0.002,
+    "min": 0.971
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.969,
+    "sd": 0.011,
+    "min": 0.957
+   },
+   "buildMs": {
+    "mean": 119.667,
+    "sd": 3.399,
+    "min": 115
+   },
+   "ms": {
+    "mean": 5578.667,
+    "sd": 109.415,
+    "min": 5484
+   },
+   "conns": {
+    "mean": 10056,
+    "sd": 12.961,
+    "min": 10038
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.9411764705882353,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8235294117647058,
+    "ncHalf": null,
+    "meanPairCos": 0.9080473357403354,
+    "rate": 0.14066776315789475,
+    "activeFrac": 0.9709166666666664,
+    "satFrac": 0,
+    "meanThr": 0.9568121250000026,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 5484,
+    "buildMs": 121,
+    "conns": 10062
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8823529411764706,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7647058823529411,
+    "ncHalf": null,
+    "meanPairCos": 0.9166950084919988,
+    "rate": 0.1426381578947369,
+    "activeFrac": 0.9742083333333335,
+    "satFrac": 0,
+    "meanThr": 0.9661399999999994,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 5732,
+    "buildMs": 115,
+    "conns": 10038
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8235294117647058,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7647058823529411,
+    "ncHalf": null,
+    "meanPairCos": 0.9250823911519109,
+    "rate": 0.14548574561403513,
+    "activeFrac": 0.9767083333333334,
+    "satFrac": 0,
+    "meanThr": 0.9834459999999945,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 5520,
+    "buildMs": 123,
+    "conns": 10068
+   }
+  ]
+ },
+ "wiring|short:d:100:d:d:d:5": {
+  "tag": "wiring",
+  "spec": "short:d:100:d:d:d:5",
+  "dataset": "short",
+  "nWords": 50,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.987,
+    "sd": 0.009,
+    "min": 0.98
+   },
+   "linPartial": {
+    "mean": 0.919,
+    "sd": 0.014,
+    "min": 0.908
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.947,
+    "sd": 0.019,
+    "min": 0.92
+   },
+   "ncPartial": {
+    "mean": 0.837,
+    "sd": 0.009,
+    "min": 0.831
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.907,
+    "sd": 0.013,
+    "min": 0.896
+   },
+   "rate": {
+    "mean": 0.134,
+    "sd": 0.005,
+    "min": 0.129
+   },
+   "activeFrac": {
+    "mean": 0.941,
+    "sd": 0.021,
+    "min": 0.915
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.922,
+    "sd": 0.079,
+    "min": 1.851
+   },
+   "buildMs": {
+    "mean": 17.667,
+    "sd": 4.497,
+    "min": 14
+   },
+   "ms": {
+    "mean": 5481.333,
+    "sd": 185.05,
+    "min": 5220
+   },
+   "conns": {
+    "mean": 1618,
+    "sd": 4.546,
+    "min": 1613
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9384615384615385,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.96,
+    "ncPartial": 0.85,
+    "ncHalf": null,
+    "meanPairCos": 0.8959975680614327,
+    "rate": 0.12890175438596485,
+    "activeFrac": 0.9145333333333334,
+    "satFrac": 0,
+    "meanThr": 1.8507619999991882,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 5220,
+    "buildMs": 24,
+    "conns": 1617
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.9076923076923077,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.92,
+    "ncPartial": 0.8307692307692308,
+    "ncHalf": null,
+    "meanPairCos": 0.9002259083039781,
+    "rate": 0.13352807017543863,
+    "activeFrac": 0.9441999999999996,
+    "satFrac": 0,
+    "meanThr": 1.8834824999989772,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 5600,
+    "buildMs": 15,
+    "conns": 1613
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9115384615384615,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.96,
+    "ncPartial": 0.8307692307692308,
+    "ncHalf": null,
+    "meanPairCos": 0.9260479039539403,
+    "rate": 0.14080701754385966,
+    "activeFrac": 0.9653999999999998,
+    "satFrac": 0,
+    "meanThr": 2.03220899999918,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 5624,
+    "buildMs": 14,
+    "conns": 1624
+   }
+  ]
+ },
+ "wiring|short:d:100:d:d:d:10": {
+  "tag": "wiring",
+  "spec": "short:d:100:d:d:d:10",
+  "dataset": "short",
+  "nWords": 50,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.98,
+    "sd": 0,
+    "min": 0.98
+   },
+   "linPartial": {
+    "mean": 0.9,
+    "sd": 0.025,
+    "min": 0.865
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.953,
+    "sd": 0.009,
+    "min": 0.94
+   },
+   "ncPartial": {
+    "mean": 0.786,
+    "sd": 0.042,
+    "min": 0.727
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.93,
+    "sd": 0.015,
+    "min": 0.91
+   },
+   "rate": {
+    "mean": 0.137,
+    "sd": 0.004,
+    "min": 0.132
+   },
+   "activeFrac": {
+    "mean": 0.969,
+    "sd": 0.014,
+    "min": 0.95
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.974,
+    "sd": 0.101,
+    "min": 1.853
+   },
+   "buildMs": {
+    "mean": 12.333,
+    "sd": 1.7,
+    "min": 10
+   },
+   "ms": {
+    "mean": 5909,
+    "sd": 140.847,
+    "min": 5710
+   },
+   "conns": {
+    "mean": 2112.333,
+    "sd": 11.324,
+    "min": 2097
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9153846153846154,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.96,
+    "ncPartial": 0.8076923076923077,
+    "ncHalf": null,
+    "meanPairCos": 0.9096314006212107,
+    "rate": 0.13168771929824558,
+    "activeFrac": 0.9503999999999995,
+    "satFrac": 0,
+    "meanThr": 1.8528594999990462,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 5710,
+    "buildMs": 13,
+    "conns": 2097
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9192307692307692,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.96,
+    "ncPartial": 0.823076923076923,
+    "ncHalf": null,
+    "meanPairCos": 0.9351619210213906,
+    "rate": 0.13833508771929828,
+    "activeFrac": 0.9764666666666665,
+    "satFrac": 0,
+    "meanThr": 1.967605499999149,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 6001,
+    "buildMs": 14,
+    "conns": 2116
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.8653846153846154,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.94,
+    "ncPartial": 0.7269230769230769,
+    "ncHalf": null,
+    "meanPairCos": 0.9443021320066202,
+    "rate": 0.14237368421052626,
+    "activeFrac": 0.981466666666666,
+    "satFrac": 0,
+    "meanThr": 2.1002564999993614,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 6016,
+    "buildMs": 10,
+    "conns": 2124
+   }
+  ]
+ },
+ "wiring|short:d:100:d:d:d:40": {
+  "tag": "wiring",
+  "spec": "short:d:100:d:d:d:40",
+  "dataset": "short",
+  "nWords": 50,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.98,
+    "sd": 0,
+    "min": 0.98
+   },
+   "linPartial": {
+    "mean": 0.953,
+    "sd": 0.027,
+    "min": 0.919
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.973,
+    "sd": 0.009,
+    "min": 0.96
+   },
+   "ncPartial": {
+    "mean": 0.888,
+    "sd": 0.052,
+    "min": 0.815
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.856,
+    "sd": 0.034,
+    "min": 0.826
+   },
+   "rate": {
+    "mean": 0.126,
+    "sd": 0.007,
+    "min": 0.118
+   },
+   "activeFrac": {
+    "mean": 0.901,
+    "sd": 0.037,
+    "min": 0.87
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.785,
+    "sd": 0.1,
+    "min": 1.678
+   },
+   "buildMs": {
+    "mean": 21.667,
+    "sd": 6.6,
+    "min": 17
+   },
+   "ms": {
+    "mean": 9946.667,
+    "sd": 266.665,
+    "min": 9704
+   },
+   "conns": {
+    "mean": 5126.333,
+    "sd": 3.3,
+    "min": 5122
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9538461538461539,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.98,
+    "ncPartial": 0.9153846153846154,
+    "ncHalf": null,
+    "meanPairCos": 0.8390567031857766,
+    "rate": 0.12324736842105269,
+    "activeFrac": 0.8802000000000002,
+    "satFrac": 0,
+    "meanThr": 1.7584259999990517,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 9704,
+    "buildMs": 17,
+    "conns": 5127
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9846153846153847,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.98,
+    "ncPartial": 0.9346153846153846,
+    "ncHalf": null,
+    "meanPairCos": 0.8256300153487834,
+    "rate": 0.11841929824561402,
+    "activeFrac": 0.8697333333333334,
+    "satFrac": 0,
+    "meanThr": 1.6783049999990483,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 9818,
+    "buildMs": 17,
+    "conns": 5130
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9192307692307692,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.96,
+    "ncPartial": 0.8153846153846154,
+    "ncHalf": null,
+    "meanPairCos": 0.9040881658801148,
+    "rate": 0.1348701754385965,
+    "activeFrac": 0.9535333333333328,
+    "satFrac": 0,
+    "meanThr": 1.9178084999990055,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 10318,
+    "buildMs": 31,
+    "conns": 5122
+   }
+  ]
+ },
+ "wiring|short:d:100:5:d:d:d": {
+  "tag": "wiring",
+  "spec": "short:d:100:5:d:d:d",
+  "dataset": "short",
+  "nWords": 50,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.973,
+    "sd": 0.009,
+    "min": 0.96
+   },
+   "linPartial": {
+    "mean": 0.963,
+    "sd": 0.009,
+    "min": 0.95
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.947,
+    "sd": 0.034,
+    "min": 0.9
+   },
+   "ncPartial": {
+    "mean": 0.895,
+    "sd": 0.027,
+    "min": 0.865
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.755,
+    "sd": 0.053,
+    "min": 0.686
+   },
+   "rate": {
+    "mean": 0.083,
+    "sd": 0.008,
+    "min": 0.072
+   },
+   "activeFrac": {
+    "mean": 0.82,
+    "sd": 0.045,
+    "min": 0.76
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.009,
+    "sd": 0.084,
+    "min": 0.908
+   },
+   "buildMs": {
+    "mean": 13.667,
+    "sd": 3.771,
+    "min": 11
+   },
+   "ms": {
+    "mean": 5829.667,
+    "sd": 51.545,
+    "min": 5769
+   },
+   "conns": {
+    "mean": 2273.667,
+    "sd": 7.717,
+    "min": 2263
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.96,
+    "linPartial": 0.9692307692307692,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.96,
+    "ncPartial": 0.9307692307692308,
+    "ncHalf": null,
+    "meanPairCos": 0.6857453129343762,
+    "rate": 0.07199298245614037,
+    "activeFrac": 0.7597333333333331,
+    "satFrac": 0,
+    "meanThr": 0.9076499999997403,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 5825,
+    "buildMs": 19,
+    "conns": 2263
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.95,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.9,
+    "ncPartial": 0.8653846153846154,
+    "ncHalf": null,
+    "meanPairCos": 0.7643163137192314,
+    "rate": 0.08437017543859648,
+    "activeFrac": 0.8318666666666665,
+    "satFrac": 0,
+    "meanThr": 1.0059854999994056,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 5895,
+    "buildMs": 11,
+    "conns": 2277
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9692307692307692,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.98,
+    "ncPartial": 0.8884615384615384,
+    "ncHalf": null,
+    "meanPairCos": 0.8141871895558835,
+    "rate": 0.0926280701754386,
+    "activeFrac": 0.8681999999999997,
+    "satFrac": 0,
+    "meanThr": 1.11433349999926,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 5769,
+    "buildMs": 11,
+    "conns": 2281
+   }
+  ]
+ },
+ "wiring|short:d:100:10:d:d:d": {
+  "tag": "wiring",
+  "spec": "short:d:100:10:d:d:d",
+  "dataset": "short",
+  "nWords": 50,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.98,
+    "sd": 0,
+    "min": 0.98
+   },
+   "linPartial": {
+    "mean": 0.967,
+    "sd": 0.01,
+    "min": 0.954
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.953,
+    "sd": 0.019,
+    "min": 0.94
+   },
+   "ncPartial": {
+    "mean": 0.89,
+    "sd": 0.034,
+    "min": 0.865
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.815,
+    "sd": 0.018,
+    "min": 0.79
+   },
+   "rate": {
+    "mean": 0.102,
+    "sd": 0.004,
+    "min": 0.096
+   },
+   "activeFrac": {
+    "mean": 0.861,
+    "sd": 0.014,
+    "min": 0.842
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.323,
+    "sd": 0.058,
+    "min": 1.247
+   },
+   "buildMs": {
+    "mean": 11,
+    "sd": 2.828,
+    "min": 9
+   },
+   "ms": {
+    "mean": 6106.667,
+    "sd": 110.473,
+    "min": 5951
+   },
+   "conns": {
+    "mean": 2563.667,
+    "sd": 3.399,
+    "min": 2559
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9769230769230769,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.98,
+    "ncPartial": 0.9384615384615385,
+    "ncHalf": null,
+    "meanPairCos": 0.7902263776780313,
+    "rate": 0.09621929824561407,
+    "activeFrac": 0.8421333333333336,
+    "satFrac": 0,
+    "meanThr": 1.247353999999276,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 5951,
+    "buildMs": 15,
+    "conns": 2565
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9692307692307692,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.94,
+    "ncPartial": 0.8653846153846154,
+    "ncHalf": null,
+    "meanPairCos": 0.8214234449175523,
+    "rate": 0.10395438596491226,
+    "activeFrac": 0.8761999999999999,
+    "satFrac": 0,
+    "meanThr": 1.333052999999066,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 6196,
+    "buildMs": 9,
+    "conns": 2559
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.9538461538461539,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.94,
+    "ncPartial": 0.8653846153846154,
+    "ncHalf": null,
+    "meanPairCos": 0.8319744344393982,
+    "rate": 0.10528421052631583,
+    "activeFrac": 0.8651999999999996,
+    "satFrac": 0,
+    "meanThr": 1.3873919999991782,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 6173,
+    "buildMs": 9,
+    "conns": 2567
+   }
+  ]
+ },
+ "wiring|short:d:100:50:d:d:d": {
+  "tag": "wiring",
+  "spec": "short:d:100:50:d:d:d",
+  "dataset": "short",
+  "nWords": 50,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.973,
+    "sd": 0.009,
+    "min": 0.96
+   },
+   "linPartial": {
+    "mean": 0.777,
+    "sd": 0.065,
+    "min": 0.688
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.96,
+    "sd": 0.016,
+    "min": 0.94
+   },
+   "ncPartial": {
+    "mean": 0.676,
+    "sd": 0.057,
+    "min": 0.596
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.96,
+    "sd": 0.009,
+    "min": 0.952
+   },
+   "rate": {
+    "mean": 0.156,
+    "sd": 0.002,
+    "min": 0.154
+   },
+   "activeFrac": {
+    "mean": 0.985,
+    "sd": 0.005,
+    "min": 0.98
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.58,
+    "sd": 0.062,
+    "min": 2.527
+   },
+   "buildMs": {
+    "mean": 15.667,
+    "sd": 2.867,
+    "min": 12
+   },
+   "ms": {
+    "mean": 8062.667,
+    "sd": 237.782,
+    "min": 7727
+   },
+   "conns": {
+    "mean": 4608,
+    "sd": 11.86,
+    "min": 4594
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.98,
+    "linPartial": 0.8423076923076923,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.96,
+    "ncPartial": 0.7269230769230769,
+    "ncHalf": null,
+    "meanPairCos": 0.951532387001152,
+    "rate": 0.1541561403508773,
+    "activeFrac": 0.9803333333333328,
+    "satFrac": 0,
+    "meanThr": 2.5457569999996386,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 8248,
+    "buildMs": 19,
+    "conns": 4607
+   },
+   {
+    "linFull": 0.96,
+    "linPartial": 0.8,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.94,
+    "ncPartial": 0.7038461538461539,
+    "ncHalf": null,
+    "meanPairCos": 0.9558648066577441,
+    "rate": 0.15394561403508766,
+    "activeFrac": 0.9837999999999998,
+    "satFrac": 0,
+    "meanThr": 2.527134499999605,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 7727,
+    "buildMs": 16,
+    "conns": 4594
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.6884615384615385,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.98,
+    "ncPartial": 0.5961538461538461,
+    "ncHalf": null,
+    "meanPairCos": 0.972477353690252,
+    "rate": 0.15840701754385952,
+    "activeFrac": 0.9917333333333332,
+    "satFrac": 0,
+    "meanThr": 2.667260999999751,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 8213,
+    "buildMs": 12,
+    "conns": 4623
+   }
+  ]
+ },
+ "wiring|short:d:100:d:0.1:d:d": {
+  "tag": "wiring",
+  "spec": "short:d:100:d:0.1:d:d",
+  "dataset": "short",
+  "nWords": 50,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.973,
+    "sd": 0.009,
+    "min": 0.96
+   },
+   "linPartial": {
+    "mean": 0.821,
+    "sd": 0.057,
+    "min": 0.75
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.82,
+    "sd": 0.114,
+    "min": 0.68
+   },
+   "ncPartial": {
+    "mean": 0.597,
+    "sd": 0.121,
+    "min": 0.465
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.845,
+    "sd": 0.061,
+    "min": 0.794
+   },
+   "rate": {
+    "mean": 0.079,
+    "sd": 0.008,
+    "min": 0.072
+   },
+   "activeFrac": {
+    "mean": 0.873,
+    "sd": 0.033,
+    "min": 0.841
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.896,
+    "sd": 0.063,
+    "min": 0.846
+   },
+   "buildMs": {
+    "mean": 11,
+    "sd": 2.449,
+    "min": 8
+   },
+   "ms": {
+    "mean": 6024.333,
+    "sd": 282.376,
+    "min": 5625
+   },
+   "conns": {
+    "mean": 3120,
+    "sd": 5.099,
+    "min": 3113
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.98,
+    "linPartial": 0.8884615384615384,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.96,
+    "ncPartial": 0.7576923076923077,
+    "ncHalf": null,
+    "meanPairCos": 0.7944947176790206,
+    "rate": 0.07175964912280701,
+    "activeFrac": 0.8590666666666664,
+    "satFrac": 0,
+    "meanThr": 0.8459954999997882,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 6226,
+    "buildMs": 14,
+    "conns": 3113
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.823076923076923,
+    "linHalf": null,
+    "linTrain": 0.9866666666666667,
+    "ncFull": 0.82,
+    "ncPartial": 0.5692307692307692,
+    "ncHalf": null,
+    "meanPairCos": 0.8107575771258143,
+    "rate": 0.07552280701754387,
+    "activeFrac": 0.8407333333333334,
+    "satFrac": 0,
+    "meanThr": 0.8562219999996489,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 5625,
+    "buildMs": 8,
+    "conns": 3125
+   },
+   {
+    "linFull": 0.96,
+    "linPartial": 0.75,
+    "linHalf": null,
+    "linTrain": 0.9933333333333333,
+    "ncFull": 0.68,
+    "ncPartial": 0.4653846153846154,
+    "ncHalf": null,
+    "meanPairCos": 0.930834684876862,
+    "rate": 0.08943508771929827,
+    "activeFrac": 0.9183333333333333,
+    "satFrac": 0,
+    "meanThr": 0.9847984999992734,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 6222,
+    "buildMs": 11,
+    "conns": 3122
+   }
+  ]
+ },
+ "wiring|short:d:100:d:1.5:d:d": {
+  "tag": "wiring",
+  "spec": "short:d:100:d:1.5:d:d",
+  "dataset": "short",
+  "nWords": 50,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.993,
+    "sd": 0.009,
+    "min": 0.98
+   },
+   "linPartial": {
+    "mean": 0.903,
+    "sd": 0.028,
+    "min": 0.877
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.987,
+    "sd": 0.019,
+    "min": 0.96
+   },
+   "ncPartial": {
+    "mean": 0.847,
+    "sd": 0.054,
+    "min": 0.8
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.874,
+    "sd": 0.008,
+    "min": 0.863
+   },
+   "rate": {
+    "mean": 0.139,
+    "sd": 0.001,
+    "min": 0.138
+   },
+   "activeFrac": {
+    "mean": 0.927,
+    "sd": 0.006,
+    "min": 0.921
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.221,
+    "sd": 0.016,
+    "min": 2.201
+   },
+   "buildMs": {
+    "mean": 12.333,
+    "sd": 4.784,
+    "min": 8
+   },
+   "ms": {
+    "mean": 6191.333,
+    "sd": 292.137,
+    "min": 5787
+   },
+   "conns": {
+    "mean": 3120,
+    "sd": 5.099,
+    "min": 3113
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.9423076923076923,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.9230769230769231,
+    "ncHalf": null,
+    "meanPairCos": 0.8627520120012803,
+    "rate": 0.13821052631578948,
+    "activeFrac": 0.9208666666666666,
+    "satFrac": 0,
+    "meanThr": 2.2010319999993224,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 6467,
+    "buildMs": 8,
+    "conns": 3113
+   },
+   {
+    "linFull": 0.98,
+    "linPartial": 0.8884615384615384,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.96,
+    "ncPartial": 0.8192307692307692,
+    "ncHalf": null,
+    "meanPairCos": 0.8772074865113886,
+    "rate": 0.13973333333333335,
+    "activeFrac": 0.9256666666666666,
+    "satFrac": 0,
+    "meanThr": 2.2238684999993104,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 6320,
+    "buildMs": 19,
+    "conns": 3125
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8769230769230769,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8,
+    "ncHalf": null,
+    "meanPairCos": 0.8823965025311264,
+    "rate": 0.14055614035087713,
+    "activeFrac": 0.9347333333333326,
+    "satFrac": 0,
+    "meanThr": 2.2395794999993264,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 5787,
+    "buildMs": 10,
+    "conns": 3122
+   }
+  ]
+ },
+ "capacity|tiny:d:10": {
+  "tag": "capacity",
+  "spec": "tiny:d:10",
+  "dataset": "tiny",
+  "nWords": 8,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.917,
+    "sd": 0.118,
+    "min": 0.75
+   },
+   "linPartial": {
+    "mean": 0.556,
+    "sd": 0.416,
+    "min": 0
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.875,
+    "sd": 0,
+    "min": 0.875
+   },
+   "ncPartial": {
+    "mean": 0.667,
+    "sd": 0.272,
+    "min": 0.333
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.845,
+    "sd": 0.029,
+    "min": 0.806
+   },
+   "rate": {
+    "mean": 0.123,
+    "sd": 0.001,
+    "min": 0.121
+   },
+   "activeFrac": {
+    "mean": 0.919,
+    "sd": 0.019,
+    "min": 0.9
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.639,
+    "sd": 0.008,
+    "min": 0.628
+   },
+   "buildMs": {
+    "mean": 2.667,
+    "sd": 3.091,
+    "min": 0
+   },
+   "ms": {
+    "mean": 54,
+    "sd": 9.626,
+    "min": 41
+   },
+   "conns": {
+    "mean": 100.667,
+    "sd": 0.471,
+    "min": 100
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.75,
+    "linPartial": 0,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.875,
+    "ncPartial": 0.3333333333333333,
+    "ncHalf": null,
+    "meanPairCos": 0.8057145373887906,
+    "rate": 0.12379385964912282,
+    "activeFrac": 0.8999999999999999,
+    "satFrac": 0,
+    "meanThr": 0.642585000000007,
+    "nPartial": 3,
+    "nHalf": 0,
+    "ms": 64,
+    "buildMs": 7,
+    "conns": 101
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.6666666666666666,
+    "linHalf": null,
+    "linTrain": 0.9583333333333334,
+    "ncFull": 0.875,
+    "ncPartial": 0.6666666666666666,
+    "ncHalf": null,
+    "meanPairCos": 0.8543341127260522,
+    "rate": 0.12434210526315786,
+    "activeFrac": 0.9125000000000001,
+    "satFrac": 0,
+    "meanThr": 0.6465500000000068,
+    "nPartial": 3,
+    "nHalf": 0,
+    "ms": 57,
+    "buildMs": 1,
+    "conns": 100
+   },
+   {
+    "linFull": 1,
+    "linPartial": 1,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.875,
+    "ncPartial": 1,
+    "ncHalf": null,
+    "meanPairCos": 0.8744898157136277,
+    "rate": 0.12094298245614034,
+    "activeFrac": 0.9458333333333334,
+    "satFrac": 0,
+    "meanThr": 0.6276050000000071,
+    "nPartial": 3,
+    "nHalf": 0,
+    "ms": 41,
+    "buildMs": 0,
+    "conns": 101
+   }
+  ]
+ },
+ "capacity|medium:d:10": {
+  "tag": "capacity",
+  "spec": "medium:d:10",
+  "dataset": "medium",
+  "nWords": 20,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.867,
+    "sd": 0.062,
+    "min": 0.8
+   },
+   "linPartial": {
+    "mean": 0.49,
+    "sd": 0.028,
+    "min": 0.471
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.817,
+    "sd": 0.024,
+    "min": 0.8
+   },
+   "ncPartial": {
+    "mean": 0.529,
+    "sd": 0.127,
+    "min": 0.353
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.76,
+    "sd": 0.14,
+    "min": 0.588
+   },
+   "rate": {
+    "mean": 0.106,
+    "sd": 0.019,
+    "min": 0.081
+   },
+   "activeFrac": {
+    "mean": 0.816,
+    "sd": 0.133,
+    "min": 0.662
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.777,
+    "sd": 0.092,
+    "min": 0.657
+   },
+   "buildMs": {
+    "mean": 0.333,
+    "sd": 0.471,
+    "min": 0
+   },
+   "ms": {
+    "mean": 242.333,
+    "sd": 22.514,
+    "min": 216
+   },
+   "conns": {
+    "mean": 111.667,
+    "sd": 0.471,
+    "min": 111
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.8,
+    "linPartial": 0.47058823529411764,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.8,
+    "ncPartial": 0.6470588235294118,
+    "ncHalf": null,
+    "meanPairCos": 0.759653058666955,
+    "rate": 0.11052631578947367,
+    "activeFrac": 0.7983333333333332,
+    "satFrac": 0,
+    "meanThr": 0.7955900000000197,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 271,
+    "buildMs": 0,
+    "conns": 112
+   },
+   {
+    "linFull": 0.85,
+    "linPartial": 0.47058823529411764,
+    "linHalf": null,
+    "linTrain": 0.9833333333333333,
+    "ncFull": 0.8,
+    "ncPartial": 0.35294117647058826,
+    "ncHalf": null,
+    "meanPairCos": 0.9313487097023758,
+    "rate": 0.12688596491228069,
+    "activeFrac": 0.9866666666666667,
+    "satFrac": 0,
+    "meanThr": 0.8789300000000189,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 240,
+    "buildMs": 1,
+    "conns": 112
+   },
+   {
+    "linFull": 0.95,
+    "linPartial": 0.5294117647058824,
+    "linHalf": null,
+    "linTrain": 0.9833333333333333,
+    "ncFull": 0.85,
+    "ncPartial": 0.5882352941176471,
+    "ncHalf": null,
+    "meanPairCos": 0.587558246634216,
+    "rate": 0.08105263157894735,
+    "activeFrac": 0.6616666666666666,
+    "satFrac": 0,
+    "meanThr": 0.6567100000000214,
+    "nPartial": 17,
+    "nHalf": 0,
+    "ms": 216,
+    "buildMs": 0,
+    "conns": 111
+   }
+  ]
+ },
+ "capacity|short:d:10": {
+  "tag": "capacity",
+  "spec": "short:d:10",
+  "dataset": "short",
+  "nWords": 50,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.893,
+    "sd": 0.057,
+    "min": 0.82
+   },
+   "linPartial": {
+    "mean": 0.528,
+    "sd": 0.055,
+    "min": 0.465
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.747,
+    "sd": 0.127,
+    "min": 0.62
+   },
+   "ncPartial": {
+    "mean": 0.453,
+    "sd": 0.111,
+    "min": 0.342
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.805,
+    "sd": 0.084,
+    "min": 0.686
+   },
+   "rate": {
+    "mean": 0.118,
+    "sd": 0.013,
+    "min": 0.101
+   },
+   "activeFrac": {
+    "mean": 0.86,
+    "sd": 0.09,
+    "min": 0.733
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.608,
+    "sd": 0.181,
+    "min": 1.385
+   },
+   "buildMs": {
+    "mean": 1.333,
+    "sd": 0.471,
+    "min": 1
+   },
+   "ms": {
+    "mean": 1320.667,
+    "sd": 100.5,
+    "min": 1237
+   },
+   "conns": {
+    "mean": 193,
+    "sd": 1.414,
+    "min": 191
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.9,
+    "linPartial": 0.5192307692307693,
+    "linHalf": null,
+    "linTrain": 0.9733333333333334,
+    "ncFull": 0.7,
+    "ncPartial": 0.4115384615384615,
+    "ncHalf": null,
+    "meanPairCos": 0.8547382722080727,
+    "rate": 0.12005263157894729,
+    "activeFrac": 0.9266666666666669,
+    "satFrac": 0,
+    "meanThr": 1.6118199999988019,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 1237,
+    "buildMs": 1,
+    "conns": 194
+   },
+   {
+    "linFull": 0.82,
+    "linPartial": 0.4653846153846154,
+    "linHalf": null,
+    "linTrain": 0.9866666666666667,
+    "ncFull": 0.62,
+    "ncPartial": 0.3423076923076923,
+    "ncHalf": null,
+    "meanPairCos": 0.8743085635360232,
+    "rate": 0.13177192982456137,
+    "activeFrac": 0.9220000000000003,
+    "satFrac": 0,
+    "meanThr": 1.8283699999988532,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 1263,
+    "buildMs": 1,
+    "conns": 191
+   },
+   {
+    "linFull": 0.96,
+    "linPartial": 0.6,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.92,
+    "ncPartial": 0.6038461538461538,
+    "ncHalf": null,
+    "meanPairCos": 0.6863014726975151,
+    "rate": 0.10080701754385966,
+    "activeFrac": 0.7326666666666667,
+    "satFrac": 0,
+    "meanThr": 1.3846249999990867,
+    "nPartial": 260,
+    "nHalf": 0,
+    "ms": 1462,
+    "buildMs": 2,
+    "conns": 194
+   }
+  ]
+ },
+ "capacity|short:25:10": {
+  "tag": "capacity",
+  "spec": "short:25:10",
+  "dataset": "short",
+  "nWords": 25,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.92,
+    "sd": 0.033,
+    "min": 0.88
+   },
+   "linPartial": {
+    "mean": 0.604,
+    "sd": 0.132,
+    "min": 0.436
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.893,
+    "sd": 0.082,
+    "min": 0.8
+   },
+   "ncPartial": {
+    "mean": 0.584,
+    "sd": 0.132,
+    "min": 0.423
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.857,
+    "sd": 0.101,
+    "min": 0.714
+   },
+   "rate": {
+    "mean": 0.132,
+    "sd": 0.017,
+    "min": 0.108
+   },
+   "activeFrac": {
+    "mean": 0.921,
+    "sd": 0.093,
+    "min": 0.789
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.272,
+    "sd": 0.154,
+    "min": 1.066
+   },
+   "buildMs": {
+    "mean": 2,
+    "sd": 0.816,
+    "min": 1
+   },
+   "ms": {
+    "mean": 543.333,
+    "sd": 35.65,
+    "min": 493
+   },
+   "conns": {
+    "mean": 193,
+    "sd": 1.414,
+    "min": 191
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.92,
+    "linPartial": 0.6174496644295302,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.88,
+    "ncPartial": 0.5838926174496645,
+    "ncHalf": null,
+    "meanPairCos": 0.926033802288685,
+    "rate": 0.13866666666666666,
+    "activeFrac": 0.9866666666666667,
+    "satFrac": 0,
+    "meanThr": 1.3108399999995248,
+    "nPartial": 149,
+    "nHalf": 0,
+    "ms": 566,
+    "buildMs": 3,
+    "conns": 194
+   },
+   {
+    "linFull": 0.88,
+    "linPartial": 0.436241610738255,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.8,
+    "ncPartial": 0.4228187919463087,
+    "ncHalf": null,
+    "meanPairCos": 0.9317789650767726,
+    "rate": 0.14922807017543857,
+    "activeFrac": 0.9866666666666667,
+    "satFrac": 0,
+    "meanThr": 1.4382299999994337,
+    "nPartial": 149,
+    "nHalf": 0,
+    "ms": 571,
+    "buildMs": 2,
+    "conns": 191
+   },
+   {
+    "linFull": 0.96,
+    "linPartial": 0.7583892617449665,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7449664429530202,
+    "ncHalf": null,
+    "meanPairCos": 0.7140302102871278,
+    "rate": 0.10835087719298246,
+    "activeFrac": 0.7893333333333333,
+    "satFrac": 0,
+    "meanThr": 1.0660099999998183,
+    "nPartial": 149,
+    "nHalf": 0,
+    "ms": 493,
+    "buildMs": 1,
+    "conns": 194
+   }
+  ]
+ },
+ "capacity|short:10:10": {
+  "tag": "capacity",
+  "spec": "short:10:10",
+  "dataset": "short",
+  "nWords": 10,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.543,
+    "sd": 0.183,
+    "min": 0.386
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.967,
+    "sd": 0.047,
+    "min": 0.9
+   },
+   "ncPartial": {
+    "mean": 0.557,
+    "sd": 0.182,
+    "min": 0.414
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.887,
+    "sd": 0.095,
+    "min": 0.752
+   },
+   "rate": {
+    "mean": 0.143,
+    "sd": 0.019,
+    "min": 0.117
+   },
+   "activeFrac": {
+    "mean": 0.942,
+    "sd": 0.082,
+    "min": 0.827
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.919,
+    "sd": 0.093,
+    "min": 0.795
+   },
+   "buildMs": {
+    "mean": 4,
+    "sd": 4.967,
+    "min": 0
+   },
+   "ms": {
+    "mean": 141,
+    "sd": 38.262,
+    "min": 111
+   },
+   "conns": {
+    "mean": 193,
+    "sd": 1.414,
+    "min": 191
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.44285714285714284,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.9,
+    "ncPartial": 0.44285714285714284,
+    "ncHalf": null,
+    "meanPairCos": 0.9536700206847836,
+    "rate": 0.15078947368421053,
+    "activeFrac": 1,
+    "satFrac": 0,
+    "meanThr": 0.946280000000009,
+    "nPartial": 70,
+    "nHalf": 0,
+    "ms": 195,
+    "buildMs": 0,
+    "conns": 194
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.38571428571428573,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.4142857142857143,
+    "ncHalf": null,
+    "meanPairCos": 0.9539734446271416,
+    "rate": 0.16026315789473686,
+    "activeFrac": 1,
+    "satFrac": 0,
+    "meanThr": 1.0167399999999935,
+    "nPartial": 70,
+    "nHalf": 0,
+    "ms": 117,
+    "buildMs": 11,
+    "conns": 191
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.8142857142857143,
+    "ncHalf": null,
+    "meanPairCos": 0.7521779986908838,
+    "rate": 0.11657894736842103,
+    "activeFrac": 0.8266666666666667,
+    "satFrac": 0,
+    "meanThr": 0.7949600000000155,
+    "nPartial": 70,
+    "nHalf": 0,
+    "ms": 111,
+    "buildMs": 1,
+    "conns": 194
+   }
+  ]
+ },
+ "capacity|short:25:25": {
+  "tag": "capacity",
+  "spec": "short:25:25",
+  "dataset": "short",
+  "nWords": 25,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.781,
+    "sd": 0.054,
+    "min": 0.705
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 0.96,
+    "sd": 0.057,
+    "min": 0.88
+   },
+   "ncPartial": {
+    "mean": 0.709,
+    "sd": 0.074,
+    "min": 0.604
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.888,
+    "sd": 0.047,
+    "min": 0.823
+   },
+   "rate": {
+    "mean": 0.135,
+    "sd": 0.008,
+    "min": 0.124
+   },
+   "activeFrac": {
+    "mean": 0.949,
+    "sd": 0.043,
+    "min": 0.889
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.304,
+    "sd": 0.057,
+    "min": 1.225
+   },
+   "buildMs": {
+    "mean": 2,
+    "sd": 0,
+    "min": 2
+   },
+   "ms": {
+    "mean": 774.667,
+    "sd": 10.656,
+    "min": 761
+   },
+   "conns": {
+    "mean": 768.333,
+    "sd": 3.3,
+    "min": 764
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.7046979865771812,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 0.88,
+    "ncPartial": 0.6040268456375839,
+    "ncHalf": null,
+    "meanPairCos": 0.9317386834180168,
+    "rate": 0.14259649122807014,
+    "activeFrac": 0.9802666666666668,
+    "satFrac": 0,
+    "meanThr": 1.360459999999561,
+    "nPartial": 149,
+    "nHalf": 0,
+    "ms": 787,
+    "buildMs": 2,
+    "conns": 764
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.825503355704698,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7651006711409396,
+    "ncHalf": null,
+    "meanPairCos": 0.9090069138869952,
+    "rate": 0.13828771929824563,
+    "activeFrac": 0.9781333333333335,
+    "satFrac": 0,
+    "meanThr": 1.3260759999995508,
+    "nPartial": 149,
+    "nHalf": 0,
+    "ms": 776,
+    "buildMs": 2,
+    "conns": 772
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8120805369127517,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7583892617449665,
+    "ncHalf": null,
+    "meanPairCos": 0.8232791342285989,
+    "rate": 0.12370526315789472,
+    "activeFrac": 0.8885333333333335,
+    "satFrac": 0,
+    "meanThr": 1.225457999999649,
+    "nPartial": 149,
+    "nHalf": 0,
+    "ms": 761,
+    "buildMs": 2,
+    "conns": 769
+   }
+  ]
+ },
+ "capacity|short:10:25": {
+  "tag": "capacity",
+  "spec": "short:10:25",
+  "dataset": "short",
+  "nWords": 10,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "linPartial": {
+    "mean": 0.819,
+    "sd": 0.075,
+    "min": 0.714
+   },
+   "linHalf": null,
+   "ncFull": {
+    "mean": 1,
+    "sd": 0,
+    "min": 1
+   },
+   "ncPartial": {
+    "mean": 0.781,
+    "sd": 0.111,
+    "min": 0.643
+   },
+   "ncHalf": null,
+   "meanPairCos": {
+    "mean": 0.906,
+    "sd": 0.044,
+    "min": 0.844
+   },
+   "rate": {
+    "mean": 0.143,
+    "sd": 0.008,
+    "min": 0.132
+   },
+   "activeFrac": {
+    "mean": 0.973,
+    "sd": 0.029,
+    "min": 0.932
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 0.918,
+    "sd": 0.039,
+    "min": 0.865
+   },
+   "buildMs": {
+    "mean": 2,
+    "sd": 0,
+    "min": 2
+   },
+   "ms": {
+    "mean": 219.333,
+    "sd": 8.576,
+    "min": 209
+   },
+   "conns": {
+    "mean": 768.333,
+    "sd": 3.3,
+    "min": 764
+   }
+  },
+  "rows": [
+   {
+    "linFull": 1,
+    "linPartial": 0.7142857142857143,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.6428571428571429,
+    "ncHalf": null,
+    "meanPairCos": 0.9431080831618414,
+    "rate": 0.15045614035087715,
+    "activeFrac": 0.9906666666666667,
+    "satFrac": 0,
+    "meanThr": 0.9552460000000028,
+    "nPartial": 70,
+    "nHalf": 0,
+    "ms": 219,
+    "buildMs": 2,
+    "conns": 764
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8571428571428571,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.7857142857142857,
+    "ncHalf": null,
+    "meanPairCos": 0.9297730276475746,
+    "rate": 0.14603508771929827,
+    "activeFrac": 0.9973333333333334,
+    "satFrac": 0,
+    "meanThr": 0.9346060000000045,
+    "nPartial": 70,
+    "nHalf": 0,
+    "ms": 209,
+    "buildMs": 2,
+    "conns": 772
+   },
+   {
+    "linFull": 1,
+    "linPartial": 0.8857142857142857,
+    "linHalf": null,
+    "linTrain": 1,
+    "ncFull": 1,
+    "ncPartial": 0.9142857142857143,
+    "ncHalf": null,
+    "meanPairCos": 0.8444949256088472,
+    "rate": 0.13161403508771932,
+    "activeFrac": 0.9320000000000002,
+    "satFrac": 0,
+    "meanThr": 0.8651600000000153,
+    "nPartial": 70,
+    "nHalf": 0,
+    "ms": 230,
+    "buildMs": 2,
+    "conns": 769
+   }
+  ]
+ },
+ "capacity|full:121:10:5": {
+  "tag": "capacity",
+  "spec": "full:121:10:5",
+  "dataset": "full",
+  "nWords": 121,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.165,
+    "sd": 0.018,
+    "min": 0.149
+   },
+   "linPartial": {
+    "mean": 0.154,
+    "sd": 0.026,
+    "min": 0.132
+   },
+   "linHalf": {
+    "mean": 0.088,
+    "sd": 0.005,
+    "min": 0.083
+   },
+   "ncFull": {
+    "mean": 0.212,
+    "sd": 0.034,
+    "min": 0.174
+   },
+   "ncPartial": {
+    "mean": 0.182,
+    "sd": 0.024,
+    "min": 0.149
+   },
+   "ncHalf": {
+    "mean": 0.084,
+    "sd": 0.007,
+    "min": 0.074
+   },
+   "meanPairCos": {
+    "mean": 0.979,
+    "sd": 0.008,
+    "min": 0.968
+   },
+   "rate": {
+    "mean": 0.159,
+    "sd": 0.001,
+    "min": 0.157
+   },
+   "activeFrac": {
+    "mean": 0.992,
+    "sd": 0.005,
+    "min": 0.985
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 3,
+    "sd": 0,
+    "min": 3
+   },
+   "buildMs": {
+    "mean": 8.333,
+    "sd": 2.625,
+    "min": 6
+   },
+   "ms": {
+    "mean": 9232.667,
+    "sd": 268.775,
+    "min": 8993
+   },
+   "conns": {
+    "mean": 1090,
+    "sd": 0,
+    "min": 1090
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.1487603305785124,
+    "linPartial": 0.1322314049586777,
+    "linHalf": 0.08677685950413223,
+    "linTrain": 0.49586776859504134,
+    "ncFull": 0.17355371900826447,
+    "ncPartial": 0.1487603305785124,
+    "ncHalf": 0.08677685950413223,
+    "meanPairCos": 0.9830020934024936,
+    "rate": 0.1596672466289691,
+    "activeFrac": 0.9938016528925622,
+    "satFrac": 0,
+    "meanThr": 3.0005500000011343,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 9097,
+    "buildMs": 7,
+    "conns": 1090
+   },
+   {
+    "linFull": 0.15702479338842976,
+    "linPartial": 0.14049586776859505,
+    "linHalf": 0.08264462809917356,
+    "linTrain": 0.4669421487603306,
+    "ncFull": 0.2066115702479339,
+    "ncPartial": 0.19008264462809918,
+    "ncHalf": 0.0743801652892562,
+    "meanPairCos": 0.9853371603921994,
+    "rate": 0.16076555023923442,
+    "activeFrac": 0.9962809917355373,
+    "satFrac": 0,
+    "meanThr": 3.0004750000011375,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 9608,
+    "buildMs": 6,
+    "conns": 1090
+   },
+   {
+    "linFull": 0.19008264462809918,
+    "linPartial": 0.19008264462809918,
+    "linHalf": 0.09504132231404959,
+    "linTrain": 0.6322314049586777,
+    "ncFull": 0.256198347107438,
+    "ncPartial": 0.2066115702479339,
+    "ncHalf": 0.09090909090909091,
+    "meanPairCos": 0.9682727702188585,
+    "rate": 0.15748151370160945,
+    "activeFrac": 0.9847107438016536,
+    "satFrac": 0,
+    "meanThr": 2.9999000000011105,
+    "nPartial": 121,
+    "nHalf": 242,
+    "ms": 8993,
+    "buildMs": 12,
+    "conns": 1090
+   }
+  ]
+ },
+ "capacity|full:50:10:5": {
+  "tag": "capacity",
+  "spec": "full:50:10:5",
+  "dataset": "full",
+  "nWords": 50,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.34,
+    "sd": 0.065,
+    "min": 0.26
+   },
+   "linPartial": {
+    "mean": 0.147,
+    "sd": 0.009,
+    "min": 0.14
+   },
+   "linHalf": {
+    "mean": 0.127,
+    "sd": 0.005,
+    "min": 0.12
+   },
+   "ncFull": {
+    "mean": 0.347,
+    "sd": 0.066,
+    "min": 0.26
+   },
+   "ncPartial": {
+    "mean": 0.14,
+    "sd": 0.016,
+    "min": 0.12
+   },
+   "ncHalf": {
+    "mean": 0.113,
+    "sd": 0.031,
+    "min": 0.07
+   },
+   "meanPairCos": {
+    "mean": 0.983,
+    "sd": 0.006,
+    "min": 0.974
+   },
+   "rate": {
+    "mean": 0.161,
+    "sd": 0.001,
+    "min": 0.16
+   },
+   "activeFrac": {
+    "mean": 0.998,
+    "sd": 0.002,
+    "min": 0.995
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 2.166,
+    "sd": 0.03,
+    "min": 2.123
+   },
+   "buildMs": {
+    "mean": 10,
+    "sd": 1.414,
+    "min": 9
+   },
+   "ms": {
+    "mean": 3111.667,
+    "sd": 172.716,
+    "min": 2892
+   },
+   "conns": {
+    "mean": 1090,
+    "sd": 0,
+    "min": 1090
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.26,
+    "linPartial": 0.14,
+    "linHalf": 0.12,
+    "linTrain": 0.68,
+    "ncFull": 0.26,
+    "ncPartial": 0.14,
+    "ncHalf": 0.07,
+    "meanPairCos": 0.9856952637727826,
+    "rate": 0.16136842105263155,
+    "activeFrac": 0.9990000000000001,
+    "satFrac": 0,
+    "meanThr": 2.183764999999398,
+    "nPartial": 50,
+    "nHalf": 100,
+    "ms": 3129,
+    "buildMs": 9,
+    "conns": 1090
+   },
+   {
+    "linFull": 0.34,
+    "linPartial": 0.14,
+    "linHalf": 0.13,
+    "linTrain": 0.66,
+    "ncFull": 0.36,
+    "ncPartial": 0.16,
+    "ncHalf": 0.14,
+    "meanPairCos": 0.9888892889021663,
+    "rate": 0.1614736842105263,
+    "activeFrac": 1,
+    "satFrac": 0,
+    "meanThr": 2.1908249999994136,
+    "nPartial": 50,
+    "nHalf": 100,
+    "ms": 3314,
+    "buildMs": 12,
+    "conns": 1090
+   },
+   {
+    "linFull": 0.42,
+    "linPartial": 0.16,
+    "linHalf": 0.13,
+    "linTrain": 0.75,
+    "ncFull": 0.42,
+    "ncPartial": 0.12,
+    "ncHalf": 0.13,
+    "meanPairCos": 0.9743150036231498,
+    "rate": 0.1596842105263158,
+    "activeFrac": 0.9950000000000003,
+    "satFrac": 0,
+    "meanThr": 2.1233999999993385,
+    "nPartial": 50,
+    "nHalf": 100,
+    "ms": 2892,
+    "buildMs": 9,
+    "conns": 1090
+   }
+  ]
+ },
+ "capacity|full:25:10:5": {
+  "tag": "capacity",
+  "spec": "full:25:10:5",
+  "dataset": "full",
+  "nWords": 25,
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "agg": {
+   "linFull": {
+    "mean": 0.413,
+    "sd": 0.105,
+    "min": 0.32
+   },
+   "linPartial": {
+    "mean": 0.2,
+    "sd": 0.033,
+    "min": 0.16
+   },
+   "linHalf": {
+    "mean": 0.147,
+    "sd": 0.025,
+    "min": 0.12
+   },
+   "ncFull": {
+    "mean": 0.413,
+    "sd": 0.075,
+    "min": 0.36
+   },
+   "ncPartial": {
+    "mean": 0.133,
+    "sd": 0.019,
+    "min": 0.12
+   },
+   "ncHalf": {
+    "mean": 0.127,
+    "sd": 0.057,
+    "min": 0.06
+   },
+   "meanPairCos": {
+    "mean": 0.984,
+    "sd": 0.007,
+    "min": 0.974
+   },
+   "rate": {
+    "mean": 0.161,
+    "sd": 0.001,
+    "min": 0.16
+   },
+   "activeFrac": {
+    "mean": 0.998,
+    "sd": 0.003,
+    "min": 0.994
+   },
+   "satFrac": {
+    "mean": 0,
+    "sd": 0,
+    "min": 0
+   },
+   "meanThr": {
+    "mean": 1.353,
+    "sd": 0.012,
+    "min": 1.336
+   },
+   "buildMs": {
+    "mean": 7.333,
+    "sd": 0.471,
+    "min": 7
+   },
+   "ms": {
+    "mean": 1186,
+    "sd": 31.273,
+    "min": 1144
+   },
+   "conns": {
+    "mean": 1090,
+    "sd": 0,
+    "min": 1090
+   }
+  },
+  "rows": [
+   {
+    "linFull": 0.36,
+    "linPartial": 0.16,
+    "linHalf": 0.12,
+    "linTrain": 0.66,
+    "ncFull": 0.36,
+    "ncPartial": 0.12,
+    "ncHalf": 0.06,
+    "meanPairCos": 0.9888569077315109,
+    "rate": 0.16221052631578947,
+    "activeFrac": 1,
+    "satFrac": 0,
+    "meanThr": 1.3630899999997683,
+    "nPartial": 25,
+    "nHalf": 50,
+    "ms": 1195,
+    "buildMs": 7,
+    "conns": 1090
+   },
+   {
+    "linFull": 0.32,
+    "linPartial": 0.2,
+    "linHalf": 0.14,
+    "linTrain": 0.74,
+    "ncFull": 0.36,
+    "ncPartial": 0.12,
+    "ncHalf": 0.12,
+    "meanPairCos": 0.9897939181563336,
+    "rate": 0.16131578947368422,
+    "activeFrac": 1,
+    "satFrac": 0,
+    "meanThr": 1.360999999999767,
+    "nPartial": 25,
+    "nHalf": 50,
+    "ms": 1144,
+    "buildMs": 7,
+    "conns": 1090
+   },
+   {
+    "linFull": 0.56,
+    "linPartial": 0.24,
+    "linHalf": 0.18,
+    "linTrain": 0.86,
+    "ncFull": 0.52,
+    "ncPartial": 0.16,
+    "ncHalf": 0.2,
+    "meanPairCos": 0.9741995506941041,
+    "rate": 0.15994736842105267,
+    "activeFrac": 0.9939999999999999,
+    "satFrac": 0,
+    "meanThr": 1.3361649999997756,
+    "nPartial": 25,
+    "nHalf": 50,
+    "ms": 1219,
+    "buildMs": 8,
+    "conns": 1090
+   }
+  ]
+ }
+}

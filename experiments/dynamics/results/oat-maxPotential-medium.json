@@ -1,0 +1,596 @@
+{
+ "maxPotential 0.6": {
+  "cfg": {
+   "brain": {
+    "maxPotential": 0.6
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 0.95,
+    "linPart": 0.7647058823529411,
+    "sepFull": 0.8,
+    "sepPart": 0.7647058823529411,
+    "pairCos": 0.8838991352998907,
+    "rate": 0.0481578947368421,
+    "active": 0.8734999999999997,
+    "silentWords": 0,
+    "meanThr": 0.5910547500000181,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.7647058823529411,
+    "sepFull": 0.85,
+    "sepPart": 0.5882352941176471,
+    "pairCos": 0.9242410227387269,
+    "rate": 0.047927631578947354,
+    "active": 0.917,
+    "silentWords": 0,
+    "meanThr": 0.5955452500000189,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.6470588235294118,
+    "sepFull": 0.75,
+    "sepPart": 0.47058823529411764,
+    "pairCos": 0.8953310273641654,
+    "rate": 0.048328947368421055,
+    "active": 0.8887499999999999,
+    "silentWords": 0,
+    "meanThr": 0.5920035000000184,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 0.983,
+    "sd": 0.024
+   },
+   "linPart": {
+    "mean": 0.725,
+    "sd": 0.055
+   },
+   "sepFull": {
+    "mean": 0.8,
+    "sd": 0.041
+   },
+   "sepPart": {
+    "mean": 0.608,
+    "sd": 0.121
+   },
+   "pairCos": {
+    "mean": 0.901,
+    "sd": 0.017
+   },
+   "rate": {
+    "mean": 0.048,
+    "sd": 0
+   },
+   "active": {
+    "mean": 0.893,
+    "sd": 0.018
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.593,
+    "sd": 0.002
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "maxPotential 1": {
+  "cfg": {
+   "brain": {
+    "maxPotential": 1
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 0.95,
+    "sepPart": 0.7647058823529411,
+    "pairCos": 0.9136835023763664,
+    "rate": 0.10203947368421051,
+    "active": 0.8819999999999999,
+    "silentWords": 0,
+    "meanThr": 0.7653812500000164,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 0.95,
+    "linPart": 0.7647058823529411,
+    "sepFull": 0.95,
+    "sepPart": 0.7058823529411765,
+    "pairCos": 0.9577497628539688,
+    "rate": 0.11538815789473685,
+    "active": 0.9587499999999997,
+    "silentWords": 0,
+    "meanThr": 0.8148770000000155,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 0.9,
+    "sepPart": 0.6470588235294118,
+    "pairCos": 0.9389522887794816,
+    "rate": 0.10710526315789475,
+    "active": 0.905,
+    "silentWords": 0,
+    "meanThr": 0.785105250000016,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 0.983,
+    "sd": 0.024
+   },
+   "linPart": {
+    "mean": 0.824,
+    "sd": 0.048
+   },
+   "sepFull": {
+    "mean": 0.933,
+    "sd": 0.024
+   },
+   "sepPart": {
+    "mean": 0.706,
+    "sd": 0.048
+   },
+   "pairCos": {
+    "mean": 0.937,
+    "sd": 0.018
+   },
+   "rate": {
+    "mean": 0.108,
+    "sd": 0.006
+   },
+   "active": {
+    "mean": 0.915,
+    "sd": 0.032
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.788,
+    "sd": 0.02
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "maxPotential 2": {
+  "cfg": {
+   "brain": {
+    "maxPotential": 2
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.8917852697690631,
+    "rate": 0.10515789473684209,
+    "active": 0.8850000000000001,
+    "silentWords": 0,
+    "meanThr": 0.7746975000000157,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.7647058823529411,
+    "pairCos": 0.9373405683282438,
+    "rate": 0.11778289473684211,
+    "active": 0.9634999999999998,
+    "silentWords": 0,
+    "meanThr": 0.8219867500000154,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9181000586132705,
+    "rate": 0.11084210526315788,
+    "active": 0.91375,
+    "silentWords": 0,
+    "meanThr": 0.7949045000000156,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.843,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.804,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.916,
+    "sd": 0.019
+   },
+   "rate": {
+    "mean": 0.111,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.921,
+    "sd": 0.032
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.797,
+    "sd": 0.019
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "maxPotential 3": {
+  "cfg": {
+   "brain": {
+    "maxPotential": 3
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.8864925479915026,
+    "rate": 0.10474342105263157,
+    "active": 0.88325,
+    "silentWords": 0,
+    "meanThr": 0.7743207500000163,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9309139859711992,
+    "rate": 0.11804605263157894,
+    "active": 0.9559999999999998,
+    "silentWords": 0,
+    "meanThr": 0.8222115000000154,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9117476058130353,
+    "rate": 0.1111315789473684,
+    "active": 0.9110000000000001,
+    "silentWords": 0,
+    "meanThr": 0.796534000000016,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.863,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.824,
+    "sd": 0
+   },
+   "pairCos": {
+    "mean": 0.91,
+    "sd": 0.018
+   },
+   "rate": {
+    "mean": 0.111,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.917,
+    "sd": 0.03
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.798,
+    "sd": 0.02
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "maxPotential 6": {
+  "cfg": {
+   "brain": {
+    "maxPotential": 6
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.8867706687520607,
+    "rate": 0.10594736842105261,
+    "active": 0.8805,
+    "silentWords": 0,
+    "meanThr": 0.773420250000016,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8823529411764706,
+    "pairCos": 0.9272697707775374,
+    "rate": 0.11908552631578946,
+    "active": 0.9642499999999998,
+    "silentWords": 0,
+    "meanThr": 0.8231005000000158,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9060517338391683,
+    "rate": 0.11117105263157892,
+    "active": 0.9209999999999999,
+    "silentWords": 0,
+    "meanThr": 0.7951032500000162,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.843,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.843,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.907,
+    "sd": 0.017
+   },
+   "rate": {
+    "mean": 0.112,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.922,
+    "sd": 0.034
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.797,
+    "sd": 0.02
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "maxPotential 10": {
+  "cfg": {
+   "brain": {
+    "maxPotential": 10
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.8867706687520607,
+    "rate": 0.10594736842105261,
+    "active": 0.8805,
+    "silentWords": 0,
+    "meanThr": 0.773420250000016,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8823529411764706,
+    "pairCos": 0.9272697707775374,
+    "rate": 0.11908552631578946,
+    "active": 0.9642499999999998,
+    "silentWords": 0,
+    "meanThr": 0.8231005000000158,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9060517338391683,
+    "rate": 0.11117105263157892,
+    "active": 0.9209999999999999,
+    "silentWords": 0,
+    "meanThr": 0.7951032500000162,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.843,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.843,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.907,
+    "sd": 0.017
+   },
+   "rate": {
+    "mean": 0.112,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.922,
+    "sd": 0.034
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.797,
+    "sd": 0.02
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ }
+}

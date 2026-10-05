@@ -1,0 +1,596 @@
+{
+ "synapsesPerNode 1": {
+  "cfg": {
+   "brain": {
+    "synapsesPerNode": 1
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.5328059596726872,
+    "rate": 0.07570394736842104,
+    "active": 0.5250000000000001,
+    "silentWords": 0,
+    "meanThr": 0.6204942500000178,
+    "wMeanAbs": 0.7428878235595766,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 1,
+    "pairCos": 0.5489406395409153,
+    "rate": 0.07318421052631578,
+    "active": 0.5135000000000001,
+    "silentWords": 0,
+    "meanThr": 0.611604750000018,
+    "wMeanAbs": 0.7176275984750827,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 1,
+    "sepFull": 1,
+    "sepPart": 0.9411764705882353,
+    "pairCos": 0.537113570623644,
+    "rate": 0.07466447368421052,
+    "active": 0.5165,
+    "silentWords": 0,
+    "meanThr": 0.617110000000018,
+    "wMeanAbs": 0.7266542559769005,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.98,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.54,
+    "sd": 0.007
+   },
+   "rate": {
+    "mean": 0.075,
+    "sd": 0.001
+   },
+   "active": {
+    "mean": 0.518,
+    "sd": 0.005
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.616,
+    "sd": 0.004
+   },
+   "wMeanAbs": {
+    "mean": 0.729,
+    "sd": 0.01
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "synapsesPerNode 5": {
+  "cfg": {
+   "brain": {
+    "synapsesPerNode": 5
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.7647058823529411,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9029100710987118,
+    "rate": 0.11520394736842106,
+    "active": 0.9110000000000001,
+    "silentWords": 0,
+    "meanThr": 0.8066600000000156,
+    "wMeanAbs": 0.7257364919109736,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.7647058823529411,
+    "pairCos": 0.9303795619290005,
+    "rate": 0.12369736842105258,
+    "active": 0.9492500000000001,
+    "silentWords": 0,
+    "meanThr": 0.8408547500000156,
+    "wMeanAbs": 0.7043032685520416,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.7647058823529411,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9168574416710836,
+    "rate": 0.11690131578947369,
+    "active": 0.93025,
+    "silentWords": 0,
+    "meanThr": 0.8190465000000157,
+    "wMeanAbs": 0.7163473822057463,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.784,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.804,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.917,
+    "sd": 0.011
+   },
+   "rate": {
+    "mean": 0.119,
+    "sd": 0.004
+   },
+   "active": {
+    "mean": 0.93,
+    "sd": 0.016
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.822,
+    "sd": 0.014
+   },
+   "wMeanAbs": {
+    "mean": 0.715,
+    "sd": 0.009
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "synapsesPerNode 10": {
+  "cfg": {
+   "brain": {
+    "synapsesPerNode": 10
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.7647058823529411,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9361520048205053,
+    "rate": 0.12366447368421055,
+    "active": 0.9622499999999998,
+    "silentWords": 0,
+    "meanThr": 0.8439042500000149,
+    "wMeanAbs": 0.5174078779152766,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.7058823529411765,
+    "sepFull": 1,
+    "sepPart": 0.7058823529411765,
+    "pairCos": 0.9533255922497487,
+    "rate": 0.13173026315789477,
+    "active": 0.978,
+    "silentWords": 0,
+    "meanThr": 0.8714590000000144,
+    "wMeanAbs": 0.4975399641051131,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.7058823529411765,
+    "sepFull": 1,
+    "sepPart": 0.7058823529411765,
+    "pairCos": 0.9501245629307412,
+    "rate": 0.12964473684210526,
+    "active": 0.98425,
+    "silentWords": 0,
+    "meanThr": 0.8646217500000151,
+    "wMeanAbs": 0.5083661429001874,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.725,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.745,
+    "sd": 0.055
+   },
+   "pairCos": {
+    "mean": 0.947,
+    "sd": 0.007
+   },
+   "rate": {
+    "mean": 0.128,
+    "sd": 0.003
+   },
+   "active": {
+    "mean": 0.975,
+    "sd": 0.009
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.86,
+    "sd": 0.012
+   },
+   "wMeanAbs": {
+    "mean": 0.508,
+    "sd": 0.008
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "synapsesPerNode 20": {
+  "cfg": {
+   "brain": {
+    "synapsesPerNode": 20
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8235294117647058,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.8864925479915026,
+    "rate": 0.10474342105263157,
+    "active": 0.88325,
+    "silentWords": 0,
+    "meanThr": 0.7743207500000163,
+    "wMeanAbs": 0.25413660313761643,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9309139859711992,
+    "rate": 0.11804605263157894,
+    "active": 0.9559999999999998,
+    "silentWords": 0,
+    "meanThr": 0.8222115000000154,
+    "wMeanAbs": 0.24702565964978088,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.9117476058130353,
+    "rate": 0.1111315789473684,
+    "active": 0.9110000000000001,
+    "silentWords": 0,
+    "meanThr": 0.796534000000016,
+    "wMeanAbs": 0.2506133832870719,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.863,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.824,
+    "sd": 0
+   },
+   "pairCos": {
+    "mean": 0.91,
+    "sd": 0.018
+   },
+   "rate": {
+    "mean": 0.111,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.917,
+    "sd": 0.03
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.798,
+    "sd": 0.02
+   },
+   "wMeanAbs": {
+    "mean": 0.251,
+    "sd": 0.003
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "synapsesPerNode 40": {
+  "cfg": {
+   "brain": {
+    "synapsesPerNode": 40
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8823529411764706,
+    "pairCos": 0.6713933664766327,
+    "rate": 0.08690131578947367,
+    "active": 0.7124999999999999,
+    "silentWords": 0,
+    "meanThr": 0.6782002500000174,
+    "wMeanAbs": 0.12569432989285906,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8235294117647058,
+    "pairCos": 0.8009635190130291,
+    "rate": 0.09990789473684208,
+    "active": 0.8137500000000001,
+    "silentWords": 0,
+    "meanThr": 0.7359450000000165,
+    "wMeanAbs": 0.12222107821355635,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.9411764705882353,
+    "sepFull": 1,
+    "sepPart": 0.8823529411764706,
+    "pairCos": 0.7557625247156771,
+    "rate": 0.09289473684210527,
+    "active": 0.753,
+    "silentWords": 0,
+    "meanThr": 0.7119887500000172,
+    "wMeanAbs": 0.12347096569323829,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.902,
+    "sd": 0.028
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.863,
+    "sd": 0.028
+   },
+   "pairCos": {
+    "mean": 0.743,
+    "sd": 0.054
+   },
+   "rate": {
+    "mean": 0.093,
+    "sd": 0.005
+   },
+   "active": {
+    "mean": 0.76,
+    "sd": 0.042
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.709,
+    "sd": 0.024
+   },
+   "wMeanAbs": {
+    "mean": 0.124,
+    "sd": 0.001
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ },
+ "synapsesPerNode 80": {
+  "cfg": {
+   "brain": {
+    "synapsesPerNode": 80
+   }
+  },
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "perSeed": [
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8823529411764706,
+    "pairCos": 0.5965506505696027,
+    "rate": 0.08053289473684211,
+    "active": 0.6550000000000001,
+    "silentWords": 0,
+    "meanThr": 0.6370682500000178,
+    "wMeanAbs": 0.062485245852395864,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8823529411764706,
+    "pairCos": 0.6835923295761505,
+    "rate": 0.0884671052631579,
+    "active": 0.728,
+    "silentWords": 0,
+    "meanThr": 0.6817882500000171,
+    "wMeanAbs": 0.06059334310931245,
+    "nPart": 17
+   },
+   {
+    "linFull": 1,
+    "linPart": 0.8823529411764706,
+    "sepFull": 1,
+    "sepPart": 0.8823529411764706,
+    "pairCos": 0.6827416159010214,
+    "rate": 0.09064473684210528,
+    "active": 0.73575,
+    "silentWords": 0,
+    "meanThr": 0.6928417500000176,
+    "wMeanAbs": 0.061311192347185406,
+    "nPart": 17
+   }
+  ],
+  "stats": {
+   "linFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "linPart": {
+    "mean": 0.882,
+    "sd": 0
+   },
+   "sepFull": {
+    "mean": 1,
+    "sd": 0
+   },
+   "sepPart": {
+    "mean": 0.882,
+    "sd": 0
+   },
+   "pairCos": {
+    "mean": 0.654,
+    "sd": 0.041
+   },
+   "rate": {
+    "mean": 0.087,
+    "sd": 0.004
+   },
+   "active": {
+    "mean": 0.706,
+    "sd": 0.036
+   },
+   "silentWords": {
+    "mean": 0,
+    "sd": 0
+   },
+   "meanThr": {
+    "mean": 0.671,
+    "sd": 0.024
+   },
+   "wMeanAbs": {
+    "mean": 0.061,
+    "sd": 0.001
+   },
+   "nPart": {
+    "mean": 17,
+    "sd": 0
+   }
+  }
+ }
+}

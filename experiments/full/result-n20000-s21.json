@@ -1,0 +1,29 @@
+{
+ "size": 20000,
+ "seed": 21,
+ "coverage": 2,
+ "wMax": 1,
+ "words": 121,
+ "concepts": 1000,
+ "checkpoints": [
+  {
+   "epoch": 4,
+   "trainSeconds": 5236.4285084,
+   "msPerTick": 270.4766791528926,
+   "full": 1,
+   "half": 1,
+   "quarter": 0,
+   "ten": 0,
+   "driveFull": 1,
+   "driveHalf": 1,
+   "driveQuarter": 1,
+   "driveTen": 1,
+   "onlyRightWordFires": 1,
+   "rate": 0.16315548064375815,
+   "activeFrac": 0.5259743801652893,
+   "evalSeconds": 4703.932956799999
+  }
+ ],
+ "buildSeconds": 836.0851720000001,
+ "connections": 1100000
+}

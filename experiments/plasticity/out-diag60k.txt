@@ -1,0 +1,12 @@
+
+initial wiring  (source type + weight sign: count, mean |w|, max |w|; mean±sd over seeds 1,2,3)
+  excPos  n 3133±41    mean|w| 0.176±0.000    max|w| 0.37±0.00
+  excNeg  n 0±0        mean|w| 0.000±0.000    max|w| 0.00±0.00
+  inhNeg  n 867±41     mean|w| 0.521±0.004    max|w| 1.10±0.02
+  inhPos  n 0±0        mean|w| 0.000±0.000    max|w| 0.00±0.00
+
+after 60000 plastic ticks  (source type + weight sign: count, mean |w|, max |w|; mean±sd over seeds 1,2,3)
+  excPos  n 1580±29    mean|w| 1.293±0.066    max|w| 8.31±1.64
+  excNeg  n 1243±31    mean|w| 1.135±0.036    max|w| 5.71±0.26
+  inhNeg  n 1±0        mean|w| 0.068±0.058    max|w| 0.07±0.06
+  inhPos  n 236±17     mean|w| 10.800±0.582   max|w| 22.43±2.75

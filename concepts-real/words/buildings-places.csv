@@ -1,0 +1,59 @@
+Word,Category,Appearance,Shape,Size,Material,Smell,Parts,Function,Action,Power,Sound,Movement,Location,Region,User,Sociality,Danger,Property,Emotion,Value,Time,Era
+House,Place; Building; Dwelling,,,Huge,Brick,,Walls; Roof; Chimney; Windows; Rooms,Living; Shelter,Live in; Sleep in,,,,Town,,Resident,Private; Family,,,Comfort; Security,Expensive,,
+Cottage,Place; Building; Dwelling,,,Large,Stone; Thatch,,Walls; Roof; Chimney; Windows,Living; Shelter,Live in; Sleep in,,,,Village; Countryside,,Resident,Private; Family,,,Comfort; Security,Expensive,,Traditional
+Apartment,Place; Building; Dwelling,,,Large,Concrete,,Walls; Windows; Rooms,Living; Shelter,Live in; Sleep in,,,,City,,Resident,Private; Family,,,Comfort; Security,Affordable,,Modern
+Mansion,Place; Building; Dwelling,,,Gigantic,Stone; Marble,,Walls; Roof; Rooms; Columns; Gate,Living; Shelter,Live in; Sleep in,,,,Countryside,,Resident,Private; Family,,,Comfort; Security; Elegance,Luxury,,
+Cabin,Place; Building; Dwelling; Shelter,,,Large,Logs,Woody,Walls; Roof; Chimney,Living; Shelter,Live in; Sleep in,,,,Forest; Mountain,,Hiker; Hunter,Private; Family,,,Comfort; Security,,,Traditional
+Hut,Place; Building; Dwelling; Shelter,,,Large,Wood; Thatch,,Walls; Roof,Living; Shelter,Live in; Sleep in,,,,Village,,,Private; Family,,,Comfort; Security,Cheap,,Prehistoric
+Igloo,Place; Building; Dwelling; Shelter,,Dome-shaped,Large,Snow; Ice,,Walls,Living; Shelter,Live in; Sleep in,,,,Polar ice; Snowfield,Arctic,Hunter,Private; Family,,,Comfort; Security,Free,,Traditional
+Tent,Place; Shelter,,Triangular,Large,Canvas; Nylon,,Pole; Rope; Flap,Camping; Shelter,Sleep in; Camp; Fold,,,,Campsite,,Camper; Hiker,,,Portable; Foldable; Waterproof,Freedom,Affordable,,
+Castle,Place; Building,,,Gigantic,Stone,,Walls; Tower; Gate,Tourism; Defense,Visit; Defend,,Echo,,Hillside,,King; Knight,,,,Awe; Mystery,,,Medieval
+Palace,Place; Building,,,Gigantic,Stone; Marble,,Walls; Columns; Gate,Tourism; Ruling,Visit; Rule,,Echo,,City,,King,,,,Awe; Elegance,,,
+Tower,Place; Building,,Tall; Narrow,Gigantic,Stone; Steel,,Stairs; Windows,Observation; Tourism,Climb; Visit,,,,City,,,,Falls,,Awe,,,
+Skyscraper,Place; Building; Workplace,,Tall,Gigantic,Steel; Glass,,Elevator; Windows,Office work; Commerce,Work,,,,City,,Office worker; Businessperson,,Falls,,Awe,,,Modern
+Lighthouse,Place; Building; Infrastructure,Glowing,Tall; Cylindrical,Huge,Stone; Brick,Briny,Stairs; Lens,Navigation,Climb; Navigate,,,,Coast; Cliff,,Sailor; Navigator,,,,Security; Loneliness,,Night,
+Windmill,Place; Building,,Tall,Huge,Wood; Stone,,Sail,Wind power; Farming,,Wind,Creak; Whoosh,Spins,Countryside; Hillside,Netherlands,Farmer,,,,,,,Medieval
+Church,Place; Building; Place of worship; Public building,,,Huge,Stone,,Spire; Altar; Bell,Worship; Religious service,Pray; Kneel; Visit,,Echo; Bells; Singing,,Town,Europe,Worshipper; Priest,Public,,,Reverence; Peace,,Weekend,Medieval
+Cathedral,Place; Building; Place of worship; Public building,,,Gigantic,Stone,Incense,Spire; Altar; Columns,Worship; Religious service; Tourism,Pray; Kneel; Visit,,Echo; Bells; Singing,,City,Europe,Worshipper; Priest,Public,,,Reverence; Peace; Awe,,Weekend,Medieval
+Mosque,Place; Building; Place of worship; Public building,,Dome-shaped,Gigantic,Stone,,Tower,Worship; Religious service,Pray; Kneel; Wash,,Chant; Prayer,,City,Middle East,Worshipper,Public,,,Reverence; Peace,,,Medieval
+Temple,Place; Building; Place of worship; Public building,,Stepped,Gigantic,Stone,Incense,Columns; Altar; Stairs,Worship; Religious service; Tourism,Pray; Kneel; Visit,,Chant; Bells,,Hillside,Asia,Worshipper; Priest,Public,,,Reverence; Peace,,,Ancient
+School,Place; Building; Public building; Educational institution,,,Huge,Brick,,Classrooms; Bell,Education,Study; Learn,,Laughter; Shout,,Town; City,,Student; Teacher; Child,Public,,,,,Day,
+University,Place; Building; Public building; Educational institution,,,Gigantic,Stone; Brick,,Classrooms,Education; Research,Study; Learn; Lecture,,,,City,,Student; Teacher; Scientist,Public,,,,,,Medieval
+Library,Place; Building; Public building; Cultural institution,,,Huge,,Papery,Shelves; Tables,Book lending; Reading; Studying,Read; Study,,Quiet,,Town; City,,Student,Public,,,Calm; Concentration,Free,,
+Museum,Place; Building; Public building; Cultural institution,,,Huge,Stone,,Rooms; Columns,Displaying; Education; Tourism,Visit; Admire,,Quiet; Echo,,City,,Tourist; Student,Public,,,Curiosity; Wonder,Affordable,,
+Hospital,Place; Building; Public building; Medical facility,,,Gigantic,Concrete,Antiseptic,Rooms; Beds,Healthcare; Surgery; Emergency response,Visit; Examine,,Beep; Siren,,Town; City,,Patient; Nurse,Public,Infection,,Anxiety; Hope,,,
+Pharmacy,Place; Building; Shop; Medical facility,,,Large,,Antiseptic,Counter; Shelves,Shopping; Commerce; Medicine supply,Buy; Pay,,,,Town; Street,,Customer; Patient,Public,,,,,,
+Shop,Place; Building; Shop,,,Large,,,Counter; Shelves; Windows,Shopping; Commerce,Buy; Pay,,,,Town; Street,,Customer,Public,,,,,,
+Supermarket,Place; Building; Shop,,,Gigantic,,,Counter; Shelves; Doors,Shopping; Commerce,Buy; Pay,,Beep; Announcements,,Town; City,,Customer; Cashier,Public,,,,,,Modern
+Bakery,Place; Building; Shop,,,Large,,Fresh-baked,Counter; Shelves,Shopping; Commerce; Bread baking,Buy; Pay; Bake,,,,Town; Street,,Customer; Baker,Public,,,Comfort,,Morning,
+Market,Place; Shop; Outdoor space,,,Huge,,Fruity,Tables,Shopping; Commerce; Socializing,Buy; Pay; Sell,,Crowd noise; Shout,,Town; Street,,Customer; Farmer,Public; Crowded,,,,,Morning; Weekend,Ancient
+Bank,Place; Building; Public building,,,Huge,Stone,,Counter; Columns,Banking; Money handling; Security,Pay; Store,,Quiet,,Town; City,,Customer; Cashier,Public,Robbery,,Security; Authority,,,
+Office,Place; Building; Workplace,,,Large,,,Tables; Rooms,Office work,Work; Type; Call,,Typing; Ring,,City,,Office worker; Businessperson,,,,Stress; Concentration,,Day,Modern
+Factory,Place; Building; Workplace,,,Gigantic,Steel; Concrete,Chemical,Chimney; Gate,Manufacturing,Work; Load,,Clang; Loud,,City,,Worker; Engineer,,Pollution; Fumes,,,,,Industrial
+Warehouse,Place; Building; Workplace,,,Gigantic,Steel; Concrete,,Shelves; Doors; Ramp,Storing; Shipping,Work; Store; Load; Unload,,Echo; Beep,,City,,Worker; Driver,,,,,,,Industrial
+Theater,Place; Building; Entertainment venue,,,Gigantic,,,Seats,Entertainment; Performance; Acting,Watch; Pay; Clap,,Applause; Music,,City,,Audience,Public; Crowded,,,Excitement,Expensive,Evening,Ancient
+Cinema,Place; Building; Entertainment venue,Dark,,Huge,,Buttery,Seats; Screen,Entertainment; Watching,Watch; Pay,,Loud; Music,,City,,Audience,Public; Crowded,,,Excitement; Fun,Affordable,Evening,Modern
+Stadium,Place; Building; Sports venue,,Oval,Gigantic,Concrete; Steel,,Seats; Gate,Entertainment; Sports,Watch; Pay,,Cheering; Crowd noise,,City,,Audience; Athlete; Referee,Public; Crowded,,,Excitement,,Weekend,
+Gym,Place; Building; Sports venue,,,Huge,,Sweaty,Rooms,Exercise; Sports,Exercise; Lift; Run,,Clang; Music,,Town; City,,Athlete; Weightlifter,Public,Strain; Sprains,,Energy,,,Modern
+Restaurant,Place; Building; Eating place,,,Large,,Meaty,Tables; Seats,Socializing; Food service; Dining,Pay; Dine,,Clink; Clatter,,Town; City,,Customer; Waiter; Cook,Public,,,Comfort; Romance,Expensive,Evening,
+Cafe,Place; Building; Eating place,,,Large,,Coffee,Tables; Counter,Socializing; Food service; Drink service,Pay; Sip; Read,,Clink,,Town; City,,Customer; Waiter,Public,,,Comfort; Calm,Affordable,Morning; Afternoon,
+Bar,Place; Building; Eating place,Dark,,Large,,Alcoholic,Tables; Counter,Socializing; Drink service,Pay; Sip,,Clink; Music; Laughter,,Town; City,,Customer; Bartender,Public,Intoxicating,,Fun,Affordable,Evening; Night,
+Hotel,Place; Building; Public building,,,Gigantic,,,Rooms; Beds; Elevator,Lodging; Tourism,Sleep in; Pay,,,,City,,Tourist; Traveler,Public,,,Comfort,Expensive,,
+Barn,Place; Building; Farm building,,,Huge,Wood,Hay; Barnyard,Walls; Roof; Doors,Animal housing; Storing,Feed; Store,,Moo; Creak,,Farm; Countryside,,Farmer,,,,,,,Traditional
+Stable,Place; Building; Farm building,,,Huge,Wood,Hay; Barnyard,Walls; Roof; Doors,Animal housing,Feed; Ride,,Neigh; Snort,,Farm; Countryside,,Farmer; Rider,,,,,,,Traditional
+Farm,Place; Workplace; Farmland,,,Gigantic,,Barnyard,Fence; Gate,Farming; Growing food; Keeping animals,Feed; Sow; Harvest,,Moo; Crowing,,Countryside,,Farmer,,,,Calm,,Morning,Ancient
+Garage,Place; Building,,,Large,Concrete,Fuel; Oily,Walls; Roof; Doors,Vehicle repair; Storing,Store; Fix,,Clang,,Home; Street,,Driver; Mechanic,,,,,,,
+Station,Place; Building; Transport hub; Infrastructure,,,Gigantic,,,Platform; Rails,Transport link; Travel,Board; Travel,,Announcements; Whistle,,City; Town; Railway,,Passenger; Commuter,Public; Crowded,,,Excitement; Stress,,,Industrial
+Airport,Place; Building; Transport hub; Infrastructure,,,Gigantic,,Fuel,Gate; Tower,Transport link; Travel; Air travel,Board; Travel,,Announcements; Roar,,City,,Passenger; Traveler; Pilot,Public; Crowded,,,Excitement; Stress,,,Modern
+Harbor,Place; Transport hub; Infrastructure,,,Gigantic,,Briny,,Transport link; Shipping; Fishing,Dock; Load; Unload,,Blare; Lapping,,Coast,,Sailor; Fisherman,Public,,,,,,Ancient
+Road,Place; Infrastructure,,Long,Gigantic,Asphalt,Exhaust,,Transport link; Travel,Drive; Walk; Cross,,Traffic noise,,Countryside; Town,,Driver; Cyclist,Public,Crashes,,,,,Ancient
+Street,Place; Infrastructure,,Long,Huge,Asphalt,Exhaust,,Transport link; Shopping,Walk; Drive; Cross,,Traffic noise; Footsteps,,City; Town,,Pedestrian; Driver,Public,Crashes,,,,,
+Highway,Place; Infrastructure,,Long; Wide; Straight,Vast,Asphalt,Exhaust,Ramp,Transport link; Travel,Drive,,Traffic noise,,Countryside,,Driver,Public,Crashes,,,,,Modern
+Bridge,Place; Infrastructure,,Long; Arched,Gigantic,Steel; Stone,,Cable; Columns,Crossing; Transport link,Cross; Drive; Walk,,,,River; Valley,,Driver; Pedestrian,,Falls; Collapse,,,,,Ancient
+Tunnel,Place; Infrastructure,Dark,Long; Tubular,Gigantic,Concrete; Rock,,,Crossing; Transport link,Drive; Dig,,Echo; Traffic noise,,Underground; Mountain,,Driver; Miner,,Collapse; Crashes,,,,,Industrial
+Park,Place; Outdoor space,,,Gigantic,,Grassy,Fence; Gate,Recreation; Play; Socializing,Stroll; Picnic; Play,,Birdsong; Laughter,,City; Town,,Everyone; Child; Runner,Public,,,Calm; Joy,Free,,
+Playground,Place; Outdoor space,,,Huge,Steel; Wood,,Fence; Gate,Play; Recreation; Exercise,Play; Swing; Slide; Climb,,Laughter; Shout,,City; Town; School; Park,,Child; Parent,Public,Falls; Bruises,,Joy; Fun,Free,,
+Garden,Place; Outdoor space,,,Large,,Floral,Fence; Gate,Growing plants; Recreation; Decoration,Plant; Water; Prune; Dig,,Birdsong; Buzz,,Home,,Gardener; Homeowner,Private,,,Calm; Joy,,Spring; Summer,
+Zoo,Place; Outdoor space; Entertainment venue,,,Gigantic,,Barnyard,Fence; Gate; Bars,Entertainment; Education; Nature conservation,Visit; Observe; Feed,,Roar; Squawk,,City,,Child; Tourist,Public,,,Curiosity; Wonder; Fun,,,
+Prison,Place; Building; Public building,,,Gigantic,Concrete; Steel,,Walls; Bars; Gate; Fence,Imprisonment; Security,Lock; Guard,,Clang; Shout,,Town; City,,Police officer,Public,Violence,,Fear; Loneliness; Sadness,,,
+Cemetery,Place; Outdoor space,,,Huge,Stone,Floral,Fence; Gate,Burial,Visit; Pray; Dig,,Quiet; Birdsong,,Town; Church,,Priest,Public,,,Grief; Peace; Sadness,,,Ancient

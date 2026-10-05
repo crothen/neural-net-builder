@@ -1,0 +1,3 @@
+real: 1039 words, 2660 concepts, 19.9 concepts per word on average
+neurons | words | input conn. | after 5 passes: all / missing / half / +2 wrong | after 15 passes: all / missing / half / +2 wrong | active | teach s
+    400 |  1039 |         6%  |  98% /  98% /  84% /  98% | 100% / 100% /  99% / 100% |  50% | 2518

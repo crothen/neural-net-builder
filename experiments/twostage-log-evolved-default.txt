@@ -1,0 +1,20 @@
+
+=== evolved | medium (20 words) | brain 200 | plasticity "default" | 3 seeds
+stage-1 passes | after stage 1: brain partial-cue ceiling, word similarity, active, connections, max weight | after 5 word passes: full / missing | after 20: full / missing
+       0       | 100% ceiling, similarity 0.41, active  29%,  7000 conns, max w  0.2 |  88% /  80% | 100% /  98%
+       1       | 100% ceiling, similarity 0.38, active  30%,   326 conns, max w  1.0 |  92% /  86% | 100% /  98%
+       2       | 100% ceiling, similarity 0.38, active  31%,   357 conns, max w  1.9 |  95% /  84% | 100% /  96%
+       5       | 100% ceiling, similarity 0.40, active  36%,   445 conns, max w  4.9 |  92% /  78% | 100% / 100%
+      10       | 100% ceiling, similarity 0.45, active  43%,   564 conns, max w 10.7 |  87% /  75% | 100% /  98%
+      20       | 100% ceiling, similarity 0.56, active  58%,   725 conns, max w 22.0 |  87% /  61% | 100% /  96%
+      50       |  98% ceiling, similarity 0.59, active  69%,  1175 conns, max w 50.5 |  90% /  59% | 100% /  98%
+
+=== evolved | short (50 words) | brain 200 | plasticity "default" | 3 seeds
+stage-1 passes | after stage 1: brain partial-cue ceiling, word similarity, active, connections, max weight | after 5 word passes: full / missing | after 20: full / missing
+       0       | 100% ceiling, similarity 0.64, active  53%,  7000 conns, max w  0.2 |  93% /  84% |  98% /  99%
+       1       | 100% ceiling, similarity 0.53, active  54%,   790 conns, max w  3.0 |  97% /  93% |  98% /  99%
+       2       |  99% ceiling, similarity 0.55, active  57%,   846 conns, max w  5.8 |  97% /  93% |  98% /  99%
+       5       |  99% ceiling, similarity 0.60, active  63%,  1003 conns, max w 14.6 |  97% /  90% |  98% /  99%
+      10       |  99% ceiling, similarity 0.63, active  69%,  1232 conns, max w 30.7 |  93% /  79% |  98% /  99%
+      20       |  99% ceiling, similarity 0.63, active  73%,  1667 conns, max w 59.8 |  91% /  81% |  98% /  98%
+      50       |  99% ceiling, similarity 0.60, active  78%,  2823 conns, max w 135.5 |  90% /  74% |  97% /  98%

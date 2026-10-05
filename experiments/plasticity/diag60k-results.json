@@ -1,0 +1,98 @@
+{
+ "ticks": 60000,
+ "runs": [
+  {
+   "seed": 1,
+   "at0": {
+    "excPosN": 3080,
+    "excPosMean": 0.17599590761678544,
+    "excPosMax": 0.37333254038821906,
+    "excNegN": 0,
+    "excNegMean": 0,
+    "excNegMax": 0,
+    "inhNegN": 920,
+    "inhNegMean": 0.5157380620551779,
+    "inhNegMax": 1.1010980135179125,
+    "inhPosN": 0,
+    "inhPosMean": 0,
+    "inhPosMax": 0
+   },
+   "atN": {
+    "excPosN": 1548,
+    "excPosMean": 1.2726983196515569,
+    "excPosMax": 10.564729200523814,
+    "excNegN": 1228,
+    "excNegMean": 1.1398540236978758,
+    "excNegMax": 6.064653694240874,
+    "inhNegN": 0,
+    "inhNegMean": 0,
+    "inhNegMax": 0,
+    "inhPosN": 260,
+    "inhPosMean": 10.010266114528838,
+    "inhPosMax": 26.18112929826503
+   }
+  },
+  {
+   "seed": 2,
+   "at0": {
+    "excPosN": 3180,
+    "excPosMean": 0.1761530973244648,
+    "excPosMax": 0.37098931847140193,
+    "excNegN": 0,
+    "excNegMean": 0,
+    "excNegMax": 0,
+    "inhNegN": 820,
+    "inhNegMean": 0.5218729135455146,
+    "inhNegMax": 1.084163453662768,
+    "inhPosN": 0,
+    "inhPosMean": 0,
+    "inhPosMax": 0
+   },
+   "atN": {
+    "excPosN": 1619,
+    "excPosMean": 1.224748683363514,
+    "excPosMax": 6.722830092850636,
+    "excNegN": 1215,
+    "excNegMean": 1.0887938464956044,
+    "excNegMax": 5.4431468343042,
+    "inhNegN": 1,
+    "inhNegMean": 0.14074508982151746,
+    "inhNegMax": 0.14074508982151746,
+    "inhPosN": 225,
+    "inhPosMean": 11.39371168694507,
+    "inhPosMax": 21.459416919657933
+   }
+  },
+  {
+   "seed": 3,
+   "at0": {
+    "excPosN": 3140,
+    "excPosMean": 0.1753261655632215,
+    "excPosMax": 0.3721605626633391,
+    "excNegN": 0,
+    "excNegMean": 0,
+    "excNegMax": 0,
+    "inhNegN": 860,
+    "inhNegMean": 0.5254992712555454,
+    "inhNegMax": 1.1218810634454712,
+    "inhPosN": 0,
+    "inhPosMean": 0,
+    "inhPosMax": 0
+   },
+   "atN": {
+    "excPosN": 1572,
+    "excPosMean": 1.3817974623969695,
+    "excPosMax": 7.655088098130412,
+    "excNegN": 1286,
+    "excNegMean": 1.1774243443398318,
+    "excNegMax": 5.6285786137016265,
+    "inhNegN": 1,
+    "inhNegMean": 0.062425393331795934,
+    "inhNegMax": 0.062425393331795934,
+    "inhPosN": 224,
+    "inhPosMean": 10.995758830109285,
+    "inhPosMax": 19.6577604941069
+   }
+  }
+ ]
+}

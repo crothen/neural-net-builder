@@ -1,0 +1,25 @@
+gen  0 | best 0.737 (taught 0.74/0.51 linear 0.99/0.92 rate 0.010) | mean 0.254 | 380s
+gen  1 | best 0.737 (taught 0.74/0.51 linear 0.99/0.92 rate 0.010) | mean 0.353 | 697s
+gen  2 | best 0.742 (taught 0.73/0.51 linear 0.99/1.00 rate 0.076) | mean 0.470 | 923s
+gen  3 | best 0.792 (taught 0.83/0.53 linear 0.99/1.00 rate 0.141) | mean 0.489 | 1184s
+gen  4 | best 0.807 (taught 0.83/0.59 linear 0.99/1.00 rate 0.184) | mean 0.625 | 1509s
+gen  5 | best 0.976 (taught 0.98/0.95 linear 0.99/1.00 rate 0.135) | mean 0.744 | 1944s
+gen  6 | best 0.982 (taught 0.99/0.96 linear 0.99/1.00 rate 0.097) | mean 0.798 | 2485s
+gen  7 | best 0.982 (taught 0.99/0.96 linear 0.99/1.00 rate 0.097) | mean 0.880 | 3054s
+gen  8 | best 0.985 (taught 0.99/0.97 linear 0.99/1.00 rate 0.130) | mean 0.901 | 3470s
+gen  9 | best 0.985 (taught 0.99/0.97 linear 0.99/1.00 rate 0.130) | mean 0.919 | 3819s
+
+Fresh-seed check (5 seeds x medium+short), brain 200:
+  app default        fitness 0.233 taught 0.05/0.00 linear 1.00/0.43 rate 0.154 {"medium":0.267,"short":0.198}
+  finalist 1         fitness 0.978 taught 0.99/0.95 linear 0.99/1.00 rate 0.098 {"medium":0.979,"short":0.978}
+      {"inputCoverage":30.6217,"inputLocalizer":73.0912,"inputWeightMax":1.5,"isLocalized":1,"localizationLeak":47.7009,"synapsesPerNode":9,"initialWeightModifier":0.257,"inhibitoryFraction":0.5,"threshold":0.8325,"decay":0.3942,"refractoryPeriod":1,"fatigue":0.7545,"recovery":0.5,"readoutCoverage":0.6192}
+  finalist 2         fitness 0.978 taught 0.98/0.95 linear 0.99/1.00 rate 0.097 {"medium":0.989,"short":0.967}
+      {"inputCoverage":30.6217,"inputLocalizer":73.0912,"inputWeightMax":1.5,"isLocalized":1,"localizationLeak":52.8647,"synapsesPerNode":9,"initialWeightModifier":0.257,"inhibitoryFraction":0.5,"threshold":0.8325,"decay":0.3942,"refractoryPeriod":1,"fatigue":0.7545,"recovery":0.5,"readoutCoverage":0.6192}
+  finalist 3         fitness 0.973 taught 0.98/0.94 linear 0.99/1.00 rate 0.100 {"medium":0.971,"short":0.975}
+      {"inputCoverage":19.6912,"inputLocalizer":70.482,"inputWeightMax":1.5,"isLocalized":0,"localizationLeak":95.6183,"synapsesPerNode":9,"initialWeightModifier":0.7178,"inhibitoryFraction":0.4454,"threshold":0.75,"decay":0.479,"refractoryPeriod":1,"fatigue":0.8196,"recovery":0.5,"readoutCoverage":0.6192}
+  finalist 4         fitness 0.973 taught 0.99/0.93 linear 0.99/1.00 rate 0.134 {"medium":0.972,"short":0.974}
+      {"inputCoverage":21.1934,"inputLocalizer":92.1416,"inputWeightMax":1.5,"isLocalized":0,"localizationLeak":54.8942,"synapsesPerNode":38,"initialWeightModifier":0.3337,"inhibitoryFraction":0.5,"threshold":0.5401,"decay":0.5107,"refractoryPeriod":1,"fatigue":0.5129,"recovery":0.415,"readoutCoverage":0.4056}
+  finalist 5         fitness 0.966 taught 0.98/0.92 linear 0.99/1.00 rate 0.073 {"medium":0.964,"short":0.968}
+      {"inputCoverage":19.6912,"inputLocalizer":66.1834,"inputWeightMax":1.4415,"isLocalized":1,"localizationLeak":46.3142,"synapsesPerNode":17,"initialWeightModifier":0.2927,"inhibitoryFraction":0.5,"threshold":0.8325,"decay":0.5121,"refractoryPeriod":2,"fatigue":0.8196,"recovery":0.4809,"readoutCoverage":0.6192}
+
+124 setups evaluated in 4256s -> experiments\evolve\results-main-n200.json

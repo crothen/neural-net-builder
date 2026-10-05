@@ -1,0 +1,462 @@
+{
+ "args": {
+  "pop": "16",
+  "gens": "10",
+  "size": "200",
+  "datasets": "medium,short",
+  "seeds": "1,2",
+  "workers": "2",
+  "finalSeeds": "11,12,13,14,15",
+  "tag": "main"
+ },
+ "readout": {},
+ "history": [
+  {
+   "gen": 0,
+   "best": 0.7370192307692307,
+   "mean": 0.25439882635746597,
+   "bestGenome": {
+    "inputCoverage": 9.949,
+    "inputLocalizer": 62.283,
+    "inputWeightMax": 0.8839,
+    "isLocalized": 0,
+    "localizationLeak": 74.8708,
+    "synapsesPerNode": 12,
+    "initialWeightModifier": 0.3143,
+    "inhibitoryFraction": 0.2846,
+    "threshold": 1.4443,
+    "decay": 0.638,
+    "refractoryPeriod": 2,
+    "fatigue": 0.0849,
+    "recovery": 0.0195,
+    "readoutCoverage": 0.3958
+   }
+  },
+  {
+   "gen": 1,
+   "best": 0.7370192307692307,
+   "mean": 0.3526480132918552,
+   "bestGenome": {
+    "inputCoverage": 9.949,
+    "inputLocalizer": 62.283,
+    "inputWeightMax": 0.8839,
+    "isLocalized": 0,
+    "localizationLeak": 74.8708,
+    "synapsesPerNode": 12,
+    "initialWeightModifier": 0.3143,
+    "inhibitoryFraction": 0.2846,
+    "threshold": 1.4443,
+    "decay": 0.638,
+    "refractoryPeriod": 2,
+    "fatigue": 0.0849,
+    "recovery": 0.0195,
+    "readoutCoverage": 0.3958
+   }
+  },
+  {
+   "gen": 2,
+   "best": 0.7422307692307692,
+   "mean": 0.47043279835972857,
+   "bestGenome": {
+    "inputCoverage": 13.2673,
+    "inputLocalizer": 81.7663,
+    "inputWeightMax": 1.1121,
+    "isLocalized": 0,
+    "localizationLeak": 54.8942,
+    "synapsesPerNode": 2,
+    "initialWeightModifier": 0.2144,
+    "inhibitoryFraction": 0.4887,
+    "threshold": 0.7873,
+    "decay": 0.6083,
+    "refractoryPeriod": 1,
+    "fatigue": 0.4159,
+    "recovery": 0.2076,
+    "readoutCoverage": 0.0865
+   }
+  },
+  {
+   "gen": 3,
+   "best": 0.7924264705882353,
+   "mean": 0.48874328337104067,
+   "bestGenome": {
+    "inputCoverage": 21.1934,
+    "inputLocalizer": 100,
+    "inputWeightMax": 1.5,
+    "isLocalized": 0,
+    "localizationLeak": 54.8942,
+    "synapsesPerNode": 38,
+    "initialWeightModifier": 0.2144,
+    "inhibitoryFraction": 0.5,
+    "threshold": 0.5999,
+    "decay": 0.5107,
+    "refractoryPeriod": 0,
+    "fatigue": 0.7486,
+    "recovery": 0.5,
+    "readoutCoverage": 0.084
+   }
+  },
+  {
+   "gen": 4,
+   "best": 0.8067160633484163,
+   "mean": 0.6254725325226245,
+   "bestGenome": {
+    "inputCoverage": 21.1934,
+    "inputLocalizer": 100,
+    "inputWeightMax": 1.5,
+    "isLocalized": 0,
+    "localizationLeak": 54.8942,
+    "synapsesPerNode": 38,
+    "initialWeightModifier": 0.2144,
+    "inhibitoryFraction": 0.4073,
+    "threshold": 0.5999,
+    "decay": 0.619,
+    "refractoryPeriod": 0,
+    "fatigue": 0.7486,
+    "recovery": 0.5,
+    "readoutCoverage": 0.084
+   }
+  },
+  {
+   "gen": 5,
+   "best": 0.9755,
+   "mean": 0.743724582861991,
+   "bestGenome": {
+    "inputCoverage": 41.9961,
+    "inputLocalizer": 71.3153,
+    "inputWeightMax": 1.5,
+    "isLocalized": 0,
+    "localizationLeak": 52.8647,
+    "synapsesPerNode": 9,
+    "initialWeightModifier": 0.4117,
+    "inhibitoryFraction": 0.4454,
+    "threshold": 0.8325,
+    "decay": 0.3942,
+    "refractoryPeriod": 1,
+    "fatigue": 0.8196,
+    "recovery": 0.5,
+    "readoutCoverage": 0.6192
+   }
+  },
+  {
+   "gen": 6,
+   "best": 0.9822997737556561,
+   "mean": 0.797785103223982,
+   "bestGenome": {
+    "inputCoverage": 30.6217,
+    "inputLocalizer": 73.0912,
+    "inputWeightMax": 1.5,
+    "isLocalized": 1,
+    "localizationLeak": 52.8647,
+    "synapsesPerNode": 9,
+    "initialWeightModifier": 0.257,
+    "inhibitoryFraction": 0.5,
+    "threshold": 0.8325,
+    "decay": 0.3942,
+    "refractoryPeriod": 1,
+    "fatigue": 0.7545,
+    "recovery": 0.5,
+    "readoutCoverage": 0.6192
+   }
+  },
+  {
+   "gen": 7,
+   "best": 0.9822997737556561,
+   "mean": 0.8796384332579186,
+   "bestGenome": {
+    "inputCoverage": 30.6217,
+    "inputLocalizer": 73.0912,
+    "inputWeightMax": 1.5,
+    "isLocalized": 1,
+    "localizationLeak": 52.8647,
+    "synapsesPerNode": 9,
+    "initialWeightModifier": 0.257,
+    "inhibitoryFraction": 0.5,
+    "threshold": 0.8325,
+    "decay": 0.3942,
+    "refractoryPeriod": 1,
+    "fatigue": 0.7545,
+    "recovery": 0.5,
+    "readoutCoverage": 0.6192
+   }
+  },
+  {
+   "gen": 8,
+   "best": 0.985472850678733,
+   "mean": 0.9013264281674208,
+   "bestGenome": {
+    "inputCoverage": 21.1934,
+    "inputLocalizer": 92.1416,
+    "inputWeightMax": 1.5,
+    "isLocalized": 0,
+    "localizationLeak": 54.8942,
+    "synapsesPerNode": 38,
+    "initialWeightModifier": 0.3337,
+    "inhibitoryFraction": 0.5,
+    "threshold": 0.5401,
+    "decay": 0.5107,
+    "refractoryPeriod": 1,
+    "fatigue": 0.5129,
+    "recovery": 0.415,
+    "readoutCoverage": 0.4056
+   }
+  },
+  {
+   "gen": 9,
+   "best": 0.985472850678733,
+   "mean": 0.9191595376131223,
+   "bestGenome": {
+    "inputCoverage": 21.1934,
+    "inputLocalizer": 92.1416,
+    "inputWeightMax": 1.5,
+    "isLocalized": 0,
+    "localizationLeak": 54.8942,
+    "synapsesPerNode": 38,
+    "initialWeightModifier": 0.3337,
+    "inhibitoryFraction": 0.5,
+    "threshold": 0.5401,
+    "decay": 0.5107,
+    "refractoryPeriod": 1,
+    "fatigue": 0.5129,
+    "recovery": 0.415,
+    "readoutCoverage": 0.4056
+   }
+  }
+ ],
+ "final": [
+  {
+   "genome": {
+    "inputCoverage": 30.6217,
+    "inputLocalizer": 73.0912,
+    "inputWeightMax": 1.5,
+    "isLocalized": 1,
+    "localizationLeak": 47.7009,
+    "synapsesPerNode": 9,
+    "initialWeightModifier": 0.257,
+    "inhibitoryFraction": 0.5,
+    "threshold": 0.8325,
+    "decay": 0.3942,
+    "refractoryPeriod": 1,
+    "fatigue": 0.7545,
+    "recovery": 0.5,
+    "readoutCoverage": 0.6192
+   },
+   "search": {
+    "fitness": 0.9816380090497738,
+    "taughtFull": 0.99,
+    "taughtPartial": 0.9580882352941177,
+    "linearFull": 0.99,
+    "linearPartial": 0.9980769230769231,
+    "rate": 0.09411339285714286,
+    "activeFrac": 0.40669999999999995,
+    "byDataset": {
+     "medium": 0.982,
+     "short": 0.981
+    }
+   },
+   "fresh": {
+    "fitness": 0.9781617647058823,
+    "taughtFull": 0.9880000000000001,
+    "taughtPartial": 0.947782805429864,
+    "linearFull": 0.9920000000000002,
+    "linearPartial": 0.9988461538461539,
+    "rate": 0.097625,
+    "activeFrac": 0.42173,
+    "byDataset": {
+     "medium": 0.979,
+     "short": 0.978
+    }
+   }
+  },
+  {
+   "genome": {
+    "inputCoverage": 30.6217,
+    "inputLocalizer": 73.0912,
+    "inputWeightMax": 1.5,
+    "isLocalized": 1,
+    "localizationLeak": 52.8647,
+    "synapsesPerNode": 9,
+    "initialWeightModifier": 0.257,
+    "inhibitoryFraction": 0.5,
+    "threshold": 0.8325,
+    "decay": 0.3942,
+    "refractoryPeriod": 1,
+    "fatigue": 0.7545,
+    "recovery": 0.5,
+    "readoutCoverage": 0.6192
+   },
+   "search": {
+    "fitness": 0.9822997737556561,
+    "taughtFull": 0.99,
+    "taughtPartial": 0.9602941176470587,
+    "linearFull": 0.99,
+    "linearPartial": 0.9980769230769231,
+    "rate": 0.09724598214285715,
+    "activeFrac": 0.4165249999999999,
+    "byDataset": {
+     "medium": 0.991,
+     "short": 0.973
+    }
+   },
+   "fresh": {
+    "fitness": 0.9781404977375565,
+    "taughtFull": 0.984,
+    "taughtPartial": 0.9546606334841629,
+    "linearFull": 0.9880000000000001,
+    "linearPartial": 0.9996153846153846,
+    "rate": 0.0972632142857143,
+    "activeFrac": 0.420025,
+    "byDataset": {
+     "medium": 0.989,
+     "short": 0.967
+    }
+   }
+  },
+  {
+   "genome": {
+    "inputCoverage": 19.6912,
+    "inputLocalizer": 70.482,
+    "inputWeightMax": 1.5,
+    "isLocalized": 0,
+    "localizationLeak": 95.6183,
+    "synapsesPerNode": 9,
+    "initialWeightModifier": 0.7178,
+    "inhibitoryFraction": 0.4454,
+    "threshold": 0.75,
+    "decay": 0.479,
+    "refractoryPeriod": 1,
+    "fatigue": 0.8196,
+    "recovery": 0.5,
+    "readoutCoverage": 0.6192
+   },
+   "search": {
+    "fitness": 0.9817822398190046,
+    "taughtFull": 0.99,
+    "taughtPartial": 0.9580882352941177,
+    "linearFull": 0.99,
+    "linearPartial": 0.9990384615384615,
+    "rate": 0.10040401785714287,
+    "activeFrac": 0.37675000000000003,
+    "byDataset": {
+     "medium": 0.982,
+     "short": 0.981
+    }
+   },
+   "fresh": {
+    "fitness": 0.9732393665158373,
+    "taughtFull": 0.9810000000000002,
+    "taughtPartial": 0.9419004524886876,
+    "linearFull": 0.9900000000000002,
+    "linearPartial": 0.9984615384615385,
+    "rate": 0.10005446428571427,
+    "activeFrac": 0.38099000000000005,
+    "byDataset": {
+     "medium": 0.971,
+     "short": 0.975
+    }
+   }
+  },
+  {
+   "genome": {
+    "inputCoverage": 21.1934,
+    "inputLocalizer": 92.1416,
+    "inputWeightMax": 1.5,
+    "isLocalized": 0,
+    "localizationLeak": 54.8942,
+    "synapsesPerNode": 38,
+    "initialWeightModifier": 0.3337,
+    "inhibitoryFraction": 0.5,
+    "threshold": 0.5401,
+    "decay": 0.5107,
+    "refractoryPeriod": 1,
+    "fatigue": 0.5129,
+    "recovery": 0.415,
+    "readoutCoverage": 0.4056
+   },
+   "search": {
+    "fitness": 0.985472850678733,
+    "taughtFull": 0.99,
+    "taughtPartial": 0.9708710407239819,
+    "linearFull": 0.99,
+    "linearPartial": 0.9980769230769231,
+    "rate": 0.12956696428571426,
+    "activeFrac": 0.44487499999999996,
+    "byDataset": {
+     "medium": 0.991,
+     "short": 0.98
+    }
+   },
+   "fresh": {
+    "fitness": 0.9727169683257918,
+    "taughtFull": 0.9880000000000001,
+    "taughtPartial": 0.9306334841628958,
+    "linearFull": 0.9900000000000002,
+    "linearPartial": 0.9988461538461539,
+    "rate": 0.13417160714285714,
+    "activeFrac": 0.461595,
+    "byDataset": {
+     "medium": 0.972,
+     "short": 0.974
+    }
+   }
+  },
+  {
+   "genome": {
+    "inputCoverage": 19.6912,
+    "inputLocalizer": 66.1834,
+    "inputWeightMax": 1.4415,
+    "isLocalized": 1,
+    "localizationLeak": 46.3142,
+    "synapsesPerNode": 17,
+    "initialWeightModifier": 0.2927,
+    "inhibitoryFraction": 0.5,
+    "threshold": 0.8325,
+    "decay": 0.5121,
+    "refractoryPeriod": 2,
+    "fatigue": 0.8196,
+    "recovery": 0.4809,
+    "readoutCoverage": 0.6192
+   },
+   "search": {
+    "fitness": 0.9826476244343892,
+    "taughtFull": 0.99,
+    "taughtPartial": 0.9609728506787331,
+    "linearFull": 0.99,
+    "linearPartial": 0.9990384615384615,
+    "rate": 0.07474732142857143,
+    "activeFrac": 0.38506250000000003,
+    "byDataset": {
+     "medium": 0.982,
+     "short": 0.983
+    }
+   },
+   "fresh": {
+    "fitness": 0.9658984162895926,
+    "taughtFull": 0.9790000000000001,
+    "taughtPartial": 0.921289592760181,
+    "linearFull": 0.9880000000000001,
+    "linearPartial": 0.998076923076923,
+    "rate": 0.07349892857142856,
+    "activeFrac": 0.381035,
+    "byDataset": {
+     "medium": 0.964,
+     "short": 0.968
+    }
+   }
+  }
+ ],
+ "defaultFresh": {
+  "fitness": 0.2326382352941177,
+  "taughtFull": 0.047,
+  "taughtPartial": 0,
+  "linearFull": 1,
+  "linearPartial": 0.42558823529411766,
+  "rate": 0.15405428571428567,
+  "activeFrac": 0.9851699999999999,
+  "byDataset": {
+   "medium": 0.267,
+   "short": 0.198
+  }
+ },
+ "evaluated": 124,
+ "seconds": 4256.191
+}

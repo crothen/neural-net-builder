@@ -1,0 +1,37 @@
+Word,Category,Color,Appearance,Shape,Size,Covering,Movement,Speed,Location,Region,Diet,Parts,Behavior,Growth,Sociality,Time,Danger,Function
+Salmon,Living thing; Animal; Fish; Saltwater fish; Freshwater fish; Seafood,Silver,,Streamlined,Medium,Scales,Swims; Leaps,,River; Ocean,,Carnivore; Small fish,Fins; Gills,Swims upstream,Lays eggs; Migrates,School,,,Sport fishing
+Trout,Living thing; Animal; Fish; Freshwater fish; Seafood,Brown,Spotted,Streamlined,Small,Scales,Swims,,River,,Carnivore; Insects,Fins; Gills,,Lays eggs,Solitary,,,Sport fishing
+Tuna,Living thing; Animal; Fish; Saltwater fish; Seafood; Predator,Blue,,Streamlined,Large,Scales,Swims,Very fast,Ocean,,Carnivore; Fish,Fins; Gills; Forked tail,,Lays eggs; Migrates,School,,,Sport fishing
+Swordfish,Living thing; Animal; Fish; Saltwater fish; Seafood; Predator,Blue,,Streamlined,Large,Skin,Swims,Very fast,Ocean,,Carnivore; Fish,Fins; Gills; Sword bill,,Lays eggs; Migrates,Solitary,,,Sport fishing
+Mackerel,Living thing; Animal; Fish; Saltwater fish; Seafood,Blue,Striped,Streamlined,Small,Scales,Swims,,Ocean,,Carnivore; Small fish,Fins; Gills; Forked tail,,Lays eggs; Migrates,School,,,
+Herring,Living thing; Animal; Fish; Saltwater fish; Seafood,Silver,,Streamlined,Small,Scales,Swims,,Ocean,Atlantic,Filter feeder; Plankton,Fins; Gills; Forked tail,,Lays eggs; Migrates,School,,,
+Sardine,Living thing; Animal; Fish; Saltwater fish; Seafood,Silver,,Streamlined,Small,Scales,Swims,,Coast,Mediterranean,Filter feeder; Plankton,Fins; Gills; Forked tail,,Lays eggs,School,,,
+Cod,Living thing; Animal; Fish; Saltwater fish; Seafood; Predator,Gray,Speckled,,Medium,Scales,Swims,,Seabed,Atlantic,Carnivore; Small fish,Fins; Gills; Barbels,Bottom-feeds,Lays eggs,School,,,
+Flounder,Living thing; Animal; Fish; Saltwater fish; Seafood,Brown,Camouflaged,Flat,Small,Scales,Swims,,Seabed,,Carnivore; Worms,Fins; Gills,Buries in sand,Lays eggs,Solitary,,,
+Carp,Living thing; Animal; Fish; Freshwater fish,Brown,,,Medium,Scales,Swims,,Pond,,Omnivore; Aquatic plants,Fins; Gills; Barbels,Bottom-feeds,Lays eggs,School,,,Sport fishing
+Goldfish,Living thing; Animal; Fish; Freshwater fish; Domestic animal; Pet,Orange,,,Small,Scales,Swims,,Aquarium,,Omnivore; Pet food,Fins; Gills,,Lays eggs,Lives with humans,,,Ornament
+Catfish,Living thing; Animal; Fish; Freshwater fish; Seafood,Gray,,,Medium,Skin,Swims,,River,,Omnivore; Worms,Fins; Gills; Barbels,Bottom-feeds,Lays eggs,Solitary,Nocturnal,,
+Pike,Living thing; Animal; Fish; Freshwater fish; Predator,Green,Mottled,Long,Medium,Scales,Swims,,Lake,,Carnivore; Fish,Fins; Gills; Sharp teeth,Ambushes,Lays eggs,Solitary,,Bites,Sport fishing
+Piranha,Living thing; Animal; Fish; Freshwater fish; Predator,Silver,,,Small,Scales,Swims,,River,South America,Carnivore; Fish,Fins; Gills; Sharp teeth,,Lays eggs,School,,Bites,
+Eel,Living thing; Animal; Fish; Freshwater fish; Seafood,Brown,,Long,Small,Slime,Swims; Slithers,,River,,Carnivore; Worms,Fins; Gills,Hides in cracks,Lays eggs; Migrates,Solitary,Nocturnal,,
+Shark,Living thing; Animal; Fish; Saltwater fish; Predator,Gray,,Streamlined,Large,Skin,Swims,,Ocean,,Carnivore; Fish,Fins; Gills; Sharp teeth; Dorsal fin,,Live birth,Solitary,,Deadly,
+Ray,Living thing; Animal; Fish; Saltwater fish,Gray,Camouflaged,Flat,Medium,Skin,Swims; Glides,,Seabed,,Carnivore; Shellfish,Fins; Gills; Stinger,Buries in sand,Live birth,Solitary,,Stings,
+Seahorse,Living thing; Animal; Fish; Saltwater fish,Yellow,Camouflaged,Curved,Tiny,,Swims; Drifts,Very slow,Reef,,Carnivore; Plankton,Fins; Snout; Prehensile tail,Changes color,Lays eggs; Mates for life,Pairs,,,
+Clownfish,Living thing; Animal; Fish; Saltwater fish; Pet,Orange; White,Banded,,Tiny,Scales,Swims,,Reef; Aquarium,,Omnivore; Algae,Fins; Gills,,Lays eggs,Pairs,,,Ornament
+Pufferfish,Living thing; Animal; Fish; Saltwater fish; Seafood,Brown,Spotted,Round,Small,Skin,Swims,,Reef,,Omnivore; Shellfish,Fins; Gills; Spines,Inflates,Lays eggs,Solitary,,Poisonous,Delicacy
+Anglerfish,Living thing; Animal; Fish; Saltwater fish; Predator,Black,Glowing,Round,Small,Skin,Swims; Drifts,,Deep sea,,Carnivore; Fish,Fins; Gills; Sharp teeth; Lure,Ambushes,Lays eggs,Solitary,,,
+Octopus,Living thing; Animal; Mollusk; Invertebrate; Cephalopod; Predator; Seafood,Brown,Camouflaged,,Medium,Skin,Swims; Crawls,,Seabed,,Carnivore,Eight arms; Suckers; Ink sac,Squirts ink; Changes color,Lays eggs,Solitary,Nocturnal,,
+Squid,Living thing; Animal; Mollusk; Invertebrate; Cephalopod; Predator; Seafood,White,Translucent,Streamlined,Small,Skin,Swims,,Ocean,,Carnivore; Small fish,Tentacles; Suckers; Ink sac,Squirts ink,Lays eggs,School,Nocturnal,,
+Jellyfish,Living thing; Animal; Invertebrate,Colorless,Translucent,Bell-shaped,Small,,Drifts,,Ocean,,Carnivore; Plankton,Tentacles; Stinging cells,Swarms,Spawns,Swarm,,Stings,
+Starfish,Living thing; Animal; Invertebrate; Predator,Orange,,Star-shaped,Small,Skin,Crawls,Very slow,Seabed,,Carnivore; Shellfish,Five arms; Suckers,Regenerates limbs,Spawns,Solitary,,,
+Urchin,Living thing; Animal; Invertebrate; Seafood,Purple,,Spherical,Small,Shell,Crawls,Very slow,Rocky shore,,Herbivore; Algae,Spines; Suckers,Grazes,Spawns,,,Pricks,Delicacy
+Crab,Living thing; Animal; Crustacean; Invertebrate; Shellfish; Seafood,Brown,,Wide,Small,Exoskeleton,Crawls; Scuttles,,Rocky shore,,Omnivore; Algae,Pincers; Ten legs; Eyestalks,Walks sideways,Lays eggs; Molts,Solitary,,Pinches; Allergenic,
+Lobster,Living thing; Animal; Crustacean; Invertebrate; Shellfish; Seafood,Red,,Long,Small,Exoskeleton,Crawls,,Seabed,,Omnivore; Shellfish,Pincers; Ten legs; Antennae,Hides in cracks,Lays eggs; Molts,Solitary,Nocturnal,Pinches; Allergenic,Delicacy
+Crayfish,Living thing; Animal; Crustacean; Invertebrate; Shellfish; Seafood,Brown,,Long,Small,Exoskeleton,Crawls,,River,,Omnivore; Aquatic plants,Pincers; Ten legs; Antennae,Hides in cracks,Lays eggs; Molts,Solitary,Nocturnal,Pinches; Allergenic,
+Shrimp,Living thing; Animal; Crustacean; Invertebrate; Shellfish; Seafood,Gray,Translucent,Curved,Tiny,Exoskeleton,Swims,,Seabed,,Omnivore; Plankton,Ten legs; Antennae,,Lays eggs; Molts,School,,Allergenic,
+Krill,Living thing; Animal; Crustacean; Invertebrate,Pink,Translucent,,Tiny,Exoskeleton,Swims,,Ocean,Antarctica,Filter feeder; Algae,Ten legs; Antennae,Swarms,Lays eggs; Molts,Swarm,,,
+Oyster,Living thing; Animal; Mollusk; Invertebrate; Shellfish; Seafood,Gray,,Irregular,Small,Shell,Sessile,,Seabed,,Filter feeder; Plankton,Two shells; Gills,Makes pearls,Spawns,Colony,,Food poisoning,Delicacy
+Mussel,Living thing; Animal; Mollusk; Invertebrate; Shellfish; Seafood,Black,,Oval,Small,Shell,Sessile,,Rocky shore,,Filter feeder; Plankton,Two shells; Gills; Beard,,Spawns,Colony,,Food poisoning,
+Clam,Living thing; Animal; Mollusk; Invertebrate; Shellfish; Seafood,White,,Round,Small,Shell,Burrows,,Seabed,,Filter feeder; Plankton,Two shells; Gills; Foot,Buries in sand,Spawns,Colony,,Food poisoning,
+Scallop,Living thing; Animal; Mollusk; Invertebrate; Shellfish; Seafood,Pink,,,Small,Shell,Swims,,Seabed,,Filter feeder; Plankton,Two shells; Gills; Many eyes,,Spawns,Colony,,,Delicacy
+Coral,Living thing; Animal; Invertebrate,Pink,Colorful,Branching,,,Sessile,,Reef,,Filter feeder; Plankton,Tentacles; Stinging cells,Builds reef,Spawns,Colony,,Cuts,Tourism

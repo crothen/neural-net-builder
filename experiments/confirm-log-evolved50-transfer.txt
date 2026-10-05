@@ -1,0 +1,6 @@
+n=200  evolved-n50                                    tiny   | fire full 1.00±0.00 partial 1.00±0.00 | drive full 1.00±0.00 partial 1.00±0.00 | active 0.25±0.01 pairCos 0.46±0.02
+n=200  evolved-n50                                    medium | fire full 1.00±0.00 partial 1.00±0.00 | drive full 1.00±0.00 partial 1.00±0.00 | active 0.29±0.01 pairCos 0.41±0.03
+n=200  evolved-n50                                    short  | fire full 0.98±0.00 partial 0.99±0.00 | drive full 0.98±0.00 partial 0.99±0.00 | active 0.54±0.01 pairCos 0.65±0.01
+n=400  evolved-n50                                    tiny   | fire full 1.00±0.00 partial 1.00±0.00 | drive full 1.00±0.00 partial 1.00±0.00 | active 0.25±0.00 pairCos 0.45±0.02
+n=400  evolved-n50                                    medium | fire full 1.00±0.00 partial 0.98±0.05 | drive full 1.00±0.00 partial 0.99±0.02 | active 0.29±0.01 pairCos 0.40±0.01
+n=400  evolved-n50                                    short  | fire full 0.98±0.00 partial 0.99±0.00 | drive full 0.98±0.00 partial 0.99±0.00 | active 0.54±0.00 pairCos 0.64±0.01

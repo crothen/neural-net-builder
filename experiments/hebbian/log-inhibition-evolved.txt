@@ -1,0 +1,20 @@
+
+=== evolved | short (50 words) | brain 200 | stage 1 = 10 passes | 3 seeds
+condition      | all concepts | one missing | half | +2 wrong | half-cue brain state vs full | active | word similarity | exc w mean | inh strength mean
+frozen         |  98%         |  98%        |  85% |  96%     | 0.79                         |  53%   | 0.63            | 0.027      | 0.084
+shrink         |  98%         |  99%        |  85% |  98%     | 0.78                         |  51%   | 0.62            | 0.006      | 0.084
+exc x2         |  98%         |  99%        |  87% |  95%     | 0.79                         |  52%   | 0.62            | 0.011      | 0.084
+exc x4         |  98%         |  99%        |  86% |  96%     | 0.79                         |  53%   | 0.63            | 0.020      | 0.084
+exc+inh x2     |  98%         |  99%        |  91% |  96%     | 0.75                         |  45%   | 0.52            | 0.006      | 0.252
+exc+inh x4     |  98%         |  99%        |  88% |  96%     | 0.75                         |  46%   | 0.53            | 0.015      | 0.258
+exc+inh x8     |  98%         |  99%        |  91% |  96%     | 0.76                         |  47%   | 0.53            | 0.028      | 0.264
+
+=== evolved | medium (20 words) | brain 200 | stage 1 = 10 passes | 3 seeds
+condition      | all concepts | one missing | half | +2 wrong | half-cue brain state vs full | active | word similarity | exc w mean | inh strength mean
+frozen         | 100%         |  96%        | 100% |  57%     | 0.82                         |  29%   | 0.41            | 0.027      | 0.084
+shrink         | 100%         |  98%        | 100% |  55%     | 0.82                         |  28%   | 0.40            | 0.006      | 0.084
+exc x2         | 100%         |  98%        | 100% |  53%     | 0.82                         |  28%   | 0.40            | 0.009      | 0.084
+exc x4         | 100%         | 100%        | 100% |  50%     | 0.82                         |  29%   | 0.40            | 0.014      | 0.084
+exc+inh x2     | 100%         | 100%        | 100% |  50%     | 0.81                         |  28%   | 0.36            | 0.007      | 0.133
+exc+inh x4     | 100%         |  98%        | 100% |  52%     | 0.80                         |  29%   | 0.36            | 0.011      | 0.135
+exc+inh x8     | 100%         |  98%        | 100% |  52%     | 0.81                         |  29%   | 0.36            | 0.019      | 0.141

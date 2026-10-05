@@ -1,0 +1,536 @@
+{
+ "check": [
+  {
+   "seed": 1,
+   "real": [
+    0.5,
+    1,
+    0
+   ],
+   "replay": [
+    0.5,
+    1,
+    0
+   ],
+   "realWrong": [
+    {
+     "word": "Sky",
+     "got": "Ice"
+    },
+    {
+     "word": "Sand",
+     "got": "Fire"
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire"
+    },
+    {
+     "word": "Cave",
+     "got": "Night"
+    }
+   ]
+  },
+  {
+   "seed": 2,
+   "real": [
+    0.75,
+    1,
+    0
+   ],
+   "replay": [
+    0.75,
+    1,
+    0
+   ],
+   "realWrong": [
+    {
+     "word": "Sand",
+     "got": "Fire"
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire"
+    }
+   ]
+  },
+  {
+   "seed": 3,
+   "real": [
+    0.5,
+    1,
+    0
+   ],
+   "replay": [
+    0.5,
+    1,
+    0
+   ],
+   "realWrong": [
+    {
+     "word": "Sky",
+     "got": "Ice"
+    },
+    {
+     "word": "Sand",
+     "got": "Fire"
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire"
+    },
+    {
+     "word": "Cave",
+     "got": "Night"
+    }
+   ]
+  }
+ ],
+ "baseline": [
+  {
+   "ds": "tiny",
+   "seed": 1,
+   "fullDrive": 0.5,
+   "fullFire": 0,
+   "maxPotentialInTraining": 0.1381,
+   "threshold": 0.5,
+   "ticksAnyNodeFired": 0,
+   "weightsIdenticalToHebb": true,
+   "wMaxAbs": 8.65,
+   "nWrong": 4,
+   "wrongToSuperset": 4,
+   "wrong": [
+    {
+     "word": "Sky",
+     "got": "Ice",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Sand",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Cave",
+     "got": "Night",
+     "gotIsSuperset": true
+    }
+   ]
+  },
+  {
+   "ds": "tiny",
+   "seed": 2,
+   "fullDrive": 0.75,
+   "fullFire": 0,
+   "maxPotentialInTraining": 0.1311,
+   "threshold": 0.5,
+   "ticksAnyNodeFired": 0,
+   "weightsIdenticalToHebb": true,
+   "wMaxAbs": 8.45,
+   "nWrong": 2,
+   "wrongToSuperset": 2,
+   "wrong": [
+    {
+     "word": "Sand",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire",
+     "gotIsSuperset": true
+    }
+   ]
+  },
+  {
+   "ds": "tiny",
+   "seed": 3,
+   "fullDrive": 0.5,
+   "fullFire": 0,
+   "maxPotentialInTraining": 0.1674,
+   "threshold": 0.5,
+   "ticksAnyNodeFired": 0,
+   "weightsIdenticalToHebb": true,
+   "wMaxAbs": 8.45,
+   "nWrong": 4,
+   "wrongToSuperset": 4,
+   "wrong": [
+    {
+     "word": "Sky",
+     "got": "Ice",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Sand",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Cave",
+     "got": "Night",
+     "gotIsSuperset": true
+    }
+   ]
+  },
+  {
+   "ds": "tiny",
+   "seed": 4,
+   "fullDrive": 0.5,
+   "fullFire": 0,
+   "maxPotentialInTraining": 0.1297,
+   "threshold": 0.5,
+   "ticksAnyNodeFired": 0,
+   "weightsIdenticalToHebb": true,
+   "wMaxAbs": 8.3,
+   "nWrong": 4,
+   "wrongToSuperset": 3,
+   "wrong": [
+    {
+     "word": "Sky",
+     "got": "Ice",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Sand",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Cave",
+     "got": "Night",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Ember",
+     "got": "Night",
+     "gotIsSuperset": false
+    }
+   ]
+  },
+  {
+   "ds": "tiny",
+   "seed": 5,
+   "fullDrive": 0.75,
+   "fullFire": 0,
+   "maxPotentialInTraining": 0.1561,
+   "threshold": 0.5,
+   "ticksAnyNodeFired": 0,
+   "weightsIdenticalToHebb": true,
+   "wMaxAbs": 8.7,
+   "nWrong": 2,
+   "wrongToSuperset": 2,
+   "wrong": [
+    {
+     "word": "Sky",
+     "got": "Ice",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire",
+     "gotIsSuperset": true
+    }
+   ]
+  },
+  {
+   "ds": "medium",
+   "seed": 1,
+   "fullDrive": 0.55,
+   "fullFire": 0,
+   "maxPotentialInTraining": 0.1297,
+   "threshold": 0.5,
+   "ticksAnyNodeFired": 0,
+   "weightsIdenticalToHebb": true,
+   "wMaxAbs": 8.25,
+   "nWrong": 9,
+   "wrongToSuperset": 5,
+   "wrong": [
+    {
+     "word": "Sky",
+     "got": "Ice",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Sand",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Cave",
+     "got": "Night",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Ember",
+     "got": "Fire",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Blood",
+     "got": "Brick",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Cloud",
+     "got": "Snow",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Leaf",
+     "got": "Brick",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Steel",
+     "got": "Snow",
+     "gotIsSuperset": false
+    }
+   ]
+  },
+  {
+   "ds": "medium",
+   "seed": 2,
+   "fullDrive": 0.55,
+   "fullFire": 0,
+   "maxPotentialInTraining": 0.1382,
+   "threshold": 0.5,
+   "ticksAnyNodeFired": 0,
+   "weightsIdenticalToHebb": true,
+   "wMaxAbs": 8.75,
+   "nWrong": 9,
+   "wrongToSuperset": 6,
+   "wrong": [
+    {
+     "word": "Sky",
+     "got": "Ice",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Sand",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Cave",
+     "got": "Night",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Ember",
+     "got": "Night",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Blood",
+     "got": "Lava",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Grass",
+     "got": "Brick",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Cloud",
+     "got": "Snow",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Leaf",
+     "got": "Brick",
+     "gotIsSuperset": false
+    }
+   ]
+  },
+  {
+   "ds": "medium",
+   "seed": 3,
+   "fullDrive": 0.6,
+   "fullFire": 0,
+   "maxPotentialInTraining": 0.1267,
+   "threshold": 0.5,
+   "ticksAnyNodeFired": 0,
+   "weightsIdenticalToHebb": true,
+   "wMaxAbs": 8.65,
+   "nWrong": 8,
+   "wrongToSuperset": 3,
+   "wrong": [
+    {
+     "word": "Fire",
+     "got": "Night",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Sky",
+     "got": "Ice",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Sand",
+     "got": "Night",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Lemon",
+     "got": "Night",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Cave",
+     "got": "Night",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Ember",
+     "got": "Night",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Cloud",
+     "got": "Snow",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Leaf",
+     "got": "Grass",
+     "gotIsSuperset": false
+    }
+   ]
+  },
+  {
+   "ds": "medium",
+   "seed": 4,
+   "fullDrive": 0.55,
+   "fullFire": 0,
+   "maxPotentialInTraining": 0.1206,
+   "threshold": 0.5,
+   "ticksAnyNodeFired": 0,
+   "weightsIdenticalToHebb": true,
+   "wMaxAbs": 8.25,
+   "nWrong": 9,
+   "wrongToSuperset": 5,
+   "wrong": [
+    {
+     "word": "Ice",
+     "got": "Night",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Sky",
+     "got": "Night",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Sand",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Cave",
+     "got": "Night",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Ember",
+     "got": "Night",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Blood",
+     "got": "Lava",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Cloud",
+     "got": "Snow",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Leaf",
+     "got": "Brick",
+     "gotIsSuperset": false
+    }
+   ]
+  },
+  {
+   "ds": "medium",
+   "seed": 5,
+   "fullDrive": 0.6,
+   "fullFire": 0,
+   "maxPotentialInTraining": 0.1362,
+   "threshold": 0.5,
+   "ticksAnyNodeFired": 0,
+   "weightsIdenticalToHebb": true,
+   "wMaxAbs": 8.3,
+   "nWrong": 8,
+   "wrongToSuperset": 4,
+   "wrong": [
+    {
+     "word": "Sky",
+     "got": "Ice",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Sand",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Lemon",
+     "got": "Fire",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Cave",
+     "got": "Fire",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Ember",
+     "got": "Fire",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Grass",
+     "got": "Brick",
+     "gotIsSuperset": false
+    },
+    {
+     "word": "Cloud",
+     "got": "Snow",
+     "gotIsSuperset": true
+    },
+    {
+     "word": "Leaf",
+     "got": "Brick",
+     "gotIsSuperset": false
+    }
+   ]
+  }
+ ]
+}
