@@ -186,12 +186,13 @@ export function sequenceScore(params, opts, seeds) {
  */
 export function simonTrial(params, { N = 100, size = 10, tiles = 9, maxRounds = 9, repeats = false, seed = 1 } = {}) {
     const context = !!params.context, ctxSize = 5;
-    if (context) N = Math.max(N, tiles * size + maxRounds * ctxSize);
+    const nCtx = params.ctxGroups || maxRounds; // step-signal groups; fewer than maxRounds means they are reused cyclically
+    if (context) N = Math.max(N, tiles * size + nCtx * ctxSize);
     const b = buildBrain(params, N, seed);
     const { p, run, reset } = b;
     const all = shuffled(Array.from({ length: N }, (_, i) => i));
     const groups = Array.from({ length: tiles }, (_, k) => all.slice(k * size, (k + 1) * size));
-    const ctx = Array.from({ length: maxRounds }, (_, k) => context ? all.slice(tiles * size + k * ctxSize, tiles * size + (k + 1) * ctxSize) : []);
+    const ctx = Array.from({ length: maxRounds }, (_, k) => context ? all.slice(tiles * size + (k % nCtx) * ctxSize, tiles * size + (k % nCtx + 1) * ctxSize) : []);
     const sequence = [];
     const order = shuffled(groups.map((_, i) => i));
     for (let k = 0; k < maxRounds; k++) sequence.push(repeats ? Math.floor(Math.random() * tiles) : order[k % tiles]);
