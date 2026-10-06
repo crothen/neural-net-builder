@@ -123,7 +123,7 @@ export class Renderer {
                 this.ctx.beginPath();
             } else {
                 // Dynamic styling based on Weight & Activity
-                let baseWidth = 0.5 + (weightAbs * 1.5); // Thicker connections = stronger weights
+                let baseWidth = Math.min(4, 0.5 + (weightAbs * 1.5)); // Thicker connections = stronger weights, capped
                 let baseAlpha = view?.restingAlpha ?? (0.02 + (weightAbs * 0.1)); // Extremely transparent resting state
 
                 if (intensity > 0.01) {

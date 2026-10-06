@@ -1576,7 +1576,7 @@ export class NeuralNet {
             const since = this.tickCount - src.lastFiredTick;
             const pre = since <= window && (sameTick || since >= 1);
             if (pre) conn.weight += rate * (1 - conn.weight / cap);
-            else if (weakenSilent) conn.weight -= rate * conn.weight / cap;
+            else if (weakenSilent) conn.weight *= Math.max(0, 1 - rate / cap); // towards zero, never past it
         }
     }
 

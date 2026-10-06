@@ -12,6 +12,8 @@ export const DEFAULTS = {
     rule: 'window',     // 'window': silent senders are weakened | 'keep': silent senders are left alone
     window: 2,          // how many ticks back a sender still counts as "fired together" with the receiver
     sameTick: 1,        // 1: a sender firing in the same tick counts too | 0: only earlier ticks (sender before receiver)
+    negCap: 0,          // 'window' rule: a silent sender's weight is pushed towards -negCap (0 = towards zero), bounded
+    negRate: 0,         // ... at this rate (0 = use lr/cap as before)
     retention: 0.8,     // share of the potential a neuron keeps per tick (the engine calls this "decay")
     refractory: 1,
     threshold: 1,
@@ -72,8 +74,12 @@ export function buildBrain(params, N, seed) {
                 for (const { conn, src } of incoming[j]) {
                     const r = recent[src];
                     const pre = r <= p.window && (p.sameTick || r >= 1) ? 1 : 0;
-                    if (p.rule === 'keep') conn.weight += p.lr * pre * (1 - conn.weight / p.cap);
-                    else conn.weight += p.lr * (pre - conn.weight / p.cap);
+                    if (pre) conn.weight += p.lr * (1 - conn.weight / p.cap);
+                    else if (p.rule !== 'keep') {
+                        // silent sender: weaken towards -negCap (or zero), never past it
+                        const rate = Math.min(1, p.negRate || p.lr / p.cap);
+                        conn.weight += rate * (-p.negCap - conn.weight);
+                    }
                 }
             }
         }
@@ -215,7 +221,7 @@ export function simonTrial(params, { N = 100, size = 10, tiles = 9, maxRounds = 
                 if (isOn && !wasOn[g]) replayed.push(g);
                 wasOn[g] = isOn;
             }
-            if (replayed.length > shown.length) break;
+            if (replayed.length >= shown.length) break; // like the game: the round ends with the k-th press
         }
         if (replayed.length === shown.length && replayed.every((g, i) => g === shown[i])) rounds++;
         else break;

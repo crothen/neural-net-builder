@@ -1272,7 +1272,7 @@ var NeuralNet = class {
       const since = this.tickCount - src.lastFiredTick;
       const pre = since <= window && (sameTick || since >= 1);
       if (pre) conn.weight += rate * (1 - conn.weight / cap);
-      else if (weakenSilent) conn.weight -= rate * conn.weight / cap;
+      else if (weakenSilent) conn.weight *= Math.max(0, 1 - rate / cap);
     }
   }
   // ---- Step caches -------------------------------------------------------------------------------------------
@@ -1784,21 +1784,21 @@ var SIMON_NO_STEP_SIGNAL = {
   ...SIMON_DEFAULTS,
   stepSignal: false,
   repeats: false,
-  inhibitory: 0,
-  showTicks: 10,
-  cueTicks: 3,
-  weightCap: 0.03,
-  learningRate: 0.3036,
+  inhibitory: 10,
+  showTicks: 9,
+  cueTicks: 6,
+  weightCap: 0.1364,
+  learningRate: 0.0525,
   window: 4,
   sameTick: false,
-  weakenSilent: true,
-  retention: 0.4696,
-  refractory: 2,
-  fatigue: 0.8473,
+  weakenSilent: false,
+  retention: 0.6075,
+  refractory: 0,
+  fatigue: 0.0984,
   recovery: 0.6,
-  excToInh: 0.0612,
-  excToInhSpread: 1.3692,
-  inhToExc: 0.0709
+  excToInh: 0.0128,
+  excToInhSpread: 1.6049,
+  inhToExc: 0.02
 };
 var SIMON_MODULE_ID = "simon";
 var SimonGame = class {

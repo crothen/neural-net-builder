@@ -12,7 +12,7 @@
 import { fork } from 'node:child_process';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { score, sequenceScore, simonScore } from './lib.mjs';
+import { score, sequenceScore, simonScore, DEFAULTS } from './lib.mjs';
 
 /** Genes: [min, max, kind]; kind = lin | log | int | bool | choice(list). */
 const GENES = {
@@ -34,6 +34,8 @@ const GENES = {
     seqCueTicks: [2, 8, 'int'],
     context: [0, 1, 'bool'],
     seqGap: [0, 6, 'int'],
+    negCap: [0, 0.5, 'lin'],
+    negRate: [0.01, 1, 'log'],
 };
 /** The pattern-memory demo's settings, as the starting point. */
 const SEED_GENOME = { cap: 0.111, lr: 0.028, rule: 'keep', window: 2, sameTick: 1, retention: 0.838, refractory: 0, fatigue: 0, recovery: 0.1, nInh: 5, wEI: 0.041, wEIspread: 1.706, wIE: 0.207, exposures: 1, seqTicks: 10, seqCueTicks: 5, context: 0, seqGap: 0 };
@@ -95,6 +97,8 @@ function randomGene(name) {
     return clamp(name, lo + rnd() * (hi - lo));
 }
 const randomGenome = () => Object.fromEntries(Object.keys(GENES).map(k => [k, randomGene(k)]));
+/** Genes a hand-written genome does not mention get their harness default, so mutation never works on undefined. */
+const complete = (g) => Object.fromEntries(Object.keys(GENES).map(k => [k, g[k] !== undefined && g[k] !== null && !Number.isNaN(g[k]) ? g[k] : (DEFAULTS[k] ?? randomGene(k))]));
 function mutate(parent, strength) {
     const g = { ...parent };
     for (const [name, [lo, hi, kind]] of Object.entries(GENES)) {
@@ -118,7 +122,7 @@ async function main() {
     const fmt = (s) => a.task.startsWith('simon') ? `fitness ${s.fitness.toFixed(3)} | Simon rounds survived: ${s.rounds.toFixed(1)} without repeats, ${s.roundsRepeats.toFixed(1)} with` : `fitness ${s.fitness.toFixed(3)} | patterns ${(s.k5 * 100).toFixed(0)}% / ${(s.k10 * 100).toFixed(0)}% exact | sequence ${(s.seqSteps * 100).toFixed(0)}% of steps, whole chain ${(s.seqOrder * 100).toFixed(0)}%, intruders ${(s.seqIntruders * 100).toFixed(0)}%`;
 
     const t0 = Date.now();
-    let population = [SEED_GENOME, SIMON_GENOME, ...Array.from({ length: popSize - 2 }, randomGenome)];
+    let population = [complete(SEED_GENOME), complete(SIMON_GENOME), ...Array.from({ length: popSize - 2 }, randomGenome)];
     const history = [];
     for (let gen = 0; gen < gens; gen++) {
         const scored = await Promise.all(population.map(async g => ({ g, s: await scoreCached(g) })));
@@ -143,7 +147,7 @@ async function main() {
     const top = [...cache.entries()].sort((x, y) => y[1].fitness - x[1].fitness).slice(0, 5).map(([k]) => k).filter(k => byKey.has(k));
     const final = [];
     for (const k of top) { const g = byKey.get(k); final.push({ genome: g, search: cache.get(k), fresh: await pool.run(g, finalSeeds, a.task) }); }
-    const seedFresh = await pool.run(SEED_GENOME, finalSeeds, a.task);
+    const seedFresh = await pool.run(complete(SEED_GENOME), finalSeeds, a.task);
     final.sort((x, y) => y.fresh.fitness - x.fresh.fitness);
     console.log(`\nFresh-seed check (${finalSeeds.length} seeds):`);
     console.log(`  starting point (demo settings): ${fmt(seedFresh)}`);
