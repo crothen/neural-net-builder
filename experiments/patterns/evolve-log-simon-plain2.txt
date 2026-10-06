@@ -1,0 +1,55 @@
+gen  0 | best fitness 0.352 | Simon rounds survived: 3.2 without repeats, 0.0 with | mean 0.094 | 5s
+gen  1 | best fitness 0.352 | Simon rounds survived: 3.2 without repeats, 0.0 with | mean 0.117 | 7s
+gen  2 | best fitness 0.352 | Simon rounds survived: 3.2 without repeats, 0.0 with | mean 0.128 | 10s
+gen  3 | best fitness 0.352 | Simon rounds survived: 3.2 without repeats, 0.0 with | mean 0.141 | 14s
+gen  4 | best fitness 0.352 | Simon rounds survived: 3.2 without repeats, 0.0 with | mean 0.150 | 17s
+gen  5 | best fitness 0.352 | Simon rounds survived: 3.2 without repeats, 0.0 with | mean 0.187 | 24s
+gen  6 | best fitness 0.537 | Simon rounds survived: 4.8 without repeats, 0.0 with | mean 0.223 | 33s
+gen  7 | best fitness 0.537 | Simon rounds survived: 4.8 without repeats, 0.0 with | mean 0.223 | 40s
+gen  8 | best fitness 0.537 | Simon rounds survived: 4.8 without repeats, 0.0 with | mean 0.244 | 50s
+gen  9 | best fitness 0.537 | Simon rounds survived: 4.8 without repeats, 0.0 with | mean 0.254 | 60s
+gen 10 | best fitness 0.685 | Simon rounds survived: 6.2 without repeats, 0.0 with | mean 0.290 | 73s
+gen 11 | best fitness 0.685 | Simon rounds survived: 6.2 without repeats, 0.0 with | mean 0.259 | 83s
+gen 12 | best fitness 0.685 | Simon rounds survived: 6.2 without repeats, 0.0 with | mean 0.287 | 97s
+gen 13 | best fitness 0.685 | Simon rounds survived: 6.2 without repeats, 0.0 with | mean 0.296 | 110s
+gen 14 | best fitness 0.685 | Simon rounds survived: 6.2 without repeats, 0.0 with | mean 0.287 | 122s
+gen 15 | best fitness 0.685 | Simon rounds survived: 6.2 without repeats, 0.0 with | mean 0.262 | 130s
+gen 16 | best fitness 0.685 | Simon rounds survived: 6.2 without repeats, 0.0 with | mean 0.284 | 138s
+gen 17 | best fitness 0.704 | Simon rounds survived: 6.3 without repeats, 0.0 with | mean 0.264 | 144s
+gen 18 | best fitness 0.704 | Simon rounds survived: 6.3 without repeats, 0.0 with | mean 0.299 | 153s
+gen 19 | best fitness 0.704 | Simon rounds survived: 6.3 without repeats, 0.0 with | mean 0.286 | 161s
+gen 20 | best fitness 0.926 | Simon rounds survived: 8.3 without repeats, 0.0 with | mean 0.299 | 171s
+gen 21 | best fitness 0.926 | Simon rounds survived: 8.3 without repeats, 0.0 with | mean 0.361 | 182s
+gen 22 | best fitness 0.926 | Simon rounds survived: 8.3 without repeats, 0.0 with | mean 0.352 | 188s
+gen 23 | best fitness 0.926 | Simon rounds survived: 8.3 without repeats, 0.0 with | mean 0.404 | 195s
+gen 24 | best fitness 0.926 | Simon rounds survived: 8.3 without repeats, 0.0 with | mean 0.495 | 204s
+gen 25 | best fitness 0.926 | Simon rounds survived: 8.3 without repeats, 0.0 with | mean 0.470 | 211s
+gen 26 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.463 | 217s
+gen 27 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.441 | 223s
+gen 28 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.537 | 232s
+gen 29 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.535 | 240s
+gen 30 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.514 | 248s
+gen 31 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.486 | 254s
+gen 32 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.496 | 260s
+gen 33 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.531 | 267s
+gen 34 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.539 | 275s
+gen 35 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.652 | 285s
+gen 36 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.622 | 293s
+gen 37 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.581 | 302s
+gen 38 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.596 | 310s
+gen 39 | best fitness 1.000 | Simon rounds survived: 9.0 without repeats, 0.0 with | mean 0.725 | 320s
+
+Fresh-seed check (12 seeds):
+  starting point (demo settings): fitness 0.324 | Simon rounds survived: 2.9 without repeats, 0.0 with
+  finalist 1: fitness 0.907 | Simon rounds survived: 8.2 without repeats, 0.0 with
+      {"cap":0.03,"lr":0.3036,"rule":"window","window":4,"sameTick":0,"retention":0.4696,"refractory":2,"fatigue":0.8473,"recovery":0.6,"nInh":0,"wEI":0.0612,"wEIspread":1.3692,"wIE":0.0709,"exposures":2,"seqTicks":10,"seqCueTicks":3,"context":1,"seqGap":0}
+  finalist 2: fitness 0.889 | Simon rounds survived: 8.0 without repeats, 0.0 with
+      {"cap":0.03,"lr":0.3036,"rule":"window","window":4,"sameTick":0,"retention":0.5621,"refractory":1,"fatigue":0.9324,"recovery":0.6,"nInh":0,"wEI":0.1918,"wEIspread":1.5541,"wIE":0.2985,"exposures":3,"seqTicks":14,"seqCueTicks":3,"context":1,"seqGap":0}
+  finalist 3: fitness 0.667 | Simon rounds survived: 6.0 without repeats, 0.0 with
+      {"cap":0.03,"lr":0.1626,"rule":"window","window":3,"sameTick":0,"retention":0.4686,"refractory":2,"fatigue":0.8937,"recovery":0.6,"nInh":0,"wEI":0.1406,"wEIspread":1,"wIE":0.055,"exposures":2,"seqTicks":10,"seqCueTicks":4,"context":0,"seqGap":0}
+  finalist 4: fitness 0.667 | Simon rounds survived: 6.0 without repeats, 0.0 with
+      {"cap":0.03,"lr":0.1626,"rule":"window","window":3,"sameTick":0,"retention":0.4686,"refractory":2,"fatigue":0.8937,"recovery":0.6,"nInh":0,"wEI":0.095,"wEIspread":1,"wIE":0.0487,"exposures":2,"seqTicks":10,"seqCueTicks":4,"context":0,"seqGap":0}
+  finalist 5: fitness 0.667 | Simon rounds survived: 6.0 without repeats, 0.0 with
+      {"cap":0.03,"lr":0.1626,"rule":"window","window":3,"sameTick":0,"retention":0.4686,"refractory":2,"fatigue":0.8937,"recovery":0.6,"nInh":0,"wEI":0.095,"wEIspread":1.1556,"wIE":0.0246,"exposures":2,"seqTicks":10,"seqCueTicks":4,"context":0,"seqGap":0}
+
+1448 settings evaluated in 329s

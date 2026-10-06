@@ -26,6 +26,7 @@ export const DEFAULTS = {
     cueTicks: 20,       // pattern completion: the half-pattern cue lasts this long
     seqTicks: 10,       // sequences: each element is stimulated for this long, one after the other
     seqCueTicks: 5,     // sequences: the first element is cued for this long, then the brain runs free
+    seqGap: 0,          // sequences: silent ticks between two elements while the sequence is shown
     stim: 3,            // weight of the direct stimulation input
 };
 
@@ -193,7 +194,7 @@ export function simonTrial(params, { N = 100, size = 10, tiles = 9, maxRounds = 
     for (let k = 1; k <= maxRounds; k++) {
         const shown = sequence.slice(0, k);
         reset();
-        shown.forEach((t, step) => run([...groups[t], ...ctx[step]], p.seqTicks, true));
+        shown.forEach((t, step) => { run([...groups[t], ...ctx[step]], p.seqTicks, true); if (p.seqGap > 0) run([], p.seqGap, true); });
 
         // Verification, tick by tick: cue the first tile briefly, then let the brain run. A tile is "pressed"
         // when >= half its neurons fired within the last 3 ticks; with context on, each press switches the step

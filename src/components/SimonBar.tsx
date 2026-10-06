@@ -91,7 +91,7 @@ export const SimonBar: React.FC<SimonBarProps> = ({ canvasRef, onNetworkChanged,
                 <span className="simon-round">Round {Math.min((game?.round ?? 0) + 1, game?.options.maxRounds ?? 9)} of {game?.options.maxRounds ?? 9}</span>
                 <span className="pm-spacer" />
                 <label className="simon-option"><input type="checkbox" checked={repeats} disabled={busy} onChange={e => { setRepeats(e.target.checked); build({ repeats: e.target.checked }); }} /> repeats</label>
-                <label className="simon-option"><input type="checkbox" checked={stepSignal} disabled={busy} onChange={e => { setStepSignal(e.target.checked); build({ stepSignal: e.target.checked }); }} title="Tell the Brain which step it is on. Without it, a tile that appears twice in the sequence is ambiguous." /> step signal</label>
+                <label className="simon-option"><input type="checkbox" checked={stepSignal} disabled={busy} onChange={e => { const on = e.target.checked; setStepSignal(on); if (!on) setRepeats(false); build({ stepSignal: on, repeats: on ? repeats : false }); }} title="Tell the Brain which step it is on. Each setting loads a Brain evolved for it; without the signal a tile that appears twice in the sequence is ambiguous, so repeats are switched off." /> step signal</label>
                 <button className="pm-quiet" onClick={() => build()} disabled={busy} title="New Brain, new sequence">Start over</button>
                 <button className="pm-quiet" onClick={onClose} title="Hide these controls">×</button>
             </div>

@@ -696,8 +696,18 @@ Rounds survived, 12 fresh seeds, without / with repeated tiles:
 - In the browser (desktop and phone size) full games were played through, e.g. 4 4 2 9 5 8 3 5 4 shown and
   pressed back correctly.
 
-Live at `.../pattern-memory/?demo=simon` (and via the Demos section of the sidebar). The two checkboxes
-(repeats, step signal) rebuild the brain; with the step signal off the brain falls back to about 3 rounds.
+**Without the step signal** (`--task simon-plain`, no repeated tiles): a first run plateaued at 4.0 rounds; its
+failures were order swaps (shown 4 2 1 7, pressed 4 1 2 7): a tile's neurons kept firing after their stimulation
+ended, overlapped with the tile after next, and so learned a skip-ahead link. A second run with a larger
+population, a gap gene, and the step-signal winner as a starting point found a brain that survives **8.2 rounds**
+on fresh seeds (8.9 inside the app, 11 of 12 games perfect). It is a very different brain: tiny weight cap
+(0.03), fast learning (0.30), short memory (retention 0.47), a refractory period of 2, strong fatigue (0.85)
+with fast recovery (0.6), no inhibitory pool, weakening of silent senders, and only senders that fired *before*
+the receiver count. With repeated tiles it manages 3.3 rounds, as expected: without a step signal a repeat is
+ambiguous.
+
+Live at `.../pattern-memory/?demo=simon` (and via the Demos section of the sidebar). The step-signal checkbox
+loads the brain evolved for that setting; switching it off also switches repeats off.
 
 ## Engine speed-up
 

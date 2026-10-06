@@ -1780,6 +1780,26 @@ var SIMON_DEFAULTS = {
   excToInhSpread: 3.3755,
   inhToExc: 0.4125
 };
+var SIMON_NO_STEP_SIGNAL = {
+  ...SIMON_DEFAULTS,
+  stepSignal: false,
+  repeats: false,
+  inhibitory: 0,
+  showTicks: 10,
+  cueTicks: 3,
+  weightCap: 0.03,
+  learningRate: 0.3036,
+  window: 4,
+  sameTick: false,
+  weakenSilent: true,
+  retention: 0.4696,
+  refractory: 2,
+  fatigue: 0.8473,
+  recovery: 0.6,
+  excToInh: 0.0612,
+  excToInhSpread: 1.3692,
+  inhToExc: 0.0709
+};
 var SIMON_MODULE_ID = "simon";
 var SimonGame = class {
   options;
@@ -1797,7 +1817,7 @@ var SimonGame = class {
   excitatoryIds = [];
   constructor(net, options = {}) {
     this.net = net;
-    this.options = { ...SIMON_DEFAULTS, ...options };
+    this.options = { ...options.stepSignal === false ? SIMON_NO_STEP_SIGNAL : SIMON_DEFAULTS, ...options };
     const o = this.options;
     const excitatory = o.tiles * o.tileSize + (o.stepSignal ? o.maxRounds * o.stepSize : 0);
     const total = excitatory + o.inhibitory;

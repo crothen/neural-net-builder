@@ -2,6 +2,8 @@
 //   node experiments/patterns/evolve.mjs [--pop 32] [--gens 30] [--workers 4] [--seeds 1,2,3,4] [--tag main] [--task patterns|simon]
 // --task simon: fitness = rounds survived in the Simon game (9 tiles, growing sequence), 70% without repeated
 // tiles and 30% with, each divided by 9.
+// --task simon-plain: no repeated tiles and NO step signal allowed (the context gene is forced off); fitness =
+// rounds survived / 9.
 // Learning phase: the brain is shown patterns / sequences with its Hebbian rule on.
 // Verification phase: learning off; half-pattern cues must bring back exactly their pattern, and the first
 // pattern of a chain must make the others follow in order.
@@ -31,11 +33,18 @@ const GENES = {
     seqTicks: [5, 15, 'int'],
     seqCueTicks: [2, 8, 'int'],
     context: [0, 1, 'bool'],
+    seqGap: [0, 6, 'int'],
 };
 /** The pattern-memory demo's settings, as the starting point. */
-const SEED_GENOME = { cap: 0.111, lr: 0.028, rule: 'keep', window: 2, sameTick: 1, retention: 0.838, refractory: 0, fatigue: 0, recovery: 0.1, nInh: 5, wEI: 0.041, wEIspread: 1.706, wIE: 0.207, exposures: 1, seqTicks: 10, seqCueTicks: 5, context: 0 };
+const SEED_GENOME = { cap: 0.111, lr: 0.028, rule: 'keep', window: 2, sameTick: 1, retention: 0.838, refractory: 0, fatigue: 0, recovery: 0.1, nInh: 5, wEI: 0.041, wEIspread: 1.706, wIE: 0.207, exposures: 1, seqTicks: 10, seqCueTicks: 5, context: 0, seqGap: 0 };
+/** The Simon winner with the step signal (Finding 13), as a second starting point for the no-signal search. */
+const SIMON_GENOME = { cap: 0.495, lr: 0.3657, rule: 'window', window: 4, sameTick: 1, retention: 0.8958, refractory: 0, fatigue: 1.0634, recovery: 0.0952, nInh: 5, wEI: 0.01, wEIspread: 3.3755, wIE: 0.4125, exposures: 2, seqTicks: 11, seqCueTicks: 4, context: 0, seqGap: 0 };
 
 export function evaluate(genome, seeds, task = 'patterns') {
+    if (task === 'simon-plain') {
+        const plain = simonScore({ ...genome, context: 0 }, { repeats: false }, seeds);
+        return { fitness: plain.rounds / 9, rounds: plain.rounds, roundsRepeats: 0, k5: 0, k10: 0, seqSteps: 0, seqOrder: 0, seqIntruders: 0 };
+    }
     if (task === 'simon') {
         const plain = simonScore(genome, { repeats: false }, seeds), rep = simonScore(genome, { repeats: true }, seeds);
         return { fitness: (0.7 * plain.rounds + 0.3 * rep.rounds) / 9, rounds: plain.rounds, roundsRepeats: rep.rounds, k5: 0, k10: 0, seqSteps: 0, seqOrder: 0, seqIntruders: 0 };
@@ -106,10 +115,10 @@ async function main() {
     const pool = makePool(Number(a.workers));
     const cache = new Map();
     const scoreCached = async (g) => { const k = keyOf(g); if (!cache.has(k)) cache.set(k, await pool.run(g, seeds, a.task)); return cache.get(k); };
-    const fmt = (s) => a.task === 'simon' ? `fitness ${s.fitness.toFixed(3)} | Simon rounds survived: ${s.rounds.toFixed(1)} without repeats, ${s.roundsRepeats.toFixed(1)} with` : `fitness ${s.fitness.toFixed(3)} | patterns ${(s.k5 * 100).toFixed(0)}% / ${(s.k10 * 100).toFixed(0)}% exact | sequence ${(s.seqSteps * 100).toFixed(0)}% of steps, whole chain ${(s.seqOrder * 100).toFixed(0)}%, intruders ${(s.seqIntruders * 100).toFixed(0)}%`;
+    const fmt = (s) => a.task.startsWith('simon') ? `fitness ${s.fitness.toFixed(3)} | Simon rounds survived: ${s.rounds.toFixed(1)} without repeats, ${s.roundsRepeats.toFixed(1)} with` : `fitness ${s.fitness.toFixed(3)} | patterns ${(s.k5 * 100).toFixed(0)}% / ${(s.k10 * 100).toFixed(0)}% exact | sequence ${(s.seqSteps * 100).toFixed(0)}% of steps, whole chain ${(s.seqOrder * 100).toFixed(0)}%, intruders ${(s.seqIntruders * 100).toFixed(0)}%`;
 
     const t0 = Date.now();
-    let population = [SEED_GENOME, ...Array.from({ length: popSize - 1 }, randomGenome)];
+    let population = [SEED_GENOME, SIMON_GENOME, ...Array.from({ length: popSize - 2 }, randomGenome)];
     const history = [];
     for (let gen = 0; gen < gens; gen++) {
         const scored = await Promise.all(population.map(async g => ({ g, s: await scoreCached(g) })));
