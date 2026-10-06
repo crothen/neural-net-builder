@@ -1,0 +1,55 @@
+gen  0 | best fitness 0.352 | Simon rounds survived: 3.2 without repeats, 0.0 with | mean 0.109 | 7s
+gen  1 | best fitness 0.352 | Simon rounds survived: 3.2 without repeats, 0.0 with | mean 0.131 | 11s
+gen  2 | best fitness 0.352 | Simon rounds survived: 3.2 without repeats, 0.0 with | mean 0.124 | 14s
+gen  3 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.144 | 20s
+gen  4 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.181 | 27s
+gen  5 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.197 | 35s
+gen  6 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.222 | 45s
+gen  7 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.223 | 55s
+gen  8 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.254 | 70s
+gen  9 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.274 | 88s
+gen 10 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.311 | 109s
+gen 11 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.285 | 129s
+gen 12 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.314 | 153s
+gen 13 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.323 | 174s
+gen 14 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.303 | 191s
+gen 15 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.277 | 203s
+gen 16 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.279 | 220s
+gen 17 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.299 | 241s
+gen 18 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.305 | 263s
+gen 19 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.313 | 285s
+gen 20 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.299 | 303s
+gen 21 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.310 | 326s
+gen 22 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.282 | 342s
+gen 23 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.311 | 365s
+gen 24 | best fitness 0.463 | Simon rounds survived: 4.2 without repeats, 0.0 with | mean 0.325 | 389s
+gen 25 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.308 | 411s
+gen 26 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.322 | 436s
+gen 27 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.371 | 469s
+gen 28 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.325 | 496s
+gen 29 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.321 | 522s
+gen 30 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.360 | 556s
+gen 31 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.329 | 582s
+gen 32 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.344 | 613s
+gen 33 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.372 | 646s
+gen 34 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.318 | 667s
+gen 35 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.306 | 683s
+gen 36 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.347 | 705s
+gen 37 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.376 | 732s
+gen 38 | best fitness 0.481 | Simon rounds survived: 4.3 without repeats, 0.0 with | mean 0.378 | 759s
+gen 39 | best fitness 0.574 | Simon rounds survived: 5.2 without repeats, 0.0 with | mean 0.348 | 781s
+
+Fresh-seed check (12 seeds):
+  starting point (demo settings): fitness 0.324 | Simon rounds survived: 2.9 without repeats, 0.0 with
+  finalist 1: fitness 0.435 | Simon rounds survived: 3.9 without repeats, 0.0 with
+      {"cap":0.3197,"lr":0.0241,"rule":"window","window":4,"sameTick":0,"retention":0.7226,"refractory":0,"fatigue":0.0075,"recovery":0.0465,"nInh":5,"wEI":0.0147,"wEIspread":2.2555,"wIE":0.057,"exposures":1,"seqTicks":7,"seqCueTicks":6,"context":0,"seqGap":0,"negCap":null,"negRate":0.0407}
+  finalist 2: fitness 0.426 | Simon rounds survived: 3.8 without repeats, 0.0 with
+      {"cap":0.409,"lr":0.0386,"rule":"window","window":4,"sameTick":0,"retention":0.8102,"refractory":0,"fatigue":0,"recovery":0.1654,"nInh":5,"wEI":0.0341,"wEIspread":2.6314,"wIE":0.0487,"exposures":1,"seqTicks":8,"seqCueTicks":5,"context":1,"seqGap":1,"negRate":null}
+  finalist 3: fitness 0.426 | Simon rounds survived: 3.8 without repeats, 0.0 with
+      {"cap":0.409,"lr":0.0386,"rule":"window","window":4,"sameTick":0,"retention":0.8102,"refractory":0,"fatigue":0.0853,"recovery":0.1654,"nInh":5,"wEI":0.0341,"wEIspread":2.6314,"wIE":0.0487,"exposures":1,"seqTicks":8,"seqCueTicks":5,"context":1,"seqGap":1,"negCap":null,"negRate":null}
+  finalist 4: fitness 0.407 | Simon rounds survived: 3.7 without repeats, 0.0 with
+      {"cap":0.3233,"lr":0.028,"rule":"window","window":4,"sameTick":0,"retention":0.8324,"refractory":0,"fatigue":0,"recovery":0.2019,"nInh":5,"wEI":0.0171,"wEIspread":2.0838,"wIE":0.085,"exposures":1,"seqTicks":8,"seqCueTicks":5,"context":0,"seqGap":0,"negCap":null,"negRate":null}
+  finalist 5: fitness 0.370 | Simon rounds survived: 3.3 without repeats, 0.0 with
+      {"cap":0.111,"lr":0.028,"rule":"keep","window":0,"sameTick":1,"retention":0.838,"refractory":0,"fatigue":0,"recovery":0.1,"nInh":5,"wEI":0.038,"wEIspread":1.706,"wIE":0.085,"exposures":1,"seqTicks":10,"seqCueTicks":5,"context":0,"seqGap":0,"negRate":null}
+
+1450 settings evaluated in 795s

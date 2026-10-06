@@ -36,7 +36,7 @@ export const SIMON_DEFAULTS = {
 };
 
 /**
- * Settings evolved for playing WITHOUT the step signal (no repeated tiles). Honest result: about 3.5 of 9 rounds
+ * Settings evolved for playing WITHOUT the step signal (no repeated tiles). Honest result: about 4.4 of 9 rounds
  * on fresh seeds. (An earlier version reached 8 rounds only by exploiting a flaw in the weakening step that let
  * weights explode; that flaw is fixed and this is the best found with the corrected rule so far.)
  */
@@ -44,21 +44,21 @@ export const SIMON_NO_STEP_SIGNAL = {
     ...SIMON_DEFAULTS,
     stepSignal: false,
     repeats: false,
-    inhibitory: 10,
-    showTicks: 9,
-    cueTicks: 6,
-    weightCap: 0.1364,
-    learningRate: 0.0525,
-    window: 4,
-    sameTick: false,
+    inhibitory: 5,
+    showTicks: 5,
+    cueTicks: 4,
+    weightCap: 0.111,
+    learningRate: 0.0116,
+    window: 2,
+    sameTick: true,
     weakenSilent: false,
-    retention: 0.6075,
+    retention: 0.9383,
     refractory: 0,
-    fatigue: 0.0984,
-    recovery: 0.6,
-    excToInh: 0.0128,
-    excToInhSpread: 1.6049,
-    inhToExc: 0.02,
+    fatigue: 0.0099,
+    recovery: 0.046,
+    excToInh: 0.0145,
+    excToInhSpread: 1.0533,
+    inhToExc: 0.7512,
 };
 
 export type SimonOptions = Partial<typeof SIMON_DEFAULTS>;

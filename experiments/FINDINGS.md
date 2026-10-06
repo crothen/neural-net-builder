@@ -696,18 +696,23 @@ Rounds survived, 12 fresh seeds, without / with repeated tiles:
 - In the browser (desktop and phone size) full games were played through, e.g. 4 4 2 9 5 8 3 5 4 shown and
   pressed back correctly.
 
-**Without the step signal** (`--task simon-plain`, no repeated tiles): a first run plateaued at 4.0 rounds; its
-failures were order swaps (shown 4 2 1 7, pressed 4 1 2 7): a tile's neurons kept firing after their stimulation
-ended, overlapped with the tile after next, and so learned a skip-ahead link. A second run with a larger
-population, a gap gene, and the step-signal winner as a starting point found a brain that survives **8.2 rounds**
-on fresh seeds (8.9 inside the app, 11 of 12 games perfect). It is a very different brain: tiny weight cap
-(0.03), fast learning (0.30), short memory (retention 0.47), a refractory period of 2, strong fatigue (0.85)
-with fast recovery (0.6), no inhibitory pool, weakening of silent senders, and only senders that fired *before*
-the receiver count. With repeated tiles it manages 3.3 rounds, as expected: without a step signal a repeat is
-ambiguous.
+**Without the step signal** (`--task simon-plain`, no repeated tiles): four evolution runs, all plateauing at
+**3.5–4.4 rounds** on fresh seeds. The failures are order swaps (shown 4 2 1 7, pressed 4 1 2 7): a tile's
+neurons keep firing after their stimulation ends, overlap with the tile after next, and so learn a skip-ahead
+link. One run appeared to reach 8.2 rounds, but it had found a flaw in the rule: the weakening step subtracted
+rate × w / cap, and with rate 0.30 and cap 0.03 that flips a weight's sign and multiplies it by 9 on every
+update. The exploding negative weights acted as strong inhibition between non-consecutive tiles, which is what
+made the chain work; in the app they showed up as giant cyan wedges. The step is now bounded (a weight can only
+shrink towards zero), and a bounded version of what the exploit did (push a silent sender's weight towards a
+negative cap) was added as genes; it did not beat 4.4 rounds. Lesson: evolution finds bugs faster than people do,
+so every rule needs hard bounds before it goes into a search.
+
+**Bigger boards** with the step-signal brain (tiles × 10 neurons + 5 per step + 5 inhibitory; sequence length =
+number of tiles; 8 games each): without repeats it completed **every game at 9, 12, 15, 20 and 30 tiles**
+(455 neurons at 30). With repeats: 8.9 / 10.8 / 13.0 / 18.0 / 22.8 rounds of 9 / 12 / 15 / 20 / 30.
 
 Live at `.../pattern-memory/?demo=simon` (and via the Demos section of the sidebar). The step-signal checkbox
-loads the brain evolved for that setting; switching it off also switches repeats off.
+loads the brain evolved for that setting (about 4 rounds without it); switching it off also switches repeats off.
 
 ## Engine speed-up
 
