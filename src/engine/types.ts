@@ -94,6 +94,8 @@ export interface ModuleConfig {
     //             to or from inhibitory neurons are left as wired.
     hebbianRule?: 'classic' | 'window';
     hebbianWindow?: number; // 'window' rule: how many ticks back a sender still counts (default 2)
+    hebbianSameTick?: boolean; // 'window' rule: a sender firing in the same tick counts too (default true)
+    hebbianWeakenSilent?: boolean; // 'window' rule: senders that did NOT fire are weakened, w -= rate * w / cap (default false)
     weightCap?: number; // 'window' rule: largest weight a learned synapse can reach (default 0.25)
     pruningThreshold?: number; // Remove weak connections below this
     regrowthRate?: number; // New connections per tick

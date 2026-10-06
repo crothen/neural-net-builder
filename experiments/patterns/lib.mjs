@@ -166,3 +166,65 @@ export function sequenceScore(params, opts, seeds) {
     for (const seed of seeds) { const r = sequenceTrial(params, { ...opts, seed }); for (const k of Object.keys(acc)) acc[k] += r[k] / seeds.length; }
     return acc;
 }
+
+/**
+ * "Simon" with a brain: 9 tiles = 9 disjoint groups of `size` neurons. Round k shows tiles s1..sk one after the
+ * other (seqTicks each, learning on). Verification: learning off, cue s1 briefly, let the brain run free and read
+ * off the order in which tile groups come on. The round is passed if that order is exactly s1..sk.
+ * Returns { rounds: rounds passed before the first failure, replayed: what came back in the last round }.
+ * opts.repeats: allow a tile to appear more than once in the sequence (default false).
+ * params.context (0/1): a "step" signal. With it on, a small extra group of neurons for step k is stimulated
+ * together with the k-th tile while the sequence is shown, and during replay the game switches that signal on
+ * for step k+1 as soon as the brain has "pressed" k tiles. It makes repeated tiles distinguishable.
+ */
+export function simonTrial(params, { N = 100, size = 10, tiles = 9, maxRounds = 9, repeats = false, seed = 1 } = {}) {
+    const context = !!params.context, ctxSize = 5;
+    if (context) N = Math.max(N, tiles * size + maxRounds * ctxSize);
+    const b = buildBrain(params, N, seed);
+    const { p, run, reset } = b;
+    const all = shuffled(Array.from({ length: N }, (_, i) => i));
+    const groups = Array.from({ length: tiles }, (_, k) => all.slice(k * size, (k + 1) * size));
+    const ctx = Array.from({ length: maxRounds }, (_, k) => context ? all.slice(tiles * size + k * ctxSize, tiles * size + (k + 1) * ctxSize) : []);
+    const sequence = [];
+    const order = shuffled(groups.map((_, i) => i));
+    for (let k = 0; k < maxRounds; k++) sequence.push(repeats ? Math.floor(Math.random() * tiles) : order[k % tiles]);
+
+    let rounds = 0, replayed = [];
+    for (let k = 1; k <= maxRounds; k++) {
+        const shown = sequence.slice(0, k);
+        reset();
+        shown.forEach((t, step) => run([...groups[t], ...ctx[step]], p.seqTicks, true));
+
+        // Verification, tick by tick: cue the first tile briefly, then let the brain run. A tile is "pressed"
+        // when >= half its neurons fired within the last 3 ticks; with context on, each press switches the step
+        // signal to the next step.
+        reset();
+        replayed = [];
+        const frames = [];
+        const wasOn = new Array(tiles).fill(false);
+        const total = p.seqCueTicks + (k + 1) * p.seqTicks * 2;
+        for (let t = 0; t < total; t++) {
+            const step = Math.min(replayed.length, maxRounds - 1);
+            const on = [...(t < p.seqCueTicks ? groups[shown[0]] : []), ...(context ? ctx[t < p.seqCueTicks ? 0 : step] : [])];
+            frames.push(run(on, 1, false, true).frames[0]);
+            for (let g = 0; g < tiles; g++) {
+                let n = 0;
+                for (const i of groups[g]) if (frames[t][i] || (t > 0 && frames[t - 1][i]) || (t > 1 && frames[t - 2][i])) n++;
+                const isOn = n * 2 >= size;
+                if (isOn && !wasOn[g]) replayed.push(g);
+                wasOn[g] = isOn;
+            }
+            if (replayed.length > shown.length) break;
+        }
+        if (replayed.length === shown.length && replayed.every((g, i) => g === shown[i])) rounds++;
+        else break;
+    }
+    return { rounds, sequence, replayed };
+}
+
+/** Average rounds survived over seeds. */
+export function simonScore(params, opts, seeds) {
+    let sum = 0; const hist = {};
+    for (const seed of seeds) { const r = simonTrial(params, { ...opts, seed }); sum += r.rounds; hist[r.rounds] = (hist[r.rounds] || 0) + 1; }
+    return { rounds: sum / seeds.length, hist };
+}

@@ -661,6 +661,44 @@ The deployed demo (`src/demos/patternMemory.ts`) now uses run 2's settings: in-a
 
 Not done: a run with sequence weighted higher, longer chains, and the sequence task in the app.
 
+## Finding 13 — Simon: a growing sequence on a 3×3 board
+
+The game: 9 tiles, each a disjoint group of 10 neurons. Round k shows tiles 1..k one after the other (learning
+on), then the first tile is cued briefly and the brain must press the rest in order by itself (learning off); a
+tile is "pressed" when at least half its neurons fired within the last 3 ticks. The game ends at the first
+mistake; score = rounds survived (max 9). Two variants: tiles may repeat in the sequence, or not.
+(`patterns/lib.mjs` → `simonTrial`, `patterns/evolve.mjs --task simon`.)
+
+Why repeats are hard: a plain chain stores "after tile 2 comes tile 5". With the sequence 2 5 2 4 it also stores
+"after 2 comes 4", and nothing says which applies. Fix tested: a **step signal**, a small extra group of neurons
+for "step k", stimulated together with the k-th tile while the sequence is shown and switched on for step k+1
+during replay as soon as the brain has pressed k tiles (the player knows which step it is on). Each link then
+becomes (tile at step k) → (tile at step k+1).
+
+Rounds survived, 12 fresh seeds, without / with repeated tiles:
+
+| Brain | Without repeats | With repeats |
+|---|---|---|
+| Pattern specialist (Finding 12) | 1.8 | 2.4 |
+| Sequence specialist (Finding 12) | 3.3 | 3.1 |
+| Evolved for Simon, no step signal available | 3.5 | 3.5 |
+| **Evolved for Simon with the step signal** | **8.0** | **7.6** |
+| The same setup inside the app (`simon-app-check.mjs`) | 9.0 (12 of 12 games perfect) | 8.4 (9 of 12 perfect) |
+
+- **The step signal is the difference between 3–4 rounds and the whole board.** Every finalist of the run that
+  could use it did.
+- **The evolved brain is built for hand-over**: a large fatigue (threshold jumps by 1.06 after a spike, recovering
+  at 0.095 per tick) switches a tile's neurons off after they have fired, so the next tile can take over; a
+  fast learning rate (0.37) with a high cap (0.5) and a 4-tick window stores the chain in one showing; silent
+  senders are weakened; 5 inhibitory neurons.
+- Without repeats the in-app version completed all nine rounds in every one of 12 games; with repeats, 9 of 12
+  (the other three reached rounds 6–7).
+- In the browser (desktop and phone size) full games were played through, e.g. 4 4 2 9 5 8 3 5 4 shown and
+  pressed back correctly.
+
+Live at `.../pattern-memory/?demo=simon` (and via the Demos section of the sidebar). The two checkboxes
+(repeats, step signal) rebuild the brain; with the step signal off the brain falls back to about 3 rounds.
+
 ## Engine speed-up
 
 `step()` took about 13 ms per tick with learning on, mostly from filtering and locale-sorting all brain nodes
@@ -736,6 +774,8 @@ Run from the repo root.
 | `node experiments/patterns/search.mjs 150 1` | Random search over the small-brain setup |
 | `node experiments/patterns/evolve.mjs --pop 32 --gens 40 --workers 4 --seeds 1,2,3,4,5,6,7,8` | Evolve settings for self-taught pattern completion + sequence replay (Finding 12) |
 | `node experiments/patterns/app-check.mjs 1,2,5,10,20 20` | The in-app pattern memory, headless |
+| `node experiments/patterns/evolve.mjs --task simon --pop 32 --gens 30 --workers 4 --seeds 1,2,3,4,5,6` | Evolve settings for the Simon game (Finding 13) |
+| `node experiments/patterns/simon-app-check.mjs 12 1 1` | The in-app Simon game, headless (seeds, repeats, step signal) |
 | `node experiments/hebbian/diag.mjs default medium 21` | What the engine's Hebbian rule strengthens, and where the growth comes from |
 | `node experiments/hebbian/twostage-v2.mjs default causal` | Two-stage training with the corrected rule (rules: causal, same, shrink; then datasets, seeds, stage-1 lengths, rate, cap factor) |
 

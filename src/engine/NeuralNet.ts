@@ -966,16 +966,26 @@ export class NeuralNet {
 
     // ---- Direct stimulation and spike recording (used by demos and experiments)
 
-    private stimuli: { nodes: BaseNode[], remaining: number, strength: number, onDone?: () => void }[] = [];
+    private stimuli: { id: number, nodes: BaseNode[], remaining: number, strength: number, onDone?: () => void }[] = [];
+    private nextStimulusId: number = 1;
+    /** Called at the end of every step(), if set. */
+    public afterStep: (() => void) | null = null;
     private spikeCounts: Map<string, number> | null = null;
 
     /**
      * Drive nodes directly: for the next `ticks` ticks, `strength` is added to their input.
-     * onDone is called at the end of the tick in which the stimulation runs out.
+     * onDone is called at the end of the tick in which the stimulation runs out. Returns an id for stopStimulus().
      */
-    public stimulate(nodeIds: string[], ticks: number, strength: number = 3, onDone?: () => void) {
+    public stimulate(nodeIds: string[], ticks: number, strength: number = 3, onDone?: () => void): number {
         const nodes = nodeIds.map(id => this.nodes.get(id)).filter((n): n is BaseNode => !!n);
-        if (ticks > 0) this.stimuli.push({ nodes, remaining: ticks, strength, onDone });
+        const id = this.nextStimulusId++;
+        if (ticks > 0) this.stimuli.push({ id, nodes, remaining: ticks, strength, onDone });
+        return id;
+    }
+
+    /** Stop one stimulation early (its onDone is not called). */
+    public stopStimulus(id: number) {
+        this.stimuli = this.stimuli.filter(stimulus => stimulus.id !== id);
     }
 
     public clearStimulation() {
@@ -1544,6 +1554,7 @@ export class NeuralNet {
         });
 
         for (const onDone of finishedStimuli) onDone();
+        if (this.afterStep) this.afterStep();
     }
 
     /**
@@ -1556,12 +1567,16 @@ export class NeuralNet {
         const rate = module.learningRate || 0.01;
         const cap = module.weightCap ?? 0.25;
         const window = module.hebbianWindow ?? 2;
+        const sameTick = module.hebbianSameTick ?? true;
+        const weakenSilent = module.hebbianWeakenSilent ?? false;
         const entries = this.getHebbianEntries(module.id);
         for (let k = 0; k < entries.length; k++) {
             const { conn, src, tgt } = entries[k];
             if (!tgt.isFiring || tgt.neuronType !== 'EXCITATORY' || src.neuronType !== 'EXCITATORY') continue;
-            if (this.tickCount - src.lastFiredTick > window) continue;
-            conn.weight += rate * (1 - conn.weight / cap);
+            const since = this.tickCount - src.lastFiredTick;
+            const pre = since <= window && (sameTick || since >= 1);
+            if (pre) conn.weight += rate * (1 - conn.weight / cap);
+            else if (weakenSilent) conn.weight -= rate * conn.weight / cap;
         }
     }
 

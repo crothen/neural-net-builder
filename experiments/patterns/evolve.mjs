@@ -1,5 +1,7 @@
 // Evolve brain settings for self-taught learning: pattern completion and sequence replay, no teacher.
-//   node experiments/patterns/evolve.mjs [--pop 32] [--gens 30] [--workers 4] [--seeds 1,2,3,4] [--tag main]
+//   node experiments/patterns/evolve.mjs [--pop 32] [--gens 30] [--workers 4] [--seeds 1,2,3,4] [--tag main] [--task patterns|simon]
+// --task simon: fitness = rounds survived in the Simon game (9 tiles, growing sequence), 70% without repeated
+// tiles and 30% with, each divided by 9.
 // Learning phase: the brain is shown patterns / sequences with its Hebbian rule on.
 // Verification phase: learning off; half-pattern cues must bring back exactly their pattern, and the first
 // pattern of a chain must make the others follow in order.
@@ -8,7 +10,7 @@
 import { fork } from 'node:child_process';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { score, sequenceScore } from './lib.mjs';
+import { score, sequenceScore, simonScore } from './lib.mjs';
 
 /** Genes: [min, max, kind]; kind = lin | log | int | bool | choice(list). */
 const GENES = {
@@ -26,11 +28,18 @@ const GENES = {
     wEIspread: [1, 4, 'lin'],
     wIE: [0.02, 0.8, 'log'],
     exposures: [1, 3, 'int'],
+    seqTicks: [5, 15, 'int'],
+    seqCueTicks: [2, 8, 'int'],
+    context: [0, 1, 'bool'],
 };
 /** The pattern-memory demo's settings, as the starting point. */
-const SEED_GENOME = { cap: 0.111, lr: 0.028, rule: 'keep', window: 2, sameTick: 1, retention: 0.838, refractory: 0, fatigue: 0, recovery: 0.1, nInh: 5, wEI: 0.041, wEIspread: 1.706, wIE: 0.207, exposures: 1 };
+const SEED_GENOME = { cap: 0.111, lr: 0.028, rule: 'keep', window: 2, sameTick: 1, retention: 0.838, refractory: 0, fatigue: 0, recovery: 0.1, nInh: 5, wEI: 0.041, wEIspread: 1.706, wIE: 0.207, exposures: 1, seqTicks: 10, seqCueTicks: 5, context: 0 };
 
-export function evaluate(genome, seeds) {
+export function evaluate(genome, seeds, task = 'patterns') {
+    if (task === 'simon') {
+        const plain = simonScore(genome, { repeats: false }, seeds), rep = simonScore(genome, { repeats: true }, seeds);
+        return { fitness: (0.7 * plain.rounds + 0.3 * rep.rounds) / 9, rounds: plain.rounds, roundsRepeats: rep.rounds, k5: 0, k10: 0, seqSteps: 0, seqOrder: 0, seqIntruders: 0 };
+    }
     const k5 = score(genome, { N: 100, size: 10, K: 5 }, seeds);
     const k10 = score(genome, { N: 100, size: 10, K: 10 }, seeds);
     const seq = sequenceScore(genome, { N: 100, size: 10, length: 4 }, seeds);
@@ -38,7 +47,7 @@ export function evaluate(genome, seeds) {
 }
 
 function args() {
-    const a = { pop: 32, gens: 30, workers: 4, seeds: '1,2,3,4', finalSeeds: '101,102,103,104,105,106,107,108', tag: 'main' };
+    const a = { pop: 32, gens: 30, workers: 4, seeds: '1,2,3,4', finalSeeds: '101,102,103,104,105,106,107,108', tag: 'main', task: 'patterns' };
     for (let i = 2; i < process.argv.length; i += 2) a[process.argv[i].replace(/^--/, '')] = process.argv[i + 1];
     return a;
 }
@@ -53,7 +62,7 @@ function makePool(n) {
         pump();
     });
     return {
-        run: (genome, seeds) => new Promise((resolve, reject) => { const id = nextId++; pending.set(id, { resolve, reject }); queue.push({ id, genome, seeds }); pump(); }),
+        run: (genome, seeds, task) => new Promise((resolve, reject) => { const id = nextId++; pending.set(id, { resolve, reject }); queue.push({ id, genome, seeds, task }); pump(); }),
         close: () => workers.forEach(w => w.kill()),
     };
 }
@@ -96,8 +105,8 @@ async function main() {
     const popSize = Number(a.pop), gens = Number(a.gens);
     const pool = makePool(Number(a.workers));
     const cache = new Map();
-    const scoreCached = async (g) => { const k = keyOf(g); if (!cache.has(k)) cache.set(k, await pool.run(g, seeds)); return cache.get(k); };
-    const fmt = (s) => `fitness ${s.fitness.toFixed(3)} | patterns ${(s.k5 * 100).toFixed(0)}% / ${(s.k10 * 100).toFixed(0)}% exact | sequence ${(s.seqSteps * 100).toFixed(0)}% of steps, whole chain ${(s.seqOrder * 100).toFixed(0)}%, intruders ${(s.seqIntruders * 100).toFixed(0)}%`;
+    const scoreCached = async (g) => { const k = keyOf(g); if (!cache.has(k)) cache.set(k, await pool.run(g, seeds, a.task)); return cache.get(k); };
+    const fmt = (s) => a.task === 'simon' ? `fitness ${s.fitness.toFixed(3)} | Simon rounds survived: ${s.rounds.toFixed(1)} without repeats, ${s.roundsRepeats.toFixed(1)} with` : `fitness ${s.fitness.toFixed(3)} | patterns ${(s.k5 * 100).toFixed(0)}% / ${(s.k10 * 100).toFixed(0)}% exact | sequence ${(s.seqSteps * 100).toFixed(0)}% of steps, whole chain ${(s.seqOrder * 100).toFixed(0)}%, intruders ${(s.seqIntruders * 100).toFixed(0)}%`;
 
     const t0 = Date.now();
     let population = [SEED_GENOME, ...Array.from({ length: popSize - 1 }, randomGenome)];
@@ -124,8 +133,8 @@ async function main() {
     for (const g of population) byKey.set(keyOf(g), g);
     const top = [...cache.entries()].sort((x, y) => y[1].fitness - x[1].fitness).slice(0, 5).map(([k]) => k).filter(k => byKey.has(k));
     const final = [];
-    for (const k of top) { const g = byKey.get(k); final.push({ genome: g, search: cache.get(k), fresh: await pool.run(g, finalSeeds) }); }
-    const seedFresh = await pool.run(SEED_GENOME, finalSeeds);
+    for (const k of top) { const g = byKey.get(k); final.push({ genome: g, search: cache.get(k), fresh: await pool.run(g, finalSeeds, a.task) }); }
+    const seedFresh = await pool.run(SEED_GENOME, finalSeeds, a.task);
     final.sort((x, y) => y.fresh.fitness - x.fresh.fitness);
     console.log(`\nFresh-seed check (${finalSeeds.length} seeds):`);
     console.log(`  starting point (demo settings): ${fmt(seedFresh)}`);
@@ -138,7 +147,7 @@ async function main() {
 // ---------------------------------------------------------------- entry point (worker or master)
 if (process.argv[2] === '--worker') {
     process.on('message', (job) => {
-        try { process.send({ id: job.id, result: evaluate(job.genome, job.seeds) }); }
+        try { process.send({ id: job.id, result: evaluate(job.genome, job.seeds, job.task) }); }
         catch (err) { process.send({ id: job.id, error: String(err && err.stack || err) }); }
     });
 } else {

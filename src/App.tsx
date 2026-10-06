@@ -5,6 +5,7 @@ import type { NeuralCanvasHandle } from './components/NeuralCanvas';
 import type { ModuleConfig, ConnectionSide, ModuleType } from './engine/types';
 import type { BaseNode as NeuralNode } from './engine/nodes/BaseNode';
 import { PatternMemoryBar } from './components/PatternMemoryBar';
+import { SimonBar } from './components/SimonBar';
 import './App.css';
 import tooltipConfig from './config/tooltips.json';
 // Import initial network directly (Vite/Bundler will handle JSON)
@@ -111,9 +112,11 @@ const MemoizedFilterSelect = React.memo(({ filterModuleIds, onChange, connection
     prev.onChange === next.onChange;
 });
 
-// The pattern-memory demo has its own address: .../pattern-memory/ (or ?demo=pattern-memory on any page)
-const startInPatternDemo = window.location.pathname.includes('/pattern-memory')
-  || new URLSearchParams(window.location.search).get('demo') === 'pattern-memory';
+// Demos have their own addresses: .../pattern-memory/ opens the pattern memory; ?demo=pattern-memory or
+// ?demo=simon works on any page.
+const demoParam = new URLSearchParams(window.location.search).get('demo');
+const startInPatternDemo = demoParam === 'pattern-memory' || (demoParam === null && window.location.pathname.includes('/pattern-memory'));
+const startInSimon = demoParam === 'simon';
 
 function App() {
   const canvasRef = useRef<NeuralCanvasHandle>(null);
@@ -210,6 +213,7 @@ function App() {
   const [mobilePanel, setMobilePanel] = useState<'left' | 'right' | null>(null);
   // Pattern-memory demo: its controls are drawn over the canvas while this is on
   const [patternDemo, setPatternDemo] = useState(false);
+  const [simonDemo, setSimonDemo] = useState(false);
 
   // --- Initial Load ---
   useEffect(() => {
@@ -218,6 +222,10 @@ function App() {
       if (canvasRef.current) {
         if (startInPatternDemo) {
           setPatternDemo(true); // builds its own Brain
+          return;
+        }
+        if (startInSimon) {
+          setSimonDemo(true);
           return;
         }
         console.log("Loading Initial Network...", initialNetwork);
@@ -410,6 +418,7 @@ function App() {
 
   const handleClear = () => {
     setPatternDemo(false);
+    setSimonDemo(false);
     if (canvasRef.current) {
       canvasRef.current.clear();
       refreshModules();
@@ -453,6 +462,7 @@ function App() {
         const json = JSON.parse(event.target?.result as string);
         if (canvasRef.current) {
           setPatternDemo(false);
+          setSimonDemo(false);
           canvasRef.current.clear();
           canvasRef.current.load(json);
           setTimeout(() => {
@@ -1647,6 +1657,14 @@ function App() {
           onNodeContextMenu={handleNodeContextMenu}
         />
 
+        {simonDemo && (
+          <SimonBar
+            canvasRef={canvasRef}
+            onNetworkChanged={() => { refreshModules(); handleModuleSelect(null); }}
+            onRun={() => setSimulation(prev => ({ ...prev, paused: false, speed: Math.min(prev.speed, 120) }))}
+            onClose={() => setSimonDemo(false)}
+          />
+        )}
         {patternDemo && (
           <PatternMemoryBar
             canvasRef={canvasRef}
@@ -1749,6 +1767,7 @@ function App() {
             className="primary"
             onClick={() => {
               if (modules.length > 0 && !patternDemo && !window.confirm('This replaces the current network with a 110-neuron memory Brain. Continue?')) return;
+              setSimonDemo(false);
               setPatternDemo(true);
               setMobilePanel(null);
             }}
@@ -1756,6 +1775,19 @@ function App() {
             Pattern memory
           </button>
           <div style={{ fontSize: '0.75rem', color: '#888' }}>A Brain that stores patterns with Hebbian learning and completes them from half.</div>
+          <button
+            className="primary"
+            style={{ marginTop: '8px' }}
+            onClick={() => {
+              if (modules.length > 0 && !simonDemo && !window.confirm('This replaces the current network with a 100-neuron Brain for the Simon game. Continue?')) return;
+              setPatternDemo(false);
+              setSimonDemo(true);
+              setMobilePanel(null);
+            }}
+          >
+            Simon (sequence game)
+          </button>
+          <div style={{ fontSize: '0.75rem', color: '#888' }}>Tiles light up in a growing sequence; the Brain has to press them back from memory.</div>
         </div>
         {/* Creation */}
         < div className="control-group" >

@@ -768,6 +768,61 @@ z-index: 10000;
   color: #777;
 }
 
+/* Simon board */
+.simon-round {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.simon-option {
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+.simon-body {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.simon-board {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(3, 44px);
+  gap: 5px;
+  flex: none;
+}
+
+.simon-tile {
+  border: 2px solid #666;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background 0.1s;
+}
+
+.simon-tile.lit {
+  box-shadow: 0 0 14px currentColor;
+}
+
+.simon-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.simon-side button.primary {
+  padding: 0.7rem 0.6rem;
+}
+
 /* Mobile-only chrome (hidden on desktop) */
 .mobile-bar,
 .mobile-backdrop,

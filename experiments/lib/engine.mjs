@@ -847,14 +847,23 @@ var NeuralNet = class {
   }
   // ---- Direct stimulation and spike recording (used by demos and experiments)
   stimuli = [];
+  nextStimulusId = 1;
+  /** Called at the end of every step(), if set. */
+  afterStep = null;
   spikeCounts = null;
   /**
    * Drive nodes directly: for the next `ticks` ticks, `strength` is added to their input.
-   * onDone is called at the end of the tick in which the stimulation runs out.
+   * onDone is called at the end of the tick in which the stimulation runs out. Returns an id for stopStimulus().
    */
   stimulate(nodeIds, ticks, strength = 3, onDone) {
-    const nodes = nodeIds.map((id) => this.nodes.get(id)).filter((n) => !!n);
-    if (ticks > 0) this.stimuli.push({ nodes, remaining: ticks, strength, onDone });
+    const nodes = nodeIds.map((id2) => this.nodes.get(id2)).filter((n) => !!n);
+    const id = this.nextStimulusId++;
+    if (ticks > 0) this.stimuli.push({ id, nodes, remaining: ticks, strength, onDone });
+    return id;
+  }
+  /** Stop one stimulation early (its onDone is not called). */
+  stopStimulus(id) {
+    this.stimuli = this.stimuli.filter((stimulus) => stimulus.id !== id);
   }
   clearStimulation() {
     this.stimuli = [];
@@ -1242,6 +1251,7 @@ var NeuralNet = class {
       }
     });
     for (const onDone of finishedStimuli) onDone();
+    if (this.afterStep) this.afterStep();
   }
   /**
    * 'window' Hebbian rule: neurons that fire within a few ticks of each other get wired together, up to a cap.
@@ -1253,12 +1263,16 @@ var NeuralNet = class {
     const rate = module.learningRate || 0.01;
     const cap = module.weightCap ?? 0.25;
     const window = module.hebbianWindow ?? 2;
+    const sameTick = module.hebbianSameTick ?? true;
+    const weakenSilent = module.hebbianWeakenSilent ?? false;
     const entries = this.getHebbianEntries(module.id);
     for (let k = 0; k < entries.length; k++) {
       const { conn, src, tgt } = entries[k];
       if (!tgt.isFiring || tgt.neuronType !== "EXCITATORY" || src.neuronType !== "EXCITATORY") continue;
-      if (this.tickCount - src.lastFiredTick > window) continue;
-      conn.weight += rate * (1 - conn.weight / cap);
+      const since = this.tickCount - src.lastFiredTick;
+      const pre = since <= window && (sameTick || since >= 1);
+      if (pre) conn.weight += rate * (1 - conn.weight / cap);
+      else if (weakenSilent) conn.weight -= rate * conn.weight / cap;
     }
   }
   // ---- Step caches -------------------------------------------------------------------------------------------
@@ -1734,9 +1748,215 @@ var PatternMemory = class {
   /** For the canvas: only show links that have actually been learned. */
   isLearnedLink = (conn) => conn.weight > this.options.weightCap * 0.4 && !this.inhibitorySet.has(conn.sourceId) && !this.inhibitorySet.has(conn.targetId);
 };
+
+// src/demos/simon.ts
+var SIMON_DEFAULTS = {
+  tiles: 9,
+  tileSize: 10,
+  // neurons per tile
+  inhibitory: 5,
+  stepSize: 5,
+  // neurons per "step" signal (only with stepSignal)
+  stepSignal: true,
+  // tell the Brain which step it is on (makes repeated tiles distinguishable)
+  repeats: true,
+  // may the sequence repeat a tile?
+  maxRounds: 9,
+  showTicks: 11,
+  // each tile is lit (stimulated) for this long while the sequence is shown
+  cueTicks: 4,
+  // the first tile is cued for this long before the Brain is on its own
+  stimulation: 3,
+  weightCap: 0.495,
+  learningRate: 0.3657,
+  window: 4,
+  sameTick: true,
+  weakenSilent: true,
+  retention: 0.8958,
+  refractory: 0,
+  fatigue: 1.0634,
+  recovery: 0.0952,
+  excToInh: 0.01,
+  excToInhSpread: 3.3755,
+  inhToExc: 0.4125
+};
+var SIMON_MODULE_ID = "simon";
+var SimonGame = class {
+  options;
+  tiles = [];
+  // neuron ids per tile
+  steps = [];
+  // neuron ids per step signal
+  sequence = [];
+  round = 0;
+  // rounds passed so far
+  busy = false;
+  gameOver = false;
+  net;
+  inhibitorySet = /* @__PURE__ */ new Set();
+  excitatoryIds = [];
+  constructor(net, options = {}) {
+    this.net = net;
+    this.options = { ...SIMON_DEFAULTS, ...options };
+    const o = this.options;
+    const excitatory = o.tiles * o.tileSize + (o.stepSignal ? o.maxRounds * o.stepSize : 0);
+    const total = excitatory + o.inhibitory;
+    net.clear();
+    net.addModule({
+      id: SIMON_MODULE_ID,
+      type: "BRAIN",
+      x: 600,
+      y: 400,
+      nodeCount: total,
+      radius: 260,
+      name: "Simon",
+      label: "Simon",
+      synapsesPerNode: total - 1,
+      isLocalized: false,
+      localizationLeak: 0,
+      threshold: 1,
+      decay: o.retention,
+      refractoryPeriod: o.refractory,
+      hebbianLearning: false,
+      hebbianRule: "window",
+      hebbianWindow: o.window,
+      hebbianSameTick: o.sameTick,
+      hebbianWeakenSilent: o.weakenSilent,
+      weightCap: o.weightCap,
+      learningRate: o.learningRate,
+      regrowthRate: 0
+    });
+    for (let i = 0; i < total; i++) {
+      const id = `${SIMON_MODULE_ID}-${i}`;
+      const node = net.nodes.get(id);
+      node.fatigue = o.fatigue;
+      node.recovery = o.recovery;
+      if (i < o.inhibitory) {
+        node.neuronType = "INHIBITORY";
+        this.inhibitorySet.add(id);
+      } else {
+        node.neuronType = "EXCITATORY";
+        this.excitatoryIds.push(id);
+      }
+    }
+    for (const conn of net.connections) {
+      const fromInhibitory = this.inhibitorySet.has(conn.sourceId), toInhibitory = this.inhibitorySet.has(conn.targetId);
+      if (fromInhibitory) conn.weight = toInhibitory ? 0 : -o.inhToExc;
+      else if (toInhibitory) conn.weight = o.excToInh * (1 + Math.random() * (o.excToInhSpread - 1));
+      else conn.weight = Math.random() * 0.02;
+    }
+    const pool = this.excitatoryIds.slice();
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    for (let t = 0; t < o.tiles; t++) this.tiles.push(pool.slice(t * o.tileSize, (t + 1) * o.tileSize));
+    if (o.stepSignal) for (let k = 0; k < o.maxRounds; k++) this.steps.push(pool.slice(o.tiles * o.tileSize + k * o.stepSize, o.tiles * o.tileSize + (k + 1) * o.stepSize));
+    this.newSequence();
+  }
+  get module() {
+    return this.net.modules.get(SIMON_MODULE_ID);
+  }
+  newSequence() {
+    const o = this.options;
+    const order = Array.from({ length: o.tiles }, (_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    this.sequence = Array.from({ length: o.maxRounds }, (_, k) => o.repeats ? Math.floor(Math.random() * o.tiles) : order[k % o.tiles]);
+    this.round = 0;
+    this.gameOver = false;
+  }
+  /** The Brain forgets its fatigue between show and replay, like the experiment harness. */
+  reset() {
+    this.net.resetState();
+    this.net.clearStimulation();
+    for (const id of this.excitatoryIds) {
+      const n = this.net.nodes.get(id);
+      n.currentThreshold = n.threshold;
+    }
+  }
+  /**
+   * Play the next round: show tiles 1..k (learning on), then let the Brain replay (learning off).
+   * onShow(tile)   a tile lights up while the sequence is shown
+   * onPress(tile)  the Brain pressed a tile during replay
+   * onDone(result)
+   */
+  playRound(onShow, onPress, onDone) {
+    if (this.busy || this.gameOver) return;
+    this.busy = true;
+    const o = this.options;
+    const k = this.round + 1;
+    const shown = this.sequence.slice(0, k);
+    const net = this.net;
+    this.reset();
+    this.module.hebbianLearning = true;
+    const showStep = (step) => {
+      if (step >= shown.length) {
+        onShow(null);
+        this.replay(shown, onPress, onDone);
+        return;
+      }
+      onShow(shown[step]);
+      net.stimulate([...this.tiles[shown[step]], ...this.steps[step] || []], o.showTicks, o.stimulation, () => showStep(step + 1));
+    };
+    showStep(0);
+  }
+  replay(shown, onPress, onDone) {
+    const o = this.options;
+    const net = this.net;
+    this.module.hebbianLearning = false;
+    this.reset();
+    const pressed = [];
+    const wasOn = new Array(o.tiles).fill(false);
+    let ticks = 0;
+    const limit = o.cueTicks + (shown.length + 1) * o.showTicks * 2;
+    const finish = () => {
+      net.afterStep = null;
+      net.clearStimulation();
+      const passed = pressed.length === shown.length && pressed.every((t, i) => t === shown[i]);
+      if (passed) this.round++;
+      else this.gameOver = true;
+      this.busy = false;
+      onDone({ round: shown.length, shown, pressed, passed });
+    };
+    let stepShown = -1, stepStimulus = 0;
+    const driveStep = () => {
+      if (!o.stepSignal) return;
+      const step = Math.min(pressed.length, o.maxRounds - 1);
+      if (step === stepShown) return;
+      stepShown = step;
+      net.stopStimulus(stepStimulus);
+      stepStimulus = net.stimulate(this.steps[step], limit, o.stimulation);
+    };
+    driveStep();
+    net.stimulate(this.tiles[shown[0]], o.cueTicks, o.stimulation);
+    net.afterStep = () => {
+      ticks++;
+      for (let t = 0; t < o.tiles; t++) {
+        let on = 0;
+        for (const id of this.tiles[t]) if (net.tickCount - net.nodes.get(id).lastFiredTick <= 2) on++;
+        const isOn = on * 2 >= o.tileSize;
+        if (isOn && !wasOn[t]) {
+          pressed.push(t);
+          onPress(t);
+          driveStep();
+        }
+        wasOn[t] = isOn;
+      }
+      const wrong = pressed.some((t, i) => t !== shown[i]);
+      if (wrong || pressed.length >= shown.length || ticks >= limit) finish();
+    };
+  }
+  /** Only learned links between tile neurons are worth drawing. */
+  isLearnedLink = (conn) => conn.weight > this.options.weightCap * 0.4 && !this.inhibitorySet.has(conn.sourceId) && !this.inhibitorySet.has(conn.targetId);
+};
 export {
   NeuralNet,
   NodeType,
   PATTERN_MEMORY_DEFAULTS,
-  PatternMemory
+  PatternMemory,
+  SIMON_DEFAULTS,
+  SimonGame
 };
